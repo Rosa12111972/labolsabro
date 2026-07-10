@@ -468,10 +468,22 @@ async function onInputChange() {
       const data = await r.json();
       const hits = data.quotes || [];
       if (!hits.length) { box.style.display = 'none'; return; }
+      const EXCHANGES = {
+        'NMS':'NASDAQ 🇺🇸','NGM':'NASDAQ 🇺🇸','NCM':'NASDAQ 🇺🇸',
+        'NYQ':'NYSE 🇺🇸','NYB':'NYSE 🇺🇸','PCX':'NYSE 🇺🇸',
+        'AMS':'Ámsterdam 🇳🇱','EPA':'París 🇫🇷','ETR':'Fráncfort 🇩🇪',
+        'LSE':'Londres 🇬🇧','SWX':'Zúrich 🇨🇭','MC':'Madrid 🇪🇸',
+        'TYO':'Tokio 🇯🇵','HKG':'Hong Kong 🇭🇰','SHH':'Shanghái 🇨🇳',
+        'TSX':'Toronto 🇨🇦','ASX':'Sídney 🇦🇺','BRU':'Bruselas 🇧🇪',
+        'STU':'Stuttgart 🇩🇪','VIE':'Viena 🇦🇹','OSL':'Oslo 🇳🇴',
+        'CPH':'Copenhague 🇩🇰','STO':'Estocolmo 🇸🇪','HEL':'Helsinki 🇫🇮',
+        'LIS':'Lisboa 🇵🇹','MIL':'Milán 🇮🇹','WSE':'Varsovia 🇵🇱',
+        'CCY':'Crypto','CCC':'Crypto',
+      };
       box.innerHTML = hits.map((h, i) => {
         const name = h.name || h.symbol;
         const type = h.type === 'CRYPTOCURRENCY' ? '₿' : h.type === 'ETF' ? '📦' : '📈';
-        const exch = h.exchange || '';
+        const exch = EXCHANGES[h.exchange] || h.exchange || '';
         return `<div class="suggest-item" data-ticker="${h.symbol}" data-i="${i}" onclick="pickSuggestion('${h.symbol}')" onmouseenter="highlightSuggestion(${i})">
           <span style="font-size:15px">${type}</span>
           <div style="flex:1;min-width:0">
