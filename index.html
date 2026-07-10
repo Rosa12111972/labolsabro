@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mosca — laBolsabro</title>
+<meta name="description" content="Aprende a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones. Solo tu dinero haciendo algo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --card: #141414;
+  --card2: #1c1c1c;
+  --border: #2a2a2a;
+  --border2: #333;
+  --green: #22c55e;
+  --green-dim: #16a34a;
+  --green-glow: rgba(34,197,94,0.15);
+  --yellow: #facc15;
+  --yellow-dim: rgba(250,204,21,0.12);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.12);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.12);
+  --text: #f5f5f5;
+  --text2: #a3a3a3;
+  --text3: #525252;
+  --radius: 16px;
+  --radius-lg: 24px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Space Grotesk', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+.safety-bar { background: #111; border-bottom: 1px solid var(--border); text-align: center; padding: 10px 24px; font-size: 12px; color: var(--text3); }
+.safety-bar strong { color: var(--text2); }
+
+nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 62px; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-mark { width: 36px; height: 36px; background: var(--yellow); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.logo-text { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.04em; }
+.logo-sub { font-size: 11px; font-weight: 700; color: var(--green); }
+.nav-btn { background: var(--green); color: #000; padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+.nav-btn:hover { opacity: 0.85; }
+
+.hero { max-width: 1100px; margin: 0 auto; padding: 100px 24px 80px; text-align: center; }
+.hero-tag { display: inline-flex; align-items: center; gap: 8px; background: var(--yellow-dim); border: 1px solid rgba(250,204,21,0.25); color: var(--yellow); padding: 7px 18px; border-radius: 100px; font-size: 13px; font-weight: 700; margin-bottom: 32px; }
+.tag-dot { width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+h1 { font-size: clamp(42px, 7vw, 80px); font-weight: 700; line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 24px; }
+h1 em { font-style: normal; color: var(--green); }
+.hero-sub { font-size: clamp(16px, 2vw, 20px); color: var(--text2); max-width: 520px; margin: 0 auto 44px; line-height: 1.7; }
+.form-row { display: flex; gap: 10px; max-width: 440px; margin: 0 auto 14px; flex-wrap: wrap; justify-content: center; }
+.form-row input { flex: 1; min-width: 180px; padding: 14px 20px; border-radius: 100px; border: 1px solid var(--border2); font-size: 15px; background: var(--card); color: var(--text); outline: none; font-family: inherit; transition: border 0.2s; }
+.form-row input::placeholder { color: var(--text3); }
+.form-row input:focus { border-color: var(--green); }
+.form-row button { padding: 14px 28px; background: var(--green); color: #000; border: none; border-radius: 100px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+.form-row button:hover { opacity: 0.85; }
+.hero-note { font-size: 13px; color: var(--text3); }
+
+.phone-wrap { margin-top: 64px; position: relative; }
+.phone-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 400px; height: 400px; background: var(--green-glow); border-radius: 50%; filter: blur(80px); pointer-events: none; }
+.phone { width: 260px; margin: 0 auto; background: #111; border-radius: 40px; border: 1.5px solid var(--border2); padding: 12px; position: relative; z-index: 1; }
+.phone-screen { background: var(--card); border-radius: 30px; overflow: hidden; }
+.phone-pill-bar { height: 24px; display: flex; align-items: center; justify-content: center; }
+.phone-pill { width: 70px; height: 5px; background: #333; border-radius: 3px; }
+.phone-body { padding: 14px; }
+.p-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.p-hi { font-size: 13px; font-weight: 700; }
+.p-lv { font-size: 11px; font-weight: 700; background: var(--yellow-dim); color: var(--yellow); padding: 3px 10px; border-radius: 100px; }
+.p-bal { background: var(--green); border-radius: 18px; padding: 18px; margin-bottom: 10px; }
+.p-bal-l { font-size: 11px; color: rgba(0,0,0,0.5); margin-bottom: 3px; }
+.p-bal-n { font-size: 28px; font-weight: 700; color: #000; letter-spacing: -0.04em; }
+.p-bal-s { font-size: 11px; color: rgba(0,0,0,0.5); margin-top: 3px; }
+.p-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.p-mini { background: var(--card2); border-radius: 12px; padding: 11px 13px; border: 1px solid var(--border); }
+.p-mini-l { font-size: 10px; color: var(--text3); margin-bottom: 3px; }
+.p-mini-v { font-size: 16px; font-weight: 700; }
+.p-mini-s { font-size: 10px; color: var(--green); font-weight: 600; }
+.p-reto { background: var(--yellow-dim); border: 1px solid rgba(250,204,21,0.2); border-radius: 12px; padding: 10px 12px; }
+.p-reto-l { font-size: 10px; font-weight: 700; color: var(--yellow); margin-bottom: 2px; }
+.p-reto-t { font-size: 11px; color: var(--text2); line-height: 1.4; }
+
+.stats-strip { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--card); }
+.stats-inner { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: grid; grid-template-columns: repeat(4, 1fr); }
+.stat-item { text-align: center; padding: 8px; border-right: 1px solid var(--border); }
+.stat-item:last-child { border-right: none; }
+.stat-num { font-size: 32px; font-weight: 700; letter-spacing: -0.04em; margin-bottom: 4px; }
+.stat-label { font-size: 13px; color: var(--text2); }
+
+section { max-width: 1100px; margin: 0 auto; padding: 80px 24px; }
+.pill { display: inline-block; font-size: 12px; font-weight: 700; color: var(--green); background: var(--green-glow); border: 1px solid rgba(34,197,94,0.2); padding: 4px 14px; border-radius: 100px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; }
+h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 14px; }
+.sub { font-size: 17px; color: var(--text2); max-width: 500px; line-height: 1.7; margin-bottom: 48px; }
+
+.bg-card { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.modes { display: grid; grid-template-columns: 1fr 1fr; background: var(--border); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); gap: 1px; }
+.mode { background: var(--card); padding: 36px; }
+.mode-badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
+.mb-green { background: var(--green-glow); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+.mb-purple { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+.mode-emoji { font-size: 40px; margin-bottom: 16px; display: block; }
+.mode-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; }
+.mode-desc { font-size: 15px; color: var(--text2); line-height: 1.7; margin-bottom: 24px; }
+.mode-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.mode-list li { font-size: 14px; color: var(--text2); display: flex; gap: 10px; }
+.c-g { color: var(--green); font-weight: 700; flex-shrink: 0; }
+.c-p { color: var(--purple); font-weight: 700; flex-shrink: 0; }
+
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); }
+.feat { background: var(--card); padding: 28px; }
+.feat-emoji { font-size: 28px; margin-bottom: 14px; display: block; }
+.feat-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.feat-desc { font-size: 13px; color: var(--text2); line-height: 1.7; }
+.feat-tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; margin-top: 12px; }
+
+.stocks-bg { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.stocks-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+.steps { display: flex; flex-direction: column; }
+.step { display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.step:last-child { border-bottom: none; }
+.step-n { width: 32px; height: 32px; border-radius: 50%; background: var(--card2); border: 1px solid var(--border2); color: var(--text2); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.step-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.step-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.stocks-panel { background: var(--bg); border-radius: var(--radius-lg); border: 1px solid var(--border2); overflow: hidden; }
+.s-hdr { background: var(--card2); padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.s-hdr-title { font-size: 13px; font-weight: 700; }
+.s-live { font-size: 11px; color: var(--yellow); font-weight: 700; display: flex; align-items: center; gap: 5px; }
+.live-dot { width: 6px; height: 6px; background: var(--yellow); border-radius: 50%; animation: blink 2s infinite; }
+.stock-row { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+.stock-row:last-child { border-bottom: none; }
+.stock-ico { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.stock-name { font-size: 14px; font-weight: 700; }
+.stock-sec { font-size: 11px; color: var(--text3); }
+.sbadge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px; }
+.sg { background: var(--green-glow); color: var(--green); }
+.sy { background: var(--yellow-dim); color: var(--yellow); }
+.sr { background: var(--red-dim); color: var(--red); }
+.stock-per { font-size: 11px; color: var(--text3); margin-top: 3px; text-align: right; }
+.s-foot { padding: 12px 20px; font-size: 11px; color: var(--text3); line-height: 1.6; background: var(--card2); border-top: 1px solid var(--border); }
+
+.safe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
+.safe-card { background: var(--card); padding: 24px; }
+.safe-ico { font-size: 24px; margin-bottom: 12px; display: block; }
+.safe-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.safe-desc { font-size: 13px; color: var(--text2); line-height: 1.7; }
+.legal-box { background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius); padding: 20px 24px; }
+.legal-box p { font-size: 12px; color: var(--text3); line-height: 1.9; }
+.legal-box strong { color: var(--text2); }
+
+.price-bg { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); }
+.price-card { background: var(--card); padding: 28px; position: relative; }
+.price-card.hot { background: var(--card2); }
+.hot-badge { position: absolute; top: -1px; right: 24px; background: var(--green); color: #000; font-size: 11px; font-weight: 700; padding: 5px 14px; border-radius: 0 0 12px 12px; }
+.price-tier { font-size: 12px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; }
+.price-num { font-size: 40px; font-weight: 700; letter-spacing: -0.04em; margin-bottom: 4px; }
+.price-num span { font-size: 16px; font-weight: 400; color: var(--text3); }
+.price-desc { font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.6; }
+.price-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 24px; }
+.price-list li { font-size: 13px; color: var(--text2); display: flex; gap: 8px; }
+.price-list li span { color: var(--green); font-weight: 700; flex-shrink: 0; }
+.price-btn { width: 100%; padding: 13px; border-radius: 100px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.price-btn-out { border: 1px solid var(--border2); background: transparent; color: var(--text2); }
+.price-btn-out:hover { border-color: var(--text); color: var(--text); }
+.price-btn-solid { border: none; background: var(--green); color: #000; }
+.price-btn-solid:hover { opacity: 0.85; }
+
+.faq-wrap { max-width: 680px; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q { width: 100%; text-align: left; padding: 18px 0; font-size: 15px; font-weight: 700; cursor: pointer; background: none; border: none; color: var(--text); display: flex; justify-content: space-between; align-items: center; gap: 16px; font-family: inherit; }
+.faq-q::after { content: "+"; font-size: 22px; font-weight: 300; color: var(--text3); flex-shrink: 0; transition: transform 0.2s; }
+.faq-item.open .faq-q::after { transform: rotate(45deg); }
+.faq-a { font-size: 14px; color: var(--text2); line-height: 1.8; padding-bottom: 18px; display: none; }
+.faq-item.open .faq-a { display: block; }
+
+.cta-wrap { max-width: 1052px; margin: 0 auto 80px; padding: 0 24px; }
+.cta-block { background: var(--green); border-radius: var(--radius-lg); padding: 64px 40px; text-align: center; }
+.cta-block h2 { color: #000; margin-bottom: 8px; }
+.cta-sub-tag { font-size: 18px; font-weight: 700; color: rgba(0,0,0,0.45); margin-bottom: 16px; }
+.cta-block p { color: rgba(0,0,0,0.55); font-size: 16px; margin-bottom: 32px; }
+.cta-form { display: flex; gap: 10px; max-width: 420px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+.cta-form input { flex: 1; min-width: 180px; padding: 13px 20px; border-radius: 100px; border: none; font-size: 15px; outline: none; font-family: inherit; background: rgba(0,0,0,0.12); color: #000; }
+.cta-form input::placeholder { color: rgba(0,0,0,0.35); }
+.cta-form button { padding: 13px 24px; background: #000; color: #fff; border: none; border-radius: 100px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+.cta-form button:hover { opacity: 0.8; }
+
+footer { border-top: 1px solid var(--border); }
+.footer-inner { max-width: 1100px; margin: 0 auto; padding: 28px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-logo { display: flex; align-items: center; gap: 8px; }
+.footer-mark { width: 28px; height: 28px; background: var(--yellow); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.footer-name { font-size: 15px; font-weight: 700; }
+.footer-slogan { font-size: 11px; color: var(--green); font-weight: 700; }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-size: 13px; color: var(--text3); text-decoration: none; }
+.footer-links a:hover { color: var(--text); }
+.footer-copy { font-size: 12px; color: var(--text3); }
+
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+.overlay.open { display: flex; }
+.modal { background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 40px 32px; max-width: 380px; width: 100%; text-align: center; }
+.modal-emoji { font-size: 52px; margin-bottom: 16px; }
+.modal h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 8px; }
+.modal p { font-size: 14px; color: var(--text2); margin-bottom: 24px; line-height: 1.6; }
+.modal-btn { padding: 13px 32px; background: var(--green); color: #000; border: none; border-radius: 100px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); }
+.testi { background: var(--card); padding: 28px; }
+.testi-stars { color: var(--yellow); font-size: 14px; margin-bottom: 14px; }
+.testi-text { font-size: 14px; color: var(--text2); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-av { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.testi-name { font-size: 14px; font-weight: 700; }
+.testi-role { font-size: 12px; color: var(--text3); }
+
+@media (max-width: 768px) {
+  .modes, .stocks-layout, .feat-grid, .safe-grid, .price-grid, .testi-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: 1fr 1fr; }
+  .stat-item:nth-child(2) { border-right: none; }
+  .cta-block { padding: 40px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="safety-bar">
+  <strong>Mosca es educación financiera, no asesoramiento financiero.</strong> No gestiónamos tu dinero. Invertir en bolsa conlleva riesgo de pérdida.
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-mark">🪰</div>
+      <div>
+        <div class="logo-text">Mosca</div>
+        <div class="logo-sub">laBolsabro</div>
+      </div>
+    </div>
+    <button class="nav-btn" onclick="openModal()">Quiero acceso</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag"><div class="tag-dot"></div> Beta abierta · Apúntate gratis</div>
+  <h1>Tu dinero<br>se aburre.<br><em>Haz algo.</em></h1>
+  <p class="hero-sub">La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones de adulto. Solo tu dinero haciendo algo.</p>
+  <form action="https://formspree.io/f/mqevbzvb" method="POST" onsubmit="handleForm(event)" class="form-row" style="flex-wrap:wrap;justify-content:center;">
+    <input type="email" name="email" id="heroEmail" placeholder="tu@email.com" required />
+    <button type="submit">Apuntarme gratis</button>
+  </form>
+  <p class="hero-note">Beta gratuita · <strong style="color:var(--text2)">Sin tarjeta de crédito</strong> · Acceso anticipado</p>
+
+  <div class="phone-wrap">
+    <div class="phone-glow"></div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="phone-pill-bar"><div class="phone-pill"></div></div>
+        <div class="phone-body">
+          <div class="p-top">
+            <div class="p-hi">Hola Alex 👋</div>
+            <div class="p-lv">Nv.3 · 2340 XP</div>
+          </div>
+          <div class="p-bal">
+            <div class="p-bal-l">Saldo total</div>
+            <div class="p-bal-n">847,50 €</div>
+            <div class="p-bal-s">↑ +47 € este mes · vas bien bro</div>
+          </div>
+          <div class="p-row">
+            <div class="p-mini">
+              <div class="p-mini-l">Ahorrando</div>
+              <div class="p-mini-v">210 €</div>
+              <div class="p-mini-s">3 botes</div>
+            </div>
+            <div class="p-mini">
+              <div class="p-mini-l">Invertido</div>
+              <div class="p-mini-v">150 €</div>
+              <div class="p-mini-s">simulado</div>
+            </div>
+          </div>
+          <div class="p-reto">
+            <div class="p-reto-l">⚡ Reto de hoy</div>
+            <div class="p-reto-t">Aporta 1 € al bote vacaciones. Solo uno.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--green)">14-40</div>
+      <div class="stat-label">Años · público objetivo</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Gratuita en beta</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--yellow)">0 €</div>
+      <div class="stat-label">Dinero real arriesgado</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2 min</div>
+      <div class="stat-label">Por reto diario</div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-card">
+  <section>
+    <div class="pill">Para quien es</div>
+    <h2>Dos modos.<br>Una sola app.</h2>
+    <p class="sub">Empieza a ahorrar con 16. A los 22 ya analizas si Inditex está barata en bolsa.</p>
+    <div class="modes">
+      <div class="mode">
+        <div class="mode-badge mb-green">Junior · 14-25 años</div>
+        <span class="mode-emoji">🧠</span>
+        <div class="mode-title">Para el que no controla su dinero</div>
+        <div class="mode-desc">Especialmente si tienes TDAH o si el dinero se te escapa de las maños. La familia paga, tú aprendes.</div>
+        <ul class="mode-list">
+          <li><span class="c-g">✓</span> Ahorro automático — ocurre solo</li>
+          <li><span class="c-g">✓</span> Retos diarios de 2 minutos</li>
+          <li><span class="c-g">✓</span> Regla anti-impulso de 48h</li>
+          <li><span class="c-g">✓</span> Vista de progreso para tu familia</li>
+          <li><span class="c-g">✓</span> Puntos XP y rachas semanales</li>
+        </ul>
+      </div>
+      <div class="mode" style="border-left:1px solid var(--border)">
+        <div class="mode-badge mb-purple">Inversor · 18-40 años</div>
+        <span class="mode-emoji">📈</span>
+        <div class="mode-title">Para el que quiere invertir sin perderse</div>
+        <div class="mode-desc">análisis de valor de empresas sin tecnicismos. Sabrás si algo esta caro o barato antes de meter tu dinero.</div>
+        <ul class="mode-list">
+          <li><span class="c-p">✓</span> semáforo de valor en un clic</li>
+          <li><span class="c-p">✓</span> Barata / justa / cara en lenguaje humano</li>
+          <li><span class="c-p">✓</span> Comparador de empresas por sector</li>
+          <li><span class="c-p">✓</span> Simulador de interes compuesto</li>
+          <li><span class="c-p">✓</span> Alertas cuando algo se pone interesante</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section>
+  <div class="pill">Por que Mosca</div>
+  <h2>No es otra app<br>de presupuestos.</h2>
+  <p class="sub">diseñada para el cerebro que se aburre, se distrae y gasta por impulso.</p>
+  <div class="feat-grid">
+    <div class="feat">
+      <span class="feat-emoji">⚡</span>
+      <div class="feat-title">automatización total</div>
+      <div class="feat-desc">El ahorro ocurre solo. Lo configuras una vez y el sistema trabaja cada mes sin que tengas que acordarte.</div>
+      <span class="feat-tag" style="background:var(--green-glow);color:var(--green)">Anti-olvido</span>
+    </div>
+    <div class="feat">
+      <span class="feat-emoji">🎯</span>
+      <div class="feat-title">Una pantalla, una acción</div>
+      <div class="feat-desc">Nada de menús interminables. Un objetivo por pantalla. diseñado para mantener el foco sin agobiarte.</div>
+      <span class="feat-tag" style="background:var(--purple-dim);color:var(--purple)">TDAH-friendly</span>
+    </div>
+    <div class="feat">
+      <span class="feat-emoji">🏆</span>
+      <div class="feat-title">Retos y rachas</div>
+      <div class="feat-desc">Puntos, niveles, rachas. Tu cerebro recibe la recompensa inmediata que necesita para crear hábitos.</div>
+      <span class="feat-tag" style="background:var(--yellow-dim);color:var(--yellow)">Dopamina sana</span>
+    </div>
+    <div class="feat">
+      <span class="feat-emoji">🔬</span>
+      <div class="feat-title">Valor intrínseco fácil</div>
+      <div class="feat-desc">Esta Apple cara o barata? Lo ves en 3 segundos con un semáforo de colores. Sin leer ningun balance.</div>
+      <span class="feat-tag" style="background:var(--green-glow);color:var(--green)">Value investing</span>
+    </div>
+    <div class="feat">
+      <span class="feat-emoji">⏱️</span>
+      <div class="feat-title">Regla de las 48h</div>
+      <div class="feat-desc">Quieres algo que no planeabas? Espera 2 dias. El 70% de las veces ya no lo querras. Basado en psicologia del consumo.</div>
+      <span class="feat-tag" style="background:var(--red-dim);color:var(--red)">Anti-impulso</span>
+    </div>
+    <div class="feat">
+      <span class="feat-emoji">👨‍👩‍👧</span>
+      <div class="feat-title">Vista familiar</div>
+      <div class="feat-desc">Tus padres ven si cumples retos y cuanto progresas — sin ver tu saldo exacto. Autonomia con apoyo.</div>
+      <span class="feat-tag" style="background:var(--purple-dim);color:var(--purple)">Para familias</span>
+    </div>
+  </div>
+</section>
+
+<div class="stocks-bg">
+  <section>
+    <div class="pill">Mosca Inversor · En vivo</div>
+    <h2>laBolsabro.<br>Datos reales ahora.</h2>
+    <p class="sub">Busca cualquier empresa que cotice en bolsa. Datos reales en tiempo real. El semáforo es educativo — no una recomendación de compra.</p>
+
+    <div style="background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden;">
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <input id="stockInput" type="text" placeholder="Acción o crypto: AAPL, NVDA, ASML, BTC, ETH, SOL..." style="flex:1;min-width:200px;padding:12px 18px;border-radius:100px;border:1px solid var(--border2);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')doSearch()">
+        <button onclick="doSearch()" style="padding:12px 24px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Analizar</button>
+      </div>
+      <div style="padding:12px 24px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:var(--text3);margin-right:4px;">Prueba con:</span>
+        <button class="quick-btn" onclick="doTicker('AAPL')">Apple</button>
+        <button class="quick-btn" onclick="doTicker('MSFT')">Microsoft</button>
+        <button class="quick-btn" onclick="doTicker('NVDA')">NVIDIA</button>
+        <button class="quick-btn" onclick="doTicker('TSLA')">Tesla</button>
+        <button class="quick-btn" onclick="doTicker('ASML')">ASML</button>
+        <button class="quick-btn" onclick="doTicker('ITX.MC')">Inditex</button>
+        <button class="quick-btn" onclick="doTicker('GLD')">Oro ETF</button>
+        <button class="quick-btn" onclick="doTicker('SLV')">Plata ETF</button>
+        <button class="quick-btn" onclick="doTicker('NEM')">Newmont (oro)</button>
+        <button class="quick-btn" onclick="doTicker('WPM')">Wheaton (plata)</button>
+        <button class="quick-btn" onclick="doTicker('BTC')">Bitcoin</button>
+        <button class="quick-btn" onclick="doTicker('ETH')">Ethereum</button>
+        <button class="quick-btn" onclick="doTicker('SOL')">Solana</button>
+      </div>
+      <div id="stockResult" style="padding:24px;min-height:120px;display:flex;align-items:center;justify-content:center;">
+        <p style="font-size:14px;color:var(--text3);text-align:center;">Introduce un ticker arriba o pulsa uno de los ejemplos para ver el análisis en tiempo real.</p>
+      </div>
+      <div style="padding:12px 24px;font-size:11px;color:var(--text3);background:var(--card2);border-top:1px solid var(--border);line-height:1.6;">
+        ⚠️ <strong style="color:var(--text2)">Datos de Yahoo Finance · Educativo, no asesoramiento financiero.</strong> El semáforo PER es una referencia histórica general — sectores distintos tienen PER distintos. Invertir conlleva riesgo de pérdida. Consulta un asesor regulado antes de invertir dinero real.
+      </div>
+    </div>
+
+    <style>
+    .quick-btn { padding:5px 12px;background:var(--card2);border:1px solid var(--border2);border-radius:100px;font-size:12px;color:var(--text2);cursor:pointer;font-family:inherit;transition:all 0.15s; }
+    .quick-btn:hover { border-color:var(--green);color:var(--green); }
+    .result-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px; }
+    .result-metric { background:var(--card2);border-radius:12px;padding:14px 16px;border:1px solid var(--border); }
+    .result-metric-label { font-size:11px;color:var(--text3);margin-bottom:4px; }
+    .result-metric-val { font-size:20px;font-weight:700;color:var(--text); }
+    .result-metric-sub { font-size:11px;color:var(--text3);margin-top:2px; }
+    .semáforo { display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:14px;margin-bottom:16px;border:1px solid; }
+    .semáforo-icon { font-size:28px;flex-shrink:0; }
+    .semáforo-title { font-size:16px;font-weight:700;margin-bottom:2px; }
+    .semáforo-desc { font-size:13px;opacity:0.8;line-height:1.5; }
+    .sem-green { background:var(--green-glow);border-color:rgba(34,197,94,0.25);color:var(--green); }
+    .sem-yellow { background:var(--yellow-dim);border-color:rgba(250,204,21,0.25);color:var(--yellow); }
+    .sem-red { background:var(--red-dim);border-color:rgba(248,113,113,0.25);color:var(--red); }
+    .sem-gray { background:var(--card2);border-color:var(--border2);color:var(--text2); }
+    </style>
+  </section>
+</div>
+
+<script>
+const PER_SECTORES = {
+  'Technology': { nombre: 'Tecnologia', bajo: 20, alto: 35 },
+  'Consumer Cyclical': { nombre: 'Consumo ciclico', bajo: 15, alto: 28 },
+  'Consumer Defensive': { nombre: 'Consumo defensivo', bajo: 18, alto: 28 },
+  'Financial Services': { nombre: 'Financiero', bajo: 10, alto: 18 },
+  'Energy': { nombre: 'Energia', bajo: 8, alto: 16 },
+  'Healthcare': { nombre: 'Salud', bajo: 18, alto: 30 },
+  'Industrials': { nombre: 'Industrial', bajo: 14, alto: 24 },
+  'Basic Materials': { nombre: 'Materiales', bajo: 10, alto: 20 },
+  'Communication Services': { nombre: 'comunicación', bajo: 15, alto: 28 },
+  'Utilities': { nombre: 'Servicios públicos', bajo: 12, alto: 22 },
+  'Real Estate': { nombre: 'Inmobiliario', bajo: 20, alto: 40 },
+  'default': { nombre: 'General', bajo: 15, alto: 25 }
+};
+
+function semaforo(pe, sector, peg) {
+  if (pe === null || pe <= 0) return { cls: 'sem-gray', ico: '❓', titulo: 'Sin datos de PER', desc: 'La empresa no tiene PER disponible — puede estar en pérdidas o ser de reciente cotización.' };
+  const ref = PER_SECTORES[sector] || PER_SECTORES['default'];
+  if (peg && peg > 0) {
+    if (peg < 1)   return { cls: 'sem-green',  ico: '🟢', titulo: `Barata para su crecimiento (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x pero crece rápido — el PEG de ${peg.toFixed(2)}x indica que el precio es bajo respecto al crecimiento esperado.` };
+    if (peg <= 2)  return { cls: 'sem-yellow', ico: '🟡', titulo: `Precio justo ajustado al crecimiento (PEG ${peg.toFixed(2)}x)`, desc: `PER de ${pe.toFixed(1)}x. El PEG de ${peg.toFixed(2)}x indica que el precio refleja razonablemente el crecimiento de la empresa.` };
+    return           { cls: 'sem-red',    ico: '🔴', titulo: `Cara incluso ajustando por crecimiento (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x y PEG de ${peg.toFixed(2)}x. El mercado paga una prima muy alta incluso considerando el crecimiento esperado.` };
+  }
+  if (pe < ref.bajo) return { cls: 'sem-green',  ico: '🟢', titulo: `Zona de valor — PER bajo para ${ref.nombre}`,  desc: `PER de ${pe.toFixed(1)}x está por debajo de la media histórica del sector (${ref.bajo}x–${ref.alto}x).` };
+  if (pe <= ref.alto) return { cls: 'sem-yellow', ico: '🟡', titulo: `Precio justo — PER en media de ${ref.nombre}`, desc: `PER de ${pe.toFixed(1)}x está en línea con la media histórica del sector (${ref.bajo}x–${ref.alto}x).` };
+  return               { cls: 'sem-red',    ico: '🔴', titulo: `Zona premium — PER alto para ${ref.nombre}`,   desc: `PER de ${pe.toFixed(1)}x está por encima de la media del sector (${ref.bajo}x–${ref.alto}x).` };
+}
+
+function fmtMiles(n) {
+  if (!n) return '—';
+  if (n >= 1e12) return (n/1e12).toFixed(2) + 'B €';
+  if (n >= 1e9) return (n/1e9).toFixed(2) + 'M M€';
+  if (n >= 1e6) return (n/1e6).toFixed(0) + 'M €';
+  return n.toLocaleString();
+}
+
+function doTicker(ticker) {
+  document.getElementById('stockInput').value = ticker;
+  doSearch();
+}
+
+const CACHE_TTL = 60 * 60 * 1000;
+function cacheGet(ticker) {
+  try { const raw = localStorage.getItem('mosca_stock_' + ticker); if (!raw) return null; const { ts, data } = JSON.parse(raw); if (Date.now() - ts > CACHE_TTL) return null; return data; } catch(e) { return null; }
+}
+function cacheSet(ticker, data) {
+  try { localStorage.setItem('mosca_stock_' + ticker, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
+}
+
+async function doSearch() {
+  const ticker = document.getElementById('stockInput').value.trim().toUpperCase();
+  if (!ticker) return;
+  const el = document.getElementById('stockResult');
+  const cached = cacheGet(ticker);
+  if (cached) { if (cached.tipo === 'crypto') renderCrypto(el, cached); else renderStock(el, cached, ticker); return; }
+  el.innerHTML = '<p style="font-size:14px;color:var(--text3);">⏳ Buscando ' + ticker + '...</p>';
+  try {
+    const base = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'https://labolsabro.com' : '';
+    const res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
+    if (!res.ok) throw new Error('error ' + res.status);
+    const d = await res.json();
+    if (!d || !d.precio) throw new Error('no data');
+    cacheSet(ticker, d);
+    if (d.tipo === 'crypto') renderCrypto(el, d);
+    else renderStock(el, d, ticker);
+  } catch(e) {
+    const t = document.getElementById('stockInput').value.trim().toUpperCase();
+    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🔍</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">No encontramos "${t}"</p><p style="font-size:13px;color:var(--text3);line-height:1.8">Usa el ticker exacto de bolsa.<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
+  }
+}
+
+function renderCrypto(el, d) {
+  const clr = d.cambioPct >= 0 ? 'var(--green)' : 'var(--red)';
+  const flecha = d.cambioPct >= 0 ? '▲' : '▼';
+  const viabColor = { 'Establecida':'sem-green', 'Creciente':'sem-yellow', 'Incierta':'sem-red', 'Especulativa':'sem-red' };
+  const riesgoIco = { 'Alto':'🟡', 'Muy alto':'🔴', 'Extremo':'🔴' };
+  const semCls = viabColor[d.viabilidad] || 'sem-gray';
+  const ico = riesgoIco[d.riesgo] || '❓';
+  el.innerHTML = `<div style="width:100%"><div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="width:44px;height:44px;border-radius:10px;background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">₿</div><div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">${d.nombre}</div><div style="font-size:12px;color:var(--text3)">${d.ticker} · ${d.subtipo||d.tipoCrypto||'Crypto'}</div></div><div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text)">${d.precio?d.precio.toLocaleString('es-ES', {maximumFractionDigits:2}):'-'} $</div><div style="font-size:13px;color:${clr};font-weight:600">${flecha} ${Math.abs(d.cambioPct||d.cambio||0).toFixed(2)}% hoy</div></div></div><div class="semáforo ${semCls}" style="margin-bottom:16px"><div class="semáforo-icon">${ico}</div><div><div class="semáforo-title">Viabilidad: ${d.viabilidad} · Riesgo: ${d.riesgo}</div><div class="semáforo-desc">${d.descripcion||d.descripción||''}</div></div></div><div style="margin-top:12px;padding:12px 16px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:12px;font-size:12px;color:var(--red);line-height:1.7">⚠️ <strong>Las criptomonedas son activos de muy alto riesgo.</strong> Puedes perder todo tu dinero. Nunca inviertas más de lo que puedas permitirte perder.</div><div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border);margin-top:12px">Precio: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo.</div></div>`;
+}
+
+function renderStock(el, d, ticker) {
+  try {
+    if (!d || !d.precio) throw new Error('no data');
+    const precio = d.precio, cambioPct = d.cambioPct||d.cambio||0, moneda = d.moneda||'USD', nombre = d.nombre||ticker, sector = d.sector||'default';
+    const sectorRef = PER_SECTORES[sector] || PER_SECTORES['default'];
+    const pe = d.pe??null, fpe = d.fpe??null, mktCap = d.mktCap??null, divY = d.divY??null, betaV = d.beta??null, eps = d.eps??null, margen = d.margen??null, min52 = d.min52??null, max52 = d.max52??null, peg = d.peg??null, crecIng = d.crecimientoIng??null, roe = d.roe??null, crecEps = d.crecimientoEps??null;
+    const ocf = d.operatingCashflow??null, fcf = d.freeCashflow??null, capex = d.capitalExpenditures??null;
+    const employees = d.employees??null;
+
+    // Reinversión real: capex sobre OCF (o deducido de OCF-FCF si capex no disponible)
+    const capexAbs = capex ? Math.abs(capex) : (ocf && fcf ? Math.abs(ocf - fcf) : null);
+    const reinvPct = (capexAbs && ocf && ocf > 0) ? (capexAbs / ocf * 100) : null;
+    const reinvColor = reinvPct === null ? 'var(--text)' : reinvPct >= 40 ? 'var(--green)' : reinvPct >= 20 ? 'var(--yellow)' : 'var(--text2)';
+    const reinvSub = reinvPct === null ? 'datos no disponibles' : reinvPct >= 50 ? 'invierte fuerte en crecer' : reinvPct >= 30 ? 'crecimiento moderado' : reinvPct >= 15 ? 'negocio maduro estable' : 'reparte casi todo lo que gana';
+
+    const iniciales = ticker.replace('.MC','').replace('.AS','').replace(/\./g,'').slice(0,4);
+    const sem = semaforo(pe, sector, peg);
+    const clrCambio = cambioPct >= 0 ? 'var(--green)' : 'var(--red)';
+    const flechaCambio = cambioPct >= 0 ? '▲' : '▼';
+
+    el.innerHTML = `<div style="width:100%">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <div style="width:44px;height:44px;border-radius:10px;background:var(--card2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text);flex-shrink:0;">${iniciales}</div>
+        <div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text);">${nombre}</div><div style="font-size:12px;color:var(--text3);">${ticker} · ${sectorRef.nombre}</div></div>
+        <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text);">${precio.toFixed(2)} ${moneda}</div><div style="font-size:13px;color:${clrCambio};font-weight:600;">${flechaCambio} ${Math.abs(cambioPct).toFixed(2)}% hoy</div></div>
+      </div>
+      <div class="semáforo ${sem.cls}"><div class="semáforo-icon">${sem.ico}</div><div><div class="semáforo-title">${sem.titulo}</div><div class="semáforo-desc">${sem.desc}</div></div></div>
+      <div class="result-grid">
+        <div class="result-metric"><div class="result-metric-label">PER actual</div><div class="result-metric-val">${pe ? pe.toFixed(1)+'x' : '—'}</div><div class="result-metric-sub">Precio / Beneficio</div></div>
+        ${peg ? `<div class="result-metric"><div class="result-metric-label">PEG ratio</div><div class="result-metric-val" style="color:${peg<1?'var(--green)':peg<=2?'var(--yellow)':'var(--red)'}">${peg.toFixed(2)}x</div><div class="result-metric-sub">&lt;1 barata, 1-2 justa, &gt;2 cara</div></div>` : ''}
+        ${crecEps !== null ? `<div class="result-metric"><div class="result-metric-label">Crecimiento BPA</div><div class="result-metric-val" style="color:${crecEps>0?'var(--green)':'var(--red)'}">${(crecEps*100).toFixed(1)}%</div><div class="result-metric-sub">Beneficio por acción YoY</div></div>` : ''}
+        ${crecIng !== null ? `<div class="result-metric"><div class="result-metric-label">Crecimiento ingresos</div><div class="result-metric-val" style="color:${crecIng>0?'var(--green)':'var(--red)'}">${(crecIng*100).toFixed(1)}%</div><div class="result-metric-sub">Ventas año sobre año</div></div>` : ''}
+        ${roe !== null ? `<div class="result-metric"><div class="result-metric-label">ROE</div><div class="result-metric-val" style="color:${roe>0.15?'var(--green)':roe<0?'var(--red)':'var(--text)'}">${(roe*100).toFixed(1)}%</div><div class="result-metric-sub">Rentabilidad sobre capital</div></div>` : ''}
+        <div class="result-metric"><div class="result-metric-label">PER estimado</div><div class="result-metric-val">${fpe ? fpe.toFixed(1)+'x' : '—'}</div><div class="result-metric-sub">Proyeccion anual</div></div>
+        <div class="result-metric"><div class="result-metric-label">Cap. mercado</div><div class="result-metric-val" style="font-size:15px">${fmtMiles(mktCap)}</div><div class="result-metric-sub">Valor total</div></div>
+        <div class="result-metric"><div class="result-metric-label">Dividendo</div><div class="result-metric-val">${divY ? (divY*100).toFixed(2)+'%' : '—'}</div><div class="result-metric-sub">Rentabilidad anual</div></div>
+        <div class="result-metric"><div class="result-metric-label">EPS</div><div class="result-metric-val" style="color:${eps>0?'var(--green)':'var(--red)'}">${eps ? eps.toFixed(2) : '—'}</div><div class="result-metric-sub">Beneficio por accion</div></div>
+        <div class="result-metric"><div class="result-metric-label">Margen neto</div><div class="result-metric-val" style="color:${margen>0.1?'var(--green)':margen<0?'var(--red)':'var(--text)'}">${margen ? (margen*100).toFixed(1)+'%' : '—'}</div><div class="result-metric-sub">Beneficio sobre ventas</div></div>
+        <div class="result-metric"><div class="result-metric-label">Reinversión del negocio</div><div class="result-metric-val" style="color:${reinvColor}">${reinvPct !== null ? reinvPct.toFixed(0)+'%' : '—'}</div><div class="result-metric-sub">${reinvSub}</div></div>
+        ${ocf ? `<div class="result-metric"><div class="result-metric-label">Flujo caja operativo</div><div class="result-metric-val" style="font-size:15px;color:${ocf>0?'var(--green)':'var(--red)'}">${fmtMiles(Math.abs(ocf))}</div><div class="result-metric-sub">Caja que genera el negocio</div></div>` : ''}
+        ${fcf ? `<div class="result-metric"><div class="result-metric-label">Free Cash Flow</div><div class="result-metric-val" style="font-size:15px;color:${fcf>0?'var(--green)':'var(--red)'}">${fmtMiles(Math.abs(fcf))}</div><div class="result-metric-sub">Caja libre tras invertir</div></div>` : ''}
+        <div class="result-metric"><div class="result-metric-label">Beta</div><div class="result-metric-val">${betaV ? betaV.toFixed(2) : '—'}</div><div class="result-metric-sub">&lt;1 menos volatil</div></div>
+        <div class="result-metric"><div class="result-metric-label">Rango 52 semanas</div><div class="result-metric-val" style="font-size:13px;margin-top:4px">${min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—'}</div><div class="result-metric-sub">Min / Max</div></div>
+        ${employees ? `<div class="result-metric"><div class="result-metric-label">Empleados</div><div class="result-metric-val" style="font-size:15px">${employees.toLocaleString('es-ES')}</div><div class="result-metric-sub">En plantilla</div></div>` : ''}
+      </div>
+      <div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border)">Datos: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo, no recomendación de compra.</div>
+    </div>`;
+  } catch(e) {
+    el.innerHTML = `<div style="text-align:center;padding:16px"><p style="font-size:15px;font-weight:700;color:var(--text)">Error al mostrar datos</p></div>`;
+  }
+}
+</script>
+
+<section>
+  <div class="pill">Calculadora de inversión</div>
+  <h2>¿Cuánto ganarías<br>en 20 años?</h2>
+  <p class="sub">El interés compuesto es la fuerza más poderosa de las finanzas. Ponle números a tu futuro.</p>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:0">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
+      <div style="background:var(--card);padding:24px">
+        <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px">Inversión inicial</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="number" id="calcInicial" value="1000" min="0" max="1000000" step="100" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcular()">
+          <span style="font-size:16px;color:var(--text3)">€</span>
+        </div>
+      </div>
+      <div style="background:var(--card);padding:24px">
+        <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px">Aporte mensual</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="number" id="calcMensual" value="100" min="0" max="10000" step="10" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcular()">
+          <span style="font-size:16px;color:var(--text3)">€/mes</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--card2);padding:24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Rentabilidad anual esperada</label>
+        <span id="calcTasaVal" style="font-size:20px;font-weight:700;color:var(--green)">7%</span>
+      </div>
+      <input type="range" id="calcTasa" min="1" max="15" step="0.5" value="7" style="width:100%;accent-color:var(--green)" oninput="calcular()">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:4px">
+        <span>1% — cuenta remunerada</span><span>7-8% — fondo indexado histórico</span><span>15% — optimista</span>
+      </div>
+    </div>
+    <div style="background:var(--card);padding:20px 24px;border-bottom:1px solid var(--border)">
+      <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:12px">Horizonte temporal</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="aniosBtn">
+        <button onclick="setAnios(5)"  class="anio-btn" data-a="5">5 años</button>
+        <button onclick="setAnios(10)" class="anio-btn" data-a="10">10 años</button>
+        <button onclick="setAnios(20)" class="anio-btn anio-sel" data-a="20">20 años</button>
+        <button onclick="setAnios(30)" class="anio-btn" data-a="30">30 años</button>
+        <button onclick="setAnios(40)" class="anio-btn" data-a="40">40 años</button>
+      </div>
+    </div>
+    <div style="padding:24px;background:var(--card2)">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div style="background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:4px">Total invertido</div>
+          <div id="resInvertido" style="font-size:20px;font-weight:700;color:var(--text)">—</div>
+        </div>
+        <div style="background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:4px">Intereses generados</div>
+          <div id="resIntereses" style="font-size:20px;font-weight:700;color:var(--green)">—</div>
+        </div>
+        <div style="background:var(--green);border-radius:12px;padding:16px">
+          <div style="font-size:11px;color:rgba(0,0,0,0.55);margin-bottom:4px">Valor final</div>
+          <div id="resTotal" style="font-size:20px;font-weight:700;color:#000">—</div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Desglose año a año</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px" id="calcTabla">
+          <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px 10px;color:var(--text3);font-weight:500">Año</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500">Invertido</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500">Intereses</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500">Total</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500">Multiplicador</th></tr></thead>
+          <tbody id="calcBody"></tbody>
+        </table>
+      </div>
+      <p style="font-size:11px;color:var(--text3);margin-top:12px;line-height:1.6">⚠️ Simulación educativa con rentabilidad constante. En la realidad los mercados fluctúan. El índice S&P 500 ha dado una media histórica de ~10% anual antes de inflación (7% ajustado). Rentabilidades pasadas no garantizan rentabilidades futuras.</p>
+    </div>
+  </div>
+
+  <style>
+  .anio-btn { padding:8px 18px;border-radius:100px;border:1px solid var(--border2);background:var(--card2);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s; }
+  .anio-btn:hover { border-color:var(--green);color:var(--green); }
+  .anio-sel { background:var(--green-glow);border-color:rgba(34,197,94,0.4);color:var(--green); }
+  </style>
+
+  <script>
+  let calcAnios = 20;
+  function setAnios(n) {
+    calcAnios = n;
+    document.querySelectorAll('.anio-btn').forEach(b => { b.classList.toggle('anio-sel', parseInt(b.dataset.a) === n); });
+    calcular();
+  }
+  function fmt(n) { return Math.round(n).toLocaleString('es-ES') + ' €'; }
+  function calcular() {
+    const inicial = parseFloat(document.getElementById('calcInicial').value) || 0;
+    const mensual = parseFloat(document.getElementById('calcMensual').value) || 0;
+    const tasa = parseFloat(document.getElementById('calcTasa').value) || 7;
+    const tasaMes = tasa / 100 / 12;
+    document.getElementById('calcTasaVal').textContent = tasa.toFixed(1) + '%';
+    let saldo = inicial, totalInv = inicial;
+    const filas = [];
+    for (let y = 1; y <= calcAnios; y++) {
+      for (let m = 0; m < 12; m++) { saldo = saldo * (1 + tasaMes) + mensual; totalInv += mensual; }
+      filas.push({ year: y, inv: totalInv, total: saldo, inter: saldo - totalInv });
+    }
+    const ultimo = filas[filas.length - 1];
+    document.getElementById('resInvertido').textContent = fmt(ultimo.inv);
+    document.getElementById('resIntereses').textContent = fmt(ultimo.inter);
+    document.getElementById('resTotal').textContent = fmt(ultimo.total);
+    const milestones = new Set([1,2,3,5,10,15,20,25,30,35,40].filter(x => x <= calcAnios));
+    milestones.add(calcAnios);
+    document.getElementById('calcBody').innerHTML = filas.filter(f => milestones.has(f.year)).map(f => {
+      const mult = (f.total / (inicial + mensual * 12 * f.year || 1));
+      const pctInter = (f.inter / f.total * 100);
+      const barW = Math.min(100, pctInter);
+      return `<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;color:var(--text);font-weight:600">Año ${f.year}</td><td style="padding:10px;text-align:right;color:var(--text2)">${fmt(f.inv)}</td><td style="padding:10px;text-align:right;color:var(--green)">${fmt(f.inter)}</td><td style="padding:10px;text-align:right;font-weight:700;color:var(--text)">${fmt(f.total)}</td><td style="padding:10px;text-align:right"><span style="color:var(--yellow);font-weight:600">${mult.toFixed(1)}x</span><div style="height:4px;background:var(--border);border-radius:2px;margin-top:4px"><div style="height:4px;background:var(--green);border-radius:2px;width:${barW}%"></div></div><div style="font-size:10px;color:var(--text3);margin-top:2px">${Math.round(pctInter)}% son intereses</div></td></tr>`;
+    }).join('');
+  }
+  calcular();
+  </script>
+
+<br><br>
+
+  <div class="pill">Tu seguridad primero</div>
+  <h2>Aprendes.<br>No arriesgas.</h2>
+  <p class="sub">Mosca es educación financiera. Nunca tocamos tu dinero ni te empujamos a invertir sin entender lo que haces.</p>
+  <div class="safe-grid">
+    <div class="safe-card"><span class="safe-ico">🔒</span><div class="safe-title">No gestiónamos tu dinero</div><div class="safe-desc">No somos un banco ni una plataforma de inversión. No necesitas meter tu tarjeta ni conectar tu cuenta bancaria.</div></div>
+    <div class="safe-card"><span class="safe-ico">📚</span><div class="safe-title">educación, no especulacion</div><div class="safe-desc">Nunca te diremos "compra esto ahora". Te enseñamos a analizar datos públicos. La decisión de invertir es siempre tuya.</div></div>
+    <div class="safe-card"><span class="safe-ico">👨‍👩‍👧</span><div class="safe-title">Menores con supervision</div><div class="safe-desc">Los menores de 18 necesitan que un adulto active la cuenta familiar. Los padres pueden pausar el acceso cuando quieran.</div></div>
+    <div class="safe-card"><span class="safe-ico">⚠️</span><div class="safe-title">El riesgo siempre visible</div><div class="safe-desc">Cada vez que aparece información sobre bolsa, recordamos que invertir conlleva riesgo de perder dinero. Sin letra pequeña.</div></div>
+    <div class="safe-card"><span class="safe-ico">🐢</span><div class="safe-title">Solo largo plazo</div><div class="safe-desc">Fondos indexados, ETFs, interes compuesto. Nunca trading diario, criptomonedas especulativas ni apalancamiento.</div></div>
+    <div class="safe-card"><span class="safe-ico">🛡️</span><div class="safe-title">Sin comisiónes ocultas</div><div class="safe-desc">No cobramos comisiónes de bancos ni brokers por recomendarte sus productos. Solo la suscripción. Sin conflictos de interes.</div></div>
+  </div>
+  <div class="legal-box">
+    <p><strong>Aviso legal:</strong> Mosca es una plataforma de educación financiera en desarrollo. No estamos regulados como entidad de asesoramiento financiero bajo MiFID II ni como entidad de crédito. La información que ofrecemos sobre empresas y mercados tiene caracter exclusivamente educativo e informativo, basada en datos públicos disponibles. <strong>Invertir en bolsa conlleva riesgo de pérdida parcial o total del capital invertido.</strong> Las rentabilidades pasadas no garantizan rentabilidades futuras. Antes de tomar cualquier decisión de inversión con dinero real, consulta con un asesor financiero regulado por la CNMV.</p>
+  </div>
+</section>
+
+<div class="bg-card">
+  <section>
+    <div class="pill">Beta cerrada</div>
+    <h2>Lo que dicen<br>los primeros.</h2>
+    <p class="sub">3 meses con 40 familias en beta. Esto es lo que nos cuentan.</p>
+    <div class="testi-grid">
+      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"Mi hijo tiene 17 años y TDAH. En 6 semanas ha ahorrado 80 € solo. Antes era imposible que guardara ni un euro."</p><div class="testi-author"><div class="testi-av" style="background:var(--purple)">MJ</div><div><div class="testi-name">Maria Jose R.</div><div class="testi-role">Madre · Madrid</div></div></div></div>
+      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"Por fin entiendo si una acción esta cara. El semáforo rojo me salvo de comprar Tesla en maximos. Habria perdido pasta."</p><div class="testi-author"><div class="testi-av" style="background:var(--green);color:#000">DG</div><div><div class="testi-name">Diego G.</div><div class="testi-role">22 Años · Barcelona</div></div></div></div>
+      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"No me hace sentir mal cuando fallo un reto. Solo me dice 'manana lo intentas'. Eso cambia mucho cuando tienes TDAH."</p><div class="testi-author"><div class="testi-av" style="background:var(--yellow);color:#000">LP</div><div><div class="testi-name">Laura P.</div><div class="testi-role">19 Años · TDAH diagnosticado</div></div></div></div>
+    </div>
+  </section>
+</div>
+
+<section>
+  <div class="pill">Simulador</div>
+  <h2>¿Cuanto tendras<br>si empiezas hoy?</h2>
+  <p class="sub">Mueve los sliders y ve como crece tu dinero con el interes compuesto. La magia del tiempo y la constancia.</p>
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:32px;max-width:680px;">
+    <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:28px;">
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Ahorro mensual</span><span style="font-weight:700;color:var(--text)" id="simMonthlyLabel">50 €</span></div><input type="range" id="simMonthly" min="10" max="500" step="5" value="50" oninput="calcSim()" style="width:100%;accent-color:var(--green)"></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Años ahorrando</span><span style="font-weight:700;color:var(--text)" id="simYearsLabel">10 años</span></div><input type="range" id="simYears" min="1" max="40" step="1" value="10" oninput="calcSim()" style="width:100%;accent-color:var(--green)"></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Rentabilidad anual estimada</span><span style="font-weight:700;color:var(--text)" id="simRateLabel">7%</span></div><input type="range" id="simRate" min="1" max="15" step="0.5" value="7" oninput="calcSim()" style="width:100%;accent-color:var(--green)"><p style="font-size:11px;color:var(--text3);margin-top:6px;">Fondos indexados históricamente ~7% anual. Rentabilidad pasada no garantiza futura.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+      <div style="background:var(--card2);border-radius:12px;padding:16px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Dinero que metes</div><div style="font-size:20px;font-weight:700;color:var(--text)" id="simInvested">6.000 €</div></div>
+      <div style="background:var(--card2);border-radius:12px;padding:16px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Intereses ganados</div><div style="font-size:20px;font-weight:700;color:var(--green)" id="simEarned">2.654 €</div></div>
+      <div style="background:var(--green-glow);border-radius:12px;padding:16px;border:1px solid rgba(34,197,94,0.2);text-align:center;"><div style="font-size:11px;color:var(--green);margin-bottom:6px;">Total final</div><div style="font-size:24px;font-weight:700;color:var(--green)" id="simTotal">8.654 €</div></div>
+    </div>
+    <div style="background:var(--card2);border-radius:12px;padding:14px 18px;border:1px solid var(--border);"><p style="font-size:13px;color:var(--text2);line-height:1.6;" id="simMessage"></p></div>
+  </div>
+</section>
+
+<div class="bg-card">
+  <section>
+    <div class="pill">Retos de conocimiento</div>
+    <h2>¿Cuanto sabes<br>de dinero?</h2>
+    <p class="sub">5 preguntas. Sin trampa. Descubre que nivel tienes y gana XP. Como Duolingo pero para tu cartera.</p>
+    <div style="max-width:680px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;gap:6px;" id="quizDots"></div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="font-size:13px;color:var(--text2);">Racha <span id="quizStreak" style="color:var(--yellow);font-weight:700;">🔥 0</span></div>
+          <div style="font-size:13px;color:var(--text2);">XP <span id="quizXP" style="color:var(--green);font-weight:700;">0</span></div>
+        </div>
+      </div>
+      <div id="quizCard" style="background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden;">
+        <div style="background:var(--card2);padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+          <span id="quizCategory" style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;">Ahorro</span>
+          <span id="quizNum" style="font-size:12px;color:var(--text3);">Pregunta 1 de 5</span>
+        </div>
+        <div style="padding:28px 24px;">
+          <p id="quizQuestion" style="font-size:18px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:24px;letter-spacing:-0.02em;"></p>
+          <div id="quizOptions" style="display:flex;flex-direction:column;gap:10px;"></div>
+          <div id="quizFeedback" style="display:none;margin-top:20px;padding:16px 20px;border-radius:12px;border:1px solid;">
+            <div id="quizFeedbackTitle" style="font-size:15px;font-weight:700;margin-bottom:4px;"></div>
+            <div id="quizFeedbackText" style="font-size:13px;line-height:1.6;opacity:0.85;"></div>
+          </div>
+        </div>
+        <div style="padding:0 24px 24px;">
+          <button id="quizNextBtn" onclick="nextQuestion()" style="display:none;width:100%;padding:14px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">Siguiente pregunta →</button>
+        </div>
+      </div>
+      <div id="quizResult" style="display:none;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:40px 32px;text-align:center;">
+        <div style="font-size:52px;margin-bottom:16px;" id="quizResultEmoji">🏆</div>
+        <h3 id="quizResultTitle" style="font-size:24px;font-weight:700;letter-spacing:-0.03em;margin-bottom:8px;"></h3>
+        <p id="quizResultDesc" style="font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;"></p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;">
+          <div style="background:var(--card2);border-radius:12px;padding:16px 24px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Respuestas correctas</div><div style="font-size:28px;font-weight:700;color:var(--green)" id="quizFinalScore"></div></div>
+          <div style="background:var(--yellow-dim);border-radius:12px;padding:16px 24px;border:1px solid rgba(250,204,21,0.2);text-align:center;"><div style="font-size:11px;color:var(--yellow);margin-bottom:4px;">XP ganados</div><div style="font-size:28px;font-weight:700;color:var(--yellow)" id="quizFinalXP"></div></div>
+        </div>
+        <button onclick="resetQuiz()" style="padding:13px 28px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:10px;">Repetir quiz</button>
+        <button onclick="openModal()" style="padding:13px 28px;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">Quiero la app</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="price-bg">
+  <section>
+    <div class="pill">Precios</div>
+    <h2>Sin letra pequeña.</h2>
+    <p class="sub">Estos son los planes planificados para el lanzamiento. Durante la beta, acceso gratuito a todo.</p>
+    <div class="price-grid">
+      <div class="price-card"><div class="price-tier">Gratis</div><div class="price-num">0 € <span>/mes</span></div><div class="price-desc">Para empezar y ver si Mosca te va. Sin limite de tiempo.</div><ul class="price-list"><li><span>✓</span> 1 bote de ahorro</li><li><span>✓</span> Retos básicos diarios</li><li><span>✓</span> Simulador de interes compuesto</li><li><span>✓</span> análisis básico de empresas</li></ul><button class="price-btn price-btn-out" onclick="openModal()">Apuntarme a la beta</button></div>
+      <div class="price-card hot"><div class="hot-badge">Plan principal</div><div class="price-tier">Familia</div><div class="price-num">5,99 € <span>/mes</span></div><div class="price-desc">La familia paga, el joven aprende. Para hijos de 14-25.</div><ul class="price-list"><li><span>✓</span> Botes de ahorro ilimitados</li><li><span>✓</span> Vista familiar para 2 adultos</li><li><span>✓</span> Retos avanzados y XP extra</li><li><span>✓</span> análisis completo de empresas</li><li><span>✓</span> Recordatorios personalizables</li></ul><button class="price-btn price-btn-solid" onclick="openModal()">Apuntarme a la beta</button></div>
+      <div class="price-card"><div class="price-tier">Inversor</div><div class="price-num">9,99 € <span>/mes</span></div><div class="price-desc">Para el que ya ahorra y quiere analizar el mercado con criterio.</div><ul class="price-list"><li><span>✓</span> Todo del plan Familia</li><li><span>✓</span> Comparador avanzado por sector</li><li><span>✓</span> Alertas de valor personalizadas</li><li><span>✓</span> Historial de análisis personal</li><li><span>✓</span> Acceso prioritario a novedades</li></ul><button class="price-btn price-btn-out" onclick="openModal()">Apuntarme a la beta</button></div>
+    </div>
+  </section>
+</div>
+
+<section>
+  <div class="pill">Preguntas frecuentes</div>
+  <h2>Lo que nos preguntan.</h2>
+  <div class="faq-wrap">
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Cuando estara disponible la app?</button><div class="faq-a">Estamos en fase de desarrollo. Las personas que se apunten a la lista de espera tendran acceso anticipado gratuito a la beta cuando este lista. Te avisaremos por email.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Conecta con mi banco?</button><div class="faq-a">En la primera version no. Introduces tus datos manualmente. Lo hacemos asi a proposito: la primera fase es de educación y habito. La conexión bancaria llegara en versiones posteriores.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Me dice que acciónes comprar?</button><div class="faq-a">No. Mosca no da recomendaciónes de inversión. Mostramos análisis educativo basado en datos públicos. La decisión de invertir es siempre tuya y bajo tu responsabilidad.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Sirve si no tengo TDAH?</button><div class="faq-a">Totalmente. El diseno parte del caso mas extremo (TDAH) pero todo lo que funciona para ese cerebro funciona para cualquiera. La claridad y sencillez benefician a todos.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Que ven los padres exactamente?</button><div class="faq-a">Veran el progreso en retos y botes de ahorro, pero no el saldo exacto ni los movimientos. Queremos que el joven tenga privacidad mientras los padres se quedan tranquilos con el progreso.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Tengo que pagar ahora?</button><div class="faq-a">No. Apuntarse a la lista de espera es completamente gratuito y sin compromiso. No pedimos tarjeta ni datos de pago. Solo tu email para avisarte cuando abramos la beta.</div></div>
+  </div>
+</section>
+
+<div class="cta-wrap">
+  <div class="cta-block">
+    <h2>Tu dinero puede hacer algo.</h2>
+    <div class="cta-sub-tag">laBolsabro. Y el ahorro también.</div>
+    <p>Se el primero en probarla. Acceso anticipado gratuito cuando abramos la beta.</p>
+    <form action="https://formspree.io/f/mqevbzvb" method="POST" onsubmit="handleForm(event)" class="cta-form">
+      <input type="email" name="email" placeholder="tu@email.com" required />
+      <button type="submit">Quiero entrar</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-mark">🪰</div>
+      <div>
+        <div class="footer-name">Mosca</div>
+        <div class="footer-slogan">laBolsabro</div>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="/privacidad.html">Privacidad</a>
+      <a href="/terminos.html">Términos</a>
+      <a href="mailto:hola@labolsabro.com">Contacto</a>
+    </div>
+    <div class="footer-copy">© 2025 Mosca · Plataforma educativa · No somos asesores financieros</div>
+  </div>
+</footer>
+
+<div class="overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-emoji">🪰</div>
+    <h3>Ya estas en la lista</h3>
+    <p>Te avisamos cuando abra la beta. Seras de los primeros en acceder, con acceso gratuito y prioritario.</p>
+    <button class="modal-btn" onclick="document.getElementById('modal').classList.remove('open')">Perfecto</button>
+  </div>
+</div>
+
+<script>
+async function handleForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const emailInput = form.querySelector('input[type="email"]');
+  if (!emailInput.value || !emailInput.value.includes('@')) { emailInput.style.borderColor = '#f87171'; setTimeout(() => { emailInput.style.borderColor = ''; }, 2000); return; }
+  try {
+    await fetch('https://formspree.io/f/mqevbzvb', { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify({ email: emailInput.value }) });
+  } catch(err) {}
+  emailInput.value = '';
+  openModal();
+}
+function openModal() { document.getElementById('modal').classList.add('open'); }
+function closeModal(e) { if (e.target.id === 'modal') document.getElementById('modal').classList.remove('open'); }
+function toggleFaq(btn) { const item = btn.parentElement; const wasOpen = item.classList.contains('open'); document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open')); if (!wasOpen) item.classList.add('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modal').classList.remove('open'); });
+
+function calcSim() {
+  const monthly = parseFloat(document.getElementById('simMonthly').value);
+  const years = parseInt(document.getElementById('simYears').value);
+  const rate = parseFloat(document.getElementById('simRate').value) / 100 / 12;
+  const months = years * 12;
+  const total = monthly * ((Math.pow(1 + rate, months) - 1) / rate) * (1 + rate);
+  const invested = monthly * months;
+  const earned = total - invested;
+  const pct = Math.round((earned / invested) * 100);
+  document.getElementById('simMonthlyLabel').textContent = monthly + ' €';
+  document.getElementById('simYearsLabel').textContent = years + ' año' + (years === 1 ? '' : 's');
+  document.getElementById('simRateLabel').textContent = parseFloat(document.getElementById('simRate').value).toFixed(1) + '%';
+  document.getElementById('simInvested').textContent = Math.round(invested).toLocaleString('es-ES') + ' €';
+  document.getElementById('simEarned').textContent = Math.round(earned).toLocaleString('es-ES') + ' €';
+  document.getElementById('simTotal').textContent = Math.round(total).toLocaleString('es-ES') + ' €';
+  document.getElementById('simMessage').textContent = `Con solo ${monthly} € al mes durante ${years} años, el interés compuesto te genera ${Math.round(earned).toLocaleString('es-ES')} € extra sin hacer nada más. Eso es un ${pct}% de ganancia sobre lo que aportaste.`;
+}
+calcSim();
+
+const preguntas = [
+  { cat: 'Ahorro', q: '¿Qué es el interés compuesto?', ops: ['Pagar intereses por una deuda', 'Ganar intereses sobre tus intereses anteriores', 'Un tipo de cuenta bancaria', 'Un impuesto sobre el ahorro'], ok: 1, exp: 'El interés compuesto es ganar intereses no solo sobre tu dinero inicial, sino también sobre los intereses ya generados. Con el tiempo, esto hace que tu dinero crezca de forma exponencial.' },
+  { cat: 'Bolsa', q: '¿Qué significa que una acción tiene un PER de 10x?', ops: ['La empresa gana 10 veces más que sus competidores', 'El precio de la acción es 10 veces el beneficio anual por acción', 'La empresa ha subido un 10% este año', 'Hay 10 acciónistas mayoritarios'], ok: 1, exp: 'El PER (Precio/Beneficio) indica cuántas veces estás pagando los beneficios anuales de la empresa. Un PER de 10x significa que al precio actual, tardarías 10 años en recuperar la inversión solo con los beneficios.' },
+  { cat: 'TDAH y dinero', q: '¿Cuál es la mejor estrategia de ahorro para alguien con TDAH?', ops: ['Revisar el saldo cada día y decidir cuánto ahorrar', 'Automatizar el ahorro el mismo día que cobras', 'Ahorrar lo que sobre a final de mes', 'Guardar el dinero en efectivo en casa'], ok: 1, exp: 'Automatizar el ahorro justo cuando cobras es la estrategia más efectiva para el TDAH porque elimina la decisión. Si el dinero se mueve solo antes de que lo "veas", tu cerebro no lo cuenta como disponible.' },
+  { cat: 'inversión', q: '¿Qué es un fondo indexado?', ops: ['Un fondo gestiónado por un experto que elige las mejores acciónes', 'Un fondo que replica automáticamente un índice como el S&P 500', 'Una cuenta de ahorro con alta rentabilidad', 'Un tipo de criptomoneda estable'], ok: 1, exp: 'Un fondo indexado compra automáticamente todas las empresas de un índice en sus proporciones exactas. Al no tener un gestor activo, las comisiónes son muy bajas. Históricamente, estos fondos baten a la mayoría de gestores activos a largo plazo.' },
+  { cat: 'Ahorro', q: '¿Qué es la regla del 50/30/20?', ops: ['Invertir el 50% en acciónes, 30% en bonos y 20% en crypto', '50% para necesidades, 30% para ocio y 20% para ahorro', '50% de descuento en compras planificadas con 30 días de antelación', 'Ahorrar 20€ por cada 50€ que ganas en 30 días'], ok: 1, exp: 'La regla 50/30/20 es una guía simple para distribuir tus ingresos: 50% para gastos necesarios, 30% para lo que quieras y 20% para ahorrar o invertir.' },
+];
+
+let qIdx = 0, score = 0, xp = 0, streak = 0, selPreguntas = [];
+function shuffleArr(a) { return [...a].sort(() => Math.random() - 0.5); }
+function initQuiz() {
+  selPreguntas = shuffleArr(preguntas).slice(0, 5);
+  qIdx = 0; score = 0; xp = 0; streak = 0;
+  document.getElementById('quizXP').textContent = 0;
+  document.getElementById('quizStreak').textContent = '🔥 0';
+  document.getElementById('quizResult').style.display = 'none';
+  document.getElementById('quizCard').style.display = 'block';
+  renderDots(); renderQuestion();
+}
+function renderDots() {
+  document.getElementById('quizDots').innerHTML = selPreguntas.map((_, i) => `<div style="width:28px;height:6px;border-radius:3px;background:${i < qIdx ? 'var(--green)' : i === qIdx ? 'var(--text2)' : 'var(--border2)'}"></div>`).join('');
+}
+function renderQuestion() {
+  const p = selPreguntas[qIdx];
+  document.getElementById('quizCategory').textContent = p.cat;
+  document.getElementById('quizNum').textContent = `Pregunta ${qIdx + 1} de ${selPreguntas.length}`;
+  document.getElementById('quizQuestion').textContent = p.q;
+  document.getElementById('quizFeedback').style.display = 'none';
+  document.getElementById('quizNextBtn').style.display = 'none';
+  document.getElementById('quizOptions').innerHTML = p.ops.map((o, i) => `<button onclick="answer(${i})" style="width:100%;text-align:left;padding:14px 18px;background:var(--card2);border:1.5px solid var(--border2);border-radius:12px;font-size:14px;color:var(--text);cursor:pointer;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;gap:12px;" onmouseover="this.style.borderColor='var(--text2)'" onmouseout="this.style.borderColor='var(--border2)'"><span style="width:26px;height:26px;border-radius:50%;background:var(--card);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${String.fromCharCode(65+i)}</span>${o}</button>`).join('');
+}
+function answer(i) {
+  const p = selPreguntas[qIdx];
+  const btns = document.getElementById('quizOptions').querySelectorAll('button');
+  btns.forEach(b => b.onclick = null);
+  const correct = i === p.ok;
+  btns[i].style.borderColor = correct ? 'var(--green)' : 'var(--red)';
+  btns[i].style.background = correct ? 'var(--green-glow)' : 'var(--red-dim)';
+  if (!correct) { btns[p.ok].style.borderColor = 'var(--green)'; btns[p.ok].style.background = 'var(--green-glow)'; }
+  if (correct) { score++; streak++; xp += 10 + (streak > 1 ? 5 : 0); } else { streak = 0; }
+  document.getElementById('quizXP').textContent = xp;
+  document.getElementById('quizStreak').textContent = '🔥 ' + streak;
+  const fb = document.getElementById('quizFeedback');
+  fb.style.display = 'block';
+  fb.style.background = correct ? 'var(--green-glow)' : 'var(--red-dim)';
+  fb.style.borderColor = correct ? 'rgba(34,197,94,0.3)' : 'rgba(248,113,113,0.3)';
+  document.getElementById('quizFeedbackTitle').style.color = correct ? 'var(--green)' : 'var(--red)';
+  document.getElementById('quizFeedbackTitle').textContent = correct ? '✓ Correcto — +' + (10 + (streak > 1 ? 5 : 0)) + ' XP' : '✗ Incorrecto';
+  document.getElementById('quizFeedbackText').style.color = correct ? 'var(--green)' : 'var(--red)';
+  document.getElementById('quizFeedbackText').textContent = p.exp;
+  document.getElementById('quizNextBtn').style.display = 'block';
+}
+function nextQuestion() {
+  qIdx++;
+  if (qIdx >= selPreguntas.length) { showResult(); return; }
+  renderDots(); renderQuestion();
+}
+function showResult() {
+  document.getElementById('quizCard').style.display = 'none';
+  const r = document.getElementById('quizResult');
+  r.style.display = 'block';
+  const pct = Math.round((score / selPreguntas.length) * 100);
+  const niveles = [
+    { min: 0,  emoji: '🌱', title: 'Semilla financiera', desc: 'Tranqui, todos empezamos desde cero. Mosca está aquí para llevarte de semilla a árbol.' },
+    { min: 40, emoji: '📈', title: 'Inversor en ciernes', desc: 'Buen comienzo. Tienes base pero aún hay conceptos que pulir.' },
+    { min: 60, emoji: '💡', title: 'Cerebro financiero', desc: 'Sabes lo que te traes entre maños. Ahora toca pasar del conocimiento a la acción.' },
+    { min: 80, emoji: '🏆', title: 'Crack total', desc: '¡Máquina! Tienes un nivel financiero por encima de la media.' },
+  ];
+  const nv = [...niveles].reverse().find(n => pct >= n.min);
+  document.getElementById('quizResultEmoji').textContent = nv.emoji;
+  document.getElementById('quizResultTitle').textContent = nv.title;
+  document.getElementById('quizResultDesc').textContent = nv.desc;
+  document.getElementById('quizFinalScore').textContent = score + '/' + selPreguntas.length;
+  document.getElementById('quizFinalXP').textContent = xp + ' XP';
+}
+function resetQuiz() { initQuiz(); }
+initQuiz();
+</script>
+</body>
+</html>
