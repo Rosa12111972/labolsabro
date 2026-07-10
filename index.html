@@ -404,6 +404,9 @@ footer { border-top: 1px solid var(--border); }
         </div>
         <button onclick="doSearch()" style="padding:12px 24px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Analizar</button>
       </div>
+      <div id="historialRow" style="display:none;padding:10px 24px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;align-items:center;">
+        <span style="font-size:12px;color:var(--text3);margin-right:4px;">🕐 Recientes:</span>
+      </div>
       <div style="padding:12px 24px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;">
         <span style="font-size:12px;color:var(--text3);margin-right:4px;">Prueba con:</span>
         <button class="quick-btn" onclick="doTicker('AAPL')">Apple</button>
@@ -412,13 +415,14 @@ footer { border-top: 1px solid var(--border); }
         <button class="quick-btn" onclick="doTicker('TSLA')">Tesla</button>
         <button class="quick-btn" onclick="doTicker('ASML')">ASML</button>
         <button class="quick-btn" onclick="doTicker('ITX.MC')">Inditex</button>
-        <button class="quick-btn" onclick="doTicker('NEM')">Newmont (oro)</button>
-        <button class="quick-btn" onclick="doTicker('WPM')">Wheaton (plata)</button>
-        <button class="quick-btn" onclick="doTicker('GOLD')">Barrick Gold</button>
-        <button class="quick-btn" onclick="doTicker('AEM')">Agnico Eagle</button>
+        <button class="quick-btn" onclick="doTicker('IBE.MC')">Iberdrola</button>
+        <button class="quick-btn" onclick="doTicker('SAN.MC')">Santander</button>
+        <button class="quick-btn" onclick="doTicker('TEF.MC')">Telefónica</button>
+        <button class="quick-btn" onclick="doTicker('REP.MC')">Repsol</button>
+        <button class="quick-btn" onclick="doTicker('NEM')">Newmont</button>
+        <button class="quick-btn" onclick="doTicker('WPM')">Wheaton</button>
         <button class="quick-btn" onclick="doTicker('BTC')">Bitcoin</button>
         <button class="quick-btn" onclick="doTicker('ETH')">Ethereum</button>
-        <button class="quick-btn" onclick="doTicker('SOL')">Solana</button>
       </div>
       <div id="stockResult" style="padding:24px;min-height:120px;display:flex;align-items:center;justify-content:center;">
         <p style="font-size:14px;color:var(--text3);text-align:center;">Introduce un ticker arriba o pulsa uno de los ejemplos para ver el análisis en tiempo real.</p>
@@ -435,7 +439,9 @@ footer { border-top: 1px solid var(--border); }
     .suggest-item:last-child { border-bottom:none; }
     .suggest-item:hover { background:var(--card2); }
     .result-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px; }
-    .result-metric { background:var(--card2);border-radius:12px;padding:14px 16px;border:1px solid var(--border); }
+    .result-metric { background:var(--card2);border-radius:12px;padding:14px 16px;border:1px solid var(--border);cursor:pointer;transition:border-color 0.15s; }
+    .result-metric:hover { border-color:var(--border2); }
+    .metric-info-box { display:none;font-size:12px;color:var(--text2);line-height:1.6;margin-top:8px;padding-top:8px;border-top:1px solid var(--border); }
     .result-metric-label { font-size:11px;color:var(--text3);margin-bottom:4px; }
     .result-metric-val { font-size:20px;font-weight:700;color:var(--text); }
     .result-metric-sub { font-size:11px;color:var(--text3);margin-top:2px; }
@@ -533,7 +539,60 @@ document.addEventListener('DOMContentLoaded', () => {
     input.addEventListener('input', onInputChange);
     input.addEventListener('keydown', onInputKey);
   }
+  renderHistorial();
 });
+
+// Historial de búsquedas
+function getHistorial() {
+  try { return JSON.parse(localStorage.getItem('mosca_historial') || '[]'); } catch(e) { return []; }
+}
+function addHistorial(ticker, nombre) {
+  try {
+    let h = getHistorial().filter(x => x.ticker !== ticker);
+    h.unshift({ ticker, nombre });
+    if (h.length > 6) h = h.slice(0, 6);
+    localStorage.setItem('mosca_historial', JSON.stringify(h));
+    renderHistorial();
+  } catch(e) {}
+}
+function renderHistorial() {
+  const row = document.getElementById('historialRow');
+  if (!row) return;
+  const h = getHistorial();
+  if (!h.length) { row.style.display = 'none'; return; }
+  row.style.display = 'flex';
+  const btns = h.map(x => `<button class="quick-btn" onclick="doTicker('${x.ticker}')" style="border-color:rgba(250,204,21,0.3);color:var(--yellow)">${x.nombre || x.ticker}</button>`).join('');
+  row.innerHTML = `<span style="font-size:12px;color:var(--text3);margin-right:4px;">🕐 Recientes:</span>${btns}`;
+}
+
+// Explicaciones de métricas
+const METRIC_INFO = {
+  'PER actual': 'Cuánto pagas por cada euro de beneficio. PER 20x = pagas 20€ por cada 1€ que gana la empresa. Cuanto más bajo, más barata.',
+  'PEG ratio': 'PER ajustado al crecimiento. Menos de 1 = barata para lo que crece. Entre 1-2 = precio justo. Más de 2 = cara.',
+  'PER estimado': 'Como el PER pero usando los beneficios que se esperan el próximo año. Más bajo = mejor perspectiva futura.',
+  'Crecimiento BPA': 'Cuánto han crecido los beneficios por acción respecto al año anterior. Positivo y alto = empresa que mejora.',
+  'Crecimiento ingresos': 'Cuánto han crecido las ventas totales. Si vende más cada año, la empresa está expandiéndose.',
+  'ROE': 'Por cada 100€ de capital propio, cuánto gana la empresa. ROE del 20% = gana 20€ por cada 100€ invertidos. Más del 15% es bueno.',
+  'Cap. mercado': 'Valor total de la empresa en bolsa. Grande y estable = empresa consolidada. Pequeña = más riesgo pero más potencial.',
+  'Dividendo': 'Porcentaje del precio que te pagan al año solo por tener las acciones. Como un alquiler de tu inversión.',
+  'EPS': 'Beneficio neto dividido entre todas las acciones. Positivo = la empresa gana dinero. Negativo = está en pérdidas.',
+  'Margen neto': 'De cada 100€ que vende, cuánto se queda como beneficio real. 20% = se queda 20€. Más alto = más eficiente.',
+  'Reinversión del negocio': 'Qué parte del dinero que genera la empresa la reinvierte en crecer. Alto = apuesta por el futuro. Bajo = reparte casi todo.',
+  'Flujo caja operativo': 'Dinero real que entra por el negocio principal, antes de inversiones. La métrica más honesta de la salud financiera.',
+  'Free Cash Flow': 'Dinero que sobra después de pagar todas las inversiones necesarias. Si es positivo, la empresa genera caja de verdad.',
+  'Beta': 'Cómo se mueve la acción respecto al mercado. Beta 1 = igual que el mercado. Beta 2 = el doble de volátil. Menos de 1 = más estable.',
+  'Rango 52 semanas': 'El precio más bajo y más alto de los últimos 12 meses. Ayuda a ver si ahora está cara o barata históricamente.',
+  'Empleados': 'Tamaño de la empresa. Más empleados suele significar empresa más grande y establecida.',
+};
+
+function toggleMetricInfo(label) {
+  const id = 'info_' + label.replace(/\s/g,'_');
+  const el = document.getElementById(id);
+  if (!el) return;
+  const visible = el.style.display !== 'none';
+  document.querySelectorAll('.metric-info-box').forEach(x => x.style.display = 'none');
+  if (!visible) el.style.display = 'block';
+}
 
 const PER_SECTORES = {
   'Technology': { nombre: 'Tecnologia', bajo: 20, alto: 35 },
@@ -598,6 +657,7 @@ async function doSearch() {
     const d = await res.json();
     if (!d || !d.precio) throw new Error('no data');
     cacheSet(ticker, d);
+    addHistorial(ticker, d.nombre || ticker);
     if (d.tipo === 'crypto') renderCrypto(el, d);
     else renderStock(el, d, ticker);
   } catch(e) {
@@ -614,6 +674,12 @@ function renderCrypto(el, d) {
   const semCls = viabColor[d.viabilidad] || 'sem-gray';
   const ico = riesgoIco[d.riesgo] || '❓';
   el.innerHTML = `<div style="width:100%"><div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="width:44px;height:44px;border-radius:10px;background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">₿</div><div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">${d.nombre}</div><div style="font-size:12px;color:var(--text3)">${d.ticker} · ${d.subtipo||d.tipoCrypto||'Crypto'}</div></div><div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text)">${d.precio?d.precio.toLocaleString('es-ES', {maximumFractionDigits:2}):'-'} $</div><div style="font-size:13px;color:${clr};font-weight:600">${flecha} ${Math.abs(d.cambioPct||d.cambio||0).toFixed(2)}% hoy</div></div></div><div class="semáforo ${semCls}" style="margin-bottom:16px"><div class="semáforo-icon">${ico}</div><div><div class="semáforo-title">Viabilidad: ${d.viabilidad} · Riesgo: ${d.riesgo}</div><div class="semáforo-desc">${d.descripcion||d.descripción||''}</div></div></div><div style="margin-top:12px;padding:12px 16px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:12px;font-size:12px;color:var(--red);line-height:1.7">⚠️ <strong>Las criptomonedas son activos de muy alto riesgo.</strong> Puedes perder todo tu dinero. Nunca inviertas más de lo que puedas permitirte perder.</div><div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border);margin-top:12px">Precio: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo.</div></div>`;
+}
+
+function metric(label, val, sub, extraStyle='') {
+  const info = METRIC_INFO[label] ? `<div class="metric-info-box" id="info_${label.replace(/\s/g,'_')}">${METRIC_INFO[label]}</div>` : '';
+  const hint = METRIC_INFO[label] ? ' <span style="font-size:10px;color:var(--text3)">ⓘ</span>' : '';
+  return `<div class="result-metric" onclick="toggleMetricInfo('${label}')"><div class="result-metric-label">${label}${hint}</div><div class="result-metric-val"${extraStyle ? ` style="${extraStyle}"` : ''}>${val}</div><div class="result-metric-sub">${sub}</div>${info}</div>`;
 }
 
 function renderETF(el, d, ticker) {
@@ -703,22 +769,22 @@ function renderStock(el, d, ticker) {
       </div>
       <div class="semáforo ${sem.cls}"><div class="semáforo-icon">${sem.ico}</div><div><div class="semáforo-title">${sem.titulo}</div><div class="semáforo-desc">${sem.desc}</div></div></div>
       <div class="result-grid">
-        <div class="result-metric"><div class="result-metric-label">PER actual</div><div class="result-metric-val">${pe ? pe.toFixed(1)+'x' : '—'}</div><div class="result-metric-sub">Precio / Beneficio</div></div>
-        ${peg ? `<div class="result-metric"><div class="result-metric-label">PEG ratio</div><div class="result-metric-val" style="color:${peg<1?'var(--green)':peg<=2?'var(--yellow)':'var(--red)'}">${peg.toFixed(2)}x</div><div class="result-metric-sub">&lt;1 barata, 1-2 justa, &gt;2 cara</div></div>` : ''}
-        ${crecEps !== null ? `<div class="result-metric"><div class="result-metric-label">Crecimiento BPA</div><div class="result-metric-val" style="color:${crecEps>0?'var(--green)':'var(--red)'}">${(crecEps*100).toFixed(1)}%</div><div class="result-metric-sub">Beneficio por acción YoY</div></div>` : ''}
-        ${crecIng !== null ? `<div class="result-metric"><div class="result-metric-label">Crecimiento ingresos</div><div class="result-metric-val" style="color:${crecIng>0?'var(--green)':'var(--red)'}">${(crecIng*100).toFixed(1)}%</div><div class="result-metric-sub">Ventas año sobre año</div></div>` : ''}
-        ${roe !== null ? `<div class="result-metric"><div class="result-metric-label">ROE</div><div class="result-metric-val" style="color:${roe>0.15?'var(--green)':roe<0?'var(--red)':'var(--text)'}">${(roe*100).toFixed(1)}%</div><div class="result-metric-sub">Rentabilidad sobre capital</div></div>` : ''}
-        <div class="result-metric"><div class="result-metric-label">PER estimado</div><div class="result-metric-val">${fpe ? fpe.toFixed(1)+'x' : '—'}</div><div class="result-metric-sub">Proyeccion anual</div></div>
-        <div class="result-metric"><div class="result-metric-label">Cap. mercado</div><div class="result-metric-val" style="font-size:15px">${fmtMiles(mktCap)}</div><div class="result-metric-sub">Valor total</div></div>
-        <div class="result-metric"><div class="result-metric-label">Dividendo</div><div class="result-metric-val">${divY ? (divY*100).toFixed(2)+'%' : '—'}</div><div class="result-metric-sub">Rentabilidad anual</div></div>
-        <div class="result-metric"><div class="result-metric-label">EPS</div><div class="result-metric-val" style="color:${eps>0?'var(--green)':'var(--red)'}">${eps ? eps.toFixed(2) : '—'}</div><div class="result-metric-sub">Beneficio por accion</div></div>
-        <div class="result-metric"><div class="result-metric-label">Margen neto</div><div class="result-metric-val" style="color:${margen>0.1?'var(--green)':margen<0?'var(--red)':'var(--text)'}">${margen ? (margen*100).toFixed(1)+'%' : '—'}</div><div class="result-metric-sub">Beneficio sobre ventas</div></div>
-        <div class="result-metric"><div class="result-metric-label">Reinversión del negocio</div><div class="result-metric-val" style="color:${reinvColor}">${reinvPct !== null ? reinvPct.toFixed(0)+'%' : '—'}</div><div class="result-metric-sub">${reinvSub}</div></div>
-        ${ocf ? `<div class="result-metric"><div class="result-metric-label">Flujo caja operativo</div><div class="result-metric-val" style="font-size:15px;color:${ocf>0?'var(--green)':'var(--red)'}">${fmtMiles(Math.abs(ocf))}</div><div class="result-metric-sub">Caja que genera el negocio</div></div>` : ''}
-        ${fcf ? `<div class="result-metric"><div class="result-metric-label">Free Cash Flow</div><div class="result-metric-val" style="font-size:15px;color:${fcf>0?'var(--green)':'var(--red)'}">${fmtMiles(Math.abs(fcf))}</div><div class="result-metric-sub">Caja libre tras invertir</div></div>` : ''}
-        <div class="result-metric"><div class="result-metric-label">Beta</div><div class="result-metric-val">${betaV ? betaV.toFixed(2) : '—'}</div><div class="result-metric-sub">&lt;1 menos volatil</div></div>
-        <div class="result-metric"><div class="result-metric-label">Rango 52 semanas</div><div class="result-metric-val" style="font-size:13px;margin-top:4px">${min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—'}</div><div class="result-metric-sub">Min / Max</div></div>
-        ${employees ? `<div class="result-metric"><div class="result-metric-label">Empleados</div><div class="result-metric-val" style="font-size:15px">${employees.toLocaleString('es-ES')}</div><div class="result-metric-sub">En plantilla</div></div>` : ''}
+        ${metric('PER actual', pe ? pe.toFixed(1)+'x' : '—', 'Precio / Beneficio')}
+        ${peg ? metric('PEG ratio', peg.toFixed(2)+'x', '<1 barata, 1-2 justa, >2 cara', `color:${peg<1?'var(--green)':peg<=2?'var(--yellow)':'var(--red)'}`) : ''}
+        ${crecEps !== null ? metric('Crecimiento BPA', (crecEps*100).toFixed(1)+'%', 'Beneficio por acción YoY', `color:${crecEps>0?'var(--green)':'var(--red)'}`) : ''}
+        ${crecIng !== null ? metric('Crecimiento ingresos', (crecIng*100).toFixed(1)+'%', 'Ventas año sobre año', `color:${crecIng>0?'var(--green)':'var(--red)'}`) : ''}
+        ${roe !== null ? metric('ROE', (roe*100).toFixed(1)+'%', 'Rentabilidad sobre capital', `color:${roe>0.15?'var(--green)':roe<0?'var(--red)':'var(--text)'}`) : ''}
+        ${metric('PER estimado', fpe ? fpe.toFixed(1)+'x' : '—', 'Proyección anual')}
+        ${metric('Cap. mercado', fmtMiles(mktCap), 'Valor total', 'font-size:15px')}
+        ${metric('Dividendo', divY ? (divY*100).toFixed(2)+'%' : '—', 'Rentabilidad anual')}
+        ${metric('EPS', eps ? eps.toFixed(2) : '—', 'Beneficio por acción', `color:${eps>0?'var(--green)':'var(--red)'}`)}
+        ${metric('Margen neto', margen ? (margen*100).toFixed(1)+'%' : '—', 'Beneficio sobre ventas', `color:${margen>0.1?'var(--green)':margen<0?'var(--red)':'var(--text)'}`)}
+        ${metric('Reinversión del negocio', reinvPct !== null ? reinvPct.toFixed(0)+'%' : '—', reinvSub, `color:${reinvColor}`)}
+        ${ocf ? metric('Flujo caja operativo', fmtMiles(Math.abs(ocf)), 'Caja que genera el negocio', `font-size:15px;color:${ocf>0?'var(--green)':'var(--red)'}`) : ''}
+        ${fcf ? metric('Free Cash Flow', fmtMiles(Math.abs(fcf)), 'Caja libre tras invertir', `font-size:15px;color:${fcf>0?'var(--green)':'var(--red)'}`) : ''}
+        ${metric('Beta', betaV ? betaV.toFixed(2) : '—', '<1 menos volátil')}
+        ${metric('Rango 52 semanas', min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—', 'Min / Max', 'font-size:13px;margin-top:4px')}
+        ${employees ? metric('Empleados', employees.toLocaleString('es-ES'), 'En plantilla', 'font-size:15px') : ''}
       </div>
       <div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border)">Datos: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo, no recomendación de compra.</div>
     </div>`;
