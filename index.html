@@ -226,8 +226,31 @@ footer { border-top: 1px solid var(--border); }
 <body>
 
 <div class="safety-bar">
-  <strong>Mosca es educación financiera, no asesoramiento financiero.</strong> No gestiónamos tu dinero. Invertir en bolsa conlleva riesgo de pérdida.
+  <strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.
 </div>
+
+<!-- Modal verificación de edad -->
+<div id="ageGate" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px);">
+  <div style="background:#141414;border:1px solid #333;border-radius:24px;padding:40px 32px;max-width:400px;width:100%;text-align:center;">
+    <div style="font-size:52px;margin-bottom:16px">🔞</div>
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:12px;letter-spacing:-0.02em">Confirma tu edad</h2>
+    <p style="font-size:14px;color:#a3a3a3;line-height:1.7;margin-bottom:28px">laBolsabro es una herramienta de <strong style="color:#f5f5f5">educación financiera exclusiva para mayores de 18 años</strong>. Al continuar confirmas que tienes 18 años o más y aceptas nuestros <a href="/terminos.html" style="color:#22c55e">términos de uso</a>.</p>
+    <button onclick="acceptAge()" style="width:100%;padding:14px;background:#22c55e;color:#000;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:12px">Tengo 18 años o más — Entrar</button>
+    <p style="font-size:12px;color:#525252;line-height:1.6">Si eres menor de 18 años, cierra esta página. Esta herramienta no está diseñada para ti.</p>
+  </div>
+</div>
+<script>
+(function() {
+  if (!localStorage.getItem('mosca_age_ok')) {
+    const gate = document.getElementById('ageGate');
+    gate.style.display = 'flex';
+  }
+})();
+function acceptAge() {
+  localStorage.setItem('mosca_age_ok', '1');
+  document.getElementById('ageGate').style.display = 'none';
+}
+</script>
 
 <nav>
   <div class="nav-inner">
@@ -292,7 +315,7 @@ footer { border-top: 1px solid var(--border); }
 <div class="stats-strip">
   <div class="stats-inner">
     <div class="stat-item">
-      <div class="stat-num" style="color:var(--green)">14-40</div>
+      <div class="stat-num" style="color:var(--green)">18-40</div>
       <div class="stat-label">Años · público objetivo</div>
     </div>
     <div class="stat-item">
@@ -314,10 +337,10 @@ footer { border-top: 1px solid var(--border); }
   <section>
     <div class="pill">Para quien es</div>
     <h2>Dos modos.<br>Una sola app.</h2>
-    <p class="sub">Empieza a ahorrar con 16. A los 22 ya analizas si Inditex está barata en bolsa.</p>
+    <p class="sub">Empieza a ahorrar con 18. A los 25 ya analizas si Inditex está barata en bolsa.</p>
     <div class="modes">
       <div class="mode">
-        <div class="mode-badge mb-green">Junior · 14-25 años</div>
+        <div class="mode-badge mb-green">Junior · 18-25 años</div>
         <span class="mode-emoji">🧠</span>
         <div class="mode-title">Para el que no controla su dinero</div>
         <div class="mode-desc">Especialmente si tienes TDAH o si el dinero se te escapa de las maños. La familia paga, tú aprendes.</div>
@@ -913,7 +936,7 @@ function renderStock(el, d, ticker) {
   <div class="safe-grid">
     <div class="safe-card"><span class="safe-ico">🔒</span><div class="safe-title">No gestiónamos tu dinero</div><div class="safe-desc">No somos un banco ni una plataforma de inversión. No necesitas meter tu tarjeta ni conectar tu cuenta bancaria.</div></div>
     <div class="safe-card"><span class="safe-ico">📚</span><div class="safe-title">educación, no especulacion</div><div class="safe-desc">Nunca te diremos "compra esto ahora". Te enseñamos a analizar datos públicos. La decisión de invertir es siempre tuya.</div></div>
-    <div class="safe-card"><span class="safe-ico">👨‍👩‍👧</span><div class="safe-title">Menores con supervision</div><div class="safe-desc">Los menores de 18 necesitan que un adulto active la cuenta familiar. Los padres pueden pausar el acceso cuando quieran.</div></div>
+    <div class="safe-card"><span class="safe-ico">🔞</span><div class="safe-title">Solo mayores de 18</div><div class="safe-desc">laBolsabro está dirigida exclusivamente a mayores de 18 años. Los menores de edad no deben utilizar las herramientas de análisis financiero.</div></div>
     <div class="safe-card"><span class="safe-ico">⚠️</span><div class="safe-title">El riesgo siempre visible</div><div class="safe-desc">Cada vez que aparece información sobre bolsa, recordamos que invertir conlleva riesgo de perder dinero. Sin letra pequeña.</div></div>
     <div class="safe-card"><span class="safe-ico">🐢</span><div class="safe-title">Solo largo plazo</div><div class="safe-desc">Fondos indexados, ETFs, interes compuesto. Nunca trading diario, criptomonedas especulativas ni apalancamiento.</div></div>
     <div class="safe-card"><span class="safe-ico">🛡️</span><div class="safe-title">Sin comisiónes ocultas</div><div class="safe-desc">No cobramos comisiónes de bancos ni brokers por recomendarte sus productos. Solo la suscripción. Sin conflictos de interes.</div></div>
@@ -1007,7 +1030,7 @@ function renderStock(el, d, ticker) {
     <p class="sub">Estos son los planes planificados para el lanzamiento. Durante la beta, acceso gratuito a todo.</p>
     <div class="price-grid">
       <div class="price-card"><div class="price-tier">Gratis</div><div class="price-num">0 € <span>/mes</span></div><div class="price-desc">Para empezar y ver si Mosca te va. Sin limite de tiempo.</div><ul class="price-list"><li><span>✓</span> 1 bote de ahorro</li><li><span>✓</span> Retos básicos diarios</li><li><span>✓</span> Simulador de interes compuesto</li><li><span>✓</span> análisis básico de empresas</li></ul><button class="price-btn price-btn-out" onclick="openModal()">Apuntarme a la beta</button></div>
-      <div class="price-card hot"><div class="hot-badge">Plan principal</div><div class="price-tier">Familia</div><div class="price-num">5,99 € <span>/mes</span></div><div class="price-desc">La familia paga, el joven aprende. Para hijos de 14-25.</div><ul class="price-list"><li><span>✓</span> Botes de ahorro ilimitados</li><li><span>✓</span> Vista familiar para 2 adultos</li><li><span>✓</span> Retos avanzados y XP extra</li><li><span>✓</span> análisis completo de empresas</li><li><span>✓</span> Recordatorios personalizables</li></ul><button class="price-btn price-btn-solid" onclick="openModal()">Apuntarme a la beta</button></div>
+      <div class="price-card hot"><div class="hot-badge">Plan principal</div><div class="price-tier">Familia</div><div class="price-num">5,99 € <span>/mes</span></div><div class="price-desc">La familia paga, el joven aprende. Para jóvenes de 18-25.</div><ul class="price-list"><li><span>✓</span> Botes de ahorro ilimitados</li><li><span>✓</span> Vista familiar para 2 adultos</li><li><span>✓</span> Retos avanzados y XP extra</li><li><span>✓</span> análisis completo de empresas</li><li><span>✓</span> Recordatorios personalizables</li></ul><button class="price-btn price-btn-solid" onclick="openModal()">Apuntarme a la beta</button></div>
       <div class="price-card"><div class="price-tier">Inversor</div><div class="price-num">9,99 € <span>/mes</span></div><div class="price-desc">Para el que ya ahorra y quiere analizar el mercado con criterio.</div><ul class="price-list"><li><span>✓</span> Todo del plan Familia</li><li><span>✓</span> Comparador avanzado por sector</li><li><span>✓</span> Alertas de valor personalizadas</li><li><span>✓</span> Historial de análisis personal</li><li><span>✓</span> Acceso prioritario a novedades</li></ul><button class="price-btn price-btn-out" onclick="openModal()">Apuntarme a la beta</button></div>
     </div>
   </section>
