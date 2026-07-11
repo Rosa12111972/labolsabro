@@ -564,6 +564,11 @@ document.addEventListener('DOMContentLoaded', () => {
     input.addEventListener('keydown', onInputKey);
   }
   renderHistorial();
+  const urlTicker = new URLSearchParams(window.location.search).get('ticker');
+  if (urlTicker) {
+    document.querySelector('.stocks-bg').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => doTicker(urlTicker.toUpperCase()), 600);
+  }
 });
 
 // Historial de búsquedas
@@ -700,6 +705,22 @@ function renderCrypto(el, d) {
   el.innerHTML = `<div style="width:100%"><div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="width:44px;height:44px;border-radius:10px;background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">₿</div><div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">${d.nombre}</div><div style="font-size:12px;color:var(--text3)">${d.ticker} · ${d.subtipo||d.tipoCrypto||'Crypto'}</div></div><div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text)">${d.precio?d.precio.toLocaleString('es-ES', {maximumFractionDigits:2}):'-'} $</div><div style="font-size:13px;color:${clr};font-weight:600">${flecha} ${Math.abs(d.cambioPct||d.cambio||0).toFixed(2)}% hoy</div></div></div><div class="semáforo ${semCls}" style="margin-bottom:16px"><div class="semáforo-icon">${ico}</div><div><div class="semáforo-title">Viabilidad: ${d.viabilidad} · Riesgo: ${d.riesgo}</div><div class="semáforo-desc">${d.descripcion||d.descripción||''}</div></div></div><div style="margin-top:12px;padding:12px 16px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:12px;font-size:12px;color:var(--red);line-height:1.7">⚠️ <strong>Las criptomonedas son activos de muy alto riesgo.</strong> Puedes perder todo tu dinero. Nunca inviertas más de lo que puedas permitirte perder.</div><div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border);margin-top:12px">Precio: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo.</div></div>`;
 }
 
+function compartirWhatsApp(ticker, nombre, score) {
+  const url = `https://labolsabro.com?ticker=${ticker}`;
+  const texto = `📊 He analizado *${nombre}* (${ticker}) en laBolsabro y tiene una puntuación de *${score}/10*.\n\nMíralo tú mismo: ${url}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
+}
+
+function copiarLink(ticker) {
+  const url = `https://labolsabro.com?ticker=${ticker}`;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = event.target.closest('button');
+    const original = btn.innerHTML;
+    btn.innerHTML = '✅ Copiado';
+    setTimeout(() => btn.innerHTML = original, 2000);
+  });
+}
+
 function metric(label, val, sub, extraStyle='') {
   const info = METRIC_INFO[label] ? `<div class="metric-info-box" id="info_${label.replace(/\s/g,'_')}">${METRIC_INFO[label]}</div>` : '';
   const hint = METRIC_INFO[label] ? ' <span style="font-size:10px;color:var(--text3)">ⓘ</span>' : '';
@@ -810,7 +831,13 @@ function renderStock(el, d, ticker) {
         ${metric('Rango 52 semanas', min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—', 'Min / Max', 'font-size:13px;margin-top:4px')}
         ${employees ? metric('Empleados', employees.toLocaleString('es-ES'), 'En plantilla', 'font-size:15px') : ''}
       </div>
-      <div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border)">Datos: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo, no recomendación de compra.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px;">
+        <span style="font-size:12px;color:var(--text3)">Datos: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo.</span>
+        <div style="display:flex;gap:8px;">
+          <button onclick="compartirWhatsApp('${ticker}','${nombre.replace(/'/g,"\\'")}',${scoreFinal??0})" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:#25D366;color:#000;border:none;border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">📱 WhatsApp</button>
+          <button onclick="copiarLink('${ticker}')" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔗 Copiar link</button>
+        </div>
+      </div>
     </div>`;
   } catch(e) {
     el.innerHTML = `<div style="text-align:center;padding:16px"><p style="font-size:15px;font-weight:700;color:var(--text)">Error al mostrar datos</p></div>`;
