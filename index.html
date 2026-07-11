@@ -426,6 +426,15 @@ function acceptAge() {
           <div id="searchSuggestions" style="display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--border2);border-radius:16px;overflow:hidden;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.4)"></div>
         </div>
         <button onclick="doSearch()" style="padding:12px 24px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Analizar</button>
+        <button onclick="toggleCompare()" id="compareToggle" style="padding:12px 20px;background:var(--card2);color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">⚖️ Comparar</button>
+      </div>
+      <div id="compareRow" style="display:none;padding:14px 24px;border-bottom:1px solid var(--border);background:rgba(167,139,250,0.05);gap:10px;flex-wrap:wrap;align-items:center;">
+        <span style="font-size:13px;color:var(--purple);font-weight:700;">⚖️ Comparar con:</span>
+        <div style="flex:1;min-width:160px;position:relative;">
+          <input id="stockInput2" type="text" placeholder="Segunda empresa o ticker..." style="width:100%;padding:10px 16px;border-radius:100px;border:1px solid rgba(167,139,250,0.4);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;" autocomplete="off">
+          <div id="searchSuggestions2" style="display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--border2);border-radius:16px;overflow:hidden;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.4)"></div>
+        </div>
+        <button onclick="doCompare()" style="padding:10px 20px;background:var(--purple);color:#000;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Comparar</button>
       </div>
       <div id="historialRow" style="display:none;padding:10px 24px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;align-items:center;">
         <span style="font-size:12px;color:var(--text3);margin-right:4px;">🕐 Recientes:</span>
@@ -444,6 +453,11 @@ function acceptAge() {
         <button class="quick-btn" onclick="doTicker('REP.MC')">Repsol</button>
         <button class="quick-btn" onclick="doTicker('NEM')">Newmont</button>
         <button class="quick-btn" onclick="doTicker('WPM')">Wheaton</button>
+        <button class="quick-btn" onclick="doTicker('MC.PA')">LVMH</button>
+        <button class="quick-btn" onclick="doTicker('SAP')">SAP</button>
+        <button class="quick-btn" onclick="doTicker('NESN.SW')">Nestlé</button>
+        <button class="quick-btn" onclick="doTicker('VOW3.DE')">Volkswagen</button>
+        <button class="quick-btn" onclick="doTicker('OR.PA')">L'Oréal</button>
         <button class="quick-btn" onclick="doTicker('BTC')">Bitcoin</button>
         <button class="quick-btn" onclick="doTicker('ETH')">Ethereum</button>
       </div>
@@ -557,12 +571,187 @@ document.addEventListener('click', e => {
   }
 });
 
+function toggleCompare() {
+  const row = document.getElementById('compareRow');
+  const btn = document.getElementById('compareToggle');
+  const visible = row.style.display !== 'none';
+  row.style.display = visible ? 'none' : 'flex';
+  btn.style.borderColor = visible ? 'var(--border2)' : 'var(--purple)';
+  btn.style.color = visible ? 'var(--text2)' : 'var(--purple)';
+  if (!visible) document.getElementById('stockInput2').focus();
+}
+
+let _suggestTimer2 = null, _selectedSuggestion2 = -1;
+async function onInputChange2() {
+  const q = document.getElementById('stockInput2').value.trim();
+  const box = document.getElementById('searchSuggestions2');
+  clearTimeout(_suggestTimer2);
+  _selectedSuggestion2 = -1;
+  if (q.length < 2) { box.style.display = 'none'; return; }
+  _suggestTimer2 = setTimeout(async () => {
+    try {
+      const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'https://labolsabro.com' : '';
+      const r = await fetch(`${apiBase}/api/search?q=${encodeURIComponent(q)}`);
+      const data = await r.json();
+      const hits = data.quotes || [];
+      if (!hits.length) { box.style.display = 'none'; return; }
+      box.innerHTML = hits.map((h, i) => {
+        const name = h.name || h.symbol;
+        const type = h.type === 'CRYPTOCURRENCY' ? '₿' : h.type === 'ETF' ? '📦' : '📈';
+        return `<div class="suggest-item" onclick="pickSuggestion2('${h.symbol}')">
+          <span style="font-size:15px">${type}</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
+            <div style="font-size:11px;color:var(--text3)">${h.symbol}</div>
+          </div>
+        </div>`;
+      }).join('');
+      box.style.display = 'block';
+    } catch(e) { box.style.display = 'none'; }
+  }, 280);
+}
+function onInputKey2(e) {
+  if (e.key === 'Enter') doCompare();
+  else if (e.key === 'Escape') document.getElementById('searchSuggestions2').style.display = 'none';
+}
+function pickSuggestion2(ticker) {
+  document.getElementById('stockInput2').value = ticker;
+  document.getElementById('searchSuggestions2').style.display = 'none';
+}
+
+async function fetchStock(ticker) {
+  const cached = cacheGet(ticker);
+  if (cached) return cached;
+  const base = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'https://labolsabro.com' : '';
+  const res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
+  if (!res.ok) throw new Error('error');
+  const d = await res.json();
+  if (!d || !d.precio) throw new Error('no data');
+  cacheSet(ticker, d);
+  return d;
+}
+
+async function doCompare() {
+  const t1 = document.getElementById('stockInput').value.trim().toUpperCase();
+  const t2 = document.getElementById('stockInput2').value.trim().toUpperCase();
+  if (!t1 || !t2) { alert('Introduce las dos empresas para comparar'); return; }
+  const el = document.getElementById('stockResult');
+  el.innerHTML = '<p style="font-size:14px;color:var(--text3);">⏳ Comparando ' + t1 + ' vs ' + t2 + '...</p>';
+  try {
+    const [d1, d2] = await Promise.all([fetchStock(t1), fetchStock(t2)]);
+    renderCompare(el, d1, t1, d2, t2);
+  } catch(e) {
+    el.innerHTML = `<p style="color:var(--red);padding:16px">Error al obtener datos. Comprueba los tickers.</p>`;
+  }
+}
+
+function calcScore(d, ticker) {
+  const sector = d.sector || 'default';
+  const pe = d.pe ?? null, peg = d.peg ?? null;
+  const crecEps = d.crecimientoEps ?? null, crecIng = d.crecimientoIng ?? null;
+  const margen = d.margen ?? null, roe = d.roe ?? null, fcf = d.freeCashflow ?? null;
+  let score = 0, scoreFactors = 0;
+  if (peg && peg > 0) { score += peg < 1 ? 3 : peg <= 2 ? 2 : 0; scoreFactors++; }
+  else if (pe && pe > 0) { const ref = PER_SECTORES[sector] || PER_SECTORES['default']; score += pe < ref.bajo ? 3 : pe <= ref.alto ? 2 : 0; scoreFactors++; }
+  if (crecEps !== null) { score += crecEps > 0.15 ? 1 : crecEps > 0 ? 0.5 : 0; scoreFactors++; }
+  if (crecIng !== null) { score += crecIng > 0.10 ? 1 : crecIng > 0 ? 0.5 : 0; scoreFactors++; }
+  if (margen !== null) { score += margen > 0.15 ? 1.5 : margen > 0.05 ? 0.75 : 0; scoreFactors++; }
+  if (roe !== null) { score += roe > 0.15 ? 1.5 : roe > 0.05 ? 0.75 : 0; scoreFactors++; }
+  if (fcf !== null) { score += fcf > 0 ? 1 : 0; scoreFactors++; }
+  return scoreFactors > 0 ? Math.min(10, Math.round((score / scoreFactors) * 10 * 10) / 10) : null;
+}
+
+function cmpVal(a, b, higherBetter=true) {
+  if (a === null || b === null) return ['',''];
+  const aWins = higherBetter ? a > b : a < b;
+  const bWins = higherBetter ? b > a : b < a;
+  return [aWins ? 'color:var(--green)' : (bWins ? 'color:var(--red)' : ''), bWins ? 'color:var(--green)' : (aWins ? 'color:var(--red)' : '')];
+}
+
+function renderCompare(el, d1, t1, d2, t2) {
+  const s1 = calcScore(d1, t1), s2 = calcScore(d2, t2);
+  const sc = cmpVal(s1, s2);
+  const sem1 = semaforo(d1.pe??null, d1.sector??'default', d1.peg??null);
+  const sem2 = semaforo(d2.pe??null, d2.sector??'default', d2.peg??null);
+
+  function row(label, v1, v2, style1='', style2='') {
+    return `<div style="display:contents">
+      <div style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text3);font-weight:600;background:var(--card2);display:flex;align-items:center">${label}</div>
+      <div style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:14px;font-weight:700;text-align:center;${style1}">${v1}</div>
+      <div style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:14px;font-weight:700;text-align:center;${style2}">${v2}</div>
+    </div>`;
+  }
+
+  const pe1 = d1.pe??null, pe2 = d2.pe??null; const pec = cmpVal(pe1, pe2, false);
+  const peg1 = d1.peg??null, peg2 = d2.peg??null; const pegc = cmpVal(peg1, peg2, false);
+  const m1 = d1.margen??null, m2 = d2.margen??null; const mc = cmpVal(m1, m2);
+  const r1 = d1.roe??null, r2 = d2.roe??null; const rc = cmpVal(r1, r2);
+  const ce1 = d1.crecimientoEps??null, ce2 = d2.crecimientoEps??null; const cec = cmpVal(ce1, ce2);
+  const ci1 = d1.crecimientoIng??null, ci2 = d2.crecimientoIng??null; const cic = cmpVal(ci1, ci2);
+  const f1 = d1.freeCashflow??null, f2 = d2.freeCashflow??null; const fc = cmpVal(f1, f2);
+  const dy1 = d1.divY??null, dy2 = d2.divY??null; const dyc = cmpVal(dy1, dy2);
+  const b1 = d1.beta??null, b2 = d2.beta??null; const bc = cmpVal(b1, b2, false);
+  const scoreColor = s => s===null?'var(--text2)':s>=7?'var(--green)':s>=4?'var(--yellow)':'var(--red)';
+
+  el.innerHTML = `<div style="width:100%">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--border2);border-radius:14px;overflow:hidden;margin-bottom:16px">
+      <div style="padding:14px;background:var(--card2);border-right:1px solid var(--border)"></div>
+      <div style="padding:14px;background:var(--card2);border-right:1px solid var(--border);text-align:center">
+        <div style="font-size:15px;font-weight:700;color:var(--text)">${d1.nombre||t1}</div>
+        <div style="font-size:11px;color:var(--text3)">${t1}</div>
+        <div style="font-size:22px;font-weight:700;margin-top:6px;color:${scoreColor(s1)}">${s1!==null?s1.toFixed(1)+'/10':'—'}</div>
+        <div style="font-size:11px;color:var(--text3)">Puntuación</div>
+        <div style="margin-top:8px;font-size:13px">${sem1.ico} ${sem1.cls==='sem-green'?'Zona de valor':sem1.cls==='sem-yellow'?'Precio justo':'Zona cara'}</div>
+      </div>
+      <div style="padding:14px;background:var(--card2);text-align:center">
+        <div style="font-size:15px;font-weight:700;color:var(--text)">${d2.nombre||t2}</div>
+        <div style="font-size:11px;color:var(--text3)">${t2}</div>
+        <div style="font-size:22px;font-weight:700;margin-top:6px;color:${scoreColor(s2)}">${s2!==null?s2.toFixed(1)+'/10':'—'}</div>
+        <div style="font-size:11px;color:var(--text3)">Puntuación</div>
+        <div style="margin-top:8px;font-size:13px">${sem2.ico} ${sem2.cls==='sem-green'?'Zona de valor':sem2.cls==='sem-yellow'?'Precio justo':'Zona cara'}</div>
+      </div>
+      ${row('Precio',
+        d1.precio.toFixed(2)+' '+(d1.moneda||'USD'), d2.precio.toFixed(2)+' '+(d2.moneda||'USD'))}
+      ${row('PER actual',
+        pe1?pe1.toFixed(1)+'x':'—', pe2?pe2.toFixed(1)+'x':'—', pec[0], pec[1])}
+      ${row('PEG ratio',
+        peg1?peg1.toFixed(2)+'x':'—', peg2?peg2.toFixed(2)+'x':'—', pegc[0], pegc[1])}
+      ${row('Margen neto',
+        m1?(m1*100).toFixed(1)+'%':'—', m2?(m2*100).toFixed(1)+'%':'—', mc[0], mc[1])}
+      ${row('ROE',
+        r1?(r1*100).toFixed(1)+'%':'—', r2?(r2*100).toFixed(1)+'%':'—', rc[0], rc[1])}
+      ${row('Crec. BPA',
+        ce1?(ce1*100).toFixed(1)+'%':'—', ce2?(ce2*100).toFixed(1)+'%':'—', cec[0], cec[1])}
+      ${row('Crec. Ingresos',
+        ci1?(ci1*100).toFixed(1)+'%':'—', ci2?(ci2*100).toFixed(1)+'%':'—', cic[0], cic[1])}
+      ${row('Free Cash Flow',
+        f1?fmtMiles(Math.abs(f1)):'—', f2?fmtMiles(Math.abs(f2)):'—', fc[0], fc[1])}
+      ${row('Dividendo',
+        dy1?(dy1*100).toFixed(2)+'%':'—', dy2?(dy2*100).toFixed(2)+'%':'—', dyc[0], dyc[1])}
+      ${row('Beta',
+        b1?b1.toFixed(2):'—', b2?b2.toFixed(2):'—', bc[0], bc[1])}
+      ${row('Cap. mercado',
+        fmtMiles(d1.mktCap), fmtMiles(d2.mktCap))}
+    </div>
+    <div style="font-size:11px;color:var(--text3);padding:6px 0">Verde = mejor valor · Rojo = peor valor · Datos Yahoo Finance · Solo educativo.</div>
+  </div>`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('stockInput');
   if (input) {
     input.addEventListener('input', onInputChange);
     input.addEventListener('keydown', onInputKey);
   }
+  const input2 = document.getElementById('stockInput2');
+  if (input2) {
+    input2.addEventListener('input', onInputChange2);
+    input2.addEventListener('keydown', onInputKey2);
+  }
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#stockInput2') && !e.target.closest('#searchSuggestions2'))
+      document.getElementById('searchSuggestions2').style.display = 'none';
+  });
   renderHistorial();
   const urlTicker = new URLSearchParams(window.location.search).get('ticker');
   if (urlTicker) {
