@@ -869,12 +869,47 @@ function cacheSet(ticker, data) {
   try { localStorage.setItem('mosca_stock_' + ticker, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
 }
 
+// Límite diario de búsquedas
+const DAILY_LIMIT = 3;
+function getBusquedasHoy() {
+  try {
+    const raw = localStorage.getItem('mosca_busquedas');
+    if (!raw) return { fecha: '', count: 0 };
+    return JSON.parse(raw);
+  } catch(e) { return { fecha: '', count: 0 }; }
+}
+function incrementarBusqueda() {
+  const hoy = new Date().toDateString();
+  const data = getBusquedasHoy();
+  const count = data.fecha === hoy ? data.count + 1 : 1;
+  localStorage.setItem('mosca_busquedas', JSON.stringify({ fecha: hoy, count }));
+  return count;
+}
+function busquedasRestantes() {
+  const hoy = new Date().toDateString();
+  const data = getBusquedasHoy();
+  if (data.fecha !== hoy) return DAILY_LIMIT;
+  return Math.max(0, DAILY_LIMIT - data.count);
+}
+
+function mostrarLimiteAlcanzado(el) {
+  el.innerHTML = `<div style="text-align:center;padding:32px 16px">
+    <div style="font-size:40px;margin-bottom:16px">🔒</div>
+    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Has agotado tus 3 búsquedas de hoy</div>
+    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">El plan gratuito incluye 3 análisis al día.<br>Mañana se renueva automáticamente — o pasa a Premium y analiza sin límite.</div>
+    <a href="/premium.html" style="display:inline-block;background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;text-decoration:none;margin-bottom:12px">Ver planes Premium →</a>
+    <div style="font-size:12px;color:var(--text3);margin-top:8px">Desde 5,99€/mes · Cancela cuando quieras</div>
+  </div>`;
+}
+
 async function doSearch() {
   const ticker = document.getElementById('stockInput').value.trim().toUpperCase();
   if (!ticker) return;
   const el = document.getElementById('stockResult');
   const cached = cacheGet(ticker);
   if (cached) { if (cached.tipo === 'crypto') renderCrypto(el, cached); else renderStock(el, cached, ticker); return; }
+  // Comprobar límite diario (solo para búsquedas nuevas, no cacheadas)
+  if (busquedasRestantes() <= 0) { mostrarLimiteAlcanzado(el); return; }
   el.innerHTML = '<p style="font-size:14px;color:var(--text3);">⏳ Buscando ' + ticker + '...</p>';
   try {
     const base = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'https://labolsabro.com' : '';
@@ -884,8 +919,16 @@ async function doSearch() {
     if (!d || !d.precio) throw new Error('no data');
     cacheSet(ticker, d);
     addHistorial(ticker, d.nombre || ticker);
+    const usadas = incrementarBusqueda();
+    const restantes = DAILY_LIMIT - usadas;
     if (d.tipo === 'crypto') renderCrypto(el, d);
     else renderStock(el, d, ticker);
+    if (restantes > 0) {
+      const aviso = document.createElement('div');
+      aviso.style.cssText = 'font-size:12px;color:var(--text3);text-align:right;padding:4px 0;';
+      aviso.textContent = `${restantes} búsqueda${restantes !== 1 ? 's' : ''} gratis restante${restantes !== 1 ? 's' : ''} hoy`;
+      el.appendChild(aviso);
+    }
   } catch(e) {
     const t = document.getElementById('stockInput').value.trim().toUpperCase();
     el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🔍</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">No encontramos "${t}"</p><p style="font-size:13px;color:var(--text3);line-height:1.8">Usa el ticker exacto de bolsa.<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
