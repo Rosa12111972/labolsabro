@@ -957,8 +957,27 @@ function renderStock(el, d, ticker) {
     // Reinversión real: capex sobre OCF (o deducido de OCF-FCF si capex no disponible)
     const capexAbs = capex ? Math.abs(capex) : (ocf && fcf ? Math.abs(ocf - fcf) : null);
     const reinvPct = (capexAbs && ocf && ocf > 0) ? (capexAbs / ocf * 100) : null;
-    const reinvColor = reinvPct === null ? 'var(--text)' : reinvPct >= 40 ? 'var(--green)' : reinvPct >= 20 ? 'var(--yellow)' : 'var(--text2)';
-    const reinvSub = reinvPct === null ? 'datos no disponibles' : reinvPct >= 50 ? 'invierte fuerte en crecer' : reinvPct >= 30 ? 'crecimiento moderado' : reinvPct >= 15 ? 'negocio maduro estable' : 'reparte casi todo lo que gana';
+    // Evaluar reinversión en contexto con el crecimiento
+    const estaCrediendo = (crecIng !== null && crecIng > 0.05) || (crecEps !== null && crecEps > 0.05);
+    let reinvColor, reinvSub, reinvContexto;
+    if (reinvPct === null) {
+      reinvColor = 'var(--text)'; reinvSub = 'datos no disponibles'; reinvContexto = null;
+    } else if (reinvPct >= 40 && estaCrediendo) {
+      reinvColor = 'var(--green)'; reinvSub = 'reinvierte fuerte y crece — expansión sana';
+      reinvContexto = '✅ Invierte mucho en crecer y los resultados lo confirman. Señal muy positiva.';
+    } else if (reinvPct >= 40 && !estaCrediendo) {
+      reinvColor = 'var(--red)'; reinvSub = 'gasta mucho pero no crece — señal de alerta';
+      reinvContexto = '⚠️ Reinvierte mucho pero el crecimiento no lo refleja. Puede indicar ineficiencia o problemas estructurales.';
+    } else if (reinvPct < 20 && estaCrediendo) {
+      reinvColor = 'var(--green)'; reinvSub = 'negocio eficiente — crece sin necesitar mucho capital';
+      reinvContexto = '✅ Reinvierte poco pero sigue creciendo. Negocio muy eficiente (como Apple o Microsoft). El exceso va al accionista vía recompras o dividendo.';
+    } else if (reinvPct < 20 && !estaCrediendo) {
+      reinvColor = 'var(--yellow)'; reinvSub = 'empresa madura — distribuye beneficios';
+      reinvContexto = '🟡 Reinvierte poco y el crecimiento es limitado. Empresa madura y estable, más orientada a distribuir beneficios que a crecer.';
+    } else {
+      reinvColor = 'var(--yellow)'; reinvSub = 'crecimiento moderado';
+      reinvContexto = null;
+    }
 
     const iniciales = ticker.replace('.MC','').replace('.AS','').replace(/\./g,'').slice(0,4);
     const sem = semaforo(pe, sector, peg);
@@ -982,6 +1001,14 @@ function renderStock(el, d, ticker) {
     if (roe !== null)    { score += roe > 0.15 ? 1.5 : roe > 0.05 ? 0.75 : 0; scoreFactors++; }
     // FCF positivo (0-1 pt)
     if (fcf !== null) { score += fcf > 0 ? 1 : 0; scoreFactors++; }
+    // Reinversión en contexto con crecimiento (0-1 pt)
+    if (reinvPct !== null) {
+      if (reinvPct >= 40 && estaCrediendo) { score += 1; scoreFactors++; }       // reinvierte mucho y crece
+      else if (reinvPct < 20 && estaCrediendo) { score += 1; scoreFactors++; }   // eficiente, crece sin gastar
+      else if (reinvPct >= 40 && !estaCrediendo) { score += 0; scoreFactors++; } // gasta sin crecer
+      else if (reinvPct < 20 && !estaCrediendo) { score += 0.5; scoreFactors++; } // madura, estable
+      else { score += 0.5; scoreFactors++; }
+    }
 
     const scoreFinal = scoreFactors > 0 ? Math.min(10, Math.round((score / scoreFactors) * 10 * 10) / 10) : null;
     const scoreColor = scoreFinal === null ? 'var(--text2)' : scoreFinal >= 7 ? 'var(--green)' : scoreFinal >= 4 ? 'var(--yellow)' : 'var(--red)';
@@ -1017,6 +1044,7 @@ function renderStock(el, d, ticker) {
         ${metric('EPS', eps ? eps.toFixed(2) : '—', 'Beneficio por acción', `color:${eps>0?'var(--green)':'var(--red)'}`)}
         ${metric('Margen neto', margen ? (margen*100).toFixed(1)+'%' : '—', 'Beneficio sobre ventas', `color:${margen>0.1?'var(--green)':margen<0?'var(--red)':'var(--text)'}`)}
         ${metric('Reinversión del negocio', reinvPct !== null ? reinvPct.toFixed(0)+'%' : '—', reinvSub, `color:${reinvColor}`)}
+        ${reinvContexto ? `<div style="grid-column:1/-1;padding:10px 14px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--text2);line-height:1.6">${reinvContexto}</div>` : ''}
         ${ocf ? metric('Flujo caja operativo', fmtMiles(Math.abs(ocf)), 'Caja que genera el negocio', `font-size:15px;color:${ocf>0?'var(--green)':'var(--red)'}`) : ''}
         ${fcf ? metric('Free Cash Flow', fmtMiles(Math.abs(fcf)), 'Caja libre tras invertir', `font-size:15px;color:${fcf>0?'var(--green)':'var(--red)'}`) : ''}
         ${metric('Beta', betaV ? betaV.toFixed(2) : '—', '<1 menos volátil')}
