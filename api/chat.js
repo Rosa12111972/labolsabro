@@ -30,14 +30,14 @@ Recuerda: eres educativo, no un asesor financiero. Nunca digas "compra esto" o "
 
   try {
     const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           system_instruction: { parts: [{ text: systemPrompt }] },
           contents: [{ role: 'user', parts: [{ text: mensaje }] }],
-          generationConfig: { maxOutputTokens: 300, temperature: 0.8 },
+          generationConfig: { maxOutputTokens: 180, temperature: 0.8 },
         }),
       }
     );
