@@ -3,6 +3,10 @@
     "api/stock.js": {
       "memory": 128,
       "maxDuration": 10
+    },
+    "api/chat.js": {
+      "memory": 128,
+      "maxDuration": 15
     }
   }
 }
