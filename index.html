@@ -1609,14 +1609,10 @@ async function enviarMosca() {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-// Activar el botón si es premium
-initMoscaChat();
-
-// Activar tras pago exitoso de Stripe
-if (new URLSearchParams(window.location.search).get('success') === '1') {
-  localStorage.setItem('labolsabro_premium', '1');
-  initMoscaChat();
-}
+// Mostrar siempre el chat (premium gate se añade después)
+document.getElementById('mosca-chat-btn').style.display = 'flex';
+const _r = localStorage.getItem('mosca_region') || 'castellano';
+document.getElementById('mosca-region-sel').value = _r;
 </script>
 
 </body>
