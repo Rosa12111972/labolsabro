@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="laBolsabro">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0a;
@@ -58,6 +58,7 @@ nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); b
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 h1 { font-size: clamp(42px, 7vw, 80px); font-weight: 700; line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 24px; }
 h1 em { font-style: normal; color: var(--green); }
+h1 .mano { font-family: 'Caveat', cursive; font-size: 1.15em; font-weight: 700; color: var(--green); }
 .hero-sub { font-size: clamp(16px, 2vw, 20px); color: var(--text2); max-width: 520px; margin: 0 auto 44px; line-height: 1.7; }
 .form-row { display: flex; gap: 10px; max-width: 440px; margin: 0 auto 14px; flex-wrap: wrap; justify-content: center; }
 .form-row input { flex: 1; min-width: 180px; padding: 14px 20px; border-radius: 100px; border: 1px solid var(--border2); font-size: 15px; background: var(--card); color: var(--text); outline: none; font-family: inherit; transition: border 0.2s; }
@@ -184,12 +185,13 @@ h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; lett
 .faq-item.open .faq-a { display: block; }
 
 .cta-wrap { max-width: 1052px; margin: 0 auto 80px; padding: 0 24px; }
-.cta-block { background: var(--green); border-radius: var(--radius-lg); padding: 64px 40px; text-align: center; }
-.cta-block h2 { color: #000; margin-bottom: 8px; }
-.cta-sub-tag { font-size: 18px; font-weight: 700; color: rgba(0,0,0,0.45); margin-bottom: 16px; }
-.cta-block p { color: rgba(0,0,0,0.55); font-size: 16px; margin-bottom: 32px; }
+.cta-block { position: relative; background: #111; border: 1px solid #2a2a2a; border-radius: var(--radius-lg); padding: 72px 40px 64px; text-align: center; overflow: hidden; }
+.cta-block::before { content: '🪰'; position: absolute; right: -10px; bottom: -30px; font-size: 180px; opacity: 0.07; line-height: 1; pointer-events: none; transform: rotate(-20deg); }
+.cta-block h2 { color: var(--yellow); margin-bottom: 8px; }
+.cta-sub-tag { font-size: 16px; font-weight: 500; color: var(--text2); margin-bottom: 16px; }
+.cta-block p { color: var(--text2); font-size: 15px; margin-bottom: 32px; }
 .cta-form { display: flex; gap: 10px; max-width: 420px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
-.cta-form input { flex: 1; min-width: 180px; padding: 13px 20px; border-radius: 100px; border: none; font-size: 15px; outline: none; font-family: inherit; background: rgba(0,0,0,0.12); color: #000; }
+.cta-form input { flex: 1; min-width: 180px; padding: 13px 20px; border-radius: 100px; border: 1px solid #333; font-size: 15px; outline: none; font-family: inherit; background: #1a1a1a; color: var(--text); }
 .cta-form input::placeholder { color: rgba(0,0,0,0.35); }
 .cta-form button { padding: 13px 24px; background: #000; color: #fff; border: none; border-radius: 100px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
 .cta-form button:hover { opacity: 0.8; }
@@ -275,7 +277,7 @@ function acceptAge() {
 
 <section class="hero">
   <div class="hero-tag"><div class="tag-dot"></div> Disponible ahora · Gratis</div>
-  <h1>Tu dinero<br>se aburre.<br><em>Haz algo.</em></h1>
+  <h1>Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em></h1>
   <p class="hero-sub">La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones de adulto. Solo tu dinero haciendo algo.</p>
   <form action="https://formspree.io/f/mqevbzvb" method="POST" onsubmit="handleForm(event)" class="form-row" style="flex-wrap:wrap;justify-content:center;">
     <input type="email" name="email" id="heroEmail" placeholder="tu@email.com" required />
@@ -470,7 +472,7 @@ function acceptAge() {
         <button class="quick-btn" onclick="doTicker('ETH')">Ethereum</button>
       </div>
       <div id="stockResult" style="padding:24px;min-height:120px;display:flex;align-items:center;justify-content:center;">
-        <p style="font-size:14px;color:var(--text3);text-align:center;">Introduce un ticker arriba o pulsa uno de los ejemplos para ver el análisis en tiempo real.</p>
+        <p style="font-size:14px;color:var(--text3);text-align:center;">Escribe Apple, Tesla, Inditex... lo que sea, nano. Te digo yo si renta o no. 🪰</p>
       </div>
       <div style="padding:12px 24px;font-size:11px;color:var(--text3);background:var(--card2);border-top:1px solid var(--border);line-height:1.6;">
         ⚠️ <strong style="color:var(--text2)">Datos de Yahoo Finance · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br>
@@ -644,7 +646,7 @@ async function doCompare() {
   const t2 = document.getElementById('stockInput2').value.trim().toUpperCase();
   if (!t1 || !t2) { alert('Introduce las dos empresas para comparar'); return; }
   const el = document.getElementById('stockResult');
-  el.innerHTML = '<p style="font-size:14px;color:var(--text3);">⏳ Comparando ' + t1 + ' vs ' + t2 + '...</p>';
+  el.innerHTML = '<p style="font-size:14px;color:var(--text3);">🪰 Venga, a ver quién la tiene mejor entre ' + t1 + ' y ' + t2 + '... (en plan financiero, ¿eh?)</p>';
   try {
     const [d1, d2] = await Promise.all([fetchStock(t1), fetchStock(t2)]);
     renderCompare(el, d1, t1, d2, t2);
@@ -793,22 +795,22 @@ function renderHistorial() {
 
 // Explicaciones de métricas
 const METRIC_INFO = {
-  'PER actual': '💡 Imagina que la empresa es un piso de alquiler. El PER te dice cuántos años tardarías en recuperar lo que pagas con los beneficios que genera. PER 20 = 20 años. Cuanto más bajo, más barata está la acción.',
-  'PEG ratio': '💡 Es el PER mejorado. Tiene en cuenta que una empresa que crece rápido puede merecer pagar más por ella. Menos de 1 = ganga. Entre 1 y 2 = precio razonable. Más de 2 = la estás pagando cara.',
-  'PER estimado': '💡 Como el PER normal, pero usando los beneficios que los expertos esperan para el próximo año (no los del año pasado). Te da una idea de si la empresa tiene buena pinta de cara al futuro.',
-  'Crecimiento BPA': '💡 BPA = Beneficio Por Acción. Si sube cada año, la empresa cada vez gana más dinero. Como si tu sueldo subiera cada año — señal de que las cosas van bien.',
-  'Crecimiento ingresos': '💡 Cuánto más está vendiendo la empresa respecto al año anterior. Si vende más cada año, está creciendo. Si vende menos, algo va mal.',
-  'ROE': '💡 Rentabilidad sobre el capital. Si metes 100€ en el negocio y el ROE es 20%, el negocio genera 20€ al año. Por encima del 15% es buena señal. Por encima del 30% es excepcional.',
-  'Cap. mercado': '💡 El precio total de la empresa en bolsa (precio de la acción × número de acciones). Empresas grandes como Apple valen billones. Las pequeñas valen millones. Más grande = más estable, menos riesgo.',
-  'Dividendo': '💡 Dinero que la empresa te paga cada año solo por tener sus acciones. Si el dividendo es 3%, por cada 1.000€ invertidos te dan 30€ al año sin vender nada. Como cobrar un alquiler.',
-  'EPS': '💡 EPS = Beneficio Por Acción. Es el beneficio total de la empresa dividido entre todas sus acciones. Si es positivo, la empresa gana dinero. Si es negativo, está en pérdidas.',
-  'Margen neto': '💡 De cada 100€ que vende la empresa, cuánto se queda como beneficio después de pagar todos los gastos. Margen 20% = se queda 20€ de cada 100€. Cuanto más alto, más eficiente es el negocio.',
-  'Reinversión del negocio': '💡 Cuánto del dinero que genera la empresa lo reinvierte en crecer (nuevas fábricas, tecnología, expansión). Alto = apuesta por el futuro. Bajo = reparte casi todo entre los accionistas.',
-  'Flujo caja operativo': '💡 El dinero real que entra por el negocio del día a día. Es más fiable que los beneficios porque es difícil de manipular. Si es positivo y alto, el negocio funciona de verdad.',
-  'Free Cash Flow': '💡 El dinero que sobra de verdad después de pagar todo lo necesario para mantener el negocio. Si es positivo, la empresa tiene efectivo para crecer, pagar dividendos o reducir deudas.',
-  'Beta': '💡 Mide cuánto sube o baja la acción respecto al mercado general. Beta 1 = se mueve igual que el mercado. Beta 2 = sube y baja el doble. Beta 0.5 = se mueve la mitad. Menos de 1 = más tranquila.',
-  'Rango 52 semanas': '💡 El precio más bajo y más alto que ha tenido la acción en el último año. Si ahora está cerca del mínimo, puede ser oportunidad. Si está cerca del máximo, está en zona cara.',
-  'Empleados': '💡 Número de personas que trabajan en la empresa. Da una idea del tamaño. Una empresa con 100.000 empleados es muy diferente a una con 500.',
+  'PER actual': '💡 Imagina que la empresa es un piso de alquiler. El PER te dice cuántos años tardarías en recuperar lo que pagaste con los beneficios que genera. PER 20 = 20 años. Cuanto más bajo, más barata está. Fácil, ¿no?',
+  'PEG ratio': '💡 Es el PER pero con más cabeza. Tiene en cuenta que si la empresa crece rápido, igual merece pagar más por ella. Menos de 1 = chollo. Entre 1 y 2 = precio razonable. Más de 2 = uff, te la están vendiendo cara.',
+  'PER estimado': '💡 Como el PER normal pero mirando al futuro, home. Usa los beneficios que se esperan el año que viene, no los del pasado. Si está bajo, el mercado espera que la empresa lo pete.',
+  'Crecimiento BPA': '💡 BPA = cuánto gana la empresa por cada acción. Si sube cada año, la empresa cada vez gana más pasta. Como si tu sueldo subiera todos los años — buena señal, nano.',
+  'Crecimiento ingresos': '💡 Cuánto más está vendiendo respecto al año anterior. Si vende más = está creciendo, está petando. Si vende menos = algo va mal, ojo.',
+  'ROE': '💡 Si metes 100€ en el negocio y el ROE es 20%, el negocio genera 20€ al año. Por encima del 15% mola. Por encima del 30% es una bestialidad, tío.',
+  'Cap. mercado': '💡 Lo que vale toda la empresa en bolsa. Empresas grandes como Apple valen billones. Las pequeñas valen millones. Más grande = más estable y menos locuras de precio.',
+  'Dividendo': '💡 Pasta que la empresa te paga cada año solo por tener sus acciones. Si el dividendo es 3%, por cada 1.000€ te dan 30€ al año sin vender nada. Como cobrar un alquiler sin ser casero 😌',
+  'EPS': '💡 El beneficio total de la empresa dividido entre todas sus acciones. Si es positivo, la empresa gana dinero. Si es negativo, está perdiendo pasta. Tan simple como eso.',
+  'Margen neto': '💡 De cada 100€ que vende, cuánto se queda después de pagar todo. Margen 20% = se queda 20€ de cada 100€. Cuanto más alto, más crack es gestionando el negocio.',
+  'Reinversión del negocio': '💡 El dinero que gana, ¿lo reinvierte en crecer o se lo reparte? Alto = apuesta por el futuro. Bajo = prefiere repartir dividendos. Ninguno es malo, pero dice mucho de la empresa.',
+  'Flujo caja operativo': '💡 La pasta real que entra por el negocio del día a día. Es más fiable que los beneficios porque es difícil de manipular. Si es alto y positivo, el negocio funciona de verdad, no es humo.',
+  'Free Cash Flow': '💡 El dinero que sobra de verdad después de pagar todo lo necesario. Si es positivo, la empresa tiene cash para crecer, pagar dividendos o reducir deudas. Si es negativo... macho, que alguien mire eso.',
+  'Beta': '💡 Mide qué tan nerviosa es la acción. Beta 1 = se mueve igual que el mercado. Beta 2 = sube y baja el doble. Beta 0.5 = más tranquilita. Si tienes el corazón débil, busca beta baja 😅',
+  'Rango 52 semanas': '💡 El precio más bajo y más alto del último año. Si ahora está cerca del mínimo, igual es oportunidad. Si está cerca del máximo, está cara cara. Útil para no comprar en el peor momento.',
+  'Empleados': '💡 Cuánta gente trabaja ahí. Una empresa con 100.000 empleados es un monstruo. Con 500, es pequeña. Más grande no significa mejor, pero da contexto del tamaño real del negocio.',
 };
 
 function toggleMetricInfo(label) {
@@ -839,13 +841,13 @@ function semaforo(pe, sector, peg) {
   if (pe === null || pe <= 0) return { cls: 'sem-gray', ico: '❓', titulo: 'Sin datos de PER', desc: 'La empresa no tiene PER disponible — puede estar en pérdidas o ser de reciente cotización.' };
   const ref = PER_SECTORES[sector] || PER_SECTORES['default'];
   if (peg && peg > 0) {
-    if (peg < 1)   return { cls: 'sem-green',  ico: '🟢', titulo: `Barata para su crecimiento (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x pero crece rápido — el PEG de ${peg.toFixed(2)}x indica que el precio es bajo respecto al crecimiento esperado.` };
-    if (peg <= 2)  return { cls: 'sem-yellow', ico: '🟡', titulo: `Precio justo ajustado al crecimiento (PEG ${peg.toFixed(2)}x)`, desc: `PER de ${pe.toFixed(1)}x. El PEG de ${peg.toFixed(2)}x indica que el precio refleja razonablemente el crecimiento de la empresa.` };
-    return           { cls: 'sem-red',    ico: '🔴', titulo: `Cara incluso ajustando por crecimiento (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x y PEG de ${peg.toFixed(2)}x. El mercado paga una prima muy alta incluso considerando el crecimiento esperado.` };
+    if (peg < 1)   return { cls: 'sem-green',  ico: '🟢', titulo: `¡Esto está tirao, nano! (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x pero crece un montón — con PEG ${peg.toFixed(2)}x el mercado aún no se ha enterao. Igual renta echarle un ojo 👀` };
+    if (peg <= 2)  return { cls: 'sem-yellow', ico: '🟡', titulo: `Bien pero sin volverse loco (PEG ${peg.toFixed(2)}x)`, desc: `PER de ${pe.toFixed(1)}x. El PEG de ${peg.toFixed(2)}x dice que el precio está más o menos acorde con lo que crece. Ni ganga ni robo.` };
+    return           { cls: 'sem-red',    ico: '🔴', titulo: `Uff, esto está carete (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x y PEG de ${peg.toFixed(2)}x. Macho, pagas mucho incluso pa lo que crece. No sé yo si renta...` };
   }
-  if (pe < ref.bajo) return { cls: 'sem-green',  ico: '🟢', titulo: `Zona de valor — PER bajo para ${ref.nombre}`,  desc: `PER de ${pe.toFixed(1)}x está por debajo de la media histórica del sector (${ref.bajo}x–${ref.alto}x).` };
-  if (pe <= ref.alto) return { cls: 'sem-yellow', ico: '🟡', titulo: `Precio justo — PER en media de ${ref.nombre}`, desc: `PER de ${pe.toFixed(1)}x está en línea con la media histórica del sector (${ref.bajo}x–${ref.alto}x).` };
-  return               { cls: 'sem-red',    ico: '🔴', titulo: `Zona premium — PER alto para ${ref.nombre}`,   desc: `PER de ${pe.toFixed(1)}x está por encima de la media del sector (${ref.bajo}x–${ref.alto}x).` };
+  if (pe < ref.bajo) return { cls: 'sem-green',  ico: '🟢', titulo: `Precio bajo para su sector — puede rentar`,  desc: `PER de ${pe.toFixed(1)}x está por debajo de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Ostres, igual es una oportunidad 👀` };
+  if (pe <= ref.alto) return { cls: 'sem-yellow', ico: '🟡', titulo: `Precio justo — ni cara ni barata`, desc: `PER de ${pe.toFixed(1)}x está en la media del sector ${ref.nombre} (${ref.bajo}x–${ref.alto}x). No está mal, pero tampoco es un chollo.` };
+  return               { cls: 'sem-red',    ico: '🔴', titulo: `Va de sobrada — precio alto para su sector`,   desc: `PER de ${pe.toFixed(1)}x está por encima de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Pagas de más, tío. Ten cuidado.` };
 }
 
 function fmtMiles(n) {
@@ -910,7 +912,8 @@ async function doSearch() {
   if (cached) { if (cached.tipo === 'crypto') renderCrypto(el, cached); else renderStock(el, cached, ticker); return; }
   // Comprobar límite diario (solo para búsquedas nuevas, no cacheadas)
   if (busquedasRestantes() <= 0) { mostrarLimiteAlcanzado(el); return; }
-  el.innerHTML = '<p style="font-size:14px;color:var(--text3);">⏳ Buscando ' + ticker + '...</p>';
+  const loadMsgs = ['🪰 Un momento, que la mosca está mirando los números...','🪰 Illo, dame un seg que esto tiene más letra que un contrato...','🪰 Preguntando a la bolsa, home, que no es tan rápida...','🪰 Buscando ' + ticker + '... casi casi...'];
+  el.innerHTML = '<p style="font-size:14px;color:var(--text3);">' + loadMsgs[Math.floor(Math.random()*loadMsgs.length)] + '</p>';
   try {
     const base = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'https://labolsabro.com' : '';
     const res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
@@ -926,12 +929,12 @@ async function doSearch() {
     if (restantes > 0) {
       const aviso = document.createElement('div');
       aviso.style.cssText = 'font-size:12px;color:var(--text3);text-align:right;padding:4px 0;';
-      aviso.textContent = `${restantes} búsqueda${restantes !== 1 ? 's' : ''} gratis restante${restantes !== 1 ? 's' : ''} hoy`;
+      aviso.textContent = restantes === 1 ? `⚡ Solo te queda 1 búsqueda gratis hoy, crack` : `⚡ Te quedan ${restantes} búsquedas gratis hoy`;
       el.appendChild(aviso);
     }
   } catch(e) {
     const t = document.getElementById('stockInput').value.trim().toUpperCase();
-    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🔍</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">No encontramos "${t}"</p><p style="font-size:13px;color:var(--text3);line-height:1.8">Usa el ticker exacto de bolsa.<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
+    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🤷</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">Uff nano, "${t}" no me suena de ná</p><p style="font-size:13px;color:var(--text3);line-height:1.8">Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
   }
 }
 
@@ -1502,5 +1505,119 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
 }
 </script>
+<!-- CHAT MOSCA PREMIUM -->
+<style>
+#mosca-chat-btn { position:fixed; bottom:24px; right:24px; width:56px; height:56px; background:#facc15; border-radius:50%; border:none; font-size:26px; cursor:pointer; box-shadow:0 4px 20px rgba(0,0,0,0.4); z-index:1000; transition:transform 0.2s; display:none; }
+#mosca-chat-btn:hover { transform:scale(1.1); }
+#mosca-chat-box { position:fixed; bottom:92px; right:24px; width:320px; max-height:480px; background:#161616; border:1px solid #2a2a2a; border-radius:20px; box-shadow:0 8px 40px rgba(0,0,0,0.5); z-index:1000; display:none; flex-direction:column; overflow:hidden; }
+#mosca-chat-header { background:#111; padding:14px 18px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #2a2a2a; }
+#mosca-chat-header span { font-size:20px; }
+#mosca-chat-header div { flex:1; }
+#mosca-chat-header strong { font-size:14px; color:#f5f5f5; display:block; font-family:'Space Grotesk',sans-serif; }
+#mosca-chat-header small { font-size:11px; color:#22c55e; font-family:'Space Grotesk',sans-serif; }
+#mosca-region-bar { padding:10px 16px; background:#0f0f0f; border-bottom:1px solid #222; display:flex; align-items:center; gap:8px; }
+#mosca-region-bar label { font-size:11px; color:#666; font-family:'Space Grotesk',sans-serif; }
+#mosca-region-sel { background:#1a1a1a; border:1px solid #333; color:#f5f5f5; border-radius:100px; padding:4px 10px; font-size:12px; font-family:'Space Grotesk',sans-serif; outline:none; cursor:pointer; }
+#mosca-msgs { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
+.mc-msg { max-width:85%; padding:10px 14px; border-radius:14px; font-size:13px; line-height:1.5; font-family:'Space Grotesk',sans-serif; }
+.mc-user { background:#22c55e; color:#000; font-weight:600; align-self:flex-end; border-bottom-right-radius:4px; }
+.mc-bot { background:#222; color:#e5e5e5; align-self:flex-start; border-bottom-left-radius:4px; }
+.mc-typing { color:#666; font-style:italic; font-size:12px; align-self:flex-start; font-family:'Space Grotesk',sans-serif; }
+#mosca-input-row { padding:12px 14px; border-top:1px solid #222; display:flex; gap:8px; }
+#mosca-input { flex:1; background:#1a1a1a; border:1px solid #333; border-radius:100px; padding:9px 14px; color:#f5f5f5; font-size:13px; font-family:'Space Grotesk',sans-serif; outline:none; }
+#mosca-input:focus { border-color:#22c55e; }
+#mosca-send { background:#22c55e; border:none; border-radius:50%; width:34px; height:34px; cursor:pointer; font-size:16px; flex-shrink:0; }
+</style>
+
+<button id="mosca-chat-btn" onclick="toggleMoscaChat()" title="Pregúntale a Mosca">🪰</button>
+
+<div id="mosca-chat-box">
+  <div id="mosca-chat-header">
+    <span>🪰</span>
+    <div>
+      <strong>Mosca</strong>
+      <small>● Asistente Premium</small>
+    </div>
+    <button onclick="toggleMoscaChat()" style="background:none;border:none;color:#666;font-size:18px;cursor:pointer">✕</button>
+  </div>
+  <div id="mosca-region-bar">
+    <label>Habla como:</label>
+    <select id="mosca-region-sel" onchange="guardarRegion(this.value)">
+      <option value="castellano">Castellano 🇪🇸</option>
+      <option value="andaluz">Andaluz 🌞</option>
+      <option value="catalan">Catalán 🟡🔴</option>
+      <option value="gallego">Gallego 🌧️</option>
+    </select>
+  </div>
+  <div id="mosca-msgs">
+    <div class="mc-msg mc-bot">¡Ey! Soy Mosca 🪰 Tu asistente de bolsa. Pregúntame lo que quieras, que aquí no hay preguntas tontas.</div>
+  </div>
+  <div id="mosca-input-row">
+    <input id="mosca-input" type="text" placeholder="Pregunta lo que sea..." onkeydown="if(event.key==='Enter')enviarMosca()" />
+    <button id="mosca-send" onclick="enviarMosca()">↑</button>
+  </div>
+</div>
+
+<script>
+function isPremium() {
+  return localStorage.getItem('labolsabro_premium') === '1';
+}
+
+function toggleMoscaChat() {
+  const box = document.getElementById('mosca-chat-box');
+  box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function guardarRegion(v) {
+  localStorage.setItem('mosca_region', v);
+}
+
+function initMoscaChat() {
+  if (!isPremium()) return;
+  document.getElementById('mosca-chat-btn').style.display = 'flex';
+  const r = localStorage.getItem('mosca_region') || 'castellano';
+  document.getElementById('mosca-region-sel').value = r;
+}
+
+async function enviarMosca() {
+  const input = document.getElementById('mosca-input');
+  const msgs = document.getElementById('mosca-msgs');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  msgs.innerHTML += `<div class="mc-msg mc-user">${msg}</div>`;
+  msgs.innerHTML += `<div class="mc-msg mc-typing" id="mc-typing">Mosca está pensando...</div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+
+  const region = localStorage.getItem('mosca_region') || 'castellano';
+  const base = window.location.hostname === 'localhost' ? 'https://labolsabro.com' : '';
+
+  try {
+    const r = await fetch(`${base}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mensaje: msg, region }),
+    });
+    const data = await r.json();
+    document.getElementById('mc-typing')?.remove();
+    msgs.innerHTML += `<div class="mc-msg mc-bot">${data.respuesta || 'Uy, algo fue mal 🤷'}</div>`;
+  } catch {
+    document.getElementById('mc-typing')?.remove();
+    msgs.innerHTML += `<div class="mc-msg mc-bot">Illo, me he quedao sin conexión. Prueba otra vez 🤷</div>`;
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Activar el botón si es premium
+initMoscaChat();
+
+// Activar tras pago exitoso de Stripe
+if (new URLSearchParams(window.location.search).get('success') === '1') {
+  localStorage.setItem('labolsabro_premium', '1');
+  initMoscaChat();
+}
+</script>
+
 </body>
 </html>
