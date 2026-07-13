@@ -1311,7 +1311,7 @@ async function handleForm(e) {
   const emailInput = form.querySelector('input[type="email"]');
   if (!emailInput.value || !emailInput.value.includes('@')) { emailInput.style.borderColor = '#f87171'; setTimeout(() => { emailInput.style.borderColor = ''; }, 2000); return; }
   try {
-    await fetch('https://formspree.io/f/mqevbzvb', { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify({ email: emailInput.value }) });
+    await fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: emailInput.value }) });
   } catch(err) {}
   emailInput.value = '';
   openModal();
