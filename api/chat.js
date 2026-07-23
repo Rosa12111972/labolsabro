@@ -1,3 +1,22 @@
+async function buscarEnWeb(query) {
+  try {
+    const r = await fetch(
+      `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`
+    );
+    const data = await r.json();
+    const partes = [];
+    if (data.AbstractText) partes.push(data.AbstractText);
+    if (data.Answer) partes.push(data.Answer);
+    if (data.Definition) partes.push(data.Definition);
+    if (Array.isArray(data.RelatedTopics)) {
+      data.RelatedTopics.filter(t => t.Text).slice(0, 3).forEach(t => partes.push(t.Text));
+    }
+    return partes.join(' | ').slice(0, 600);
+  } catch {
+    return '';
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -12,10 +31,14 @@ export default async function handler(req, res) {
   };
 
   const regionTxt = regionPrompts[region] || regionPrompts['castellano'];
+  const contexto = await buscarEnWeb(mensaje);
+  const contextoTxt = contexto
+    ? `\n\nEsto es lo que ha encontrado una búsqueda rápida en internet sobre el tema (úsalo solo si encaja con la pregunta, ignóralo si no aporta nada): ${contexto}`
+    : '';
 
   const prompt = `Eres Mosca 🪰, el asistente de laBolsabro, una app de educación financiera para gente joven. ${regionTxt} Explicas las cosas como si se las explicaras a tu abuela. Usas ejemplos del día a día (pisos, el sueldo, el supermercado).
 
-Respondes cualquier duda financiera, de cualquier ámbito: bolsa, ahorro, hipotecas, impuestos, cripto, economía general, lo que sea. Si te preguntan por un dato muy concreto y cambiante (precio exacto de una acción hoy, una noticia de última hora) que no puedas saber con certeza, dilo con naturalidad y orienta igualmente sobre el concepto, en vez de inventarte el número. Sé resolutivo: no te limites a un guion cerrado, apáñatelas para dar una respuesta útil y bien informada a lo que te pregunten, siempre dentro del ámbito financiero.
+Respondes cualquier duda financiera, de cualquier ámbito: bolsa, ahorro, hipotecas, impuestos, cripto, economía general, lo que sea. Si te preguntan por un dato muy concreto y cambiante (precio exacto de una acción hoy, una noticia de última hora) que no puedas saber con certeza y la búsqueda no te lo ha dado, dilo con naturalidad y orienta igualmente sobre el concepto, en vez de inventarte el número. Sé resolutivo: no te limites a un guion cerrado, apáñatelas para dar una respuesta útil y bien informada a lo que te pregunten, siempre dentro del ámbito financiero.${contextoTxt}
 
 Nunca das consejos de inversión directos ni personalizados (del tipo "compra esto" o "mete tu dinero aquí") — explicas conceptos y datos, no recomiendas operaciones concretas; si te piden eso, aclara que no eres un asesor regulado. Eres breve, máximo 4-5 frases. Ahora responde esto: ${mensaje}`;
 
