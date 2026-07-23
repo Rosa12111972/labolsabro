@@ -1594,10 +1594,11 @@ async function enviarMosca() {
     });
     const data = await r.json();
     document.getElementById('mc-typing')?.remove();
-    msgs.innerHTML += `<div class="mc-msg mc-bot">${data.respuesta || 'Uy, algo fue mal 🤷'}</div>`;
-  } catch {
+    const debugTxt = data.respuesta ? '' : ` <br><small style="opacity:.6">[DEBUG ${r.status}: ${data.error || ''} ${data.detalle || ''}]</small>`;
+    msgs.innerHTML += `<div class="mc-msg mc-bot">${data.respuesta || 'Uy, algo fue mal 🤷'}${debugTxt}</div>`;
+  } catch (e) {
     document.getElementById('mc-typing')?.remove();
-    msgs.innerHTML += `<div class="mc-msg mc-bot">Illo, me he quedao sin conexión. Prueba otra vez 🤷</div>`;
+    msgs.innerHTML += `<div class="mc-msg mc-bot">Illo, me he quedao sin conexión. Prueba otra vez 🤷 <br><small style="opacity:.6">[DEBUG: ${e.message}]</small></div>`;
   }
   msgs.scrollTop = msgs.scrollHeight;
 }
