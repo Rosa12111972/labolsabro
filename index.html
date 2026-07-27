@@ -12,6 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="laBolsabro">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
   --bg: #0a0a0a;
@@ -948,6 +949,114 @@ function renderCrypto(el, d) {
   el.innerHTML = `<div style="width:100%"><div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="width:44px;height:44px;border-radius:10px;background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">₿</div><div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">${d.nombre}</div><div style="font-size:12px;color:var(--text3)">${d.ticker} · ${d.subtipo||d.tipoCrypto||'Crypto'}</div></div><div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text)">${d.precio?d.precio.toLocaleString('es-ES', {maximumFractionDigits:2}):'-'} $</div><div style="font-size:13px;color:${clr};font-weight:600">${flecha} ${Math.abs(d.cambioPct||d.cambio||0).toFixed(2)}% hoy</div></div></div><div class="semáforo ${semCls}" style="margin-bottom:16px"><div class="semáforo-icon">${ico}</div><div><div class="semáforo-title">Viabilidad: ${d.viabilidad} · Riesgo: ${d.riesgo}</div><div class="semáforo-desc">${d.descripcion||d.descripción||''}</div></div></div><div style="margin-top:12px;padding:12px 16px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:12px;font-size:12px;color:var(--red);line-height:1.7">⚠️ <strong>Las criptomonedas son activos de muy alto riesgo.</strong> Puedes perder todo tu dinero. Nunca inviertas más de lo que puedas permitirte perder.</div><div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border);margin-top:12px">Precio: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo.</div></div>`;
 }
 
+let _pdfData = null;
+
+function getPDFsDescargados() {
+  const h = JSON.parse(localStorage.getItem('pdf_historial') || '[]');
+  const hoy = new Date().toDateString();
+  return h.filter(d => d === hoy).length;
+}
+
+function registrarPDF() {
+  const h = JSON.parse(localStorage.getItem('pdf_historial') || '[]');
+  h.push(new Date().toDateString());
+  localStorage.setItem('pdf_historial', JSON.stringify(h.slice(-30)));
+}
+
+function descargarPDF() {
+  if (!_pdfData) return;
+  const gratis = 3;
+  const usados = getPDFsDescargados();
+  if (usados >= gratis) {
+    const ir = confirm('Has usado tus 3 PDFs gratuitos de hoy. ¿Quieres ver los planes Premium para descargas ilimitadas?');
+    if (ir) window.location.href = '/premium.html';
+    return;
+  }
+
+  const { d, ticker, score } = _pdfData;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const W = 210, pad = 20;
+
+  // Cabecera
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, W, 40, 'F');
+  doc.setTextColor(250, 204, 21);
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.text('laBolsabro', pad, 18);
+  doc.setFontSize(10);
+  doc.setTextColor(163, 163, 163);
+  doc.text('Informe de análisis · Solo educativo, no asesoramiento financiero', pad, 27);
+  doc.setTextColor(250, 204, 21);
+  doc.text(new Date().toLocaleDateString('es-ES'), W - pad, 27, { align: 'right' });
+
+  // Nombre empresa
+  doc.setTextColor(245, 245, 245);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text(d.nombre || ticker, pad, 55);
+  doc.setFontSize(12);
+  doc.setTextColor(163, 163, 163);
+  doc.text(`${ticker} · ${d.sector || 'Sector desconocido'}`, pad, 63);
+
+  // Precio y puntuación
+  doc.setFillColor(20, 20, 20);
+  doc.roundedRect(pad, 70, 80, 28, 4, 4, 'F');
+  doc.roundedRect(115, 70, 75, 28, 4, 4, 'F');
+
+  doc.setFontSize(10); doc.setTextColor(163, 163, 163);
+  doc.text('Precio actual', pad + 6, 79);
+  doc.setFontSize(16); doc.setTextColor(245, 245, 245); doc.setFont('helvetica', 'bold');
+  doc.text(`${d.precio?.toLocaleString('es-ES', {maximumFractionDigits:2}) || '—'} ${d.moneda || 'USD'}`, pad + 6, 91);
+
+  doc.setFontSize(10); doc.setTextColor(163, 163, 163); doc.setFont('helvetica', 'normal');
+  doc.text('Puntuación global', 121, 79);
+  const scoreColor = score >= 7 ? [34,197,94] : score >= 4 ? [250,204,21] : [248,113,113];
+  doc.setFontSize(16); doc.setTextColor(...scoreColor); doc.setFont('helvetica', 'bold');
+  doc.text(score !== null ? `${score.toFixed(1)} / 10` : '—', 121, 91);
+
+  // Métricas
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12); doc.setTextColor(245, 245, 245);
+  doc.text('Métricas clave', pad, 112);
+
+  const metricas = [
+    ['PER', d.pe ? d.pe.toFixed(1) + 'x' : '—'],
+    ['PEG', d.peg ? d.peg.toFixed(2) + 'x' : '—'],
+    ['Margen neto', d.margen ? (d.margen * 100).toFixed(1) + '%' : '—'],
+    ['ROE', d.roe ? (d.roe * 100).toFixed(1) + '%' : '—'],
+    ['Crecimiento BPA', d.crecimientoEps ? (d.crecimientoEps * 100).toFixed(1) + '%' : '—'],
+    ['Crecimiento ingresos', d.crecimientoIng ? (d.crecimientoIng * 100).toFixed(1) + '%' : '—'],
+    ['Dividendo', d.divY ? (d.divY * 100).toFixed(2) + '%' : '—'],
+    ['Beta', d.beta ? d.beta.toFixed(2) : '—'],
+  ];
+
+  let y = 120;
+  metricas.forEach(([label, val], i) => {
+    doc.setFillColor(i % 2 === 0 ? 20 : 26, i % 2 === 0 ? 20 : 26, i % 2 === 0 ? 20 : 26);
+    doc.rect(pad, y - 5, W - pad * 2, 10, 'F');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(163, 163, 163);
+    doc.text(label, pad + 4, y + 2);
+    doc.setFont('helvetica', 'bold'); doc.setTextColor(245, 245, 245);
+    doc.text(val, W - pad - 4, y + 2, { align: 'right' });
+    y += 10;
+  });
+
+  // Footer
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 272, W, 25, 'F');
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
+  doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
+  doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+
+  doc.save(`labolsabro-${ticker}-${new Date().toISOString().slice(0,10)}.pdf`);
+  registrarPDF();
+
+  const restantes = gratis - getPDFsDescargados();
+  if (restantes > 0) alert(`PDF descargado ✅\nTe quedan ${restantes} PDF${restantes > 1 ? 's' : ''} gratuito${restantes > 1 ? 's' : ''} hoy.`);
+}
+
 function compartirWhatsApp(ticker, nombre, score) {
   const url = `https://labolsabro.com?ticker=${ticker}`;
   const texto = `📊 He analizado *${nombre}* (${ticker}) en laBolsabro y tiene una puntuación de *${score}/10*.\n\nMíralo tú mismo: ${url}`;
@@ -998,6 +1107,7 @@ const ETF_TICKERS = ['GLD','SLV','GDX','GDXJ','IAU','SIVR','PPLT','PALL','USO','
 function renderStock(el, d, ticker) {
   try {
     if (!d || !d.precio) throw new Error('no data');
+    _pdfData = { d, ticker, score: null };
     if (ETF_TICKERS.includes(ticker) || (!d.pe && !d.margen && !d.roe && !d.eps && !d.sector)) return renderETF(el, d, ticker);
     const precio = d.precio, cambioPct = d.cambioPct||d.cambio||0, moneda = d.moneda||'USD', nombre = d.nombre||ticker, sector = d.sector||'default';
     const sectorRef = PER_SECTORES[sector] || PER_SECTORES['default'];
@@ -1062,6 +1172,7 @@ function renderStock(el, d, ticker) {
     }
 
     const scoreFinal = scoreFactors > 0 ? Math.min(10, Math.round((score / scoreFactors) * 10 * 10) / 10) : null;
+    if (_pdfData) _pdfData.score = scoreFinal;
     const scoreColor = scoreFinal === null ? 'var(--text2)' : scoreFinal >= 7 ? 'var(--green)' : scoreFinal >= 4 ? 'var(--yellow)' : 'var(--red)';
     const scoreBg = scoreFinal === null ? 'var(--card2)' : scoreFinal >= 7 ? 'rgba(34,197,94,0.1)' : scoreFinal >= 4 ? 'rgba(250,204,21,0.1)' : 'rgba(248,113,113,0.1)';
     const scoreLabel = scoreFinal === null ? 'Sin datos suficientes' : scoreFinal >= 8 ? 'Empresa excelente' : scoreFinal >= 6.5 ? 'Buena empresa' : scoreFinal >= 5 ? 'Empresa correcta' : scoreFinal >= 3 ? 'Con algunas dudas' : 'Mejor buscar otra';
@@ -1107,6 +1218,7 @@ function renderStock(el, d, ticker) {
         <div style="display:flex;gap:8px;">
           <button onclick="compartirWhatsApp('${ticker}','${nombre.replace(/'/g,"\\'")}',${scoreFinal??0})" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:#25D366;color:#000;border:none;border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">📱 WhatsApp</button>
           <button onclick="copiarLink('${ticker}')" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔗 Copiar link</button>
+          <button onclick="descargarPDF()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--yellow);border:1px solid rgba(250,204,21,0.3);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">📄 PDF</button>
         </div>
       </div>
     </div>`;
