@@ -680,7 +680,8 @@ function cmpVal(a, b, higherBetter=true) {
 }
 
 function renderCompare(el, d1, t1, d2, t2) {
-  const s1 = calcScore(d1, t1), s2 = calcScore(d2, t2);
+  _pdfData = { compare: true, d1, t1, d2, t2, s1: calcScore(d1,t1), s2: calcScore(d2,t2) };
+  const s1 = _pdfData.s1, s2 = _pdfData.s2;
   const sc = cmpVal(s1, s2);
   const sem1 = semaforo(d1.pe??null, d1.sector??'default', d1.peg??null);
   const sem2 = semaforo(d2.pe??null, d2.sector??'default', d2.peg??null);
@@ -744,7 +745,10 @@ function renderCompare(el, d1, t1, d2, t2) {
       ${row('Cap. mercado',
         fmtMiles(d1.mktCap), fmtMiles(d2.mktCap))}
     </div>
-    <div style="font-size:11px;color:var(--text3);padding:6px 0">Verde = mejor valor · Rojo = peor valor · Datos Yahoo Finance · Solo educativo.</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;flex-wrap:wrap;gap:8px;">
+      <span style="font-size:11px;color:var(--text3)">Verde = mejor valor · Rojo = peor valor · Datos Yahoo Finance · Solo educativo.</span>
+      <button onclick="descargarPDF()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--yellow);border:1px solid rgba(250,204,21,0.3);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">📄 PDF</button>
+    </div>
   </div>`;
 }
 
@@ -918,6 +922,7 @@ async function doSearch() {
   try {
     const base = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'https://labolsabro.com' : '';
     const res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
+    if (res.status === 429) { mostrarLimiteAlcanzado(el); return; }
     if (!res.ok) throw new Error('error ' + res.status);
     const d = await res.json();
     if (!d || !d.precio) throw new Error('no data');
@@ -973,8 +978,9 @@ function descargarPDF() {
     return;
   }
 
-  const { d, ticker, score } = _pdfData;
   const { jsPDF } = window.jspdf;
+  if (_pdfData.compare) { descargarPDFCompare(); return; }
+  const { d, ticker, score } = _pdfData;
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const W = 210, pad = 20;
 
@@ -1055,6 +1061,65 @@ function descargarPDF() {
 
   const restantes = gratis - getPDFsDescargados();
   if (restantes > 0) alert(`PDF descargado ✅\nTe quedan ${restantes} PDF${restantes > 1 ? 's' : ''} gratuito${restantes > 1 ? 's' : ''} hoy.`);
+}
+
+function descargarPDFCompare() {
+  const { d1, t1, d2, t2, s1, s2 } = _pdfData;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const W = 210, pad = 20;
+
+  doc.setFillColor(10,10,10); doc.rect(0,0,W,40,'F');
+  doc.setTextColor(250,204,21); doc.setFontSize(22); doc.setFont('helvetica','bold');
+  doc.text('laBolsabro', pad, 18);
+  doc.setFontSize(10); doc.setTextColor(163,163,163); doc.setFont('helvetica','normal');
+  doc.text('Comparativa de empresas · Solo educativo, no asesoramiento financiero', pad, 27);
+  doc.text(new Date().toLocaleDateString('es-ES'), W-pad, 27, { align:'right' });
+
+  const col1 = pad, col2 = W/2+4, colW = W/2-pad-4;
+  const scoreColor = s => { const c = s>=7?[34,197,94]:s>=4?[250,204,21]:[248,113,113]; return c; };
+
+  [[d1,t1,s1,col1],[d2,t2,s2,col2]].forEach(([d,t,s,x]) => {
+    doc.setFillColor(20,20,20); doc.roundedRect(x,48,colW,32,4,4,'F');
+    doc.setFontSize(14); doc.setFont('helvetica','bold'); doc.setTextColor(245,245,245);
+    doc.text(d.nombre||t, x+6, 60, { maxWidth: colW-8 });
+    doc.setFontSize(10); doc.setTextColor(163,163,163); doc.setFont('helvetica','normal');
+    doc.text(t, x+6, 67);
+    if (s!==null) { doc.setTextColor(...scoreColor(s)); doc.setFontSize(16); doc.setFont('helvetica','bold'); doc.text(`${s.toFixed(1)}/10`, x+6, 76); }
+  });
+
+  const metricas = [
+    ['Precio', `${d1.precio?.toFixed(2)||'—'} ${d1.moneda||'USD'}`, `${d2.precio?.toFixed(2)||'—'} ${d2.moneda||'USD'}`],
+    ['PER', d1.pe?d1.pe.toFixed(1)+'x':'—', d2.pe?d2.pe.toFixed(1)+'x':'—'],
+    ['Margen neto', d1.margen?(d1.margen*100).toFixed(1)+'%':'—', d2.margen?(d2.margen*100).toFixed(1)+'%':'—'],
+    ['ROE', d1.roe?(d1.roe*100).toFixed(1)+'%':'—', d2.roe?(d2.roe*100).toFixed(1)+'%':'—'],
+    ['Crec. BPA', d1.crecimientoEps?(d1.crecimientoEps*100).toFixed(1)+'%':'—', d2.crecimientoEps?(d2.crecimientoEps*100).toFixed(1)+'%':'—'],
+    ['Dividendo', d1.divY?(d1.divY*100).toFixed(2)+'%':'—', d2.divY?(d2.divY*100).toFixed(2)+'%':'—'],
+    ['Beta', d1.beta?d1.beta.toFixed(2):'—', d2.beta?d2.beta.toFixed(2):'—'],
+  ];
+
+  doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(245,245,245);
+  doc.text('Métrica', pad, 94); doc.text(d1.nombre||t1, W/2-10, 94); doc.text(d2.nombre||t2, W-pad, 94, {align:'right'});
+  doc.setDrawColor(42,42,42); doc.line(pad, 96, W-pad, 96);
+
+  let y = 104;
+  metricas.forEach(([label,v1,v2],i) => {
+    doc.setFillColor(i%2===0?20:26, i%2===0?20:26, i%2===0?20:26);
+    doc.rect(pad, y-5, W-pad*2, 10, 'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(163,163,163);
+    doc.text(label, pad+4, y+2);
+    doc.setTextColor(245,245,245);
+    doc.text(v1, W/2-10, y+2);
+    doc.text(v2, W-pad-4, y+2, {align:'right'});
+    y += 10;
+  });
+
+  doc.setFillColor(10,10,10); doc.rect(0,272,W,25,'F');
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(82,82,82);
+  doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Solo educativo, no asesoramiento financiero.', W/2, 282, {align:'center'});
+
+  doc.save(`labolsabro-${t1}-vs-${t2}-${new Date().toISOString().slice(0,10)}.pdf`);
+  registrarPDF();
 }
 
 function compartirWhatsApp(ticker, nombre, score) {

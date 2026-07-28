@@ -3,8 +3,8 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const PRICES = {
-  junior: 'price_1TsiW67RcE9ZK8wARFKB8TUQ',
-  senior: 'price_1Tsiyz7RcE9ZK8wAEZd223We',
+  junior: 'price_1Ty9Nl8oxHMJgjKmHeRoQ3Rm',
+  senior: 'price_1Ty9Ol8oxHMJgjKmf7t5janm',
 };
 
 export default async function handler(req, res) {

@@ -12,6 +12,25 @@ const CRYPTO_INFO = {
 const CRYPTO_TICKERS = ['BTC','ETH','SOL','BNB','XRP','DOGE','ADA','SHIB'];
 let _crumbCache = null;
 
+const ipLimits = new Map();
+const LIMIT = 3;
+
+function getIp(req) {
+  return (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown';
+}
+
+function checkIpLimit(ip) {
+  const today = new Date().toISOString().slice(0, 10);
+  const rec = ipLimits.get(ip);
+  if (!rec || rec.date !== today) {
+    ipLimits.set(ip, { date: today, count: 1 });
+    return true;
+  }
+  if (rec.count >= LIMIT) return false;
+  rec.count++;
+  return true;
+}
+
 async function getYahooCrumb() {
   if (_crumbCache && Date.now() - _crumbCache.ts < 50 * 60 * 1000) return _crumbCache;
   const hdrs = {
@@ -32,6 +51,11 @@ async function getYahooCrumb() {
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
+
+  const ip = getIp(req);
+  if (!checkIpLimit(ip)) {
+    return res.status(429).json({ error: 'Límite diario alcanzado', limitAlcanzado: true });
+  }
 
   const raw = (req.query.ticker || '').trim().toUpperCase().replace(/[^A-Z0-9.\-]/g, '');
   if (!raw) return res.status(400).json({ error: 'Ticker requerido' });
