@@ -14,19 +14,22 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { plan } = req.body || {};
+  const { plan, userId, email } = req.body || {};
   const priceId = PRICES[plan];
   if (!priceId) return res.status(400).json({ error: 'Plan no válido' });
 
   try {
-    const session = await stripe.checkout.sessions.create({
+    const sessionParams = {
       mode: 'subscription',
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: 'https://labolsabro.com/premium.html?success=1',
       cancel_url: 'https://labolsabro.com/premium.html?cancelled=1',
       locale: 'es',
-    });
+    };
+    if (userId) sessionParams.client_reference_id = userId;
+    if (email) sessionParams.customer_email = email;
+    const session = await stripe.checkout.sessions.create(sessionParams);
     return res.json({ url: session.url });
   } catch (e) {
     console.error(e);

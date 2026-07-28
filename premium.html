@@ -126,7 +126,13 @@
 
 <footer>© 2025 Mosca · <a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a> · <a href="mailto:hola@labolsabro.com">Contacto</a></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
+  const _sb = supabase.createClient(
+    'https://vbzhcogjyyjbjvwrtuaz.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiemhjb2dqeXlqYmp2d3J0dWF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMzg2NjQsImV4cCI6MjEwMDgxNDY2NH0.xsfE2omrJef5UnqECQfWy6w_USYVTsBW2JrGIDKSYvE'
+  );
+
   const params = new URLSearchParams(window.location.search);
   if (params.get('success') === '1') {
     const box = document.getElementById('msgBox');
@@ -147,10 +153,13 @@
     btn.textContent = 'Cargando...';
     btn.disabled = true;
     try {
+      const { data: { session } } = await _sb.auth.getSession();
+      const userId = session?.user?.id || null;
+      const email = session?.user?.email || null;
       const r = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan })
+        body: JSON.stringify({ plan, userId, email })
       });
       const data = await r.json();
       if (data.url) window.location.href = data.url;

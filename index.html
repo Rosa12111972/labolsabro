@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root {
   --bg: #0a0a0a;
@@ -231,9 +232,47 @@ footer { border-top: 1px solid var(--border); }
   .stat-item:nth-child(2) { border-right: none; }
   .cta-block { padding: 40px 24px; }
 }
+.auth-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:1000; align-items:center; justify-content:center; padding:16px; }
+.auth-overlay.open { display:flex; }
+.auth-box { background:var(--card); border:1px solid var(--border2); border-radius:var(--radius-lg); padding:36px 32px; width:100%; max-width:400px; }
+.auth-box h2 { font-size:20px; font-weight:700; margin-bottom:4px; }
+.auth-box p { font-size:13px; color:var(--text2); margin-bottom:24px; }
+.auth-field { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+.auth-field label { font-size:13px; font-weight:600; color:var(--text2); }
+.auth-field input { background:var(--card2); border:1px solid var(--border2); border-radius:10px; padding:11px 14px; font-size:14px; color:var(--text); font-family:inherit; outline:none; }
+.auth-field input:focus { border-color:var(--green); }
+.auth-submit { width:100%; background:var(--green); color:#000; font-weight:700; font-size:15px; padding:13px; border:none; border-radius:100px; cursor:pointer; font-family:inherit; margin-top:4px; }
+.auth-toggle { text-align:center; font-size:13px; color:var(--text2); margin-top:16px; }
+.auth-toggle span { color:var(--green); cursor:pointer; font-weight:600; }
+.auth-error { background:var(--red-dim); color:var(--red); border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:12px; display:none; }
+.auth-close { float:right; background:none; border:none; color:var(--text3); cursor:pointer; font-size:20px; line-height:1; }
+.nav-user { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text2); }
+.nav-user strong { color:var(--green); }
+.nav-user button { background:none; border:1px solid var(--border2); color:var(--text2); padding:6px 14px; border-radius:100px; font-size:12px; cursor:pointer; font-family:inherit; }
 </style>
 </head>
 <body>
+
+<div id="authOverlay" class="auth-overlay" onclick="closeAuthIfBg(event)">
+  <div class="auth-box">
+    <button class="auth-close" onclick="closeAuthModal()">×</button>
+    <h2 id="authTitle">Iniciar sesión</h2>
+    <p id="authSub">Accede a tu cuenta de laBolsabro</p>
+    <div id="authError" class="auth-error"></div>
+    <div class="auth-field">
+      <label>Email</label>
+      <input type="email" id="authEmail" placeholder="tu@email.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label>Contraseña</label>
+      <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="auth-submit" id="authSubmit" onclick="submitAuth()">Entrar</button>
+    <div class="auth-toggle">
+      <span id="authToggleLink" onclick="toggleAuthMode()">¿No tienes cuenta? Regístrate</span>
+    </div>
+  </div>
+</div>
 
 <div class="safety-bar">
   <strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.
@@ -272,7 +311,9 @@ function acceptAge() {
       </div>
     </div>
     <a class="nav-btn-outline" href="/premium.html">⭐ Premium</a>
-    <button class="nav-btn" onclick="openModal()">Novedades</button>
+    <div id="navAuth">
+      <button class="nav-btn" onclick="openAuthModal()">Entrar</button>
+    </div>
   </div>
 </nav>
 
@@ -876,6 +917,88 @@ function cacheSet(ticker, data) {
   try { localStorage.setItem('mosca_stock_' + ticker, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
 }
 
+// Auth Supabase
+const _sb = supabase.createClient(
+  'https://vbzhcogjyyjbjvwrtuaz.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiemhjb2dqeXlqYmp2d3J0dWF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMzg2NjQsImV4cCI6MjEwMDgxNDY2NH0.xsfE2omrJef5UnqECQfWy6w_USYVTsBW2JrGIDKSYvE'
+);
+let _currentUser = null;
+let _userPlan = 'free';
+
+async function initAuth() {
+  const { data: { session } } = await _sb.auth.getSession();
+  if (session?.user) await setUser(session.user);
+  _sb.auth.onAuthStateChange(async (event, session) => {
+    if (session?.user) await setUser(session.user);
+    else clearUser();
+  });
+}
+
+async function setUser(user) {
+  _currentUser = user;
+  const { data } = await _sb.from('profiles').select('plan').eq('id', user.id).single();
+  _userPlan = data?.plan || 'free';
+  const navAuth = document.getElementById('navAuth');
+  const isPremium = _userPlan !== 'free';
+  navAuth.innerHTML = `<div class="nav-user">
+    ${isPremium ? `<strong>⭐ ${_userPlan === 'senior' ? 'Senior' : 'Junior'}</strong>` : ''}
+    <span>${user.email.split('@')[0]}</span>
+    <button onclick="signOut()">Salir</button>
+  </div>`;
+}
+
+function clearUser() {
+  _currentUser = null;
+  _userPlan = 'free';
+  document.getElementById('navAuth').innerHTML = '<button class="nav-btn" onclick="openAuthModal()">Entrar</button>';
+}
+
+async function signOut() {
+  await _sb.auth.signOut();
+}
+
+let _authMode = 'login';
+function openAuthModal() {
+  document.getElementById('authOverlay').classList.add('open');
+  document.getElementById('authEmail').focus();
+}
+function closeAuthModal() {
+  document.getElementById('authOverlay').classList.remove('open');
+  document.getElementById('authError').style.display = 'none';
+}
+function closeAuthIfBg(e) {
+  if (e.target.id === 'authOverlay') closeAuthModal();
+}
+function toggleAuthMode() {
+  _authMode = _authMode === 'login' ? 'register' : 'login';
+  const isReg = _authMode === 'register';
+  document.getElementById('authTitle').textContent = isReg ? 'Crear cuenta' : 'Iniciar sesión';
+  document.getElementById('authSub').textContent = isReg ? 'Únete a laBolsabro gratis' : 'Accede a tu cuenta de laBolsabro';
+  document.getElementById('authSubmit').textContent = isReg ? 'Crear cuenta' : 'Entrar';
+  document.getElementById('authToggleLink').textContent = isReg ? '¿Ya tienes cuenta? Entra aquí' : '¿No tienes cuenta? Regístrate';
+  document.getElementById('authError').style.display = 'none';
+}
+async function submitAuth() {
+  const email = document.getElementById('authEmail').value.trim();
+  const pass = document.getElementById('authPass').value;
+  const errEl = document.getElementById('authError');
+  const btn = document.getElementById('authSubmit');
+  if (!email || !pass) { errEl.textContent = 'Rellena email y contraseña'; errEl.style.display = 'block'; return; }
+  btn.textContent = 'Un momento...'; btn.disabled = true;
+  let result;
+  if (_authMode === 'register') {
+    result = await _sb.auth.signUp({ email, password: pass });
+    if (!result.error) { closeAuthModal(); alert('¡Cuenta creada! Revisa tu email para confirmarla.'); }
+  } else {
+    result = await _sb.auth.signInWithPassword({ email, password: pass });
+    if (!result.error) closeAuthModal();
+  }
+  if (result.error) { errEl.textContent = result.error.message; errEl.style.display = 'block'; }
+  btn.textContent = _authMode === 'register' ? 'Crear cuenta' : 'Entrar'; btn.disabled = false;
+}
+
+initAuth();
+
 // Límite diario de búsquedas
 const DAILY_LIMIT = 3;
 function getBusquedasHoy() {
@@ -893,6 +1016,7 @@ function incrementarBusqueda() {
   return count;
 }
 function busquedasRestantes() {
+  if (_userPlan !== 'free') return 999;
   const hoy = new Date().toDateString();
   const data = getBusquedasHoy();
   if (data.fecha !== hoy) return DAILY_LIMIT;
@@ -971,8 +1095,8 @@ function registrarPDF() {
 function descargarPDF() {
   if (!_pdfData) return;
   const gratis = 3;
-  const usados = getPDFsDescargados();
-  if (usados >= gratis) {
+  const usados = _userPlan !== 'free' ? 0 : getPDFsDescargados();
+  if (_userPlan === 'free' && usados >= gratis) {
     const ir = confirm('Has usado tus 3 PDFs gratuitos de hoy. ¿Quieres ver los planes Premium para descargas ilimitadas?');
     if (ir) window.location.href = '/premium.html';
     return;
