@@ -2177,9 +2177,10 @@ async function submitExitEmail() {
 initExitIntent();
 
 const IDLE_MESSAGES = [
-  { text: '¿Sabes cuánto podrías tener ahorrado en 10 años? Pruébalo con la calculadora de interés compuesto.', cta: 'Calcularlo', action: () => scrollToId('simMonthly') },
-  { text: '¿Ya sabes qué empresa vas a analizar? Prueba con AAPL, TSLA o cualquier ticker que te suene.', cta: 'Probar ahora', action: () => scrollToId('stockInput') },
-  { text: '¿Tienes 2 minutos? Ponte a prueba con nuestro quiz de bolsa y ahorro.', cta: 'Hacer el quiz', action: () => scrollToId('quizCard') },
+  { text: 'Illo, ¿te has quedado dormido o qué? Mira cuánto podrías tener ahorrado en 10 años, que flipas.', cta: 'Flipar ahora', action: () => scrollToId('simMonthly') },
+  { text: 'Ey crack, ¿vas a analizar algo o solo estás mirando? Prueba con AAPL, TSLA... lo que te suene.', cta: 'Venga, va', action: () => scrollToId('stockInput') },
+  { text: '¿Te crees que sabes de bolsa? Demuéstralo, valiente. 2 minutos y salimos de dudas.', cta: 'Reto aceptado', action: () => scrollToId('quizCard') },
+  { text: 'Bro, sigues ahí? Trae a un colega y os lleváis búsquedas gratis los dos, gratis total.', cta: 'Invitar', action: () => { if (_currentUser) abrirInvitar(); else openAuthModal(); } },
 ];
 let _idleTimer = null;
 let _idleShown = false;
