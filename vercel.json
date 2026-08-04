@@ -15,9 +15,14 @@
     "api/check-alerts.js": {
       "memory": 128,
       "maxDuration": 30
+    },
+    "api/send-reminders.js": {
+      "memory": 128,
+      "maxDuration": 30
     }
   },
   "crons": [
-    { "path": "/api/check-alerts", "schedule": "0 14 * * *" }
+    { "path": "/api/check-alerts", "schedule": "0 14 * * *" },
+    { "path": "/api/send-reminders", "schedule": "0 7 * * *" }
   ]
 }
