@@ -1039,6 +1039,14 @@ const _sb = supabase.createClient(
 let _currentUser = null;
 let _userPlan = 'free';
 let _lastTicker = '';
+let _bonusBusquedas = 0;
+let _referralCode = '';
+
+(function capturarRef() {
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+  if (ref) localStorage.setItem('pending_ref', ref.toUpperCase());
+})();
 
 async function initAuth() {
   const { data: { session } } = await _sb.auth.getSession();
@@ -1049,14 +1057,26 @@ async function initAuth() {
   });
 }
 
+function generarCodigoReferido(userId) {
+  return userId.replace(/-/g, '').slice(0, 7).toUpperCase();
+}
+
 async function setUser(user) {
   _currentUser = user;
-  let { data } = await _sb.from('profiles').select('plan').eq('id', user.id).single();
+  let { data } = await _sb.from('profiles').select('plan,referral_code,bonus_busquedas,referred_by').eq('id', user.id).single();
   if (!data) {
-    await _sb.from('profiles').insert({ id: user.id, plan: 'free' });
-    data = { plan: 'free' };
+    const code = generarCodigoReferido(user.id);
+    await _sb.from('profiles').insert({ id: user.id, plan: 'free', referral_code: code });
+    data = { plan: 'free', referral_code: code, bonus_busquedas: 0, referred_by: null };
+    await procesarReferidoPendiente(user.id);
+  } else if (!data.referral_code) {
+    const code = generarCodigoReferido(user.id);
+    await _sb.from('profiles').update({ referral_code: code }).eq('id', user.id);
+    data.referral_code = code;
   }
   _userPlan = data?.plan || 'free';
+  _bonusBusquedas = data?.bonus_busquedas || 0;
+  _referralCode = data?.referral_code || '';
   const navAuth = document.getElementById('navAuth');
   const isPremium = _userPlan !== 'free';
   navAuth.innerHTML = `<div class="nav-user">
@@ -1064,9 +1084,25 @@ async function setUser(user) {
     ${isPremium ? `<button onclick="abrirHistorialPremium()">Mi historial</button>` : ''}
     ${isPremium ? `<button onclick="abrirAlertas()">🔔 Alertas</button>` : ''}
     ${isPremium ? `<button onclick="abrirNovedades()">🎁 Novedades</button>` : ''}
+    <button onclick="abrirInvitar()">🔥 Invita</button>
     <span>${user.email.split('@')[0]}</span>
     <button onclick="signOut()">Salir</button>
   </div>`;
+}
+
+async function procesarReferidoPendiente(newUserId) {
+  const refCode = localStorage.getItem('pending_ref');
+  if (!refCode) return;
+  localStorage.removeItem('pending_ref');
+  const { data: referrer } = await _sb.from('profiles').select('id,bonus_busquedas').eq('referral_code', refCode).single();
+  if (!referrer || referrer.id === newUserId) return;
+  await _sb.from('profiles').update({
+    referred_by: referrer.id,
+    bonus_busquedas: 3
+  }).eq('id', newUserId);
+  await _sb.from('profiles').update({
+    bonus_busquedas: (referrer.bonus_busquedas || 0) + 3
+  }).eq('id', referrer.id);
 }
 
 function clearUser() {
@@ -1194,6 +1230,24 @@ async function eliminarAlerta(id) {
   await cargarAlertas();
 }
 
+function abrirInvitar() {
+  const link = `https://labolsabro.com?ref=${_referralCode}`;
+  document.getElementById('inviteLinkBox').textContent = link;
+  document.getElementById('inviteBonusCount').textContent = _bonusBusquedas || 0;
+  document.getElementById('inviteOverlay').classList.add('open');
+}
+function cerrarInvitar() { document.getElementById('inviteOverlay').classList.remove('open'); }
+function closeInviteIfBg(e) { if (e.target.id === 'inviteOverlay') cerrarInvitar(); }
+function copiarInviteLink() {
+  const link = `https://labolsabro.com?ref=${_referralCode}`;
+  navigator.clipboard.writeText(link).then(() => alert('Link copiado, illo. Ahora a mandarlo 🚀'));
+}
+function compartirInviteWhatsapp() {
+  const link = `https://labolsabro.com?ref=${_referralCode}`;
+  const texto = `🪰 Illo, mira esta app de bolsa y ahorro que mola un montón: ${link}\nSi te apuntas con mi link nos llevamos búsquedas gratis los dos, gratis total 🔥`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
+}
+
 function abrirNovedades() { document.getElementById('novOverlay').classList.add('open'); }
 function cerrarNovedades() { document.getElementById('novOverlay').classList.remove('open'); }
 function closeNovIfBg(e) { if (e.target.id === 'novOverlay') cerrarNovedades(); }
@@ -1252,8 +1306,9 @@ function busquedasRestantes() {
   if (_userPlan !== 'free') return 999;
   const hoy = new Date().toDateString();
   const data = getBusquedasHoy();
-  if (data.fecha !== hoy) return DAILY_LIMIT;
-  return Math.max(0, DAILY_LIMIT - data.count);
+  const limiteConBonus = DAILY_LIMIT + (_bonusBusquedas || 0);
+  if (data.fecha !== hoy) return limiteConBonus;
+  return Math.max(0, limiteConBonus - data.count);
 }
 
 function mostrarLimiteAlcanzado(el) {
@@ -1293,7 +1348,7 @@ async function doSearch() {
     cacheSet(ticker, d);
     addHistorial(ticker, d.nombre || ticker);
     const usadas = incrementarBusqueda();
-    const restantes = DAILY_LIMIT - usadas;
+    const restantes = DAILY_LIMIT + (_bonusBusquedas || 0) - usadas;
     if (d.tipo === 'crypto') renderCrypto(el, d);
     else renderStock(el, d, ticker);
     guardarHistorialPremium(ticker, d.nombre || ticker, d.precio, d.tipo === 'crypto' ? null : (_pdfData ? _pdfData.score : null));
@@ -2040,6 +2095,19 @@ function renderStock(el, d, ticker) {
     <div class="footer-copy">© 2025 Mosca · Plataforma educativa · No somos asesores financieros</div>
   </div>
 </footer>
+
+<div id="inviteOverlay" class="auth-overlay" onclick="closeInviteIfBg(event)">
+  <div class="auth-box" style="text-align:center">
+    <button class="auth-close" onclick="cerrarInvitar()">×</button>
+    <div style="font-size:40px;margin-bottom:8px">🪰🔥</div>
+    <h2>Trae a un colega, illo</h2>
+    <p>Cada crack que se apunte con tu link os lleváis <strong style="color:var(--green)">+3 búsquedas gratis al día PARA SIEMPRE</strong>, tú y él. Así, sin trampa ni cartón.</p>
+    <div style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text);word-break:break-all;margin-bottom:14px;" id="inviteLinkBox"></div>
+    <button class="auth-submit" onclick="copiarInviteLink()" style="margin-bottom:10px">📋 Copiar link</button>
+    <button class="auth-submit" onclick="compartirInviteWhatsapp()" style="background:#25D366;color:#fff">Mandarlo por WhatsApp</button>
+    <p style="font-size:12px;margin-top:14px;color:var(--text3)">Ahora mismo tienes <strong style="color:var(--green)" id="inviteBonusCount">0</strong> búsquedas extra ganadas. No está mal, ¿eh, crack?</p>
+  </div>
+</div>
 
 <div id="idleBubble" class="idle-bubble">
   <button class="close" onclick="closeIdleBubble()">×</button>
