@@ -307,6 +307,28 @@ footer { border-top: 1px solid var(--border); }
   </div>
 </div>
 
+<div id="novOverlay" class="hist-overlay" onclick="closeNovIfBg(event)">
+  <div class="hist-box">
+    <button class="auth-close" onclick="cerrarNovedades()">×</button>
+    <h2>🎁 Novedades — acceso anticipado</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Como premium, ves lo que estamos construyendo antes de que salga para todos.</p>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="padding:14px;background:var(--card2);border-radius:12px;border:1px solid var(--border2)">
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px">🗣️ Asistente IA con tu acento</div>
+        <div style="font-size:12px;color:var(--text2)">Un chat que te explica bolsa en andaluz, gallego, catalán o castellano. En pruebas.</div>
+      </div>
+      <div style="padding:14px;background:var(--card2);border-radius:12px;border:1px solid var(--border2)">
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px">🏦 Conexión con tu banco</div>
+        <div style="font-size:12px;color:var(--text2)">Ver tus ahorros reales junto al análisis, sin salir de la app. En diseño.</div>
+      </div>
+      <div style="padding:14px;background:var(--card2);border-radius:12px;border:1px solid var(--border2)">
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px">📲 Alertas por WhatsApp</div>
+        <div style="font-size:12px;color:var(--text2)">Recibe el aviso de precio directo al móvil, no solo por email. Próximamente.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="safety-bar">
   <strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.
 </div>
@@ -1035,6 +1057,7 @@ async function setUser(user) {
     ${isPremium ? `<strong>⭐ ${_userPlan === 'senior' ? 'Senior' : 'Junior'}</strong>` : ''}
     ${isPremium ? `<button onclick="abrirHistorialPremium()">Mi historial</button>` : ''}
     ${isPremium ? `<button onclick="abrirAlertas()">🔔 Alertas</button>` : ''}
+    ${isPremium ? `<button onclick="abrirNovedades()">🎁 Novedades</button>` : ''}
     <span>${user.email.split('@')[0]}</span>
     <button onclick="signOut()">Salir</button>
   </div>`;
@@ -1164,6 +1187,10 @@ async function eliminarAlerta(id) {
   await _sb.from('price_alerts').delete().eq('id', id);
   await cargarAlertas();
 }
+
+function abrirNovedades() { document.getElementById('novOverlay').classList.add('open'); }
+function cerrarNovedades() { document.getElementById('novOverlay').classList.remove('open'); }
+function closeNovIfBg(e) { if (e.target.id === 'novOverlay') cerrarNovedades(); }
 
 function togglePassVis() {
   const input = document.getElementById('authPass');
