@@ -687,13 +687,35 @@ function pickSuggestion2(ticker) {
   document.getElementById('searchSuggestions2').style.display = 'none';
 }
 
+function apiBase() {
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'https://labolsabro.com' : '';
+}
+
+async function resolveTicker(query) {
+  try {
+    const r = await fetch(`${apiBase()}/api/search?q=${encodeURIComponent(query)}`);
+    const data = await r.json();
+    const hit = (data.quotes || [])[0];
+    if (!hit) return null;
+    let symbol = hit.symbol;
+    if (hit.type === 'CRYPTOCURRENCY' && symbol.endsWith('-USD')) symbol = symbol.slice(0, -4);
+    return symbol;
+  } catch(e) { return null; }
+}
+
 async function fetchStock(ticker) {
   const cached = cacheGet(ticker);
   if (cached) return cached;
-  const base = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'https://labolsabro.com' : '';
-  const res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
-  if (!res.ok) throw new Error('error');
-  const d = await res.json();
+  const base = apiBase();
+  let res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
+  let d = res.ok ? await res.json() : null;
+  if (!d || !d.precio) {
+    const resolved = await resolveTicker(ticker);
+    if (resolved && resolved.toUpperCase() !== ticker.toUpperCase()) {
+      res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(resolved)}`);
+      d = res.ok ? await res.json() : null;
+    }
+  }
   if (!d || !d.precio) throw new Error('no data');
   cacheSet(ticker, d);
   return d;
@@ -707,7 +729,7 @@ async function doCompare() {
   el.innerHTML = '<p style="font-size:14px;color:var(--text3);">🪰 Venga, a ver quién la tiene mejor entre ' + t1 + ' y ' + t2 + '... (en plan financiero, ¿eh?)</p>';
   try {
     const [d1, d2] = await Promise.all([fetchStock(t1), fetchStock(t2)]);
-    renderCompare(el, d1, t1, d2, t2);
+    renderCompare(el, d1, d1.ticker || t1, d2, d2.ticker || t2);
   } catch(e) {
     el.innerHTML = `<p style="color:var(--red);padding:16px">Error al obtener datos. Comprueba los tickers.</p>`;
   }
@@ -1122,11 +1144,18 @@ async function doSearch() {
   const loadMsgs = ['🪰 Un momento, que la mosca está mirando los números...','🪰 Illo, dame un seg que esto tiene más letra que un contrato...','🪰 Preguntando a la bolsa, home, que no es tan rápida...','🪰 Buscando ' + ticker + '... casi casi...'];
   el.innerHTML = '<p style="font-size:14px;color:var(--text3);">' + loadMsgs[Math.floor(Math.random()*loadMsgs.length)] + '</p>';
   try {
-    const base = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'https://labolsabro.com' : '';
-    const res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
+    const base = apiBase();
+    let res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
     if (res.status === 429) { mostrarLimiteAlcanzado(el); return; }
-    if (!res.ok) throw new Error('error ' + res.status);
-    const d = await res.json();
+    let d = res.ok ? await res.json() : null;
+    if (!d || !d.precio) {
+      const resolved = await resolveTicker(ticker);
+      if (resolved && resolved.toUpperCase() !== ticker.toUpperCase()) {
+        res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(resolved)}`);
+        if (res.status === 429) { mostrarLimiteAlcanzado(el); return; }
+        d = res.ok ? await res.json() : null;
+      }
+    }
     if (!d || !d.precio) throw new Error('no data');
     cacheSet(ticker, d);
     addHistorial(ticker, d.nombre || ticker);
