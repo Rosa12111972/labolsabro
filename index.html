@@ -1660,6 +1660,72 @@ function descargarPDFCompare() {
   doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(82,82,82);
   doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Solo educativo, no asesoramiento financiero.', W/2, 282, {align:'center'});
 
+  // Páginas adicionales: análisis en profundidad de cada empresa
+  [[d1, t1], [d2, t2]].forEach(([d, t]) => {
+    doc.addPage();
+    doc.setFillColor(10, 10, 10); doc.rect(0, 0, W, 24, 'F');
+    doc.setTextColor(250, 204, 21); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+    doc.text('laBolsabro', pad, 16);
+    doc.setFontSize(9); doc.setTextColor(163, 163, 163); doc.setFont('helvetica', 'normal');
+    doc.text(`Análisis en profundidad · ${d.nombre || t}`, W - pad, 16, { align: 'right' });
+
+    let y2 = 36;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+    doc.text('¿A qué se dedica esta empresa?', pad, y2);
+    y2 += 8;
+    const sectorTxt = SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'];
+    const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados.` : '';
+    const descLines = doc.splitTextToSize(`${sectorTxt}${empleadosTxt}`, W - pad * 2);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(200, 200, 200);
+    doc.text(descLines, pad, y2);
+    y2 += descLines.length * 5.5 + 12;
+
+    const { pros, contras } = generarProsContras(d, d.sector);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+    doc.text('Puntos a favor y en contra', pad, y2);
+    y2 += 9;
+    doc.setFontSize(10.5);
+    pros.forEach(p => {
+      doc.setTextColor(34, 197, 94); doc.setFont('helvetica', 'bold'); doc.text('+', pad, y2);
+      doc.setTextColor(200, 200, 200); doc.setFont('helvetica', 'normal');
+      const lines = doc.splitTextToSize(p, W - pad * 2 - 8);
+      doc.text(lines, pad + 6, y2);
+      y2 += lines.length * 5.5 + 2;
+    });
+    y2 += 4;
+    contras.forEach(c => {
+      doc.setTextColor(248, 113, 113); doc.setFont('helvetica', 'bold'); doc.text('–', pad, y2);
+      doc.setTextColor(200, 200, 200); doc.setFont('helvetica', 'normal');
+      const lines = doc.splitTextToSize(c, W - pad * 2 - 8);
+      doc.text(lines, pad + 6, y2);
+      y2 += lines.length * 5.5 + 2;
+    });
+    y2 += 10;
+
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+    doc.text('¿Cómo reinvierte sus beneficios?', pad, y2);
+    y2 += 8;
+    const reinvLines = doc.splitTextToSize(generarReinversion(d), W - pad * 2);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(200, 200, 200);
+    doc.text(reinvLines, pad, y2);
+    y2 += reinvLines.length * 5.5 + 10;
+
+    const ref = PER_SECTORES[d.sector] || PER_SECTORES['default'];
+    doc.setFillColor(20, 20, 20);
+    doc.roundedRect(pad, y2, W - pad * 2, 24, 4, 4, 'F');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(163, 163, 163);
+    doc.text(`Sector: ${ref.nombre} · PER medio del sector: ${ref.bajo}x–${ref.alto}x`, pad + 5, y2 + 9);
+    const peTxt = d.pe ? (d.pe < ref.bajo ? 'Por debajo de la media (barata)' : d.pe <= ref.alto ? 'En la media del sector' : 'Por encima de la media (cara)') : 'Sin datos de PER';
+    doc.setFont('helvetica', 'bold'); doc.setTextColor(245, 245, 245);
+    doc.text(`PER de ${t}: ${d.pe ? d.pe.toFixed(1) + 'x — ' + peTxt : '—'}`, pad + 5, y2 + 17);
+
+    doc.setFillColor(10, 10, 10);
+    doc.rect(0, 272, W, 25, 'F');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
+    doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
+    doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+  });
+
   doc.save(`labolsabro-${t1}-vs-${t2}-${new Date().toISOString().slice(0,10)}.pdf`);
   registrarPDF();
 }
