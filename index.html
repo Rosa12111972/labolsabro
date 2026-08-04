@@ -290,6 +290,23 @@ footer { border-top: 1px solid var(--border); }
   </div>
 </div>
 
+<div id="alertsOverlay" class="hist-overlay" onclick="closeAlertsIfBg(event)">
+  <div class="hist-box">
+    <button class="auth-close" onclick="cerrarAlertas()">×</button>
+    <h2>🔔 Mis alertas de precio</h2>
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+      <input id="alertTicker" placeholder="Ticker (ej. AAPL)" style="flex:1;min-width:100px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+      <select id="alertDirection" style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+        <option value="above">Sube por encima de</option>
+        <option value="below">Baja por debajo de</option>
+      </select>
+      <input id="alertPrice" type="number" step="0.01" placeholder="Precio €" style="width:100px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+      <button onclick="crearAlerta()" style="background:var(--green);color:#000;font-weight:700;border:none;border-radius:10px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;">Crear</button>
+    </div>
+    <div id="alertsBody"></div>
+  </div>
+</div>
+
 <div class="safety-bar">
   <strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.
 </div>
@@ -962,6 +979,7 @@ const _sb = supabase.createClient(
 );
 let _currentUser = null;
 let _userPlan = 'free';
+let _lastTicker = '';
 
 async function initAuth() {
   const { data: { session } } = await _sb.auth.getSession();
@@ -985,6 +1003,7 @@ async function setUser(user) {
   navAuth.innerHTML = `<div class="nav-user">
     ${isPremium ? `<strong>⭐ ${_userPlan === 'senior' ? 'Senior' : 'Junior'}</strong>` : ''}
     ${isPremium ? `<button onclick="abrirHistorialPremium()">Mi historial</button>` : ''}
+    ${isPremium ? `<button onclick="abrirAlertas()">🔔 Alertas</button>` : ''}
     <span>${user.email.split('@')[0]}</span>
     <button onclick="signOut()">Salir</button>
   </div>`;
@@ -1063,6 +1082,56 @@ function cerrarHistorialPremium() {
 }
 function closeHistIfBg(e) {
   if (e.target.id === 'histOverlay') cerrarHistorialPremium();
+}
+
+async function abrirAlertas() {
+  document.getElementById('alertsOverlay').classList.add('open');
+  document.getElementById('alertTicker').value = _lastTicker || '';
+  await cargarAlertas();
+}
+function cerrarAlertas() {
+  document.getElementById('alertsOverlay').classList.remove('open');
+}
+function closeAlertsIfBg(e) {
+  if (e.target.id === 'alertsOverlay') cerrarAlertas();
+}
+async function cargarAlertas() {
+  const body = document.getElementById('alertsBody');
+  body.innerHTML = '<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">Cargando...</p>';
+  const { data, error } = await _sb.from('price_alerts')
+    .select('*').eq('user_id', _currentUser.id)
+    .order('created_at', { ascending: false });
+  if (error || !data || !data.length) {
+    body.innerHTML = '<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">No tienes alertas activas.</p>';
+    return;
+  }
+  body.innerHTML = data.map(a => {
+    const dirTxt = a.direction === 'above' ? 'suba por encima de' : 'baje por debajo de';
+    const estado = a.triggered ? '<span style="color:var(--green);font-size:12px;font-weight:700">✓ Activada</span>' : '<span style="color:var(--text3);font-size:12px">Vigilando…</span>';
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);">
+      <div>
+        <div style="font-weight:700;font-size:14px">${a.ticker} ${dirTxt} ${a.target_price}€</div>
+        <div style="font-size:12px;margin-top:2px">${estado}</div>
+      </div>
+      <button onclick="eliminarAlerta(${a.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">Borrar</button>
+    </div>`;
+  }).join('');
+}
+async function crearAlerta() {
+  const ticker = document.getElementById('alertTicker').value.trim().toUpperCase();
+  const direction = document.getElementById('alertDirection').value;
+  const target = parseFloat(document.getElementById('alertPrice').value);
+  if (!ticker || !target || target <= 0) { alert('Rellena el ticker y un precio válido'); return; }
+  const { error } = await _sb.from('price_alerts').insert({
+    user_id: _currentUser.id, ticker, target_price: target, direction
+  });
+  if (error) { alert('Error al crear la alerta'); return; }
+  document.getElementById('alertPrice').value = '';
+  await cargarAlertas();
+}
+async function eliminarAlerta(id) {
+  await _sb.from('price_alerts').delete().eq('id', id);
+  await cargarAlertas();
 }
 
 function togglePassVis() {
@@ -1164,6 +1233,7 @@ async function doSearch() {
     if (d.tipo === 'crypto') renderCrypto(el, d);
     else renderStock(el, d, ticker);
     guardarHistorialPremium(ticker, d.nombre || ticker, d.precio, d.tipo === 'crypto' ? null : (_pdfData ? _pdfData.score : null));
+    _lastTicker = d.ticker || ticker;
     if (restantes > 0) {
       const aviso = document.createElement('div');
       aviso.style.cssText = 'font-size:12px;color:var(--text3);text-align:right;padding:4px 0;';

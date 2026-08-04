@@ -11,6 +11,13 @@
     "api/webhook.js": {
       "memory": 128,
       "maxDuration": 10
+    },
+    "api/check-alerts.js": {
+      "memory": 128,
+      "maxDuration": 30
     }
-  }
+  },
+  "crons": [
+    { "path": "/api/check-alerts", "schedule": "0 14 * * *" }
+  ]
 }
