@@ -1010,7 +1010,7 @@ async function submitAuth() {
     result = await _sb.auth.signInWithPassword({ email, password: pass });
     if (!result.error) closeAuthModal();
   }
-  if (result.error) { errEl.textContent = result.error.message; errEl.style.display = 'block'; }
+  if (result.error) { errEl.textContent = result.error.message || JSON.stringify(result.error) || 'Error desconocido'; errEl.style.display = 'block'; }
   btn.textContent = _authMode === 'register' ? 'Crear cuenta' : 'Entrar'; btn.disabled = false;
 }
 
