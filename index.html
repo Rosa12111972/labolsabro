@@ -265,7 +265,10 @@ footer { border-top: 1px solid var(--border); }
     </div>
     <div class="auth-field">
       <label>Contraseña</label>
-      <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password">
+      <div style="position:relative">
+        <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password" style="width:100%;padding-right:40px">
+        <button type="button" onclick="togglePassVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text2);font-size:16px;padding:0" id="passEye">👁</button>
+      </div>
     </div>
     <button class="auth-submit" id="authSubmit" onclick="submitAuth()">Entrar</button>
     <div class="auth-toggle">
@@ -978,6 +981,10 @@ function toggleAuthMode() {
   document.getElementById('authSubmit').textContent = isReg ? 'Crear cuenta' : 'Entrar';
   document.getElementById('authToggleLink').textContent = isReg ? '¿Ya tienes cuenta? Entra aquí' : '¿No tienes cuenta? Regístrate';
   document.getElementById('authError').style.display = 'none';
+}
+function togglePassVis() {
+  const input = document.getElementById('authPass');
+  input.type = input.type === 'password' ? 'text' : 'password';
 }
 async function resetPassword() {
   const email = document.getElementById('authEmail').value.trim();
