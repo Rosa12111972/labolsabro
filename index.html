@@ -395,30 +395,31 @@ function acceptAge() {
         <div class="phone-pill-bar"><div class="phone-pill"></div></div>
         <div class="phone-body">
           <div class="p-top">
-            <div class="p-hi">Hola Alex 👋</div>
-            <div class="p-lv">Nv.3 · 2340 XP</div>
+            <div class="p-hi" id="pHola">Hola 👋</div>
+            <div class="p-lv" id="pLevel">Nv.1 · 0 XP</div>
           </div>
           <div class="p-bal">
             <div class="p-bal-l">Saldo total</div>
-            <div class="p-bal-n">847,50 €</div>
-            <div class="p-bal-s">↑ +47 € este mes · vas bien bro</div>
+            <div class="p-bal-n" id="pSaldoTotal">0,00 €</div>
+            <div class="p-bal-s" id="pSaldoDelta">Empieza a ahorrar para verlo crecer</div>
           </div>
           <div class="p-row">
             <div class="p-mini">
               <div class="p-mini-l">Ahorrando</div>
-              <div class="p-mini-v">210 €</div>
-              <div class="p-mini-s">3 botes</div>
+              <div class="p-mini-v" id="pAhorrando">0 €</div>
+              <div class="p-mini-s" id="pBotesN">0 botes</div>
             </div>
             <div class="p-mini">
               <div class="p-mini-l">Invertido</div>
-              <div class="p-mini-v">150 €</div>
+              <div class="p-mini-v" id="pInvertido">0 €</div>
               <div class="p-mini-s">simulado</div>
             </div>
           </div>
-          <div class="p-reto">
+          <div class="p-reto" id="pRetoBox">
             <div class="p-reto-l">⚡ Reto de hoy</div>
-            <div class="p-reto-t">Aporta 1 € al bote vacaciones. Solo uno.</div>
+            <div class="p-reto-t" id="pRetoTexto">Regístrate para tener tu panel de ahorro real.</div>
           </div>
+          <button id="pAbrirPanel" onclick="abrirPanel()" style="display:none;width:100%;margin-top:10px;background:var(--green);color:#000;font-weight:700;font-size:13px;padding:10px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;">Abrir mi panel</button>
         </div>
       </div>
     </div>
@@ -1138,6 +1139,7 @@ async function setUser(user) {
     await _sb.from('profiles').update({ total_xp: _totalXP }).eq('id', user.id);
   }
   renderXPBadge();
+  await cargarPanelData();
   const navAuth = document.getElementById('navAuth');
   const isPremium = _userPlan !== 'free';
   navAuth.innerHTML = `<div class="nav-user">
@@ -1146,6 +1148,7 @@ async function setUser(user) {
     ${isPremium ? `<button onclick="abrirAlertas()">🔔 Alertas</button>` : ''}
     ${isPremium ? `<button onclick="abrirRecordatorios()">⏰ Recordatorios</button>` : ''}
     ${isPremium ? `<button onclick="abrirNovedades()">🎁 Novedades</button>` : ''}
+    <button onclick="abrirPanel()">📊 Mi panel</button>
     <button onclick="abrirInvitar()">🔥 Invita</button>
     <span>${user.email.split('@')[0]}</span>
     <button onclick="signOut()">Salir</button>
@@ -1170,8 +1173,11 @@ async function procesarReferidoPendiente(newUserId) {
 function clearUser() {
   _currentUser = null;
   _userPlan = 'free';
+  _jars = [];
+  _invertidoSimulado = 0;
   document.getElementById('navAuth').innerHTML = '<button class="nav-btn" onclick="openAuthModal()">Entrar</button>';
   cargarXPTotal();
+  renderHeroMockup();
 }
 
 async function signOut() {
@@ -1348,6 +1354,145 @@ async function crearRecordatorio() {
 async function eliminarRecordatorio(id) {
   await _sb.from('reminders').delete().eq('id', id);
   await cargarRecordatorios();
+}
+
+let _jars = [];
+let _invertidoSimulado = 0;
+let _retoCompletadoHoy = false;
+let _retoActual = null;
+
+function hoyStr() { return new Date().toISOString().slice(0, 10); }
+
+function generarRetoDelDia() {
+  if (!_jars.length) return { texto: 'Crea tu primer bote de ahorro para empezar.', tipo: 'crear_bote' };
+  const seed = new Date().getDate() + new Date().getMonth() * 31;
+  const jar = _jars[seed % _jars.length];
+  const montos = [1, 2, 3, 5];
+  const monto = montos[seed % montos.length];
+  return { texto: `Aporta ${monto} € al bote "${jar.nombre}". Solo uno.`, tipo: 'aportar', jarId: jar.id, jarNombre: jar.nombre, monto };
+}
+
+async function cargarPanelData() {
+  if (!_currentUser) return;
+  const { data: profile } = await _sb.from('profiles').select('nombre,invertido_simulado,reto_completado_fecha').eq('id', _currentUser.id).single();
+  const { data: jars } = await _sb.from('savings_jars').select('*').eq('user_id', _currentUser.id).order('created_at', { ascending: true });
+  _jars = jars || [];
+  _invertidoSimulado = profile?.invertido_simulado || 0;
+  _retoCompletadoHoy = profile?.reto_completado_fecha === hoyStr();
+  _retoActual = generarRetoDelDia();
+  window._panelNombre = profile?.nombre || _currentUser.email.split('@')[0];
+  renderHeroMockup();
+}
+
+function renderHeroMockup() {
+  const hola = document.getElementById('pHola');
+  const abrirBtn = document.getElementById('pAbrirPanel');
+  if (!_currentUser) {
+    if (hola) hola.textContent = 'Hola 👋';
+    if (abrirBtn) abrirBtn.style.display = 'none';
+    return;
+  }
+  const nivel = Math.floor((_totalXP || 0) / 100) + 1;
+  const totalBotes = _jars.reduce((s, j) => s + parseFloat(j.saldo || 0), 0);
+  const saldoTotal = totalBotes + parseFloat(_invertidoSimulado || 0);
+  document.getElementById('pHola').textContent = `Hola ${window._panelNombre} 👋`;
+  document.getElementById('pLevel').textContent = `Nv.${nivel} · ${_totalXP || 0} XP`;
+  document.getElementById('pSaldoTotal').textContent = saldoTotal.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  document.getElementById('pSaldoDelta').textContent = totalBotes === 0 && _invertidoSimulado === 0 ? 'Empieza a ahorrar para verlo crecer' : 'Tu dinero, tu control';
+  document.getElementById('pAhorrando').textContent = totalBotes.toLocaleString('es-ES', { maximumFractionDigits: 0 }) + ' €';
+  document.getElementById('pBotesN').textContent = `${_jars.length} bote${_jars.length === 1 ? '' : 's'}`;
+  document.getElementById('pInvertido').textContent = parseFloat(_invertidoSimulado || 0).toLocaleString('es-ES', { maximumFractionDigits: 0 }) + ' €';
+  document.getElementById('pRetoTexto').textContent = _retoCompletadoHoy ? '✓ Reto de hoy completado, crack.' : (_retoActual?.texto || '');
+  if (abrirBtn) abrirBtn.style.display = 'block';
+}
+
+async function abrirPanel() {
+  if (!_currentUser) { openAuthModal(); return; }
+  await cargarPanelData();
+  document.getElementById('panelSaludo').textContent = `👋 Hola, ${window._panelNombre}`;
+  await renderPanel();
+  document.getElementById('panelOverlay').classList.add('open');
+}
+function cerrarPanel() { document.getElementById('panelOverlay').classList.remove('open'); }
+function closePanelIfBg(e) { if (e.target.id === 'panelOverlay') cerrarPanel(); }
+
+async function renderPanel() {
+  const totalBotes = _jars.reduce((s, j) => s + parseFloat(j.saldo || 0), 0);
+  const saldoTotal = totalBotes + parseFloat(_invertidoSimulado || 0);
+  document.getElementById('panelSaldoTotal').textContent = saldoTotal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+
+  const inicioMes = new Date(); inicioMes.setDate(1); inicioMes.setHours(0,0,0,0);
+  const isoInicio = inicioMes.toISOString();
+  const { data: jarMovs } = await _sb.from('jar_transactions').select('monto').eq('user_id', _currentUser.id).gte('created_at', isoInicio);
+  const { data: invMovs } = await _sb.from('invest_transactions').select('monto').eq('user_id', _currentUser.id).gte('created_at', isoInicio);
+  const deltaMes = (jarMovs || []).reduce((s, m) => s + parseFloat(m.monto), 0) + (invMovs || []).reduce((s, m) => s + parseFloat(m.monto), 0);
+  document.getElementById('panelDeltaMes').textContent = (deltaMes >= 0 ? '+' : '') + deltaMes.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+
+  document.getElementById('panelRetoTexto').textContent = _retoCompletadoHoy ? '✓ Ya lo has completado hoy. Vuelve mañana a por otro.' : (_retoActual?.texto || '');
+  document.getElementById('panelRetoBtn').style.display = _retoCompletadoHoy ? 'none' : (_retoActual?.tipo === 'crear_bote' ? 'none' : 'block');
+
+  const botesEl = document.getElementById('panelBotes');
+  if (!_jars.length) {
+    botesEl.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Aún no tienes botes. Crea el primero, illo.</p>';
+  } else {
+    botesEl.innerHTML = _jars.map(j => `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+      <div>
+        <div style="font-weight:700;font-size:13.5px">${j.nombre}</div>
+        <div style="font-size:12px;color:var(--text3)">${parseFloat(j.saldo).toLocaleString('es-ES', { minimumFractionDigits: 2 })} €</div>
+      </div>
+      <button onclick="aportarBote(${j.id})" style="background:none;border:1px solid var(--border2);color:var(--green);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Aportar</button>
+    </div>`).join('');
+  }
+  document.getElementById('panelInvertido').textContent = parseFloat(_invertidoSimulado || 0).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+  renderHeroMockup();
+}
+
+async function crearBote() {
+  const nombre = prompt('¿Cómo quieres llamar a tu bote? (ej: vacaciones, coche, emergencias)');
+  if (!nombre || !nombre.trim()) return;
+  const { data, error } = await _sb.from('savings_jars').insert({ user_id: _currentUser.id, nombre: nombre.trim(), saldo: 0 }).select().single();
+  if (error) { alert('Error al crear el bote'); return; }
+  _jars.push(data);
+  _retoActual = generarRetoDelDia();
+  await renderPanel();
+}
+
+async function aportarBote(jarId) {
+  const montoStr = prompt('¿Cuánto quieres aportar a este bote? (€)');
+  const monto = parseFloat(montoStr);
+  if (!monto || monto <= 0) return;
+  const jar = _jars.find(j => j.id === jarId);
+  if (!jar) return;
+  const nuevoSaldo = parseFloat(jar.saldo) + monto;
+  await _sb.from('savings_jars').update({ saldo: nuevoSaldo }).eq('id', jarId);
+  await _sb.from('jar_transactions').insert({ jar_id: jarId, user_id: _currentUser.id, monto });
+  jar.saldo = nuevoSaldo;
+  await renderPanel();
+}
+
+async function aportarInversion() {
+  const montoStr = prompt('¿Cuánto quieres añadir a tu inversión simulada? (€, no es dinero real)');
+  const monto = parseFloat(montoStr);
+  if (!monto || monto <= 0) return;
+  const nuevoTotal = parseFloat(_invertidoSimulado || 0) + monto;
+  await _sb.from('profiles').update({ invertido_simulado: nuevoTotal }).eq('id', _currentUser.id);
+  await _sb.from('invest_transactions').insert({ user_id: _currentUser.id, monto });
+  _invertidoSimulado = nuevoTotal;
+  await renderPanel();
+}
+
+async function completarReto() {
+  if (!_retoActual || _retoActual.tipo !== 'aportar') return;
+  const jar = _jars.find(j => j.id === _retoActual.jarId);
+  if (jar) {
+    const nuevoSaldo = parseFloat(jar.saldo) + _retoActual.monto;
+    await _sb.from('savings_jars').update({ saldo: nuevoSaldo }).eq('id', jar.id);
+    await _sb.from('jar_transactions').insert({ jar_id: jar.id, user_id: _currentUser.id, monto: _retoActual.monto });
+    jar.saldo = nuevoSaldo;
+  }
+  await _sb.from('profiles').update({ reto_completado_fecha: hoyStr() }).eq('id', _currentUser.id);
+  _retoCompletadoHoy = true;
+  await renderPanel();
 }
 
 function abrirNovedades() { document.getElementById('novOverlay').classList.add('open'); }
@@ -1579,12 +1724,12 @@ function descargarPDF() {
   doc.text(new Date().toLocaleDateString('es-ES'), W - pad, 27, { align: 'right' });
 
   // Nombre empresa
-  doc.setTextColor(245, 245, 245);
+  doc.setTextColor(17, 17, 17);
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
   doc.text(d.nombre || ticker, pad, 55);
   doc.setFontSize(12);
-  doc.setTextColor(163, 163, 163);
+  doc.setTextColor(90, 90, 90);
   doc.text(`${ticker} · ${d.sector || 'Sector desconocido'}`, pad, 63);
 
   // Precio y puntuación
@@ -1605,7 +1750,7 @@ function descargarPDF() {
 
   // Métricas
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(12); doc.setTextColor(245, 245, 245);
+  doc.setFontSize(12); doc.setTextColor(17, 17, 17);
   doc.text('Métricas clave', pad, 112);
 
   const metricas = [
@@ -1647,44 +1792,44 @@ function descargarPDF() {
   doc.text(`Análisis en profundidad · ${d.nombre || ticker}`, W - pad, 16, { align: 'right' });
 
   let y2 = 36;
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
   doc.text('¿A qué se dedica esta empresa?', pad, y2);
   y2 += 8;
   const sectorTxt = SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'];
   const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados.` : '';
   const descLines = doc.splitTextToSize(`${sectorTxt}${empleadosTxt}`, W - pad * 2);
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(200, 200, 200);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
   doc.text(descLines, pad, y2);
   y2 += descLines.length * 5.5 + 12;
 
   const { pros, contras } = generarProsContras(d, d.sector);
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
   doc.text('Puntos a favor y en contra', pad, y2);
   y2 += 9;
 
   doc.setFontSize(10.5);
   pros.forEach(p => {
-    doc.setTextColor(34, 197, 94); doc.setFont('helvetica', 'bold'); doc.text('+', pad, y2);
-    doc.setTextColor(200, 200, 200); doc.setFont('helvetica', 'normal');
+    doc.setTextColor(21, 128, 61); doc.setFont('helvetica', 'bold'); doc.text('+', pad, y2);
+    doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
     const lines = doc.splitTextToSize(p, W - pad * 2 - 8);
     doc.text(lines, pad + 6, y2);
     y2 += lines.length * 5.5 + 2;
   });
   y2 += 4;
   contras.forEach(c => {
-    doc.setTextColor(248, 113, 113); doc.setFont('helvetica', 'bold'); doc.text('–', pad, y2);
-    doc.setTextColor(200, 200, 200); doc.setFont('helvetica', 'normal');
+    doc.setTextColor(185, 28, 28); doc.setFont('helvetica', 'bold'); doc.text('–', pad, y2);
+    doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
     const lines = doc.splitTextToSize(c, W - pad * 2 - 8);
     doc.text(lines, pad + 6, y2);
     y2 += lines.length * 5.5 + 2;
   });
   y2 += 10;
 
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
   doc.text('¿Cómo reinvierte sus beneficios?', pad, y2);
   y2 += 8;
   const reinvLines = doc.splitTextToSize(generarReinversion(d), W - pad * 2);
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(200, 200, 200);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
   doc.text(reinvLines, pad, y2);
   y2 += reinvLines.length * 5.5 + 14;
 
@@ -1742,7 +1887,7 @@ function descargarPDFCompare() {
     ['Beta', d1.beta?d1.beta.toFixed(2):'—', d2.beta?d2.beta.toFixed(2):'—'],
   ];
 
-  doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(245,245,245);
+  doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
   doc.text('Métrica', pad, 94); doc.text(d1.nombre||t1, W/2-10, 94); doc.text(d2.nombre||t2, W-pad, 94, {align:'right'});
   doc.setDrawColor(42,42,42); doc.line(pad, 96, W-pad, 96);
 
@@ -1772,43 +1917,43 @@ function descargarPDFCompare() {
     doc.text(`Análisis en profundidad · ${d.nombre || t}`, W - pad, 16, { align: 'right' });
 
     let y2 = 36;
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
     doc.text('¿A qué se dedica esta empresa?', pad, y2);
     y2 += 8;
     const sectorTxt = SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'];
     const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados.` : '';
     const descLines = doc.splitTextToSize(`${sectorTxt}${empleadosTxt}`, W - pad * 2);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(200, 200, 200);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
     doc.text(descLines, pad, y2);
     y2 += descLines.length * 5.5 + 12;
 
     const { pros, contras } = generarProsContras(d, d.sector);
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
     doc.text('Puntos a favor y en contra', pad, y2);
     y2 += 9;
     doc.setFontSize(10.5);
     pros.forEach(p => {
-      doc.setTextColor(34, 197, 94); doc.setFont('helvetica', 'bold'); doc.text('+', pad, y2);
-      doc.setTextColor(200, 200, 200); doc.setFont('helvetica', 'normal');
+      doc.setTextColor(21, 128, 61); doc.setFont('helvetica', 'bold'); doc.text('+', pad, y2);
+      doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
       const lines = doc.splitTextToSize(p, W - pad * 2 - 8);
       doc.text(lines, pad + 6, y2);
       y2 += lines.length * 5.5 + 2;
     });
     y2 += 4;
     contras.forEach(c => {
-      doc.setTextColor(248, 113, 113); doc.setFont('helvetica', 'bold'); doc.text('–', pad, y2);
-      doc.setTextColor(200, 200, 200); doc.setFont('helvetica', 'normal');
+      doc.setTextColor(185, 28, 28); doc.setFont('helvetica', 'bold'); doc.text('–', pad, y2);
+      doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
       const lines = doc.splitTextToSize(c, W - pad * 2 - 8);
       doc.text(lines, pad + 6, y2);
       y2 += lines.length * 5.5 + 2;
     });
     y2 += 10;
 
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
     doc.text('¿Cómo reinvierte sus beneficios?', pad, y2);
     y2 += 8;
     const reinvLines = doc.splitTextToSize(generarReinversion(d), W - pad * 2);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(200, 200, 200);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
     doc.text(reinvLines, pad, y2);
     y2 += reinvLines.length * 5.5 + 10;
 
@@ -2294,6 +2439,46 @@ function renderStock(el, d, ticker) {
     <button class="auth-submit" onclick="copiarInviteLink()" style="margin-bottom:10px">📋 Copiar link</button>
     <button class="auth-submit" onclick="compartirInviteWhatsapp()" style="background:#25D366;color:#fff">Mandarlo por WhatsApp</button>
     <p style="font-size:12px;margin-top:14px;color:var(--text3)">Ahora mismo tienes <strong style="color:var(--green)" id="inviteBonusCount">0</strong> búsquedas extra ganadas. No está mal, ¿eh, crack?</p>
+  </div>
+</div>
+
+<div id="panelOverlay" class="hist-overlay" onclick="closePanelIfBg(event)">
+  <div class="hist-box" style="max-width:520px">
+    <button class="auth-close" onclick="cerrarPanel()">×</button>
+    <h2 id="panelSaludo">👋 Tu panel</h2>
+    <div style="display:flex;gap:10px;margin-bottom:18px;">
+      <div style="flex:1;background:var(--card2);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:11px;color:var(--text3)">Saldo total</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green)" id="panelSaldoTotal">0,00 €</div>
+      </div>
+      <div style="flex:1;background:var(--card2);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:11px;color:var(--text3)">Este mes</div>
+        <div style="font-size:20px;font-weight:700;color:var(--yellow)" id="panelDeltaMes">+0,00 €</div>
+      </div>
+    </div>
+
+    <div id="panelRetoBox" style="background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.25);border-radius:12px;padding:14px 16px;margin-bottom:20px;">
+      <div style="font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:4px">⚡ Reto de hoy</div>
+      <div id="panelRetoTexto" style="font-size:13px;color:var(--text);margin-bottom:10px"></div>
+      <button id="panelRetoBtn" onclick="completarReto()" style="background:var(--yellow);color:#000;font-weight:700;font-size:12.5px;padding:8px 16px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;">Completar reto</button>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-weight:700;font-size:14px">🏺 Mis botes de ahorro</div>
+      <button onclick="crearBote()" style="background:none;border:1px solid var(--border2);color:var(--green);padding:5px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Nuevo bote</button>
+    </div>
+    <div id="panelBotes" style="margin-bottom:20px"></div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-weight:700;font-size:14px">📈 Inversión simulada</div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:12px;padding:12px 16px;">
+      <div>
+        <div style="font-size:18px;font-weight:700" id="panelInvertido">0,00 €</div>
+        <div style="font-size:11px;color:var(--text3)">Simulado, no es dinero real</div>
+      </div>
+      <button onclick="aportarInversion()" style="background:var(--purple);color:#000;font-weight:700;font-size:12.5px;padding:8px 14px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;">+ Aportar</button>
+    </div>
   </div>
 </div>
 
