@@ -1786,6 +1786,19 @@ function renderStock(el, d, ticker) {
   </div>
 </footer>
 
+<div class="auth-overlay" id="exitOverlay" onclick="closeExitIfBg(event)">
+  <div class="auth-box" style="text-align:center">
+    <button class="auth-close" onclick="closeExitModal()">×</button>
+    <div style="font-size:40px;margin-bottom:12px">🪰</div>
+    <h2>¡Espera un segundo!</h2>
+    <p>Antes de irte, déjanos tu email y te avisamos en cuanto saquemos novedades — alertas de precio, IA con acento y más.</p>
+    <div class="auth-field">
+      <input type="email" id="exitEmail" placeholder="tu@email.com">
+    </div>
+    <button class="auth-submit" onclick="submitExitEmail()">Avísame</button>
+  </div>
+</div>
+
 <div class="overlay" id="modal" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-emoji">🪰</div>
@@ -1809,6 +1822,29 @@ async function handleForm(e) {
 }
 function openModal() { document.getElementById('modal').classList.add('open'); }
 function closeModal(e) { if (e.target.id === 'modal') document.getElementById('modal').classList.remove('open'); }
+
+let _exitShown = false;
+function initExitIntent() {
+  if (sessionStorage.getItem('exit_shown')) return;
+  document.addEventListener('mouseout', (e) => {
+    if (_exitShown || _currentUser) return;
+    if (e.clientY <= 0 && !e.relatedTarget) {
+      _exitShown = true;
+      sessionStorage.setItem('exit_shown', '1');
+      document.getElementById('exitOverlay').classList.add('open');
+    }
+  });
+}
+function closeExitModal() { document.getElementById('exitOverlay').classList.remove('open'); }
+function closeExitIfBg(e) { if (e.target.id === 'exitOverlay') closeExitModal(); }
+async function submitExitEmail() {
+  const email = document.getElementById('exitEmail').value.trim();
+  if (!email || !email.includes('@')) { alert('Pon un email válido'); return; }
+  try { await fetch('/api/subscribe', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }) }); } catch(err) {}
+  closeExitModal();
+  openModal();
+}
+initExitIntent();
 function toggleFaq(btn) { const item = btn.parentElement; const wasOpen = item.classList.contains('open'); document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open')); if (!wasOpen) item.classList.add('open'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modal').classList.remove('open'); });
 
