@@ -270,6 +270,7 @@ footer { border-top: 1px solid var(--border); }
     <button class="auth-submit" id="authSubmit" onclick="submitAuth()">Entrar</button>
     <div class="auth-toggle">
       <span id="authToggleLink" onclick="toggleAuthMode()">¿No tienes cuenta? Regístrate</span>
+      &nbsp;·&nbsp;<span onclick="resetPassword()">Olvidé mi contraseña</span>
     </div>
   </div>
 </div>
@@ -977,6 +978,15 @@ function toggleAuthMode() {
   document.getElementById('authSubmit').textContent = isReg ? 'Crear cuenta' : 'Entrar';
   document.getElementById('authToggleLink').textContent = isReg ? '¿Ya tienes cuenta? Entra aquí' : '¿No tienes cuenta? Regístrate';
   document.getElementById('authError').style.display = 'none';
+}
+async function resetPassword() {
+  const email = document.getElementById('authEmail').value.trim();
+  if (!email) { alert('Escribe tu email primero'); return; }
+  const { error } = await _sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://labolsabro.com/reset.html'
+  });
+  if (error) alert('Error: ' + error.message);
+  else { closeAuthModal(); alert('Te hemos enviado un enlace para restablecer la contraseña. Revisa tu email.'); }
 }
 async function submitAuth() {
   const email = document.getElementById('authEmail').value.trim();

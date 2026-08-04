@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nueva contraseña — laBolsabro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0a0a0a; --card:#141414; --border:#2a2a2a; --green:#22c55e; --text:#f5f5f5; --text2:#a3a3a3; --red:#f87171; --red-dim:rgba(248,113,113,0.12); }
+    body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px 32px; width: 100%; max-width: 400px; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; text-decoration: none; }
+    .logo-mark { width: 36px; height: 36px; background: #facc15; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .logo-text { font-size: 18px; font-weight: 700; color: var(--text); }
+    h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    p { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+    label { display: block; font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
+    input { width: 100%; background: #1c1c1c; border: 1px solid #333; border-radius: 10px; padding: 11px 14px; font-size: 14px; color: var(--text); font-family: inherit; outline: none; margin-bottom: 16px; }
+    input:focus { border-color: var(--green); }
+    button { width: 100%; background: var(--green); color: #000; font-weight: 700; font-size: 15px; padding: 13px; border: none; border-radius: 100px; cursor: pointer; font-family: inherit; }
+    .error { background: var(--red-dim); color: var(--red); border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 12px; display: none; }
+    .success { text-align: center; display: none; }
+    .success h2 { color: var(--green); margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <a class="logo" href="/"><span class="logo-mark">🪰</span><span class="logo-text">laBolsabro</span></a>
+    <div id="formWrap">
+      <h2>Nueva contraseña</h2>
+      <p>Escribe tu nueva contraseña para acceder a laBolsabro.</p>
+      <div id="errBox" class="error"></div>
+      <label>Nueva contraseña</label>
+      <input type="password" id="pass1" placeholder="Mínimo 6 caracteres">
+      <label>Repite la contraseña</label>
+      <input type="password" id="pass2" placeholder="Repite la contraseña">
+      <button onclick="updatePass()">Guardar contraseña</button>
+    </div>
+    <div id="successWrap" class="success">
+      <h2>✅ Contraseña actualizada</h2>
+      <p style="margin-bottom:20px">Ya puedes entrar con tu nueva contraseña.</p>
+      <a href="/" style="background:var(--green);color:#000;font-weight:700;padding:12px 28px;border-radius:100px;text-decoration:none;font-size:15px;">Ir a laBolsabro</a>
+    </div>
+  </div>
+  <script>
+    const _sb = supabase.createClient(
+      'https://vbzhcogjyyjbjvwrtuaz.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiemhjb2dqeXlqYmp2d3J0dWF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMzg2NjQsImV4cCI6MjEwMDgxNDY2NH0.xsfE2omrJef5UnqECQfWy6w_USYVTsBW2JrGIDKSYvE'
+    );
+
+    async function updatePass() {
+      const p1 = document.getElementById('pass1').value;
+      const p2 = document.getElementById('pass2').value;
+      const err = document.getElementById('errBox');
+      if (p1.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres'; err.style.display = 'block'; return; }
+      if (p1 !== p2) { err.textContent = 'Las contraseñas no coinciden'; err.style.display = 'block'; return; }
+      const { error } = await _sb.auth.updateUser({ password: p1 });
+      if (error) { err.textContent = error.message; err.style.display = 'block'; return; }
+      document.getElementById('formWrap').style.display = 'none';
+      document.getElementById('successWrap').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
