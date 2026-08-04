@@ -253,6 +253,12 @@ footer { border-top: 1px solid var(--border); }
 .hist-overlay.open { display:flex; }
 .hist-box { background:var(--card); border:1px solid var(--border2); border-radius:var(--radius-lg); padding:32px; width:100%; max-width:480px; max-height:80vh; overflow-y:auto; }
 .hist-box h2 { font-size:19px; font-weight:700; margin-bottom:16px; }
+.idle-bubble { position:fixed; bottom:20px; right:20px; max-width:290px; background:var(--card); border:1px solid var(--border2); border-radius:16px; padding:16px 18px; box-shadow:0 12px 32px rgba(0,0,0,0.4); z-index:900; display:none; }
+.idle-bubble.open { display:block; animation:idleIn 0.3s ease; }
+@keyframes idleIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.idle-bubble .close { position:absolute; top:8px; right:10px; background:none; border:none; color:var(--text3); cursor:pointer; font-size:16px; }
+.idle-bubble p { font-size:13px; color:var(--text2); margin:6px 0 12px; line-height:1.5; }
+.idle-bubble button.cta { background:var(--green); color:#000; font-weight:700; font-size:12.5px; padding:9px 16px; border:none; border-radius:100px; cursor:pointer; font-family:inherit; }
 </style>
 </head>
 <body>
@@ -2035,6 +2041,13 @@ function renderStock(el, d, ticker) {
   </div>
 </footer>
 
+<div id="idleBubble" class="idle-bubble">
+  <button class="close" onclick="closeIdleBubble()">×</button>
+  <div style="font-size:22px">🪰</div>
+  <p id="idleBubbleText"></p>
+  <button class="cta" id="idleBubbleCta" onclick="idleBubbleClick()">Probar</button>
+</div>
+
 <div class="auth-overlay" id="exitOverlay" onclick="closeExitIfBg(event)">
   <div class="auth-box" style="text-align:center">
     <button class="auth-close" onclick="closeExitModal()">×</button>
@@ -2094,6 +2107,46 @@ async function submitExitEmail() {
   openModal();
 }
 initExitIntent();
+
+const IDLE_MESSAGES = [
+  { text: '¿Sabes cuánto podrías tener ahorrado en 10 años? Pruébalo con la calculadora de interés compuesto.', cta: 'Calcularlo', action: () => scrollToId('simMonthly') },
+  { text: '¿Ya sabes qué empresa vas a analizar? Prueba con AAPL, TSLA o cualquier ticker que te suene.', cta: 'Probar ahora', action: () => scrollToId('stockInput') },
+  { text: '¿Tienes 2 minutos? Ponte a prueba con nuestro quiz de bolsa y ahorro.', cta: 'Hacer el quiz', action: () => scrollToId('quizCard') },
+];
+let _idleTimer = null;
+let _idleShown = false;
+function resetIdleTimer() {
+  if (_idleShown || sessionStorage.getItem('idle_shown')) return;
+  clearTimeout(_idleTimer);
+  _idleTimer = setTimeout(showIdleBubble, 30000);
+}
+function showIdleBubble() {
+  if (_idleShown || document.getElementById('idleBubble').classList.contains('open')) return;
+  _idleShown = true;
+  sessionStorage.setItem('idle_shown', '1');
+  const msg = IDLE_MESSAGES[Math.floor(Math.random() * IDLE_MESSAGES.length)];
+  document.getElementById('idleBubbleText').textContent = msg.text;
+  const cta = document.getElementById('idleBubbleCta');
+  cta.textContent = msg.cta;
+  cta.dataset.action = IDLE_MESSAGES.indexOf(msg);
+  document.getElementById('idleBubble').classList.add('open');
+}
+function closeIdleBubble() {
+  document.getElementById('idleBubble').classList.remove('open');
+}
+function idleBubbleClick() {
+  const idx = parseInt(document.getElementById('idleBubbleCta').dataset.action);
+  closeIdleBubble();
+  if (IDLE_MESSAGES[idx]) IDLE_MESSAGES[idx].action();
+}
+function scrollToId(id) {
+  const el = document.getElementById(id) || document.getElementById('stockInput');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+['mousemove','scroll','keydown','click','touchstart'].forEach(evt => {
+  document.addEventListener(evt, resetIdleTimer, { passive: true });
+});
+resetIdleTimer();
 function toggleFaq(btn) { const item = btn.parentElement; const wasOpen = item.classList.contains('open'); document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open')); if (!wasOpen) item.classList.add('open'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modal').classList.remove('open'); });
 
