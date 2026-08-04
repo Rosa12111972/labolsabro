@@ -35,10 +35,21 @@ export default async function handler(req, res) {
       const priceId = sub.items.data[0]?.price?.id;
       const plan = PRICES[priceId] || 'junior';
 
-      await supabasePatch(`profiles?id=eq.${userId}`, {
-        plan,
-        stripe_customer_id: customerId,
-        stripe_subscription_id: subscriptionId,
+      await fetch(`${process.env.SUPABASE_URL}/rest/v1/profiles`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': process.env.SUPABASE_SERVICE_KEY,
+          'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+          'Prefer': 'resolution=merge-duplicates,return=minimal',
+        },
+        body: JSON.stringify({
+          id: userId,
+          plan,
+          stripe_customer_id: customerId,
+          stripe_subscription_id: subscriptionId,
+          updated_at: new Date().toISOString(),
+        }),
       });
     }
   }
