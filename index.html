@@ -940,7 +940,11 @@ async function initAuth() {
 
 async function setUser(user) {
   _currentUser = user;
-  const { data } = await _sb.from('profiles').select('plan').eq('id', user.id).single();
+  let { data } = await _sb.from('profiles').select('plan').eq('id', user.id).single();
+  if (!data) {
+    await _sb.from('profiles').insert({ id: user.id, plan: 'free' });
+    data = { plan: 'free' };
+  }
   _userPlan = data?.plan || 'free';
   const navAuth = document.getElementById('navAuth');
   const isPremium = _userPlan !== 'free';
