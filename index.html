@@ -1328,6 +1328,64 @@ function registrarPDF() {
   localStorage.setItem('pdf_historial', JSON.stringify(h.slice(-30)));
 }
 
+const SECTOR_EXPLICACION = {
+  'Technology': 'Vende tecnología: software, hardware o servicios digitales. Suelen crecer rápido pero también son más volátiles.',
+  'Consumer Cyclical': 'Vende cosas que compras cuando te sobra dinero: coches, ropa, ocio. Le va bien cuando la economía va bien.',
+  'Consumer Defensive': 'Vende cosas que compras siempre, haya crisis o no: comida, higiene, limpieza. Suele ser más estable.',
+  'Financial Services': 'Es un banco, aseguradora o gestora. Gana dinero con intereses, comisiones o primas.',
+  'Energy': 'Extrae, produce o distribuye energía (petróleo, gas, renovables). Muy ligada al precio de las materias primas.',
+  'Healthcare': 'Sanidad, farmacéuticas o biotecnología. Suele ser más resistente en crisis porque la gente sigue necesitando medicinas.',
+  'Industrials': 'Fabrica maquinaria, hace construcción o logística. Ligada al ciclo económico general.',
+  'Basic Materials': 'Produce materias primas: metales, química, madera. Depende mucho de los precios globales de materiales.',
+  'Communication Services': 'Telecomunicaciones, medios o redes sociales. Conecta gente o vende publicidad y contenido.',
+  'Utilities': 'Suministra electricidad, agua o gas. Negocio muy estable y regulado, con dividendos altos normalmente.',
+  'Real Estate': 'Inmobiliaria: compra, alquila o gestiona propiedades. Sensible a los tipos de interés.',
+  'default': 'No tenemos una descripción concreta de este sector, pero puedes ver sus números más abajo.'
+};
+
+function generarProsContras(d, sector) {
+  const pros = [], contras = [];
+  const ref = PER_SECTORES[sector] || PER_SECTORES['default'];
+  if (d.pe && d.pe > 0) {
+    if (d.pe < ref.bajo) pros.push('Cotiza barata para su sector (PER bajo)');
+    else if (d.pe > ref.alto) contras.push('Está cara para su sector, pagas una prima alta');
+  }
+  if (d.margen !== null && d.margen !== undefined) {
+    if (d.margen > 0.15) pros.push('Buenos márgenes: gestiona bien los costes');
+    else if (d.margen < 0.05) contras.push('Márgenes ajustados, gana poco por cada euro de venta');
+  }
+  if (d.roe !== null && d.roe !== undefined) {
+    if (d.roe > 0.15) pros.push('Rentabiliza muy bien el capital de los accionistas (ROE alto)');
+    else if (d.roe < 0.05) contras.push('Rentabiliza poco el capital invertido');
+  }
+  if (d.crecimientoIng !== null && d.crecimientoIng !== undefined) {
+    if (d.crecimientoIng > 0.10) pros.push('Los ingresos crecen con fuerza');
+    else if (d.crecimientoIng < 0) contras.push('Los ingresos están cayendo');
+  }
+  if (d.freeCashflow !== null && d.freeCashflow !== undefined) {
+    if (d.freeCashflow > 0) pros.push('Genera caja de verdad, no solo beneficio en papel');
+    else contras.push('Quema caja: gasta más de lo que ingresa');
+  }
+  if (d.debtToEquity !== null && d.debtToEquity !== undefined) {
+    if (d.debtToEquity < 50) pros.push('Poca deuda, balance sólido');
+    else if (d.debtToEquity > 150) contras.push('Mucha deuda respecto a su capital');
+  }
+  if (d.divY && d.divY > 0.02) pros.push('Reparte un dividendo decente');
+  if (!pros.length) pros.push('No destaca especialmente en los indicadores que analizamos');
+  if (!contras.length) contras.push('No detectamos señales de alarma claras en los datos');
+  return { pros: pros.slice(0,4), contras: contras.slice(0,4) };
+}
+
+function generarReinversion(d) {
+  if (d.payoutRatio === null || d.payoutRatio === undefined) {
+    return 'No tenemos datos suficientes para saber cuánto reinvierte esta empresa en crecer.';
+  }
+  const payout = Math.min(1, Math.max(0, d.payoutRatio));
+  const reinvierte = (1 - payout) * 100;
+  const reparte = payout * 100;
+  return `De cada 100€ que gana, reparte ${reparte.toFixed(0)}€ en dividendos a los accionistas y reinvierte ${reinvierte.toFixed(0)}€ en el propio negocio: nuevos productos, expansión, tecnología o pagar deuda.`;
+}
+
 function descargarPDF() {
   if (!_pdfData) return;
   const gratis = 3;
@@ -1410,6 +1468,69 @@ function descargarPDF() {
   });
 
   // Footer
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 272, W, 25, 'F');
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
+  doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
+  doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+
+  // Página 2: qué hace, pros y contras, reinversión
+  doc.addPage();
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, W, 24, 'F');
+  doc.setTextColor(250, 204, 21); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+  doc.text('laBolsabro', pad, 16);
+  doc.setFontSize(9); doc.setTextColor(163, 163, 163); doc.setFont('helvetica', 'normal');
+  doc.text(`Análisis en profundidad · ${d.nombre || ticker}`, W - pad, 16, { align: 'right' });
+
+  let y2 = 36;
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+  doc.text('¿A qué se dedica esta empresa?', pad, y2);
+  y2 += 8;
+  const sectorTxt = SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'];
+  const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados.` : '';
+  const descLines = doc.splitTextToSize(`${sectorTxt}${empleadosTxt}`, W - pad * 2);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(200, 200, 200);
+  doc.text(descLines, pad, y2);
+  y2 += descLines.length * 5.5 + 12;
+
+  const { pros, contras } = generarProsContras(d, d.sector);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+  doc.text('Puntos a favor y en contra', pad, y2);
+  y2 += 9;
+
+  doc.setFontSize(10.5);
+  pros.forEach(p => {
+    doc.setTextColor(34, 197, 94); doc.setFont('helvetica', 'bold'); doc.text('+', pad, y2);
+    doc.setTextColor(200, 200, 200); doc.setFont('helvetica', 'normal');
+    const lines = doc.splitTextToSize(p, W - pad * 2 - 8);
+    doc.text(lines, pad + 6, y2);
+    y2 += lines.length * 5.5 + 2;
+  });
+  y2 += 4;
+  contras.forEach(c => {
+    doc.setTextColor(248, 113, 113); doc.setFont('helvetica', 'bold'); doc.text('–', pad, y2);
+    doc.setTextColor(200, 200, 200); doc.setFont('helvetica', 'normal');
+    const lines = doc.splitTextToSize(c, W - pad * 2 - 8);
+    doc.text(lines, pad + 6, y2);
+    y2 += lines.length * 5.5 + 2;
+  });
+  y2 += 10;
+
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(245, 245, 245);
+  doc.text('¿Cómo reinvierte sus beneficios?', pad, y2);
+  y2 += 8;
+  const reinvLines = doc.splitTextToSize(generarReinversion(d), W - pad * 2);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(200, 200, 200);
+  doc.text(reinvLines, pad, y2);
+  y2 += reinvLines.length * 5.5 + 14;
+
+  doc.setFillColor(20, 20, 20);
+  doc.roundedRect(pad, y2, W - pad * 2, 22, 4, 4, 'F');
+  doc.setFont('helvetica', 'italic'); doc.setFontSize(9.5); doc.setTextColor(163, 163, 163);
+  const avisoLines = doc.splitTextToSize('Esto es un análisis educativo basado en datos públicos, no una recomendación de compra o venta. La decisión de invertir es siempre tuya.', W - pad * 2 - 10);
+  doc.text(avisoLines, pad + 5, y2 + 8);
+
   doc.setFillColor(10, 10, 10);
   doc.rect(0, 272, W, 25, 'F');
   doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
