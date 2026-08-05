@@ -1372,6 +1372,7 @@ function generarRetoDelDia() {
   return { texto: `Aporta ${monto} € al bote "${jar.nombre}". Solo uno.`, tipo: 'aportar', jarId: jar.id, jarNombre: jar.nombre, monto };
 }
 
+let _posiciones = [];
 async function cargarPanelData() {
   if (!_currentUser) return;
   const { data: profile } = await _sb.from('profiles').select('nombre,invertido_simulado,reto_completado_fecha').eq('id', _currentUser.id).single();
@@ -1381,6 +1382,10 @@ async function cargarPanelData() {
   _retoCompletadoHoy = profile?.reto_completado_fecha === hoyStr();
   _retoActual = generarRetoDelDia();
   window._panelNombre = profile?.nombre || _currentUser.email.split('@')[0];
+  if (_userPlan !== 'free') {
+    const { data: pos } = await _sb.from('simulated_positions').select('*').eq('user_id', _currentUser.id).order('created_at', { ascending: false });
+    _posiciones = pos || [];
+  }
   renderHeroMockup();
 }
 
@@ -1418,7 +1423,9 @@ function closePanelIfBg(e) { if (e.target.id === 'panelOverlay') cerrarPanel(); 
 
 async function renderPanel() {
   const totalBotes = _jars.reduce((s, j) => s + parseFloat(j.saldo || 0), 0);
-  const saldoTotal = totalBotes + parseFloat(_invertidoSimulado || 0);
+  const isPremium = _userPlan !== 'free';
+  const carteraValor = isPremium ? await calcularValorCartera() : parseFloat(_invertidoSimulado || 0);
+  const saldoTotal = totalBotes + carteraValor;
   document.getElementById('panelSaldoTotal').textContent = saldoTotal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
 
   const inicioMes = new Date(); inicioMes.setDate(1); inicioMes.setHours(0,0,0,0);
@@ -1444,7 +1451,93 @@ async function renderPanel() {
     </div>`).join('');
   }
   document.getElementById('panelInvertido').textContent = parseFloat(_invertidoSimulado || 0).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+
+  document.getElementById('carteraFree').style.display = !isPremium ? 'flex' : 'none';
+  document.getElementById('carteraUpsell').style.display = !isPremium ? 'block' : 'none';
+  document.getElementById('carteraPremium').style.display = isPremium ? 'block' : 'none';
+  document.getElementById('btnAddPosicion').style.display = isPremium ? 'inline-block' : 'none';
+  if (isPremium) await renderCartera();
+
   renderHeroMockup();
+}
+
+let _preciosCache = {};
+async function calcularValorCartera() {
+  if (!_posiciones.length) return 0;
+  let total = 0;
+  for (const p of _posiciones) {
+    const precio = await obtenerPrecioActual(p.ticker);
+    total += (precio ?? p.precio_compra) * parseFloat(p.shares);
+  }
+  return total;
+}
+async function obtenerPrecioActual(ticker) {
+  if (_preciosCache[ticker]) return _preciosCache[ticker];
+  try {
+    const d = await fetchStock(ticker);
+    _preciosCache[ticker] = d.precio;
+    return d.precio;
+  } catch (e) { return null; }
+}
+async function renderCartera() {
+  const el = document.getElementById('carteraPosiciones');
+  if (!_posiciones.length) {
+    el.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Aún no tienes ninguna posición. Añade la primera, crack.</p>';
+    document.getElementById('carteraInvertido').textContent = '0,00 €';
+    document.getElementById('carteraActual').textContent = '0,00 €';
+    document.getElementById('carteraGanancia').textContent = '0,00 €';
+    return;
+  }
+  el.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Cargando precios...</p>';
+  let totalInvertido = 0, totalActual = 0;
+  const filas = [];
+  for (const p of _posiciones) {
+    const precioActual = await obtenerPrecioActual(p.ticker);
+    const invertido = p.precio_compra * p.shares;
+    const actual = (precioActual ?? p.precio_compra) * p.shares;
+    const gananciaPct = precioActual ? ((precioActual - p.precio_compra) / p.precio_compra * 100) : 0;
+    totalInvertido += invertido;
+    totalActual += actual;
+    const color = gananciaPct >= 0 ? 'var(--green)' : 'var(--red)';
+    filas.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+      <div>
+        <div style="font-weight:700;font-size:13.5px">${p.ticker} <span style="font-weight:400;color:var(--text3);font-size:11.5px">· ${p.shares} uds a ${p.precio_compra.toFixed(2)}€</span></div>
+        <div style="font-size:12px;color:${color};margin-top:2px">${precioActual ? precioActual.toFixed(2) + '€ ahora · ' + (gananciaPct >= 0 ? '+' : '') + gananciaPct.toFixed(1) + '%' : 'Precio no disponible'}</div>
+      </div>
+      <button onclick="eliminarPosicion(${p.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:5px 10px;border-radius:100px;font-size:11.5px;cursor:pointer;font-family:inherit;">Borrar</button>
+    </div>`);
+  }
+  el.innerHTML = filas.join('');
+  const ganancia = totalActual - totalInvertido;
+  document.getElementById('carteraInvertido').textContent = totalInvertido.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+  document.getElementById('carteraActual').textContent = totalActual.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+  const ganEl = document.getElementById('carteraGanancia');
+  ganEl.textContent = (ganancia >= 0 ? '+' : '') + ganancia.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+  ganEl.style.color = ganancia >= 0 ? 'var(--green)' : 'var(--red)';
+}
+async function anadirPosicion() {
+  const ticker = prompt('¿Qué empresa quieres simular? (ticker, ej: AAPL, TSLA)');
+  if (!ticker || !ticker.trim()) return;
+  const t = ticker.trim().toUpperCase();
+  const sharesStr = prompt('¿Cuántas acciones simuladas quieres comprar?');
+  const shares = parseFloat(sharesStr);
+  if (!shares || shares <= 0) return;
+  let precio;
+  try {
+    const d = await fetchStock(t);
+    precio = d.precio;
+  } catch (e) { alert('No encontramos ese ticker.'); return; }
+  const { data, error } = await _sb.from('simulated_positions').insert({
+    user_id: _currentUser.id, ticker: t, nombre: t, shares, precio_compra: precio
+  }).select().single();
+  if (error) { alert('Error al añadir la posición'); return; }
+  _posiciones.unshift(data);
+  await renderPanel();
+}
+async function eliminarPosicion(id) {
+  await _sb.from('simulated_positions').delete().eq('id', id);
+  _posiciones = _posiciones.filter(p => p.id !== id);
+  await renderPanel();
 }
 
 async function crearBote() {
@@ -2470,14 +2563,36 @@ function renderStock(el, d, ticker) {
     <div id="panelBotes" style="margin-bottom:20px"></div>
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-      <div style="font-weight:700;font-size:14px">📈 Inversión simulada</div>
+      <div style="font-weight:700;font-size:14px">📈 Cartera simulada</div>
+      <button id="btnAddPosicion" onclick="anadirPosicion()" style="display:none;background:none;border:1px solid var(--border2);color:var(--purple);padding:5px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Añadir posición</button>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:12px;padding:12px 16px;">
+    <div id="carteraFree" style="display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:12px;padding:12px 16px;">
       <div>
         <div style="font-size:18px;font-weight:700" id="panelInvertido">0,00 €</div>
         <div style="font-size:11px;color:var(--text3)">Simulado, no es dinero real</div>
       </div>
       <button onclick="aportarInversion()" style="background:var(--purple);color:#000;font-weight:700;font-size:12.5px;padding:8px 14px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;">+ Aportar</button>
+    </div>
+    <div id="carteraPremium" style="display:none">
+      <div id="carteraResumen" style="display:flex;gap:10px;margin-bottom:12px;">
+        <div style="flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center">
+          <div style="font-size:10.5px;color:var(--text3)">Invertido</div>
+          <div style="font-size:16px;font-weight:700" id="carteraInvertido">0,00 €</div>
+        </div>
+        <div style="flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center">
+          <div style="font-size:10.5px;color:var(--text3)">Valor actual</div>
+          <div style="font-size:16px;font-weight:700" id="carteraActual">0,00 €</div>
+        </div>
+        <div style="flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center">
+          <div style="font-size:10.5px;color:var(--text3)">Ganancia</div>
+          <div style="font-size:16px;font-weight:700" id="carteraGanancia">0,00 €</div>
+        </div>
+      </div>
+      <div id="carteraPosiciones"></div>
+    </div>
+    <div id="carteraUpsell" style="display:none;border:1px dashed var(--border2);border-radius:12px;padding:14px 16px;text-align:center;margin-top:10px">
+      <span style="font-size:13px;color:var(--text2)">🔒 La cartera simulada con precios en vivo es de <strong style="color:var(--yellow)">Premium</strong></span>
+      <a href="/premium.html" style="display:block;margin-top:6px;font-size:12px;color:var(--green);font-weight:700;text-decoration:none;">Ver planes →</a>
     </div>
   </div>
 </div>
