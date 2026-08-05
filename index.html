@@ -1874,6 +1874,8 @@ function descargarPDF() {
   doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
   doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
   doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+  doc.setFontSize(7); doc.setTextColor(60, 60, 60);
+  doc.text(pdfMarcaAgua(), W / 2, 293, { align: 'center' });
 
   // Página 2: qué hace, pros y contras, reinversión
   doc.addPage();
@@ -1937,12 +1939,37 @@ function descargarPDF() {
   doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
   doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
   doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+  doc.setFontSize(7); doc.setTextColor(60, 60, 60);
+  doc.text(pdfMarcaAgua(), W / 2, 293, { align: 'center' });
 
   doc.save(`labolsabro-${ticker}-${new Date().toISOString().slice(0,10)}.pdf`);
   registrarPDF();
 
   const restantes = gratis - getPDFsDescargados();
   if (restantes > 0) alert(`PDF descargado ✅\nTe quedan ${restantes} PDF${restantes > 1 ? 's' : ''} gratuito${restantes > 1 ? 's' : ''} hoy.`);
+}
+
+function pdfMarcaAgua() {
+  const fecha = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const quien = _currentUser?.email || 'invitado';
+  return `Descargado por ${quien} · ${fecha} · Uso personal, no redistribuir`;
+}
+
+function generarVeredicto(d1, t1, s1, d2, t2, s2) {
+  if (s1 === null && s2 === null) return { ganador: null, texto: 'No tenemos datos suficientes de ninguna de las dos para declarar una ganadora clara.' };
+  if (s1 === null) return { ganador: t2, texto: `${t2} gana por descarte: no hay datos suficientes de ${t1} para comparar en profundidad.` };
+  if (s2 === null) return { ganador: t1, texto: `${t1} gana por descarte: no hay datos suficientes de ${t2} para comparar en profundidad.` };
+  if (Math.abs(s1 - s2) < 0.3) return { ganador: null, texto: `Empate técnico: ${t1} (${s1.toFixed(1)}/10) y ${t2} (${s2.toFixed(1)}/10) están prácticamente igualadas. La decisión depende de tu perfil de riesgo y qué sector prefieras.` };
+  const win = s1 > s2 ? t1 : t2, lose = s1 > s2 ? t2 : t1;
+  const sWin = Math.max(s1, s2), sLose = Math.min(s1, s2);
+  const dWin = s1 > s2 ? d1 : d2, dLose = s1 > s2 ? d2 : d1;
+  const razones = [];
+  if (dWin.pe && dLose.pe && dWin.pe < dLose.pe) razones.push('cotiza más barata (PER más bajo)');
+  if (dWin.roe && dLose.roe && dWin.roe > dLose.roe) razones.push('rentabiliza mejor el capital (ROE más alto)');
+  if (dWin.crecimientoIng && dLose.crecimientoIng && dWin.crecimientoIng > dLose.crecimientoIng) razones.push('crece más rápido en ingresos');
+  if (dWin.margen && dLose.margen && dWin.margen > dLose.margen) razones.push('tiene mejores márgenes');
+  const razonTxt = razones.length ? razones.slice(0, 2).join(' y ') : 'tiene mejores números en conjunto';
+  return { ganador: win, texto: `${win} sale mejor parada con ${sWin.toFixed(1)}/10 frente a ${sLose.toFixed(1)}/10 de ${lose}. Principalmente porque ${razonTxt}.` };
 }
 
 function descargarPDFCompare() {
@@ -1996,9 +2023,22 @@ function descargarPDFCompare() {
     y += 10;
   });
 
+  const veredicto = generarVeredicto(d1, t1, s1, d2, t2, s2);
+  let yV = y + 8;
+  doc.setDrawColor(250, 204, 21);
+  doc.setFillColor(255, 251, 235);
+  doc.roundedRect(pad, yV, W - pad * 2, 42, 5, 5, 'FD');
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(161, 98, 7);
+  doc.text(veredicto.ganador ? `🏆 Veredicto: gana ${veredicto.ganador}` : '⚖️ Veredicto: empate técnico', pad + 6, yV + 12);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(60, 60, 60);
+  const vLines = doc.splitTextToSize(veredicto.texto, W - pad * 2 - 12);
+  doc.text(vLines, pad + 6, yV + 21);
+
   doc.setFillColor(10,10,10); doc.rect(0,272,W,25,'F');
   doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(82,82,82);
   doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Solo educativo, no asesoramiento financiero.', W/2, 282, {align:'center'});
+  doc.setFontSize(7); doc.setTextColor(60, 60, 60);
+  doc.text(pdfMarcaAgua(), W / 2, 289, { align: 'center' });
 
   // Páginas adicionales: análisis en profundidad de cada empresa
   [[d1, t1], [d2, t2]].forEach(([d, t]) => {
@@ -2064,6 +2104,8 @@ function descargarPDFCompare() {
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
     doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
     doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+    doc.setFontSize(7); doc.setTextColor(60, 60, 60);
+    doc.text(pdfMarcaAgua(), W / 2, 293, { align: 'center' });
   });
 
   doc.save(`labolsabro-${t1}-vs-${t2}-${new Date().toISOString().slice(0,10)}.pdf`);
