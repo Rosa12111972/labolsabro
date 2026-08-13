@@ -1104,6 +1104,7 @@ let _currentUser = null;
 let _userPlan = 'free';
 let _lastTicker = '';
 let _bonusBusquedas = 0;
+let _premiumBonusUntil = null;
 let _referralCode = '';
 
 (function capturarRef() {
@@ -1127,18 +1128,22 @@ function generarCodigoReferido(userId) {
 
 async function setUser(user) {
   _currentUser = user;
-  let { data } = await _sb.from('profiles').select('plan,referral_code,bonus_busquedas,referred_by,total_xp').eq('id', user.id).single();
+  let { data } = await _sb.from('profiles').select('plan,referral_code,bonus_busquedas,referred_by,total_xp,premium_bonus_until').eq('id', user.id).single();
   if (!data) {
     const code = generarCodigoReferido(user.id);
     await _sb.from('profiles').insert({ id: user.id, plan: 'free', referral_code: code });
-    data = { plan: 'free', referral_code: code, bonus_busquedas: 0, referred_by: null, total_xp: 0 };
+    data = { plan: 'free', referral_code: code, bonus_busquedas: 0, referred_by: null, total_xp: 0, premium_bonus_until: null };
     await procesarReferidoPendiente(user.id);
+    const { data: fresh } = await _sb.from('profiles').select('premium_bonus_until').eq('id', user.id).single();
+    data.premium_bonus_until = fresh?.premium_bonus_until || null;
   } else if (!data.referral_code) {
     const code = generarCodigoReferido(user.id);
     await _sb.from('profiles').update({ referral_code: code }).eq('id', user.id);
     data.referral_code = code;
   }
-  _userPlan = data?.plan || 'free';
+  const bonusActivo = data?.premium_bonus_until && new Date(data.premium_bonus_until) > new Date();
+  _userPlan = bonusActivo && data.plan === 'free' ? 'junior' : (data?.plan || 'free');
+  _premiumBonusUntil = bonusActivo ? data.premium_bonus_until : null;
   _bonusBusquedas = data?.bonus_busquedas || 0;
   _referralCode = data?.referral_code || '';
   _totalXP = data?.total_xp || 0;
@@ -1153,7 +1158,7 @@ async function setUser(user) {
   const navAuth = document.getElementById('navAuth');
   const isPremium = _userPlan !== 'free';
   navAuth.innerHTML = `<div class="nav-user">
-    ${isPremium ? `<strong>⭐ ${_userPlan === 'senior' ? 'Senior' : 'Junior'}</strong>` : ''}
+    ${isPremium ? `<strong>${_premiumBonusUntil ? '⏳' : '⭐'} ${_userPlan === 'senior' ? 'Senior' : 'Junior'}${_premiumBonusUntil ? ' (prueba)' : ''}</strong>` : ''}
     ${isPremium ? `<button onclick="abrirHistorialPremium()">Mi historial</button>` : ''}
     ${isPremium ? `<button onclick="abrirAlertas()">🔔 Alertas</button>` : ''}
     ${isPremium ? `<button onclick="abrirRecordatorios()">⏰ Recordatorios</button>` : ''}
@@ -1165,18 +1170,24 @@ async function setUser(user) {
   </div>`;
 }
 
+const DIAS_BONUS_REFERIDO = 3;
+function extenderBonusPremium(fechaActual) {
+  const base = fechaActual && new Date(fechaActual) > new Date() ? new Date(fechaActual) : new Date();
+  base.setDate(base.getDate() + DIAS_BONUS_REFERIDO);
+  return base.toISOString();
+}
 async function procesarReferidoPendiente(newUserId) {
   const refCode = localStorage.getItem('pending_ref');
   if (!refCode) return;
   localStorage.removeItem('pending_ref');
-  const { data: referrer } = await _sb.from('profiles').select('id,bonus_busquedas').eq('referral_code', refCode).single();
+  const { data: referrer } = await _sb.from('profiles').select('id,premium_bonus_until').eq('referral_code', refCode).single();
   if (!referrer || referrer.id === newUserId) return;
   await _sb.from('profiles').update({
     referred_by: referrer.id,
-    bonus_busquedas: 3
+    premium_bonus_until: extenderBonusPremium(null)
   }).eq('id', newUserId);
   await _sb.from('profiles').update({
-    bonus_busquedas: (referrer.bonus_busquedas || 0) + 3
+    premium_bonus_until: extenderBonusPremium(referrer.premium_bonus_until)
   }).eq('id', referrer.id);
 }
 
@@ -1338,7 +1349,13 @@ async function eliminarAlerta(id) {
 function abrirInvitar() {
   const link = `https://labolsabro.com?ref=${_referralCode}`;
   document.getElementById('inviteLinkBox').textContent = link;
-  document.getElementById('inviteBonusCount').textContent = _bonusBusquedas || 0;
+  const statusEl = document.getElementById('inviteBonusStatus');
+  if (_premiumBonusUntil) {
+    const fecha = new Date(_premiumBonusUntil).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+    statusEl.innerHTML = `⏳ Tienes Premium de prueba activo hasta el <strong style="color:var(--yellow)">${fecha}</strong>. Invita a más gente para alargarlo.`;
+  } else {
+    statusEl.textContent = 'Invita a alguien y desbloqueáis Premium los dos, gratis.';
+  }
   document.getElementById('inviteOverlay').classList.add('open');
 }
 function cerrarInvitar() { document.getElementById('inviteOverlay').classList.remove('open'); }
@@ -1400,12 +1417,13 @@ let _retoActual = null;
 function hoyStr() { return new Date().toISOString().slice(0, 10); }
 
 function generarRetoDelDia() {
-  if (!_jars.length) return { texto: 'Crea tu primer bote de ahorro para empezar.', tipo: 'crear_bote' };
+  if (!_jars.length) return { texto: 'Crea tu primer bote de ahorro para empezar. Tarda 10 segundos.', tipo: 'crear_bote' };
   const seed = new Date().getDate() + new Date().getMonth() * 31;
   const jar = _jars[seed % _jars.length];
   const montos = [1, 2, 3, 5];
   const monto = montos[seed % montos.length];
-  return { texto: `Aporta ${monto} € al bote "${jar.nombre}". Solo uno.`, tipo: 'aportar', jarId: jar.id, jarNombre: jar.nombre, monto };
+  const anual = monto * 365;
+  return { texto: `Aporta ${monto} € al bote "${jar.nombre}". Solo eso. Si lo hicieras cada día, en un año serían ${anual.toLocaleString('es-ES')} € sin apenas notarlo.`, tipo: 'aportar', jarId: jar.id, jarNombre: jar.nombre, monto };
 }
 
 let _posiciones = [];
@@ -1483,7 +1501,10 @@ async function renderPanel() {
         <div style="font-weight:700;font-size:13.5px">${j.nombre}</div>
         <div style="font-size:12px;color:var(--text3)">${parseFloat(j.saldo).toLocaleString('es-ES', { minimumFractionDigits: 2 })} €</div>
       </div>
-      <button onclick="aportarBote(${j.id})" style="background:none;border:1px solid var(--border2);color:var(--green);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Aportar</button>
+      <div style="display:flex;gap:6px">
+        <button onclick="aportarBote(${j.id})" style="background:none;border:1px solid var(--border2);color:var(--green);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Aportar</button>
+        <button onclick="borrarBote(${j.id}, '${j.nombre.replace(/'/g, "\\'")}')" style="background:none;border:1px solid var(--border2);color:var(--red);padding:6px 10px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">🗑</button>
+      </div>
     </div>`).join('');
   }
   document.getElementById('panelInvertido').textContent = parseFloat(_invertidoSimulado || 0).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
@@ -1528,17 +1549,26 @@ async function renderCartera() {
   let totalInvertido = 0, totalActual = 0;
   const filas = [];
   for (const p of _posiciones) {
-    const precioActual = await obtenerPrecioActual(p.ticker);
+    let d = null;
+    try { d = await fetchStock(p.ticker); } catch (e) {}
+    const precioActual = d?.precio ?? null;
     const invertido = p.precio_compra * p.shares;
     const actual = (precioActual ?? p.precio_compra) * p.shares;
     const gananciaPct = precioActual ? ((precioActual - p.precio_compra) / p.precio_compra * 100) : 0;
     totalInvertido += invertido;
     totalActual += actual;
     const color = gananciaPct >= 0 ? 'var(--green)' : 'var(--red)';
+    let hint = '';
+    if (d && d.tipo !== 'crypto' && d.pe) {
+      const sem = semaforo(d.pe, d.sector || 'default', d.peg);
+      const hintTxt = sem.cls === 'sem-green' ? '🟢 Zona de valor — podría ser momento de comprar más' : sem.cls === 'sem-yellow' ? '🟡 Precio justo — ni prisa por comprar ni por vender' : sem.cls === 'sem-red' ? '🔴 Zona cara — podría ser momento de recoger beneficios' : '';
+      if (hintTxt) hint = `<div style="font-size:11.5px;color:var(--text3);margin-top:3px">${hintTxt}</div>`;
+    }
     filas.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
       <div>
         <div style="font-weight:700;font-size:13.5px">${p.ticker} <span style="font-weight:400;color:var(--text3);font-size:11.5px">· ${p.shares} uds a ${p.precio_compra.toFixed(2)}€</span></div>
         <div style="font-size:12px;color:${color};margin-top:2px">${precioActual ? precioActual.toFixed(2) + '€ ahora · ' + (gananciaPct >= 0 ? '+' : '') + gananciaPct.toFixed(1) + '%' : 'Precio no disponible'}</div>
+        ${hint}
       </div>
       <button onclick="eliminarPosicion(${p.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:5px 10px;border-radius:100px;font-size:11.5px;cursor:pointer;font-family:inherit;">Borrar</button>
     </div>`);
@@ -1582,6 +1612,13 @@ async function crearBote() {
   const { data, error } = await _sb.from('savings_jars').insert({ user_id: _currentUser.id, nombre: nombre.trim(), saldo: 0 }).select().single();
   if (error) { alert('Error al crear el bote'); return; }
   _jars.push(data);
+  _retoActual = generarRetoDelDia();
+  await renderPanel();
+}
+async function borrarBote(id, nombre) {
+  if (!confirm(`¿Seguro que quieres borrar el bote "${nombre}"? Perderás el saldo guardado.`)) return;
+  await _sb.from('savings_jars').delete().eq('id', id);
+  _jars = _jars.filter(j => j.id !== id);
   _retoActual = generarRetoDelDia();
   await renderPanel();
 }
@@ -2609,11 +2646,11 @@ function renderStock(el, d, ticker) {
     <button class="auth-close" onclick="cerrarInvitar()">×</button>
     <div style="font-size:40px;margin-bottom:8px">🪰🔥</div>
     <h2>Trae a un colega, illo</h2>
-    <p>Cada crack que se apunte con tu link os lleváis <strong style="color:var(--green)">+3 búsquedas gratis al día PARA SIEMPRE</strong>, tú y él. Así, sin trampa ni cartón.</p>
+    <p>Cada crack que se apunte con tu link os lleváis <strong style="color:var(--yellow)">3 días de Premium GRATIS</strong>, tú y él. Búsquedas ilimitadas, cartera simulada, alertas... todo desbloqueado. Sin trampa ni cartón.</p>
     <div style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text);word-break:break-all;margin-bottom:14px;" id="inviteLinkBox"></div>
     <button class="auth-submit" onclick="copiarInviteLink()" style="margin-bottom:10px">📋 Copiar link</button>
     <button class="auth-submit" onclick="compartirInviteWhatsapp()" style="background:#25D366;color:#fff">Mandarlo por WhatsApp</button>
-    <p style="font-size:12px;margin-top:14px;color:var(--text3)">Ahora mismo tienes <strong style="color:var(--green)" id="inviteBonusCount">0</strong> búsquedas extra ganadas. No está mal, ¿eh, crack?</p>
+    <p style="font-size:12px;margin-top:14px;color:var(--text3)" id="inviteBonusStatus">Invita a alguien y desbloqueáis Premium los dos, gratis.</p>
   </div>
 </div>
 
@@ -2638,10 +2675,11 @@ function renderStock(el, d, ticker) {
       <button id="panelRetoBtn" onclick="completarReto()" style="background:var(--yellow);color:#000;font-weight:700;font-size:12.5px;padding:8px 16px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;">Completar reto</button>
     </div>
 
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
       <div style="font-weight:700;font-size:14px">🏺 Mis botes de ahorro</div>
       <button onclick="crearBote()" style="background:none;border:1px solid var(--border2);color:var(--green);padding:5px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Nuevo bote</button>
     </div>
+    <p style="font-size:11.5px;color:var(--text3);margin-bottom:10px">Un bote es una meta de ahorro separada: vacaciones, coche, fondo de emergencia... Cada uno guarda su propio saldo, así no se te mezcla todo en un montón.</p>
     <div id="panelBotes" style="margin-bottom:20px"></div>
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
@@ -2768,7 +2806,7 @@ const IDLE_MESSAGES = [
   { text: 'Illo, ¿te has quedado dormido o qué? Mira cuánto podrías tener ahorrado en 10 años, que flipas.', cta: 'Flipar ahora', action: () => scrollToId('simMonthly') },
   { text: 'Ey crack, ¿vas a analizar algo o solo estás mirando? Prueba con AAPL, TSLA... lo que te suene.', cta: 'Venga, va', action: () => scrollToId('stockInput') },
   { text: '¿Te crees que sabes de bolsa? Demuéstralo, valiente. 2 minutos y salimos de dudas.', cta: 'Reto aceptado', action: () => scrollToId('quizCard') },
-  { text: 'Bro, sigues ahí? Trae a un colega y os lleváis búsquedas gratis los dos, gratis total.', cta: 'Invitar', action: () => { if (_currentUser) abrirInvitar(); else openAuthModal(); } },
+  { text: 'Bro, sigues ahí? Trae a un colega y os lleváis 3 días de Premium gratis los dos.', cta: 'Invitar', action: () => { if (_currentUser) abrirInvitar(); else openAuthModal(); } },
 ];
 let _idleTimer = null;
 let _idleShown = false;
