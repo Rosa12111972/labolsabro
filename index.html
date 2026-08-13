@@ -1845,9 +1845,21 @@ function generarProsContras(d, sector) {
     else if (d.debtToEquity > 150) contras.push('Mucha deuda respecto a su capital');
   }
   if (d.divY && d.divY > 0.02) pros.push('Reparte un dividendo decente');
+  if (d.peg && d.peg > 0) {
+    if (d.peg < 1) pros.push('El precio está justificado por su crecimiento (PEG bajo)');
+    else if (d.peg > 2) contras.push('Paga muy caro incluso teniendo en cuenta su crecimiento (PEG alto)');
+  }
+  if (d.crecimientoEps !== null && d.crecimientoEps !== undefined) {
+    if (d.crecimientoEps > 0.15) pros.push('El beneficio por acción crece con fuerza');
+    else if (d.crecimientoEps < 0) contras.push('El beneficio por acción está cayendo');
+  }
+  if (d.currentRatio !== null && d.currentRatio !== undefined) {
+    if (d.currentRatio > 1.5) pros.push('Buena liquidez: puede pagar sus deudas a corto plazo sin apuros');
+    else if (d.currentRatio < 1) contras.push('Liquidez ajustada: podría tener problemas para pagar deudas a corto plazo');
+  }
   if (!pros.length) pros.push('No destaca especialmente en los indicadores que analizamos');
   if (!contras.length) contras.push('No detectamos señales de alarma claras en los datos');
-  return { pros: pros.slice(0,4), contras: contras.slice(0,4) };
+  return { pros, contras };
 }
 
 function generarReinversion(d) {
@@ -1964,82 +1976,95 @@ function descargarPDF() {
   doc.setFontSize(7); doc.setTextColor(60, 60, 60);
   doc.text(pdfMarcaAgua(), W / 2, 293, { align: 'center' });
 
-  // Página 2: qué hace, pros y contras, reinversión
-  doc.addPage();
-  doc.setFillColor(10, 10, 10);
-  doc.rect(0, 0, W, 24, 'F');
-  doc.setTextColor(250, 204, 21); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
-  doc.text('laBolsabro', pad, 16);
-  doc.setFontSize(9); doc.setTextColor(163, 163, 163); doc.setFont('helvetica', 'normal');
-  doc.text(`Análisis en profundidad · ${d.nombre || ticker}`, W - pad, 16, { align: 'right' });
+  // Páginas siguientes: veredicto, negocio, pros/contras, reinversión — tantas como haga falta
+  const subtituloPDF = `Análisis en profundidad · ${d.nombre || ticker}`;
+  function nuevaPagina() {
+    pdfFooter(doc, W);
+    doc.addPage();
+    return pdfHeader(doc, W, pad, subtituloPDF);
+  }
+  function checkBreak(y, needed) {
+    if (y + needed > 258) return nuevaPagina();
+    return y;
+  }
+
+  let y2 = nuevaPagina();
 
   const veredictoInd = generarVeredictoIndividual(d, score, ticker);
-  let y2 = 34;
   doc.setDrawColor(250, 204, 21);
   doc.setFillColor(255, 251, 235);
   const vTexto = doc.splitTextToSize(veredictoInd.texto, W - pad * 2 - 12);
   const vAltura = 16 + vTexto.length * 5.2;
+  y2 = checkBreak(y2, vAltura + 14);
   doc.roundedRect(pad, y2, W - pad * 2, vAltura, 5, 5, 'FD');
   doc.setFont('helvetica', 'bold'); doc.setFontSize(11.5); doc.setTextColor(161, 98, 7);
   doc.text(`${veredictoInd.emoji} Veredicto: ${veredictoInd.titulo}`, pad + 6, y2 + 10);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(90, 60, 10);
   doc.text(vTexto, pad + 6, y2 + 17);
-  y2 += vAltura + 14;
+  y2 += vAltura + 16;
 
+  const sectorTxt = SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'];
+  const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados` : '';
+  const industriaTxt = d.industry ? `, dentro de la industria de ${d.industry}` : '';
+  const descLines = doc.splitTextToSize(`${sectorTxt}${empleadosTxt}${industriaTxt}.`, W - pad * 2);
+  y2 = checkBreak(y2, 8 + descLines.length * 5.5 + 12);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
   doc.text('¿A qué se dedica esta empresa?', pad, y2);
   y2 += 8;
-  const sectorTxt = SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'];
-  const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados.` : '';
-  const descLines = doc.splitTextToSize(`${sectorTxt}${empleadosTxt}`, W - pad * 2);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
   doc.text(descLines, pad, y2);
-  y2 += descLines.length * 5.5 + 12;
+  y2 += descLines.length * 5.5 + 14;
 
   const { pros, contras } = generarProsContras(d, d.sector);
+  y2 = checkBreak(y2, 20);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
-  doc.text('Puntos a favor y en contra', pad, y2);
+  doc.text('Puntos a favor', pad, y2);
   y2 += 9;
-
   doc.setFontSize(10.5);
   pros.forEach(p => {
+    const lines = doc.splitTextToSize(p, W - pad * 2 - 8);
+    const needed = lines.length * 5.5 + 3;
+    y2 = checkBreak(y2, needed);
     doc.setTextColor(21, 128, 61); doc.setFont('helvetica', 'bold'); doc.text('+', pad, y2);
     doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
-    const lines = doc.splitTextToSize(p, W - pad * 2 - 8);
     doc.text(lines, pad + 6, y2);
-    y2 += lines.length * 5.5 + 2;
+    y2 += needed;
   });
-  y2 += 4;
+  y2 += 8;
+
+  y2 = checkBreak(y2, 20);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
+  doc.text('Puntos en contra', pad, y2);
+  y2 += 9;
+  doc.setFontSize(10.5);
   contras.forEach(c => {
+    const lines = doc.splitTextToSize(c, W - pad * 2 - 8);
+    const needed = lines.length * 5.5 + 3;
+    y2 = checkBreak(y2, needed);
     doc.setTextColor(185, 28, 28); doc.setFont('helvetica', 'bold'); doc.text('–', pad, y2);
     doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
-    const lines = doc.splitTextToSize(c, W - pad * 2 - 8);
     doc.text(lines, pad + 6, y2);
-    y2 += lines.length * 5.5 + 2;
+    y2 += needed;
   });
   y2 += 10;
 
+  const reinvLines = doc.splitTextToSize(generarReinversion(d), W - pad * 2);
+  y2 = checkBreak(y2, 8 + reinvLines.length * 5.5 + 14);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
   doc.text('¿Cómo reinvierte sus beneficios?', pad, y2);
   y2 += 8;
-  const reinvLines = doc.splitTextToSize(generarReinversion(d), W - pad * 2);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
   doc.text(reinvLines, pad, y2);
   y2 += reinvLines.length * 5.5 + 14;
 
+  y2 = checkBreak(y2, 22);
   doc.setFillColor(20, 20, 20);
   doc.roundedRect(pad, y2, W - pad * 2, 22, 4, 4, 'F');
   doc.setFont('helvetica', 'italic'); doc.setFontSize(9.5); doc.setTextColor(163, 163, 163);
   const avisoLines = doc.splitTextToSize('Esto es un análisis educativo basado en datos públicos, no una recomendación de compra o venta. La decisión de invertir es siempre tuya.', W - pad * 2 - 10);
   doc.text(avisoLines, pad + 5, y2 + 8);
 
-  doc.setFillColor(10, 10, 10);
-  doc.rect(0, 272, W, 25, 'F');
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
-  doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
-  doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
-  doc.setFontSize(7); doc.setTextColor(60, 60, 60);
-  doc.text(pdfMarcaAgua(), W / 2, 293, { align: 'center' });
+  pdfFooter(doc, W);
 
   doc.save(`labolsabro-${ticker}-${new Date().toISOString().slice(0,10)}.pdf`);
   registrarPDF();
@@ -2052,6 +2077,25 @@ function pdfMarcaAgua() {
   const fecha = new Date().toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   const quien = _currentUser?.email || 'invitado';
   return `Descargado por ${quien} · ${fecha} · Uso personal, no redistribuir`;
+}
+
+function pdfHeader(doc, W, pad, subtitulo) {
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, W, 24, 'F');
+  doc.setTextColor(250, 204, 21); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+  doc.text('laBolsabro', pad, 16);
+  doc.setFontSize(9); doc.setTextColor(163, 163, 163); doc.setFont('helvetica', 'normal');
+  doc.text(subtitulo, W - pad, 16, { align: 'right' });
+  return 36;
+}
+function pdfFooter(doc, W) {
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 272, W, 25, 'F');
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
+  doc.text('laBolsabro · labolsabro.com · Datos: Yahoo Finance · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
+  doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+  doc.setFontSize(7); doc.setTextColor(60, 60, 60);
+  doc.text(pdfMarcaAgua(), W / 2, 293, { align: 'center' });
 }
 
 function generarVeredicto(d1, t1, s1, d2, t2, s2) {
