@@ -5,6 +5,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const PRICES = {
   junior: 'price_1Ty9Nl8oxHMJgjKmHeRoQ3Rm',
   senior: 'price_1Ty9Ol8oxHMJgjKmf7t5janm',
+  junior_anual: 'price_1U43ij8oxHMJgjKmsWKJGMNm',
+  senior_anual: 'price_1U43jR8oxHMJgjKmfdw93vWC',
 };
 
 export default async function handler(req, res) {
@@ -14,8 +16,9 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { plan, userId, email } = req.body || {};
-  const priceId = PRICES[plan];
+  const { plan, userId, email, anual } = req.body || {};
+  const planKey = anual ? `${plan}_anual` : plan;
+  const priceId = PRICES[planKey];
   if (!priceId) return res.status(400).json({ error: 'Plan no válido' });
 
   try {

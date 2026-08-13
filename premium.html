@@ -50,6 +50,10 @@
     .btn-purple { background: var(--purple); color: #000; }
     .btn-purple:hover { opacity: 0.85; }
     .guarantee { font-size: 13px; color: var(--text3); margin-top: 24px; }
+    .toggle-wrap { display: inline-flex; align-items: center; gap: 4px; background: var(--card); border: 1px solid var(--border2); border-radius: 100px; padding: 4px; margin-bottom: 40px; }
+    .toggle-btn { padding: 9px 20px; border-radius: 100px; font-size: 13.5px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; background: transparent; color: var(--text2); }
+    .toggle-btn.active { background: var(--green); color: #000; }
+    .toggle-save { background: var(--yellow); color: #000; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-left: 6px; }
     .msg { padding: 20px 28px; border-radius: 14px; margin-bottom: 32px; font-size: 15px; font-weight: 600; }
     .msg-ok { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
     .msg-err { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: #f87171; }
@@ -75,6 +79,11 @@
   <h1>Invierte mejor.<br>Por menos de un <em>café</em>.</h1>
   <p class="sub">Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.</p>
 
+  <div class="toggle-wrap">
+    <button class="toggle-btn active" id="btnMensual" onclick="cambiarCiclo('mensual')">Mensual</button>
+    <button class="toggle-btn" id="btnAnual" onclick="cambiarCiclo('anual')">Anual <span class="toggle-save">-17%</span></button>
+  </div>
+
   <div class="plans">
     <!-- GRATIS -->
     <div class="plan">
@@ -96,7 +105,7 @@
     <!-- INVERSOR JUNIOR -->
     <div class="plan">
       <div class="plan-name">Inversor Junior</div>
-      <div class="plan-price">5,99€ <span>/mes</span></div>
+      <div class="plan-price"><span id="precioJunior">5,99€</span> <span id="cicloJunior">/mes</span></div>
       <div class="plan-desc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div>
       <ul class="plan-list">
         <li><span class="c-g">✓</span> Análisis completo de empresas</li>
@@ -114,7 +123,7 @@
     <div class="plan plan-senior">
       <div class="plan-badge">⭐ Más completo</div>
       <div class="plan-name">Inversor Senior</div>
-      <div class="plan-price">9,99€ <span>/mes</span></div>
+      <div class="plan-price"><span id="precioSenior">9,99€</span> <span id="cicloSenior">/mes</span></div>
       <div class="plan-desc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div>
       <ul class="plan-list">
         <li><span class="c-g">✓</span> Todo del plan Junior</li>
@@ -155,6 +164,24 @@
     box.style.display = 'block';
   }
 
+  let _ciclo = 'mensual';
+  function cambiarCiclo(ciclo) {
+    _ciclo = ciclo;
+    document.getElementById('btnMensual').classList.toggle('active', ciclo === 'mensual');
+    document.getElementById('btnAnual').classList.toggle('active', ciclo === 'anual');
+    if (ciclo === 'anual') {
+      document.getElementById('precioJunior').textContent = '59,90€';
+      document.getElementById('cicloJunior').textContent = '/año';
+      document.getElementById('precioSenior').textContent = '99,90€';
+      document.getElementById('cicloSenior').textContent = '/año';
+    } else {
+      document.getElementById('precioJunior').textContent = '5,99€';
+      document.getElementById('cicloJunior').textContent = '/mes';
+      document.getElementById('precioSenior').textContent = '9,99€';
+      document.getElementById('cicloSenior').textContent = '/mes';
+    }
+  }
+
   async function checkout(plan) {
     const btn = event.target;
     const original = btn.textContent;
@@ -167,7 +194,7 @@
       const r = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan, userId, email })
+        body: JSON.stringify({ plan, userId, email, anual: _ciclo === 'anual' })
       });
       const data = await r.json();
       if (data.url) window.location.href = data.url;

@@ -3,6 +3,8 @@ import Stripe from 'stripe';
 const PRICES = {
   'price_1Ty9Nl8oxHMJgjKmHeRoQ3Rm': 'junior',
   'price_1Ty9Ol8oxHMJgjKmf7t5janm': 'senior',
+  'price_1U43ij8oxHMJgjKmsWKJGMNm': 'junior',
+  'price_1U43jR8oxHMJgjKmfdw93vWC': 'senior',
 };
 
 async function supabasePatch(path, data) {
