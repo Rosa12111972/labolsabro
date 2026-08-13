@@ -935,6 +935,8 @@ function renderSectorCompare(d1, d2) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const currencySel = document.getElementById('currencySelect');
+  if (currencySel) currencySel.value = _userCurrency;
   const input = document.getElementById('stockInput');
   if (input) {
     input.addEventListener('input', onInputChange);
@@ -1135,9 +1137,14 @@ async function cargarFx() {
 function cambiarMoneda(code) {
   _userCurrency = code;
   localStorage.setItem('mosca_currency', code);
-  cacheGet.__bust = Date.now();
-  const el = document.getElementById('stockResult');
-  if (el && el.dataset.ticker) doTicker(el.dataset.ticker);
+  if (_lastTicker) {
+    const cached = cacheGet(_lastTicker);
+    const el = document.getElementById('stockResult');
+    if (cached && el) {
+      if (cached.tipo === 'crypto') renderCrypto(el, cached);
+      else renderStock(el, cached, _lastTicker);
+    }
+  }
 }
 function convertirMoneda(amount, from, to) {
   if (!_fxRates || !amount || from === to) return null;
@@ -1897,7 +1904,7 @@ function renderCrypto(el, d) {
   const riesgoIco = { 'Alto':'🟡', 'Muy alto':'🔴', 'Extremo':'🔴' };
   const semCls = viabColor[d.viabilidad] || 'sem-gray';
   const ico = riesgoIco[d.riesgo] || '❓';
-  el.innerHTML = `<div style="width:100%"><div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="width:44px;height:44px;border-radius:10px;background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">₿</div><div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">${d.nombre}</div><div style="font-size:12px;color:var(--text3)">${d.ticker} · ${d.subtipo||d.tipoCrypto||'Crypto'}</div></div><div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text)">${d.precio?d.precio.toLocaleString('es-ES', {maximumFractionDigits:2}):'-'} $</div><div style="font-size:13px;color:${clr};font-weight:600">${flecha} ${Math.abs(d.cambioPct||d.cambio||0).toFixed(2)}% hoy</div></div></div><div class="semáforo ${semCls}" style="margin-bottom:16px"><div class="semáforo-icon">${ico}</div><div><div class="semáforo-title">Viabilidad: ${d.viabilidad} · Riesgo: ${d.riesgo}</div><div class="semáforo-desc">${d.descripcion||d.descripción||''}</div></div></div><div style="margin-top:12px;padding:12px 16px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:12px;font-size:12px;color:var(--red);line-height:1.7">⚠️ <strong>Las criptomonedas son activos de muy alto riesgo.</strong> Puedes perder todo tu dinero. Nunca inviertas más de lo que puedas permitirte perder.</div><div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border);margin-top:12px">Precio: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo.</div></div>`;
+  el.innerHTML = `<div style="width:100%"><div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="width:44px;height:44px;border-radius:10px;background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">₿</div><div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">${d.nombre}</div><div style="font-size:12px;color:var(--text3)">${d.ticker} · ${d.subtipo||d.tipoCrypto||'Crypto'}</div></div><div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text)">${d.precio?d.precio.toLocaleString('es-ES', {maximumFractionDigits:2}):'-'} $${d.precio?fmtMonedaConvertida(d.precio, 'USD'):''}</div><div style="font-size:13px;color:${clr};font-weight:600">${flecha} ${Math.abs(d.cambioPct||d.cambio||0).toFixed(2)}% hoy</div></div></div><div class="semáforo ${semCls}" style="margin-bottom:16px"><div class="semáforo-icon">${ico}</div><div><div class="semáforo-title">Viabilidad: ${d.viabilidad} · Riesgo: ${d.riesgo}</div><div class="semáforo-desc">${d.descripcion||d.descripción||''}</div></div></div><div style="margin-top:12px;padding:12px 16px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:12px;font-size:12px;color:var(--red);line-height:1.7">⚠️ <strong>Las criptomonedas son activos de muy alto riesgo.</strong> Puedes perder todo tu dinero. Nunca inviertas más de lo que puedas permitirte perder.</div><div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border);margin-top:12px">Precio: Yahoo Finance · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo.</div></div>`;
 }
 
 let _pdfData = null;
@@ -2399,7 +2406,7 @@ function renderETF(el, d, ticker) {
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
       <div style="width:44px;height:44px;border-radius:10px;background:var(--card2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text);flex-shrink:0;">${iniciales}</div>
       <div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text);">${nombre}</div><div style="font-size:12px;color:var(--text3);">${ticker} · ETF</div></div>
-      <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text);">${precio.toFixed(2)} ${moneda}</div><div style="font-size:13px;color:${clrCambio};font-weight:600;">${flechaCambio} ${Math.abs(cambioPct).toFixed(2)}% hoy</div></div>
+      <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text);">${precio.toFixed(2)} ${moneda}${fmtMonedaConvertida(precio, moneda)}</div><div style="font-size:13px;color:${clrCambio};font-weight:600;">${flechaCambio} ${Math.abs(cambioPct).toFixed(2)}% hoy</div></div>
     </div>
     <div class="semáforo sem-gray" style="margin-bottom:16px"><div class="semáforo-icon">📦</div><div><div class="semáforo-title">ETF — fondo cotizado</div><div class="semáforo-desc">Los ETFs no tienen PER ni métricas de empresa. Replican el precio del activo subyacente.</div></div></div>
     <div class="result-grid">
@@ -2492,7 +2499,7 @@ function renderStock(el, d, ticker) {
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
         <div style="width:44px;height:44px;border-radius:10px;background:var(--card2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text);flex-shrink:0;">${iniciales}</div>
         <div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text);">${nombre}</div><div style="font-size:12px;color:var(--text3);">${ticker} · ${sectorRef.nombre}</div></div>
-        <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text);">${precio.toFixed(2)} ${moneda}</div><div style="font-size:13px;color:${clrCambio};font-weight:600;">${flechaCambio} ${Math.abs(cambioPct).toFixed(2)}% hoy</div></div>
+        <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text);">${precio.toFixed(2)} ${moneda}${fmtMonedaConvertida(precio, moneda)}</div><div style="font-size:13px;color:${clrCambio};font-weight:600;">${flechaCambio} ${Math.abs(cambioPct).toFixed(2)}% hoy</div></div>
       </div>
       <div style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:${scoreBg};border:1px solid ${scoreColor}33;border-radius:16px;margin-bottom:12px;">
         <div style="width:64px;height:64px;border-radius:50%;background:${scoreColor}22;border:3px solid ${scoreColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
