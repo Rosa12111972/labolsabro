@@ -1860,6 +1860,14 @@ function generarReinversion(d) {
   return `De cada 100€ que gana, reparte ${reparte.toFixed(0)}€ en dividendos a los accionistas y reinvierte ${reinvierte.toFixed(0)}€ en el propio negocio: nuevos productos, expansión, tecnología o pagar deuda.`;
 }
 
+function generarVeredictoIndividual(d, score, ticker) {
+  if (score === null) return { emoji: '❓', titulo: 'Sin datos suficientes', texto: `No tenemos suficientes datos financieros de ${ticker} para dar un veredicto fiable.` };
+  const { pros, contras } = generarProsContras(d, d.sector);
+  if (score >= 7) return { emoji: '✅', titulo: 'Buena opción a día de hoy', texto: `Con ${score.toFixed(1)}/10, ${ticker} destaca sobre todo porque ${pros[0]?.toLowerCase() || 'tiene buenos números en conjunto'}. Eso no significa que no pueda bajar mañana — invertir siempre lleva riesgo.` };
+  if (score >= 4) return { emoji: '🟡', titulo: 'Opción correcta, sin ser un chollo', texto: `Con ${score.toFixed(1)}/10, ${ticker} no destaca especialmente ni tampoco preocupa. ${contras[0] || 'Vigila de cerca sus próximos resultados'} antes de decidir.` };
+  return { emoji: '🔴', titulo: 'Mejor esperar o mirar otra', texto: `Con ${score.toFixed(1)}/10, ${ticker} tiene señales que invitan a la cautela: ${contras[0]?.toLowerCase() || 'varios indicadores están por debajo de lo ideal'}. No es una recomendación de venta, solo un aviso a tener en cuenta.` };
+}
+
 function descargarPDF() {
   if (!_pdfData) return;
   const gratis = 3;
@@ -1922,23 +1930,29 @@ function descargarPDF() {
   const metricas = [
     ['PER', d.pe ? d.pe.toFixed(1) + 'x' : '—'],
     ['PEG', d.peg ? d.peg.toFixed(2) + 'x' : '—'],
+    ['EV/EBITDA', d.evEbitda ? d.evEbitda.toFixed(1) + 'x' : '—'],
     ['Margen neto', d.margen ? (d.margen * 100).toFixed(1) + '%' : '—'],
     ['ROE', d.roe ? (d.roe * 100).toFixed(1) + '%' : '—'],
     ['Crecimiento BPA', d.crecimientoEps ? (d.crecimientoEps * 100).toFixed(1) + '%' : '—'],
     ['Crecimiento ingresos', d.crecimientoIng ? (d.crecimientoIng * 100).toFixed(1) + '%' : '—'],
     ['Dividendo', d.divY ? (d.divY * 100).toFixed(2) + '%' : '—'],
+    ['Deuda/Patrimonio', d.debtToEquity ? d.debtToEquity.toFixed(0) + '%' : '—'],
+    ['Free Cash Flow', d.freeCashflow ? fmtMiles(Math.abs(d.freeCashflow)) : '—'],
+    ['Caja total', d.totalCash ? fmtMiles(d.totalCash) : '—'],
+    ['Rango 52 semanas', d.min52 && d.max52 ? `${d.min52.toFixed(1)}–${d.max52.toFixed(1)}` : '—'],
     ['Beta', d.beta ? d.beta.toFixed(2) : '—'],
+    ['Empleados', d.employees ? d.employees.toLocaleString('es-ES') : '—'],
   ];
 
   let y = 120;
   metricas.forEach(([label, val], i) => {
     doc.setFillColor(i % 2 === 0 ? 20 : 26, i % 2 === 0 ? 20 : 26, i % 2 === 0 ? 20 : 26);
-    doc.rect(pad, y - 5, W - pad * 2, 10, 'F');
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(163, 163, 163);
-    doc.text(label, pad + 4, y + 2);
+    doc.rect(pad, y - 5, W - pad * 2, 8.5, 'F');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(163, 163, 163);
+    doc.text(label, pad + 4, y + 1.5);
     doc.setFont('helvetica', 'bold'); doc.setTextColor(245, 245, 245);
-    doc.text(val, W - pad - 4, y + 2, { align: 'right' });
-    y += 10;
+    doc.text(val, W - pad - 4, y + 1.5, { align: 'right' });
+    y += 8.5;
   });
 
   // Footer
@@ -1959,7 +1973,19 @@ function descargarPDF() {
   doc.setFontSize(9); doc.setTextColor(163, 163, 163); doc.setFont('helvetica', 'normal');
   doc.text(`Análisis en profundidad · ${d.nombre || ticker}`, W - pad, 16, { align: 'right' });
 
-  let y2 = 36;
+  const veredictoInd = generarVeredictoIndividual(d, score, ticker);
+  let y2 = 34;
+  doc.setDrawColor(250, 204, 21);
+  doc.setFillColor(255, 251, 235);
+  const vTexto = doc.splitTextToSize(veredictoInd.texto, W - pad * 2 - 12);
+  const vAltura = 16 + vTexto.length * 5.2;
+  doc.roundedRect(pad, y2, W - pad * 2, vAltura, 5, 5, 'FD');
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(11.5); doc.setTextColor(161, 98, 7);
+  doc.text(`${veredictoInd.emoji} Veredicto: ${veredictoInd.titulo}`, pad + 6, y2 + 10);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(90, 60, 10);
+  doc.text(vTexto, pad + 6, y2 + 17);
+  y2 += vAltura + 14;
+
   doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
   doc.text('¿A qué se dedica esta empresa?', pad, y2);
   y2 += 8;
