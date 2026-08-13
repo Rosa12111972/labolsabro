@@ -381,6 +381,22 @@ function acceptAge() {
         <div class="logo-sub">laBolsabro</div>
       </div>
     </div>
+    <select id="currencySelect" onchange="cambiarMoneda(this.value)" style="background:var(--card2);border:1px solid var(--border2);color:var(--text2);border-radius:100px;padding:8px 12px;font-size:12.5px;font-family:inherit;outline:none;cursor:pointer;">
+      <option value="USD">🇺🇸 USD</option>
+      <option value="EUR">🇪🇺 EUR</option>
+      <option value="MXN">🇲🇽 MXN</option>
+      <option value="JPY">🇯🇵 JPY</option>
+      <option value="GBP">🇬🇧 GBP</option>
+      <option value="BRL">🇧🇷 BRL</option>
+      <option value="CAD">🇨🇦 CAD</option>
+      <option value="CHF">🇨🇭 CHF</option>
+      <option value="CNY">🇨🇳 CNY</option>
+      <option value="INR">🇮🇳 INR</option>
+      <option value="ARS">🇦🇷 ARS</option>
+      <option value="COP">🇨🇴 COP</option>
+      <option value="CLP">🇨🇱 CLP</option>
+      <option value="PEN">🇵🇪 PEN</option>
+    </select>
     <a class="nav-btn-outline" href="/premium.html">⭐ Premium</a>
     <div id="navAuth">
       <button class="nav-btn" onclick="openAuthModal()">Entrar</button>
@@ -1107,6 +1123,39 @@ let _bonusBusquedas = 0;
 let _premiumBonusUntil = null;
 let _referralCode = '';
 
+let _userCurrency = localStorage.getItem('mosca_currency') || 'USD';
+let _fxRates = null;
+async function cargarFx() {
+  try {
+    const r = await fetch(`${apiBase()}/api/fx`);
+    const data = await r.json();
+    _fxRates = data.rates || null;
+  } catch (e) { _fxRates = null; }
+}
+function cambiarMoneda(code) {
+  _userCurrency = code;
+  localStorage.setItem('mosca_currency', code);
+  cacheGet.__bust = Date.now();
+  const el = document.getElementById('stockResult');
+  if (el && el.dataset.ticker) doTicker(el.dataset.ticker);
+}
+function convertirMoneda(amount, from, to) {
+  if (!_fxRates || !amount || from === to) return null;
+  const rFrom = _fxRates[from], rTo = _fxRates[to];
+  if (!rFrom || !rTo) return null;
+  const enUSD = amount / rFrom;
+  return enUSD * rTo;
+}
+function fmtMonedaConvertida(amount, from) {
+  if (_userCurrency === from) return '';
+  const conv = convertirMoneda(amount, from, _userCurrency);
+  if (conv === null) return '';
+  const simbolos = { USD:'$', EUR:'€', MXN:'MX$', JPY:'¥', GBP:'£', BRL:'R$', CAD:'CA$', CHF:'CHF', CNY:'¥', INR:'₹', ARS:'AR$', COP:'COP$', CLP:'CLP$', PEN:'S/' };
+  const dec = _userCurrency === 'JPY' ? 0 : 2;
+  return ` <span style="color:var(--text3);font-weight:400;font-size:0.6em">(≈ ${simbolos[_userCurrency]||''}${conv.toLocaleString('es-ES',{minimumFractionDigits:dec,maximumFractionDigits:dec})} ${_userCurrency})</span>`;
+}
+cargarFx();
+
 (function capturarRef() {
   const params = new URLSearchParams(window.location.search);
   const ref = params.get('ref');
@@ -1163,6 +1212,7 @@ async function setUser(user) {
     ${isPremium ? `<button onclick="abrirAlertas()">🔔 Alertas</button>` : ''}
     ${isPremium ? `<button onclick="abrirRecordatorios()">⏰ Recordatorios</button>` : ''}
     ${isPremium ? `<button onclick="abrirNovedades()">🎁 Novedades</button>` : ''}
+    ${isPremium ? `<button onclick="abrirChatIA()">💬 Chat IA</button>` : ''}
     <button onclick="abrirPanel()">📊 Mi panel</button>
     <button onclick="abrirInvitar()">🔥 Invita</button>
     <span>${user.email.split('@')[0]}</span>
@@ -1659,6 +1709,68 @@ async function completarReto() {
   await _sb.from('profiles').update({ reto_completado_fecha: hoyStr() }).eq('id', _currentUser.id);
   _retoCompletadoHoy = true;
   await renderPanel();
+}
+
+let _chatRegion = localStorage.getItem('mosca_chat_region') || 'castellano';
+let _chatHistorial = [];
+function abrirChatIA() {
+  document.getElementById('chatRegion').value = _chatRegion;
+  document.getElementById('chatOverlay').classList.add('open');
+  if (!_chatHistorial.length) {
+    pintarMensajeChat('mosca', '¡Ey! Soy Mosca 🪰. Pregúntame lo que quieras de ahorro, bolsa o dinero en general. Voy al grano, sin rollos.');
+  }
+  document.getElementById('chatInput').focus();
+}
+function cerrarChatIA() { document.getElementById('chatOverlay').classList.remove('open'); }
+function closeChatIfBg(e) { if (e.target.id === 'chatOverlay') cerrarChatIA(); }
+function cambiarRegionChat(region) {
+  _chatRegion = region;
+  localStorage.setItem('mosca_chat_region', region);
+}
+function pintarMensajeChat(quien, texto) {
+  const box = document.getElementById('chatMessages');
+  const esMosca = quien === 'mosca';
+  const div = document.createElement('div');
+  div.style.cssText = `align-self:${esMosca ? 'flex-start' : 'flex-end'};max-width:85%;background:${esMosca ? 'var(--card2)' : 'var(--green)'};color:${esMosca ? 'var(--text)' : '#000'};padding:10px 14px;border-radius:14px;font-size:13.5px;line-height:1.5;white-space:pre-wrap;`;
+  div.textContent = texto;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+async function enviarMensajeChat() {
+  const input = document.getElementById('chatInput');
+  const mensaje = input.value.trim();
+  if (!mensaje) return;
+  input.value = '';
+  pintarMensajeChat('user', mensaje);
+  _chatHistorial.push({ role: 'user', texto: mensaje });
+  const btn = document.getElementById('chatSendBtn');
+  btn.disabled = true;
+  const box = document.getElementById('chatMessages');
+  const loadingDiv = document.createElement('div');
+  loadingDiv.id = 'chatLoading';
+  loadingDiv.style.cssText = 'align-self:flex-start;color:var(--text3);font-size:13px;padding:4px 14px;';
+  loadingDiv.textContent = '🪰 escribiendo...';
+  box.appendChild(loadingDiv);
+  box.scrollTop = box.scrollHeight;
+  try {
+    const r = await fetch(`${apiBase()}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mensaje, region: _chatRegion })
+    });
+    const data = await r.json();
+    document.getElementById('chatLoading')?.remove();
+    if (data.respuesta) {
+      pintarMensajeChat('mosca', data.respuesta);
+      _chatHistorial.push({ role: 'mosca', texto: data.respuesta });
+    } else {
+      pintarMensajeChat('mosca', 'Uy, se me ha ido la cabeza un momento. Prueba otra vez, illo.');
+    }
+  } catch (e) {
+    document.getElementById('chatLoading')?.remove();
+    pintarMensajeChat('mosca', 'No puedo conectar ahora mismo. Prueba en un momento.');
+  }
+  btn.disabled = false;
 }
 
 function abrirNovedades() { document.getElementById('novOverlay').classList.add('open'); }
@@ -2805,6 +2917,26 @@ function renderStock(el, d, ticker) {
   </div>
 </div>
 
+<div id="chatOverlay" class="hist-overlay" onclick="closeChatIfBg(event)">
+  <div class="hist-box" style="max-width:440px;display:flex;flex-direction:column;height:600px;max-height:80vh;padding:0;overflow:hidden;">
+    <div style="padding:20px 24px 14px;border-bottom:1px solid var(--border);">
+      <button class="auth-close" onclick="cerrarChatIA()" style="top:16px">×</button>
+      <h2 style="margin-bottom:8px">💬 Mosca IA</h2>
+      <select id="chatRegion" onchange="cambiarRegionChat(this.value)" style="background:var(--card2);border:1px solid var(--border2);color:var(--text2);border-radius:100px;padding:6px 12px;font-size:12px;font-family:inherit;outline:none;">
+        <option value="castellano">🇪🇸 Castellano</option>
+        <option value="andaluz">💛 Andaluz</option>
+        <option value="catalan">❤️ Catalán</option>
+        <option value="gallego">💙 Gallego</option>
+      </select>
+    </div>
+    <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;"></div>
+    <div style="display:flex;gap:8px;padding:14px 16px;border-top:1px solid var(--border);">
+      <input id="chatInput" placeholder="Pregúntame lo que sea de dinero..." onkeydown="if(event.key==='Enter')enviarMensajeChat()" style="flex:1;background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:11px 16px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+      <button onclick="enviarMensajeChat()" id="chatSendBtn" style="background:var(--green);color:#000;font-weight:700;border:none;border-radius:100px;padding:0 18px;font-size:13px;cursor:pointer;font-family:inherit;">➤</button>
+    </div>
+  </div>
+</div>
+
 <div id="idleBubble" class="idle-bubble">
   <button class="close" onclick="closeIdleBubble()">×</button>
   <div style="font-size:22px">🪰</div>
@@ -3081,7 +3213,5 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
 }
 </script>
-<!-- CHAT MOSCA: desactivado temporalmente -->
-
 </body>
 </html>
