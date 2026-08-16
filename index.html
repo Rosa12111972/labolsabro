@@ -1164,6 +1164,9 @@ function cambiarMoneda(code) {
       else renderStock(el, cached, _lastTicker);
     }
   }
+  if (typeof calcular === 'function') try { calcular(); } catch(e) {}
+  if (typeof calcSim === 'function') try { calcSim(); } catch(e) {}
+  if (_currentUser && document.getElementById('panelOverlay')?.classList.contains('open')) renderPanel();
 }
 function convertirMoneda(amount, from, to) {
   if (!_fxRates || !amount || from === to) return null;
@@ -1172,13 +1175,23 @@ function convertirMoneda(amount, from, to) {
   const enUSD = amount / rFrom;
   return enUSD * rTo;
 }
+const SIMBOLOS_MONEDA = { USD:'$', EUR:'€', MXN:'MX$', JPY:'¥', GBP:'£', BRL:'R$', CAD:'CA$', CHF:'CHF', CNY:'¥', INR:'₹', ARS:'AR$', COP:'COP$', CLP:'CLP$', PEN:'S/' };
 function fmtMonedaConvertida(amount, from) {
   if (_userCurrency === from) return '';
   const conv = convertirMoneda(amount, from, _userCurrency);
   if (conv === null) return '';
-  const simbolos = { USD:'$', EUR:'€', MXN:'MX$', JPY:'¥', GBP:'£', BRL:'R$', CAD:'CA$', CHF:'CHF', CNY:'¥', INR:'₹', ARS:'AR$', COP:'COP$', CLP:'CLP$', PEN:'S/' };
   const dec = _userCurrency === 'JPY' ? 0 : 2;
-  return ` <span style="color:var(--text3);font-weight:400;font-size:0.6em">(≈ ${simbolos[_userCurrency]||''}${conv.toLocaleString('es-ES',{minimumFractionDigits:dec,maximumFractionDigits:dec})} ${_userCurrency})</span>`;
+  return ` <span style="color:var(--text3);font-weight:400;font-size:0.6em">(≈ ${SIMBOLOS_MONEDA[_userCurrency]||''}${conv.toLocaleString('es-ES',{minimumFractionDigits:dec,maximumFractionDigits:dec})} ${_userCurrency})</span>`;
+}
+// Todos los importes internos de la app (calculadora, botes, cartera) están en EUR de base.
+function fmtEUR(amount, decimales) {
+  const dec = decimales !== undefined ? decimales : (_userCurrency === 'JPY' ? 0 : 2);
+  if (_userCurrency === 'EUR' || !_fxRates) {
+    return Math.round(amount).toLocaleString('es-ES') + ' €';
+  }
+  const conv = convertirMoneda(amount, 'EUR', _userCurrency);
+  if (conv === null) return Math.round(amount).toLocaleString('es-ES') + ' €';
+  return `${SIMBOLOS_MONEDA[_userCurrency]||''}${conv.toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${_userCurrency}`;
 }
 cargarFx();
 
@@ -1532,11 +1545,11 @@ function renderHeroMockup() {
   const saldoTotal = totalBotes + parseFloat(_invertidoSimulado || 0);
   document.getElementById('pHola').textContent = `Hola ${window._panelNombre} 👋`;
   document.getElementById('pLevel').textContent = `Nv.${nivel} · ${_totalXP || 0} XP`;
-  document.getElementById('pSaldoTotal').textContent = saldoTotal.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  document.getElementById('pSaldoTotal').textContent = fmtEUR(saldoTotal);
   document.getElementById('pSaldoDelta').textContent = totalBotes === 0 && _invertidoSimulado === 0 ? 'Empieza a ahorrar para verlo crecer' : 'Tu dinero, tu control';
-  document.getElementById('pAhorrando').textContent = totalBotes.toLocaleString('es-ES', { maximumFractionDigits: 0 }) + ' €';
+  document.getElementById('pAhorrando').textContent = fmtEUR(totalBotes, 0);
   document.getElementById('pBotesN').textContent = `${_jars.length} bote${_jars.length === 1 ? '' : 's'}`;
-  document.getElementById('pInvertido').textContent = parseFloat(_invertidoSimulado || 0).toLocaleString('es-ES', { maximumFractionDigits: 0 }) + ' €';
+  document.getElementById('pInvertido').textContent = fmtEUR(parseFloat(_invertidoSimulado || 0), 0);
   document.getElementById('pRetoTexto').textContent = _retoCompletadoHoy ? '✓ Reto de hoy completado, crack.' : (_retoActual?.texto || '');
   if (abrirBtn) abrirBtn.style.display = 'block';
 }
@@ -1556,14 +1569,14 @@ async function renderPanel() {
   const isPremium = _userPlan !== 'free';
   const carteraValor = isPremium ? await calcularValorCartera() : parseFloat(_invertidoSimulado || 0);
   const saldoTotal = totalBotes + carteraValor;
-  document.getElementById('panelSaldoTotal').textContent = saldoTotal.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+  document.getElementById('panelSaldoTotal').textContent = fmtEUR(saldoTotal);
 
   const inicioMes = new Date(); inicioMes.setDate(1); inicioMes.setHours(0,0,0,0);
   const isoInicio = inicioMes.toISOString();
   const { data: jarMovs } = await _sb.from('jar_transactions').select('monto').eq('user_id', _currentUser.id).gte('created_at', isoInicio);
   const { data: invMovs } = await _sb.from('invest_transactions').select('monto').eq('user_id', _currentUser.id).gte('created_at', isoInicio);
   const deltaMes = (jarMovs || []).reduce((s, m) => s + parseFloat(m.monto), 0) + (invMovs || []).reduce((s, m) => s + parseFloat(m.monto), 0);
-  document.getElementById('panelDeltaMes').textContent = (deltaMes >= 0 ? '+' : '') + deltaMes.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+  document.getElementById('panelDeltaMes').textContent = (deltaMes >= 0 ? '+' : '') + fmtEUR(deltaMes);
 
   document.getElementById('panelRetoTexto').textContent = _retoCompletadoHoy ? '✓ Ya lo has completado hoy. Vuelve mañana a por otro.' : (_retoActual?.texto || '');
   document.getElementById('panelRetoBtn').style.display = _retoCompletadoHoy ? 'none' : (_retoActual?.tipo === 'crear_bote' ? 'none' : 'block');
@@ -1575,7 +1588,7 @@ async function renderPanel() {
     botesEl.innerHTML = _jars.map(j => `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
       <div>
         <div style="font-weight:700;font-size:13.5px">${j.nombre}</div>
-        <div style="font-size:12px;color:var(--text3)">${parseFloat(j.saldo).toLocaleString('es-ES', { minimumFractionDigits: 2 })} €</div>
+        <div style="font-size:12px;color:var(--text3)">${fmtEUR(parseFloat(j.saldo))}</div>
       </div>
       <div style="display:flex;gap:6px">
         <button onclick="aportarBote(${j.id})" style="background:none;border:1px solid var(--border2);color:var(--green);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Aportar</button>
@@ -1583,7 +1596,7 @@ async function renderPanel() {
       </div>
     </div>`).join('');
   }
-  document.getElementById('panelInvertido').textContent = parseFloat(_invertidoSimulado || 0).toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+  document.getElementById('panelInvertido').textContent = fmtEUR(parseFloat(_invertidoSimulado || 0));
 
   document.getElementById('carteraFree').style.display = !isPremium ? 'flex' : 'none';
   document.getElementById('carteraUpsell').style.display = !isPremium ? 'block' : 'none';
@@ -1599,8 +1612,13 @@ async function calcularValorCartera() {
   if (!_posiciones.length) return 0;
   let total = 0;
   for (const p of _posiciones) {
-    const precio = await obtenerPrecioActual(p.ticker);
-    total += (precio ?? p.precio_compra) * parseFloat(p.shares);
+    let d = null;
+    try { d = await fetchStock(p.ticker); } catch (e) {}
+    const precio = d?.precio ?? p.precio_compra;
+    const moneda = d?.moneda || 'USD';
+    const valorNativo = precio * parseFloat(p.shares);
+    const valorEUR = moneda === 'EUR' ? valorNativo : (convertirMoneda(valorNativo, moneda, 'EUR') ?? valorNativo);
+    total += valorEUR;
   }
   return total;
 }
@@ -1622,17 +1640,18 @@ async function renderCartera() {
     return;
   }
   el.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Cargando precios...</p>';
-  let totalInvertido = 0, totalActual = 0;
+  let totalInvertidoEUR = 0, totalActualEUR = 0;
   const filas = [];
   for (const p of _posiciones) {
     let d = null;
     try { d = await fetchStock(p.ticker); } catch (e) {}
     const precioActual = d?.precio ?? null;
-    const invertido = p.precio_compra * p.shares;
-    const actual = (precioActual ?? p.precio_compra) * p.shares;
+    const moneda = d?.moneda || 'USD';
+    const invertidoNativo = p.precio_compra * p.shares;
+    const actualNativo = (precioActual ?? p.precio_compra) * p.shares;
     const gananciaPct = precioActual ? ((precioActual - p.precio_compra) / p.precio_compra * 100) : 0;
-    totalInvertido += invertido;
-    totalActual += actual;
+    totalInvertidoEUR += moneda === 'EUR' ? invertidoNativo : (convertirMoneda(invertidoNativo, moneda, 'EUR') ?? invertidoNativo);
+    totalActualEUR += moneda === 'EUR' ? actualNativo : (convertirMoneda(actualNativo, moneda, 'EUR') ?? actualNativo);
     const color = gananciaPct >= 0 ? 'var(--green)' : 'var(--red)';
     let hint = '';
     if (d && d.tipo !== 'crypto' && d.pe) {
@@ -1642,20 +1661,20 @@ async function renderCartera() {
     }
     filas.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
       <div>
-        <div style="font-weight:700;font-size:13.5px">${p.ticker} <span style="font-weight:400;color:var(--text3);font-size:11.5px">· ${p.shares} uds a ${p.precio_compra.toFixed(2)}€</span></div>
-        <div style="font-size:12px;color:${color};margin-top:2px">${precioActual ? precioActual.toFixed(2) + '€ ahora · ' + (gananciaPct >= 0 ? '+' : '') + gananciaPct.toFixed(1) + '%' : 'Precio no disponible'}</div>
+        <div style="font-weight:700;font-size:13.5px">${p.ticker} <span style="font-weight:400;color:var(--text3);font-size:11.5px">· ${p.shares} uds a ${p.precio_compra.toFixed(2)} ${moneda}</span></div>
+        <div style="font-size:12px;color:${color};margin-top:2px">${precioActual ? precioActual.toFixed(2) + ' ' + moneda + fmtMonedaConvertida(precioActual, moneda) + ' ahora · ' + (gananciaPct >= 0 ? '+' : '') + gananciaPct.toFixed(1) + '%' : 'Precio no disponible'}</div>
         ${hint}
       </div>
       <button onclick="eliminarPosicion(${p.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:5px 10px;border-radius:100px;font-size:11.5px;cursor:pointer;font-family:inherit;">Borrar</button>
     </div>`);
   }
   el.innerHTML = filas.join('');
-  const ganancia = totalActual - totalInvertido;
-  document.getElementById('carteraInvertido').textContent = totalInvertido.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
-  document.getElementById('carteraActual').textContent = totalActual.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
+  const gananciaEUR = totalActualEUR - totalInvertidoEUR;
+  document.getElementById('carteraInvertido').textContent = fmtEUR(totalInvertidoEUR);
+  document.getElementById('carteraActual').textContent = fmtEUR(totalActualEUR);
   const ganEl = document.getElementById('carteraGanancia');
-  ganEl.textContent = (ganancia >= 0 ? '+' : '') + ganancia.toLocaleString('es-ES', { minimumFractionDigits: 2 }) + ' €';
-  ganEl.style.color = ganancia >= 0 ? 'var(--green)' : 'var(--red)';
+  ganEl.textContent = (gananciaEUR >= 0 ? '+' : '') + fmtEUR(gananciaEUR);
+  ganEl.style.color = gananciaEUR >= 0 ? 'var(--green)' : 'var(--red)';
 }
 async function anadirPosicion() {
   const ticker = prompt('¿Qué empresa quieres simular? (ticker, ej: AAPL, TSLA)');
@@ -2645,7 +2664,7 @@ function renderStock(el, d, ticker) {
     document.querySelectorAll('.anio-btn').forEach(b => { b.classList.toggle('anio-sel', parseInt(b.dataset.a) === n); });
     calcular();
   }
-  function fmt(n) { return Math.round(n).toLocaleString('es-ES') + ' €'; }
+  function fmt(n) { return fmtEUR(n, 0); }
   function calcular() {
     const inicial = parseFloat(document.getElementById('calcInicial').value) || 0;
     const mensual = parseFloat(document.getElementById('calcMensual').value) || 0;
@@ -3082,13 +3101,13 @@ function calcSim() {
   const invested = monthly * months;
   const earned = total - invested;
   const pct = Math.round((earned / invested) * 100);
-  document.getElementById('simMonthlyLabel').textContent = monthly + ' €';
+  document.getElementById('simMonthlyLabel').textContent = fmtEUR(monthly, 0);
   document.getElementById('simYearsLabel').textContent = years + ' año' + (years === 1 ? '' : 's');
   document.getElementById('simRateLabel').textContent = parseFloat(document.getElementById('simRate').value).toFixed(1) + '%';
-  document.getElementById('simInvested').textContent = Math.round(invested).toLocaleString('es-ES') + ' €';
-  document.getElementById('simEarned').textContent = Math.round(earned).toLocaleString('es-ES') + ' €';
-  document.getElementById('simTotal').textContent = Math.round(total).toLocaleString('es-ES') + ' €';
-  document.getElementById('simMessage').textContent = `Con solo ${monthly} € al mes durante ${years} años, el interés compuesto te genera ${Math.round(earned).toLocaleString('es-ES')} € extra sin hacer nada más. Eso es un ${pct}% de ganancia sobre lo que aportaste.`;
+  document.getElementById('simInvested').textContent = fmtEUR(invested, 0);
+  document.getElementById('simEarned').textContent = fmtEUR(earned, 0);
+  document.getElementById('simTotal').textContent = fmtEUR(total, 0);
+  document.getElementById('simMessage').textContent = `Con solo ${fmtEUR(monthly, 0)} al mes durante ${years} años, el interés compuesto te genera ${fmtEUR(earned, 0)} extra sin hacer nada más. Eso es un ${pct}% de ganancia sobre lo que aportaste.`;
 }
 calcSim();
 
