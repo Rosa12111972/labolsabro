@@ -1446,12 +1446,21 @@ function rellenarAlerta(direction, precio) {
   document.getElementById('alertPrice').value = precio;
 }
 async function crearAlerta() {
-  const ticker = document.getElementById('alertTicker').value.trim().toUpperCase();
+  let ticker = document.getElementById('alertTicker').value.trim().toUpperCase();
   const direction = document.getElementById('alertDirection').value;
   const target = parseFloat(document.getElementById('alertPrice').value);
   if (!ticker || !target || target <= 0) { alert('Rellena el ticker y un precio válido'); return; }
+  let nombre = ticker;
+  try {
+    const d = await fetchStock(ticker);
+    ticker = d.ticker || ticker;
+    nombre = d.nombre || ticker;
+  } catch (e) {
+    alert(`No encontramos "${ticker}". Prueba con el ticker exacto o el nombre de la empresa.`);
+    return;
+  }
   const { error } = await _sb.from('price_alerts').insert({
-    user_id: _currentUser.id, ticker, target_price: target, direction
+    user_id: _currentUser.id, ticker, nombre, target_price: target, direction
   });
   if (error) { alert('Error al crear la alerta'); return; }
   document.getElementById('alertPrice').value = '';
