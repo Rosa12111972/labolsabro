@@ -463,7 +463,7 @@ function acceptAge() {
       <div class="stat-label">Gratis para siempre</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" style="color:var(--yellow)">0 €</div>
+      <div class="stat-num" style="color:var(--yellow)" id="statDineroArriesgado">0 €</div>
       <div class="stat-label">Dinero real arriesgado</div>
     </div>
     <div class="stat-item">
@@ -1165,6 +1165,7 @@ function actualizarPreciosSuscripcion() {
   if (cardJ) cardJ.innerHTML = `${pJunior} <span>/mes</span>`;
   const cardS = document.getElementById('precioSeniorCard');
   if (cardS) cardS.innerHTML = `${pSenior} <span>/mes</span>`;
+  setTxt('statDineroArriesgado', fmtEUR(0, 0));
 }
 function cambiarMoneda(code) {
   _userCurrency = code;
