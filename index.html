@@ -1180,6 +1180,7 @@ function cambiarMoneda(code) {
   if (typeof calcular === 'function') try { calcular(); } catch(e) {}
   if (typeof calcSim === 'function') try { calcSim(); } catch(e) {}
   if (_currentUser && document.getElementById('panelOverlay')?.classList.contains('open')) renderPanel();
+  if (_currentUser) renderHeroMockup();
   actualizarPreciosSuscripcion();
 }
 function convertirMoneda(amount, from, to) {
