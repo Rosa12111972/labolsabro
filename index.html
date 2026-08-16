@@ -262,6 +262,7 @@ footer { border-top: 1px solid var(--border); }
 .hist-box { background:var(--card); border:1px solid var(--border2); border-radius:var(--radius-lg); padding:32px; width:100%; max-width:480px; max-height:80vh; overflow-y:auto; }
 .hist-box h2 { font-size:19px; font-weight:700; margin-bottom:16px; }
 .idle-bubble { position:fixed; bottom:20px; right:20px; max-width:290px; background:var(--card); border:1px solid var(--border2); border-radius:16px; padding:16px 18px; box-shadow:0 12px 32px rgba(0,0,0,0.4); z-index:900; display:none; }
+.idle-bubble.shift-up { bottom:90px; }
 .idle-bubble.open { display:block; animation:idleIn 0.3s ease; }
 @keyframes idleIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 .idle-bubble .close { position:absolute; top:8px; right:10px; background:none; border:none; color:var(--text3); cursor:pointer; font-size:16px; }
@@ -1273,6 +1274,9 @@ async function setUser(user) {
     <span>${user.email.split('@')[0]}</span>
     <button onclick="signOut()">Salir</button>
   </div>`;
+  const fab = document.getElementById('chatFab');
+  if (fab) fab.style.display = isPremium ? 'flex' : 'none';
+  document.getElementById('idleBubble')?.classList.toggle('shift-up', isPremium);
 }
 
 const DIAS_BONUS_REFERIDO = 3;
@@ -2997,6 +3001,8 @@ function renderStock(el, d, ticker) {
     </div>
   </div>
 </div>
+
+<button id="chatFab" onclick="abrirChatIA()" style="display:none;align-items:center;justify-content:center;position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--green);border:none;font-size:26px;cursor:pointer;box-shadow:0 8px 24px rgba(34,197,94,0.4);z-index:850;">🪰</button>
 
 <div id="idleBubble" class="idle-bubble">
   <button class="close" onclick="closeIdleBubble()">×</button>
