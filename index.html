@@ -480,7 +480,7 @@ function acceptAge() {
     <p class="sub">Tanto si empiezas desde cero como si ya sabes algo de bolsa, laBolsabro tiene lo que necesitas.</p>
     <div class="modes">
       <div class="mode">
-        <div class="mode-badge mb-green">Inversor Junior · 5,99€/mes</div>
+        <div class="mode-badge mb-green">Inversor Junior · <span id="precioJuniorMode">5,99€</span>/mes</div>
         <span class="mode-emoji">📊</span>
         <div class="mode-title">Para el que empieza a invertir</div>
         <div class="mode-desc">Entiende si una empresa está cara o barata sin necesidad de conocimientos previos. El semáforo hace el trabajo por ti.</div>
@@ -493,7 +493,7 @@ function acceptAge() {
         </ul>
       </div>
       <div class="mode" style="border-left:1px solid var(--border)">
-        <div class="mode-badge mb-purple">Inversor Senior · 9,99€/mes</div>
+        <div class="mode-badge mb-purple">Inversor Senior · <span id="precioSeniorMode">9,99€</span>/mes</div>
         <span class="mode-emoji">📈</span>
         <div class="mode-title">Para el que quiere invertir con criterio</div>
         <div class="mode-desc">Análisis avanzado, alertas personalizadas e historial completo. Para tomar decisiones con información de calidad.</div>
@@ -1152,6 +1152,19 @@ async function cargarFx() {
     const data = await r.json();
     _fxRates = data.rates || null;
   } catch (e) { _fxRates = null; }
+  actualizarPreciosSuscripcion();
+}
+function actualizarPreciosSuscripcion() {
+  const pJunior = fmtEUR(5.99), pSenior = fmtEUR(9.99);
+  const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setTxt('precioJuniorMode', pJunior);
+  setTxt('precioSeniorMode', pSenior);
+  setTxt('precioJuniorFaq', pJunior);
+  setTxt('precioSeniorFaq', pSenior);
+  const cardJ = document.getElementById('precioJuniorCard');
+  if (cardJ) cardJ.innerHTML = `${pJunior} <span>/mes</span>`;
+  const cardS = document.getElementById('precioSeniorCard');
+  if (cardS) cardS.innerHTML = `${pSenior} <span>/mes</span>`;
 }
 function cambiarMoneda(code) {
   _userCurrency = code;
@@ -1167,6 +1180,7 @@ function cambiarMoneda(code) {
   if (typeof calcular === 'function') try { calcular(); } catch(e) {}
   if (typeof calcSim === 'function') try { calcSim(); } catch(e) {}
   if (_currentUser && document.getElementById('panelOverlay')?.classList.contains('open')) renderPanel();
+  actualizarPreciosSuscripcion();
 }
 function convertirMoneda(amount, from, to) {
   if (!_fxRates || !amount || from === to) return null;
@@ -1887,7 +1901,7 @@ function mostrarLimiteAlcanzado(el) {
     <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Has agotado tus 3 búsquedas de hoy</div>
     <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">El plan gratuito incluye 3 análisis al día.<br>Mañana se renueva automáticamente — o pasa a Premium y analiza sin límite.</div>
     <a href="/premium.html" style="display:inline-block;background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;text-decoration:none;margin-bottom:12px">Ver planes Premium →</a>
-    <div style="font-size:12px;color:var(--text3);margin-top:8px">Desde 5,99€/mes · Cancela cuando quieras</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:8px">Desde ${fmtEUR(5.99)}/mes · Cancela cuando quieras</div>
   </div>`;
 }
 
@@ -2819,8 +2833,8 @@ function renderStock(el, d, ticker) {
     <p class="sub">Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.</p>
     <div class="price-grid">
       <div class="price-card"><div class="price-tier">Gratis</div><div class="price-num">0 € <span>/mes</span></div><div class="price-desc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div><ul class="price-list"><li><span>✓</span> Analizador básico de acciones</li><li><span>✓</span> Calculadora de interés compuesto</li><li><span>✓</span> 3 búsquedas al día</li></ul><a class="price-btn price-btn-out" href="/#stocks">Usar gratis</a></div>
-      <div class="price-card hot"><div class="hot-badge">Más popular</div><div class="price-tier">Inversor Junior</div><div class="price-num">5,99 € <span>/mes</span></div><div class="price-desc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div><ul class="price-list"><li><span>✓</span> Análisis completo de empresas</li><li><span>✓</span> Búsquedas ilimitadas</li><li><span>✓</span> Comparador de empresas</li><li><span>✓</span> Recordatorios personalizables</li></ul><a class="price-btn price-btn-solid" href="/premium.html">Empezar Junior</a></div>
-      <div class="price-card"><div class="price-tier">Inversor Senior</div><div class="price-num">9,99 € <span>/mes</span></div><div class="price-desc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div><ul class="price-list"><li><span>✓</span> Todo del plan Junior</li><li><span>✓</span> Comparador avanzado por sector</li><li><span>✓</span> Alertas de valor personalizadas</li><li><span>✓</span> Historial de análisis personal</li><li><span>✓</span> Acceso prioritario a novedades</li></ul><a class="price-btn price-btn-out" href="/premium.html">Empezar Senior</a></div>
+      <div class="price-card hot"><div class="hot-badge">Más popular</div><div class="price-tier">Inversor Junior</div><div class="price-num" id="precioJuniorCard">5,99 € <span>/mes</span></div><div class="price-desc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div><ul class="price-list"><li><span>✓</span> Análisis completo de empresas</li><li><span>✓</span> Búsquedas ilimitadas</li><li><span>✓</span> Comparador de empresas</li><li><span>✓</span> Recordatorios personalizables</li></ul><a class="price-btn price-btn-solid" href="/premium.html">Empezar Junior</a></div>
+      <div class="price-card"><div class="price-tier">Inversor Senior</div><div class="price-num" id="precioSeniorCard">9,99 € <span>/mes</span></div><div class="price-desc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div><ul class="price-list"><li><span>✓</span> Todo del plan Junior</li><li><span>✓</span> Comparador avanzado por sector</li><li><span>✓</span> Alertas de valor personalizadas</li><li><span>✓</span> Historial de análisis personal</li><li><span>✓</span> Acceso prioritario a novedades</li></ul><a class="price-btn price-btn-out" href="/premium.html">Empezar Senior</a></div>
     </div>
   </section>
 </div>
@@ -2833,7 +2847,7 @@ function renderStock(el, d, ticker) {
     <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Conecta con mi banco?</button><div class="faq-a">Todavía no. La herramienta actual es de análisis e información. La conexión bancaria está en la hoja de ruta para versiones futuras.</div></div>
     <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Me dice qué acciones comprar?</button><div class="faq-a">No. laBolsabro no da recomendaciones de inversión. Mostramos análisis educativo basado en datos públicos de Yahoo Finance. La decisión de invertir es siempre tuya y bajo tu responsabilidad.</div></div>
     <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Necesito saber de bolsa para usarla?</button><div class="faq-a">Para nada. laBolsabro está diseñada para que cualquier persona sin conocimientos financieros entienda si una empresa está cara o barata en un vistazo. El semáforo y las explicaciones en lenguaje normal hacen el trabajo por ti.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Cuánto cuesta?</button><div class="faq-a">El plan gratuito es para siempre. Los planes de pago (Inversor Junior a 5,99€/mes e Inversor Senior a 9,99€/mes) añaden búsquedas ilimitadas, comparador avanzado y alertas. Puedes cancelar cuando quieras.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Cuánto cuesta?</button><div class="faq-a">El plan gratuito es para siempre. Los planes de pago (Inversor Junior a <span id="precioJuniorFaq">5,99€</span>/mes e Inversor Senior a <span id="precioSeniorFaq">9,99€</span>/mes) añaden búsquedas ilimitadas, comparador avanzado y alertas. Puedes cancelar cuando quieras.</div></div>
     <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Los datos son fiables?</button><div class="faq-a">Los datos vienen de Yahoo Finance, la fuente de referencia para datos bursátiles gratuitos. Pueden tener un pequeño retraso respecto al mercado en tiempo real. Son orientativos y educativos, no para tomar decisiones de inversión.</div></div>
   </div>
 </section>
