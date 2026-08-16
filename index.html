@@ -1125,7 +1125,26 @@ let _bonusBusquedas = 0;
 let _premiumBonusUntil = null;
 let _referralCode = '';
 
-let _userCurrency = localStorage.getItem('mosca_currency') || 'USD';
+const LOCALE_MONEDA = {
+  'es-MX': 'MXN', 'es-AR': 'ARS', 'es-CO': 'COP', 'es-CL': 'CLP', 'es-PE': 'PEN',
+  'es-ES': 'EUR', 'es-419': 'MXN',
+  'pt-BR': 'BRL', 'pt-PT': 'EUR',
+  'ja-JP': 'JPY', 'ja': 'JPY',
+  'en-US': 'USD', 'en-CA': 'CAD', 'en-GB': 'GBP', 'en-IN': 'INR', 'en-AU': 'USD',
+  'zh-CN': 'CNY', 'zh': 'CNY',
+  'fr-FR': 'EUR', 'fr-CA': 'CAD', 'de-DE': 'EUR', 'it-IT': 'EUR', 'nl-NL': 'EUR',
+  'hi-IN': 'INR',
+};
+function detectarMonedaNavegador() {
+  const langs = navigator.languages || [navigator.language || 'en-US'];
+  for (const l of langs) {
+    if (LOCALE_MONEDA[l]) return LOCALE_MONEDA[l];
+    const base = l.split('-')[0];
+    if (LOCALE_MONEDA[base]) return LOCALE_MONEDA[base];
+  }
+  return 'USD';
+}
+let _userCurrency = localStorage.getItem('mosca_currency') || detectarMonedaNavegador();
 let _fxRates = null;
 async function cargarFx() {
   try {
