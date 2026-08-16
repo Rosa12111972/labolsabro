@@ -48,13 +48,37 @@ async function getYahooCrumb() {
   return _crumbCache;
 }
 
+async function esPremium(req) {
+  const auth = req.headers.authorization;
+  if (!auth || !auth.startsWith('Bearer ')) return false;
+  const token = auth.slice(7);
+  try {
+    const userRes = await fetch(`${process.env.SUPABASE_URL}/auth/v1/user`, {
+      headers: { apikey: process.env.SUPABASE_ANON_KEY, Authorization: `Bearer ${token}` }
+    });
+    if (!userRes.ok) return false;
+    const user = await userRes.json();
+    if (!user?.id) return false;
+    const profRes = await fetch(`${process.env.SUPABASE_URL}/rest/v1/profiles?id=eq.${user.id}&select=plan,premium_bonus_until`, {
+      headers: { apikey: process.env.SUPABASE_SERVICE_KEY, Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}` }
+    });
+    const prof = await profRes.json();
+    const p = prof?.[0];
+    if (!p) return false;
+    const bonusActivo = p.premium_bonus_until && new Date(p.premium_bonus_until) > new Date();
+    return p.plan !== 'free' || bonusActivo;
+  } catch (e) { return false; }
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
-  const ip = getIp(req);
-  if (!checkIpLimit(ip)) {
-    return res.status(429).json({ error: 'Límite diario alcanzado', limitAlcanzado: true });
+  if (!(await esPremium(req))) {
+    const ip = getIp(req);
+    if (!checkIpLimit(ip)) {
+      return res.status(429).json({ error: 'Límite diario alcanzado', limitAlcanzado: true });
+    }
   }
 
   const raw = (req.query.ticker || '').trim().toUpperCase().replace(/[^A-Z0-9.\-]/g, '');

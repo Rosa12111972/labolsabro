@@ -780,15 +780,16 @@ async function fetchStock(ticker) {
   const cached = cacheGet(ticker);
   if (cached) return cached;
   const base = apiBase();
-  let res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
+  let res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`, { headers: authHeaders() });
   let d = res.ok ? await res.json() : null;
   if (!d || !d.precio) {
     const resolved = await resolveTicker(ticker);
     if (resolved && resolved.toUpperCase() !== ticker.toUpperCase()) {
-      res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(resolved)}`);
+      res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(resolved)}`, { headers: authHeaders() });
       d = res.ok ? await res.json() : null;
     }
   }
+  if (res.status === 429) throw new Error('limite');
   if (!d || !d.precio) throw new Error('no data');
   cacheSet(ticker, d);
   return d;
@@ -1218,13 +1219,19 @@ cargarFx();
   if (ref) localStorage.setItem('pending_ref', ref.toUpperCase());
 })();
 
+let _accessToken = null;
 async function initAuth() {
   const { data: { session } } = await _sb.auth.getSession();
+  _accessToken = session?.access_token || null;
   if (session?.user) await setUser(session.user);
   _sb.auth.onAuthStateChange(async (event, session) => {
+    _accessToken = session?.access_token || null;
     if (session?.user) await setUser(session.user);
     else clearUser();
   });
+}
+function authHeaders() {
+  return _accessToken ? { 'Authorization': `Bearer ${_accessToken}` } : {};
 }
 
 function generarCodigoReferido(userId) {
@@ -1707,7 +1714,11 @@ async function anadirPosicion() {
   try {
     const d = await fetchStock(t);
     precio = d.precio;
-  } catch (e) { alert('No encontramos ese ticker.'); return; }
+  } catch (e) {
+    if (e.message === 'limite') alert('Has alcanzado el límite de búsquedas. Espera un momento e inténtalo de nuevo.');
+    else alert('No encontramos ese ticker.');
+    return;
+  }
   const { data, error } = await _sb.from('simulated_positions').insert({
     user_id: _currentUser.id, ticker: t, nombre: t, shares, precio_compra: precio
   }).select().single();
@@ -1923,13 +1934,13 @@ async function doSearch() {
   el.innerHTML = '<p style="font-size:14px;color:var(--text3);">' + loadMsgs[Math.floor(Math.random()*loadMsgs.length)] + '</p>';
   try {
     const base = apiBase();
-    let res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`);
+    let res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`, { headers: authHeaders() });
     if (res.status === 429) { mostrarLimiteAlcanzado(el); return; }
     let d = res.ok ? await res.json() : null;
     if (!d || !d.precio) {
       const resolved = await resolveTicker(ticker);
       if (resolved && resolved.toUpperCase() !== ticker.toUpperCase()) {
-        res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(resolved)}`);
+        res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(resolved)}`, { headers: authHeaders() });
         if (res.status === 429) { mostrarLimiteAlcanzado(el); return; }
         d = res.ok ? await res.json() : null;
       }
