@@ -342,7 +342,7 @@ footer { border-top: 1px solid var(--border); }
   </div>
 </div>
 
-<div class="safety-bar">
+<div class="safety-bar" data-i18n-html="safetyBar">
   <strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.
 </div>
 
@@ -394,22 +394,26 @@ function acceptAge() {
       <option value="CLP">🇨🇱 CLP</option>
       <option value="PEN">🇵🇪 PEN</option>
     </select>
-    <a class="nav-btn-outline" href="/premium.html">⭐ Premium</a>
+    <select id="langSelect" onchange="cambiarIdioma(this.value)" style="background:var(--card2);border:1px solid var(--border2);color:var(--text2);border-radius:100px;padding:8px 12px;font-size:12.5px;font-family:inherit;outline:none;cursor:pointer;">
+      <option value="es">🇪🇸 ES</option>
+      <option value="en">🇬🇧 EN</option>
+    </select>
+    <a class="nav-btn-outline" href="/premium.html" data-i18n="navPremium">⭐ Premium</a>
     <div id="navAuth">
-      <button class="nav-btn" onclick="openAuthModal()">Entrar</button>
+      <button class="nav-btn" onclick="openAuthModal()" data-i18n="navEntrar">Entrar</button>
     </div>
   </div>
 </nav>
 
 <section class="hero">
-  <div class="hero-tag"><div class="tag-dot"></div> Disponible ahora · Gratis</div>
-  <h1>Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em></h1>
-  <p class="hero-sub">La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones de adulto. Solo tu dinero haciendo algo.</p>
+  <div class="hero-tag"><div class="tag-dot"></div> <span data-i18n="heroTag">Disponible ahora · Gratis</span></div>
+  <h1 data-i18n-html="heroTitle">Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em></h1>
+  <p class="hero-sub" data-i18n="heroSub">La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones de adulto. Solo tu dinero haciendo algo.</p>
   <form action="https://formspree.io/f/mqevbzvb" method="POST" onsubmit="handleForm(event)" class="form-row" style="flex-wrap:wrap;justify-content:center;">
     <input type="email" name="email" id="heroEmail" placeholder="tu@email.com" required />
-    <button type="submit">Empezar gratis</button>
+    <button type="submit" data-i18n="heroBtn">Empezar gratis</button>
   </form>
-  <p class="hero-note">Gratis · <strong style="color:var(--text2)">Sin tarjeta de crédito</strong> · Sin permanencia</p>
+  <p class="hero-note" data-i18n-html="heroNote">Gratis · <strong style="color:var(--text2)">Sin tarjeta de crédito</strong> · Sin permanencia</p>
 
   <div class="phone-wrap">
     <div class="phone-glow"></div>
@@ -933,6 +937,7 @@ function renderSectorCompare(d1, d2) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  aplicarIdioma();
   const currencySel = document.getElementById('currencySelect');
   if (currencySel) currencySel.value = _userCurrency;
   const input = document.getElementById('stockInput');
@@ -1159,10 +1164,11 @@ function actualizarPreciosSuscripcion() {
   setTxt('precioSeniorMode', pSenior);
   setTxt('precioJuniorFaq', pJunior);
   setTxt('precioSeniorFaq', pSenior);
+  const mesTxt = (I18N[_idioma] || I18N.es).mes;
   const cardJ = document.getElementById('precioJuniorCard');
-  if (cardJ) cardJ.innerHTML = `${pJunior} <span>/mes</span>`;
+  if (cardJ) cardJ.innerHTML = `${pJunior} <span data-i18n="mes">${mesTxt}</span>`;
   const cardS = document.getElementById('precioSeniorCard');
-  if (cardS) cardS.innerHTML = `${pSenior} <span>/mes</span>`;
+  if (cardS) cardS.innerHTML = `${pSenior} <span data-i18n="mes">${mesTxt}</span>`;
   setTxt('statDineroArriesgado', fmtEUR(0, 0));
 }
 function cambiarMoneda(code) {
@@ -1206,6 +1212,84 @@ function fmtEUR(amount, decimales) {
   const conv = convertirMoneda(amount, 'EUR', _userCurrency);
   if (conv === null) return Math.round(amount).toLocaleString('es-ES') + ' €';
   return `${SIMBOLOS_MONEDA[_userCurrency]||''}${conv.toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${_userCurrency}`;
+}
+const I18N = {
+  es: {
+    navPremium: '⭐ Premium', navEntrar: 'Entrar',
+    safetyBar: '<strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.',
+    heroTag: 'Disponible ahora · Gratis',
+    heroTitle: 'Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em>',
+    heroSub: 'La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones de adulto. Solo tu dinero haciendo algo.',
+    heroBtn: 'Empezar gratis',
+    heroNote: 'Gratis · <strong style="color:var(--text2)">Sin tarjeta de crédito</strong> · Sin permanencia',
+    pricingPill: 'Precios', pricingTitle: 'Sin letra pequeña.', pricingSub: 'Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.',
+    tierFree: 'Gratis', mes: '/mes', freeDesc: 'Para empezar y ver si laBolsabro te va. Sin límite de tiempo.',
+    freeF1: 'Analizador básico de acciones', freeF2: 'Calculadora de interés compuesto', freeF3: '3 búsquedas al día', freeBtn: 'Usar gratis',
+    hotBadge: 'Más popular', tierJunior: 'Inversor Junior', juniorDesc: 'Para el que empieza a invertir y quiere entender el mercado sin complicaciones.',
+    juniorF1: 'Análisis completo de empresas', juniorF2: 'Búsquedas ilimitadas', juniorF3: 'Comparador de empresas', juniorF4: 'Recordatorios personalizables', juniorBtn: 'Empezar Junior',
+    tierSenior: 'Inversor Senior', seniorDesc: 'Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.',
+    seniorF1: 'Todo del plan Junior', seniorF2: 'Comparador avanzado por sector', seniorF3: 'Alertas de valor personalizadas', seniorF4: 'Historial de análisis personal', seniorF5: 'Acceso prioritario a novedades', seniorBtn: 'Empezar Senior',
+    faqPill: 'Preguntas frecuentes', faqTitle: 'Lo que nos preguntan.',
+    faqQ1: '¿Está disponible ahora mismo?', faqA1: 'Sí, ya puedes usarla ahora. El analizador de acciones, el comparador y la calculadora de interés compuesto funcionan en labolsabro.com sin necesidad de registrarte. El plan gratuito no caduca.',
+    faqQ2: '¿Conecta con mi banco?', faqA2: 'Todavía no. La herramienta actual es de análisis e información. La conexión bancaria está en la hoja de ruta para versiones futuras.',
+    faqQ3: '¿Me dice qué acciones comprar?', faqA3: 'No. laBolsabro no da recomendaciones de inversión. Mostramos análisis educativo basado en datos públicos de Yahoo Finance. La decisión de invertir es siempre tuya y bajo tu responsabilidad.',
+    faqQ4: '¿Necesito saber de bolsa para usarla?', faqA4: 'Para nada. laBolsabro está diseñada para que cualquier persona sin conocimientos financieros entienda si una empresa está cara o barata en un vistazo. El semáforo y las explicaciones en lenguaje normal hacen el trabajo por ti.',
+    faqQ5: '¿Cuánto cuesta?', faqA5a: 'El plan gratuito es para siempre. Los planes de pago (Inversor Junior a', faqA5b: 'e Inversor Senior a', faqA5c: ') añaden búsquedas ilimitadas, comparador avanzado y alertas. Puedes cancelar cuando quieras.',
+    faqQ6: '¿Los datos son fiables?', faqA6: 'Los datos vienen de Yahoo Finance, la fuente de referencia para datos bursátiles gratuitos. Pueden tener un pequeño retraso respecto al mercado en tiempo real. Son orientativos y educativos, no para tomar decisiones de inversión.',
+    ctaTitle: 'Tu dinero puede hacer algo.', ctaSubtag: 'laBolsabro. Y el ahorro también.', ctaText: 'Déjanos tu email y te contamos las novedades antes que nadie.', ctaBtn: 'Avisadme de novedades',
+    footerPriv: 'Privacidad', footerTerms: 'Términos', footerContact: 'Contacto', footerCopy: '© 2025 Mosca · Plataforma educativa · No somos asesores financieros',
+  },
+  en: {
+    navPremium: '⭐ Premium', navEntrar: 'Log in',
+    safetyBar: '<strong>18+ only · Financial education, not advice.</strong> We never manage your money. Investing carries risk of loss.',
+    heroTag: 'Available now · Free',
+    heroTitle: 'Your money<br>is bored.<br><em>Do <span class="mano">something</span>.</em>',
+    heroSub: 'The app that teaches you to save and invest. No bank jargon. No lectures. Just your money doing something.',
+    heroBtn: 'Start free',
+    heroNote: 'Free · <strong style="color:var(--text2)">No credit card</strong> · Cancel anytime',
+    pricingPill: 'Pricing', pricingTitle: 'No fine print.', pricingSub: 'Start free. Upgrade whenever you want. No commitment.',
+    tierFree: 'Free', mes: '/mo', freeDesc: 'To get started and see if laBolsabro is for you. No time limit.',
+    freeF1: 'Basic stock analyzer', freeF2: 'Compound interest calculator', freeF3: '3 searches a day', freeBtn: 'Use for free',
+    hotBadge: 'Most popular', tierJunior: 'Investor Junior', juniorDesc: 'For beginners who want to understand the market without the complexity.',
+    juniorF1: 'Full company analysis', juniorF2: 'Unlimited searches', juniorF3: 'Company comparator', juniorF4: 'Custom reminders', juniorBtn: 'Start Junior',
+    tierSenior: 'Investor Senior', seniorDesc: 'For investors who want advanced analysis and custom alerts.',
+    seniorF1: 'Everything in Junior', seniorF2: 'Advanced sector comparator', seniorF3: 'Custom price alerts', seniorF4: 'Personal analysis history', seniorF5: 'Early access to new features', seniorBtn: 'Start Senior',
+    faqPill: 'FAQ', faqTitle: "What people ask us.",
+    faqQ1: 'Is it available right now?', faqA1: "Yes, you can use it today. The stock analyzer, comparator and compound interest calculator work at labolsabro.com without signing up. The free plan never expires.",
+    faqQ2: 'Does it connect to my bank?', faqA2: "Not yet. The current tool is for analysis and information. Bank connection is on the roadmap for future versions.",
+    faqQ3: 'Does it tell me what to buy?', faqA3: "No. laBolsabro doesn't give investment recommendations. We show educational analysis based on public Yahoo Finance data. The investment decision is always yours and your responsibility.",
+    faqQ4: 'Do I need to know about investing to use it?', faqA4: "Not at all. laBolsabro is designed so anyone without financial knowledge can tell at a glance if a company is cheap or expensive. The traffic-light system and plain-language explanations do the work for you.",
+    faqQ5: 'How much does it cost?', faqA5a: 'The free plan is free forever. Paid plans (Investor Junior at', faqA5b: 'and Investor Senior at', faqA5c: ') add unlimited searches, advanced comparator and alerts. Cancel anytime.',
+    faqQ6: 'Is the data reliable?', faqA6: "Data comes from Yahoo Finance, the standard reference for free market data. It may lag slightly behind real-time markets. It's informational and educational, not for making investment decisions.",
+    ctaTitle: 'Your money can do something.', ctaSubtag: 'laBolsabro. So can your savings.', ctaText: "Leave us your email and we'll tell you about updates before anyone else.", ctaBtn: 'Notify me',
+    footerPriv: 'Privacy', footerTerms: 'Terms', footerContact: 'Contact', footerCopy: '© 2025 Mosca · Educational platform · Not financial advisors',
+  }
+};
+let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
+function detectarIdiomaNavegador() {
+  const langs = navigator.languages || [navigator.language || 'es'];
+  for (const l of langs) { if (l.toLowerCase().startsWith('es')) return 'es'; }
+  return 'en';
+}
+function aplicarIdioma() {
+  const dict = I18N[_idioma] || I18N.es;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  const sel = document.getElementById('langSelect');
+  if (sel) sel.value = _idioma;
+  document.documentElement.lang = _idioma;
+}
+function cambiarIdioma(lang) {
+  _idioma = lang;
+  localStorage.setItem('mosca_lang', lang);
+  aplicarIdioma();
+  actualizarPreciosSuscripcion();
 }
 cargarFx();
 
@@ -2850,38 +2934,38 @@ function renderStock(el, d, ticker) {
 
 <div class="price-bg">
   <section>
-    <div class="pill">Precios</div>
-    <h2>Sin letra pequeña.</h2>
-    <p class="sub">Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.</p>
+    <div class="pill" data-i18n="pricingPill">Precios</div>
+    <h2 data-i18n="pricingTitle">Sin letra pequeña.</h2>
+    <p class="sub" data-i18n="pricingSub">Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.</p>
     <div class="price-grid">
-      <div class="price-card"><div class="price-tier">Gratis</div><div class="price-num">0 € <span>/mes</span></div><div class="price-desc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div><ul class="price-list"><li><span>✓</span> Analizador básico de acciones</li><li><span>✓</span> Calculadora de interés compuesto</li><li><span>✓</span> 3 búsquedas al día</li></ul><a class="price-btn price-btn-out" href="/#stocks">Usar gratis</a></div>
-      <div class="price-card hot"><div class="hot-badge">Más popular</div><div class="price-tier">Inversor Junior</div><div class="price-num" id="precioJuniorCard">5,99 € <span>/mes</span></div><div class="price-desc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div><ul class="price-list"><li><span>✓</span> Análisis completo de empresas</li><li><span>✓</span> Búsquedas ilimitadas</li><li><span>✓</span> Comparador de empresas</li><li><span>✓</span> Recordatorios personalizables</li></ul><a class="price-btn price-btn-solid" href="/premium.html">Empezar Junior</a></div>
-      <div class="price-card"><div class="price-tier">Inversor Senior</div><div class="price-num" id="precioSeniorCard">9,99 € <span>/mes</span></div><div class="price-desc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div><ul class="price-list"><li><span>✓</span> Todo del plan Junior</li><li><span>✓</span> Comparador avanzado por sector</li><li><span>✓</span> Alertas de valor personalizadas</li><li><span>✓</span> Historial de análisis personal</li><li><span>✓</span> Acceso prioritario a novedades</li></ul><a class="price-btn price-btn-out" href="/premium.html">Empezar Senior</a></div>
+      <div class="price-card"><div class="price-tier" data-i18n="tierFree">Gratis</div><div class="price-num">0 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="freeDesc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="freeF1">Analizador básico de acciones</span></li><li><span>✓</span> <span data-i18n="freeF2">Calculadora de interés compuesto</span></li><li><span>✓</span> <span data-i18n="freeF3">3 búsquedas al día</span></li></ul><a class="price-btn price-btn-out" href="/#stocks" data-i18n="freeBtn">Usar gratis</a></div>
+      <div class="price-card hot"><div class="hot-badge" data-i18n="hotBadge">Más popular</div><div class="price-tier" data-i18n="tierJunior">Inversor Junior</div><div class="price-num" id="precioJuniorCard">5,99 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="juniorDesc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="juniorF1">Análisis completo de empresas</span></li><li><span>✓</span> <span data-i18n="juniorF2">Búsquedas ilimitadas</span></li><li><span>✓</span> <span data-i18n="juniorF3">Comparador de empresas</span></li><li><span>✓</span> <span data-i18n="juniorF4">Recordatorios personalizables</span></li></ul><a class="price-btn price-btn-solid" href="/premium.html" data-i18n="juniorBtn">Empezar Junior</a></div>
+      <div class="price-card"><div class="price-tier" data-i18n="tierSenior">Inversor Senior</div><div class="price-num" id="precioSeniorCard">9,99 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="seniorDesc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="seniorF1">Todo del plan Junior</span></li><li><span>✓</span> <span data-i18n="seniorF2">Comparador avanzado por sector</span></li><li><span>✓</span> <span data-i18n="seniorF3">Alertas de valor personalizadas</span></li><li><span>✓</span> <span data-i18n="seniorF4">Historial de análisis personal</span></li><li><span>✓</span> <span data-i18n="seniorF5">Acceso prioritario a novedades</span></li></ul><a class="price-btn price-btn-out" href="/premium.html" data-i18n="seniorBtn">Empezar Senior</a></div>
     </div>
   </section>
 </div>
 
 <section>
-  <div class="pill">Preguntas frecuentes</div>
-  <h2>Lo que nos preguntan.</h2>
+  <div class="pill" data-i18n="faqPill">Preguntas frecuentes</div>
+  <h2 data-i18n="faqTitle">Lo que nos preguntan.</h2>
   <div class="faq-wrap">
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Está disponible ahora mismo?</button><div class="faq-a">Sí, ya puedes usarla ahora. El analizador de acciones, el comparador y la calculadora de interés compuesto funcionan en labolsabro.com sin necesidad de registrarte. El plan gratuito no caduca.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Conecta con mi banco?</button><div class="faq-a">Todavía no. La herramienta actual es de análisis e información. La conexión bancaria está en la hoja de ruta para versiones futuras.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Me dice qué acciones comprar?</button><div class="faq-a">No. laBolsabro no da recomendaciones de inversión. Mostramos análisis educativo basado en datos públicos de Yahoo Finance. La decisión de invertir es siempre tuya y bajo tu responsabilidad.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Necesito saber de bolsa para usarla?</button><div class="faq-a">Para nada. laBolsabro está diseñada para que cualquier persona sin conocimientos financieros entienda si una empresa está cara o barata en un vistazo. El semáforo y las explicaciones en lenguaje normal hacen el trabajo por ti.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Cuánto cuesta?</button><div class="faq-a">El plan gratuito es para siempre. Los planes de pago (Inversor Junior a <span id="precioJuniorFaq">5,99€</span>/mes e Inversor Senior a <span id="precioSeniorFaq">9,99€</span>/mes) añaden búsquedas ilimitadas, comparador avanzado y alertas. Puedes cancelar cuando quieras.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">¿Los datos son fiables?</button><div class="faq-a">Los datos vienen de Yahoo Finance, la fuente de referencia para datos bursátiles gratuitos. Pueden tener un pequeño retraso respecto al mercado en tiempo real. Son orientativos y educativos, no para tomar decisiones de inversión.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ1">¿Está disponible ahora mismo?</button><div class="faq-a" data-i18n="faqA1">Sí, ya puedes usarla ahora. El analizador de acciones, el comparador y la calculadora de interés compuesto funcionan en labolsabro.com sin necesidad de registrarte. El plan gratuito no caduca.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ2">¿Conecta con mi banco?</button><div class="faq-a" data-i18n="faqA2">Todavía no. La herramienta actual es de análisis e información. La conexión bancaria está en la hoja de ruta para versiones futuras.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ3">¿Me dice qué acciones comprar?</button><div class="faq-a" data-i18n="faqA3">No. laBolsabro no da recomendaciones de inversión. Mostramos análisis educativo basado en datos públicos de Yahoo Finance. La decisión de invertir es siempre tuya y bajo tu responsabilidad.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ4">¿Necesito saber de bolsa para usarla?</button><div class="faq-a" data-i18n="faqA4">Para nada. laBolsabro está diseñada para que cualquier persona sin conocimientos financieros entienda si una empresa está cara o barata en un vistazo. El semáforo y las explicaciones en lenguaje normal hacen el trabajo por ti.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ5">¿Cuánto cuesta?</button><div class="faq-a"><span data-i18n="faqA5a">El plan gratuito es para siempre. Los planes de pago (Inversor Junior a</span> <span id="precioJuniorFaq">5,99€</span>/<span data-i18n="mes">mes</span> <span data-i18n="faqA5b">e Inversor Senior a</span> <span id="precioSeniorFaq">9,99€</span>/<span data-i18n="mes">mes</span><span data-i18n="faqA5c">) añaden búsquedas ilimitadas, comparador avanzado y alertas. Puedes cancelar cuando quieras.</span></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ6">¿Los datos son fiables?</button><div class="faq-a" data-i18n="faqA6">Los datos vienen de Yahoo Finance, la fuente de referencia para datos bursátiles gratuitos. Pueden tener un pequeño retraso respecto al mercado en tiempo real. Son orientativos y educativos, no para tomar decisiones de inversión.</div></div>
   </div>
 </section>
 
 <div class="cta-wrap">
   <div class="cta-block">
-    <h2>Tu dinero puede hacer algo.</h2>
-    <div class="cta-sub-tag">laBolsabro. Y el ahorro también.</div>
-    <p>Déjanos tu email y te contamos las novedades antes que nadie.</p>
+    <h2 data-i18n="ctaTitle">Tu dinero puede hacer algo.</h2>
+    <div class="cta-sub-tag" data-i18n="ctaSubtag">laBolsabro. Y el ahorro también.</div>
+    <p data-i18n="ctaText">Déjanos tu email y te contamos las novedades antes que nadie.</p>
     <form action="https://formspree.io/f/mqevbzvb" method="POST" onsubmit="handleForm(event)" class="cta-form">
       <input type="email" name="email" placeholder="tu@email.com" required />
-      <button type="submit">Avisadme de novedades</button>
+      <button type="submit" data-i18n="ctaBtn">Avisadme de novedades</button>
     </form>
   </div>
 </div>
@@ -2896,11 +2980,11 @@ function renderStock(el, d, ticker) {
       </div>
     </div>
     <div class="footer-links">
-      <a href="/privacidad.html">Privacidad</a>
-      <a href="/terminos.html">Términos</a>
-      <a href="mailto:hola@labolsabro.com">Contacto</a>
+      <a href="/privacidad.html" data-i18n="footerPriv">Privacidad</a>
+      <a href="/terminos.html" data-i18n="footerTerms">Términos</a>
+      <a href="mailto:hola@labolsabro.com" data-i18n="footerContact">Contacto</a>
     </div>
-    <div class="footer-copy">© 2025 Mosca · Plataforma educativa · No somos asesores financieros</div>
+    <div class="footer-copy" data-i18n="footerCopy">© 2025 Mosca · Plataforma educativa · No somos asesores financieros</div>
   </div>
 </footer>
 
