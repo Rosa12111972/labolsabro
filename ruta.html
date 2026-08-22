@@ -85,7 +85,7 @@
   <div class="tag">🎮 Ruta de aprendizaje</div>
   <h1>Aprende a invertir,<br>nivel a nivel.</h1>
   <p class="lede">Completa cada tema para desbloquear el siguiente. Como Duolingo, pero con tu dinero.</p>
-  <div class="xpbar" id="xpBar" style="display:none">Nivel <strong id="rutaNivel" style="color:var(--green)">1</strong> · <strong id="rutaXP" style="color:var(--yellow)">0</strong> XP</div>
+  <div class="xpbar" id="xpBar" style="display:none">Nivel <strong id="rutaNivel" style="color:var(--green)">1</strong> · <strong id="rutaXP" style="color:var(--yellow)">0</strong> XP <span id="rutaRachaWrap" style="display:none">· 🔥 <strong id="rutaRacha" style="color:var(--yellow)">0</strong> días</span></div>
 </div>
 
 <div id="loginGate">
@@ -158,6 +158,26 @@ const METODO_PASOS = [
 ];
 let _metodoIdx = 0;
 
+function renderRacha(dias) {
+  const wrap = document.getElementById('rutaRachaWrap');
+  const label = document.getElementById('rutaRacha');
+  if (dias > 0) { wrap.style.display = 'inline'; label.textContent = dias; }
+  else { wrap.style.display = 'none'; }
+}
+async function registrarRacha() {
+  const hoy = new Date().toISOString().slice(0, 10);
+  const { data: prof } = await _sb.from('profiles').select('racha_dias,ultima_actividad').eq('id', _user.id).single();
+  const ultima = prof?.ultima_actividad || null;
+  let nueva = prof?.racha_dias || 0;
+  if (ultima !== hoy) {
+    const ayer = new Date(); ayer.setDate(ayer.getDate() - 1);
+    const ayerStr = ayer.toISOString().slice(0, 10);
+    nueva = (ultima === ayerStr) ? nueva + 1 : 1;
+    await _sb.from('profiles').update({ racha_dias: nueva, ultima_actividad: hoy }).eq('id', _user.id);
+  }
+  renderRacha(nueva);
+}
+
 let _user = null;
 let _progreso = {};
 let _nodoActual = null;
@@ -175,11 +195,12 @@ async function init() {
   _progreso = {};
   (prog || []).forEach(p => { _progreso[p.area] = p.completado; });
 
-  const { data: profile } = await _sb.from('profiles').select('total_xp,plan').eq('id', _user.id).single();
+  const { data: profile } = await _sb.from('profiles').select('total_xp,plan,racha_dias').eq('id', _user.id).single();
   const xp = profile?.total_xp || 0;
   document.getElementById('rutaXP').textContent = xp;
   document.getElementById('rutaNivel').textContent = Math.floor(xp / 100) + 1;
   window._esPremium = profile?.plan && profile.plan !== 'free';
+  renderRacha(profile?.racha_dias || 0);
 
   renderPath();
 }
@@ -276,6 +297,7 @@ async function finalizarNodo() {
   const el = document.getElementById('quizArea');
   if (pct >= 0.5) {
     await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
+    await registrarRacha();
     if (_qXP > 0) {
       const { data: prof } = await _sb.from('profiles').select('total_xp').eq('id', _user.id).single();
       const nuevoXP = (prof?.total_xp || 0) + _qXP;
@@ -317,6 +339,7 @@ function siguienteMetodoPaso() {
 }
 async function completarMetodo() {
   await _sb.from('learning_progress').upsert({ user_id: _user.id, area: 'analisis', completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
+  await registrarRacha();
   _progreso['analisis'] = true;
   document.getElementById('readBody').innerHTML = `<div style="text-align:center;padding:10px 0">
     <div style="font-size:48px;margin-bottom:12px">🎉</div>
@@ -329,6 +352,7 @@ async function completarMetodo() {
 }
 async function completarLectura() {
   await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
+  await registrarRacha();
   _progreso[_nodoActual.id] = true;
   cerrarNodo();
   renderPath();

@@ -27,6 +27,16 @@ export default async function handler(req, res) {
       const userData = await userRes.json();
       const email = userData?.email;
 
+      const profRes = await fetch(`${supaUrl}/rest/v1/profiles?id=eq.${r.user_id}&select=racha_dias,ultima_actividad`, {
+        headers: { apikey: supaKey, Authorization: `Bearer ${supaKey}` }
+      });
+      const profData = await profRes.json();
+      const prof = profData?.[0];
+      const rachaActiva = prof?.racha_dias > 0 && prof?.ultima_actividad !== todayStr;
+      const rachaHtml = rachaActiva
+        ? `<p style="color:#eab308;font-weight:600">🔥 Llevas ${prof.racha_dias} día${prof.racha_dias === 1 ? '' : 's'} seguidos. Entra hoy en la <a href="https://labolsabro.com/ruta.html">ruta de aprendizaje</a> para no perder la racha.</p>`
+        : '';
+
       if (email && process.env.RESEND_API_KEY) {
         await fetch('https://api.resend.com/emails', {
           method: 'POST',
@@ -34,8 +44,8 @@ export default async function handler(req, res) {
           body: JSON.stringify({
             from: 'laBolsabro <hola@labolsabro.com>',
             to: email,
-            subject: '🪰 Tu recordatorio de laBolsabro',
-            html: `<p>${r.mensaje}</p><p style="color:#999;font-size:12px">Puedes gestionar tus recordatorios en labolsabro.com</p>`
+            subject: rachaActiva ? `🔥 No pierdas tu racha de ${prof.racha_dias} días` : '🪰 Tu recordatorio de laBolsabro',
+            html: `<p>${r.mensaje}</p>${rachaHtml}<p style="color:#999;font-size:12px">Puedes gestionar tus recordatorios en labolsabro.com</p>`
           })
         });
       }
