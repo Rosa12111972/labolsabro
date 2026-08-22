@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N0QGYLXGSL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N0QGYLXGSL');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primeros pasos — laBolsabro</title>
+  <meta name="description" content="Si acabas de llegar a laBolsabro, esto es lo que tienes que hacer, en orden, para sacarle todo el partido.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0a0a0a; --card:#141414; --card2:#1c1c1c; --border:#2a2a2a; --border2:#333; --green:#22c55e; --green-glow:rgba(34,197,94,0.12); --yellow:#facc15; --yellow-dim:rgba(250,204,21,0.1); --purple:#a78bfa; --text:#f5f5f5; --text2:#a3a3a3; --text3:#525252; }
+    body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 640px; margin: 0 auto; padding: 0 24px; height: 62px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-mark { width: 36px; height: 36px; background: var(--yellow); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .logo-text { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.03em; }
+    .logo-sub { font-size: 11px; font-weight: 700; color: var(--green); }
+    .back { font-size: 13.5px; color: var(--text2); text-decoration: none; }
+    .hero { max-width: 640px; margin: 0 auto; padding: 56px 24px 8px; text-align: center; }
+    .tag { display: inline-flex; align-items: center; gap: 8px; background: var(--green-glow); border: 1px solid rgba(34,197,94,0.25); color: var(--green); padding: 6px 16px; border-radius: 100px; font-size: 12.5px; font-weight: 700; margin-bottom: 20px; }
+    h1 { font-size: clamp(28px, 5vw, 38px); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 12px; }
+    .lede { font-size: 15.5px; color: var(--text2); }
+    .progress-wrap { max-width: 640px; margin: 28px auto 0; padding: 0 24px; }
+    .progress-bar { height: 8px; background: var(--card2); border-radius: 100px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--green); border-radius: 100px; width: 0%; transition: width 0.3s; }
+    .progress-txt { text-align: center; font-size: 12.5px; color: var(--text3); margin-top: 8px; }
+    .steps { max-width: 640px; margin: 40px auto 80px; padding: 0 24px; display: flex; flex-direction: column; gap: 14px; }
+    .stepcard { background: var(--card); border: 1px solid var(--border2); border-radius: 16px; padding: 20px 22px; display: flex; gap: 16px; align-items: flex-start; transition: border-color 0.2s; }
+    .stepcard.done { border-color: rgba(34,197,94,0.4); background: var(--green-glow); }
+    .stepbox { flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: transparent; background: var(--card2); margin-top: 2px; }
+    .stepcard.done .stepbox { background: var(--green); border-color: var(--green); color: #000; }
+    .stepinfo { flex: 1; }
+    .stepinfo h3 { font-size: 15.5px; font-weight: 700; margin-bottom: 4px; }
+    .stepcard.done .stepinfo h3 { text-decoration: line-through; color: var(--text2); }
+    .stepinfo p { font-size: 13.5px; color: var(--text2); margin-bottom: 10px; }
+    .stepinfo a.go { font-size: 13px; font-weight: 700; color: var(--green); text-decoration: none; }
+    .step-badge { flex-shrink: 0; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; background: var(--yellow-dim); color: var(--yellow); padding: 3px 9px; border-radius: 100px; }
+    .celebrate { display: none; max-width: 640px; margin: 0 auto 60px; padding: 0 24px; text-align: center; }
+    .celebrate.show { display: block; }
+    .celebrate-box { background: var(--card); border: 1px solid rgba(34,197,94,0.4); border-radius: 18px; padding: 32px; }
+    .celebrate-box p { color: var(--text2); font-size: 14.5px; margin: 10px 0 20px; }
+    .btn { display: inline-block; padding: 13px 26px; border-radius: 100px; font-size: 14.5px; font-weight: 700; text-decoration: none; background: var(--green); color: #000; }
+    footer { text-align:center; padding:2rem 1.5rem; border-top:1px solid var(--border); color:var(--text3); font-size:0.82rem; }
+    footer a { color: var(--text3); }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <div class="logo-mark">🪰</div>
+      <div><div class="logo-text">Mosca</div><div class="logo-sub">laBolsabro</div></div>
+    </a>
+    <a class="back" href="/">← Volver</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="tag">🚀 Primeros pasos</div>
+  <h1>Acabas de llegar. Esto es lo que tienes que hacer.</h1>
+  <p class="lede">8 pasos, en orden, para sacarle todo el partido a laBolsabro. Márcalos según los vayas completando.</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-txt" id="progressTxt">0 de 8 completados</div>
+</div>
+
+<div class="steps" id="stepsWrap"></div>
+
+<div class="celebrate" id="celebrate">
+  <div class="celebrate-box">
+    <div style="font-size:44px">🎉</div>
+    <h2>¡Ya conoces laBolsabro entera!</h2>
+    <p>Ahora solo te queda seguir usándola. Vuelve cada día para no perder la racha.</p>
+    <a class="btn" href="/ruta.html">Ir a DuoInvest →</a>
+  </div>
+</div>
+
+<footer>© 2025 Mosca · <a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a> · <a href="mailto:hola@labolsabro.com">Contacto</a></footer>
+
+<script>
+const PASOS = [
+  { id: 'registro', badge: '1 min', title: 'Regístrate gratis', desc: 'Crea tu cuenta con email y contraseña. Sin tarjeta, sin permanencia.', href: '/', link: 'Ir a Entrar →' },
+  { id: 'buscar', badge: '30 seg', title: 'Analiza tu primera empresa', desc: 'Escribe el nombre o ticker de una empresa que conozcas (ej: Apple, Inditex) en el buscador principal.', href: '/#stocks', link: 'Ir al buscador →' },
+  { id: 'semaforo', badge: '1 min', title: 'Entiende el semáforo y la puntuación', desc: 'Verde/amarillo/rojo te dice si está barata o cara. El número 0-10 resume todo. Pulsa cualquier métrica para que te la expliquen.', href: '/#stocks', link: 'Volver al análisis →' },
+  { id: 'calculadora', badge: '1 min', title: 'Prueba la calculadora de interés compuesto', desc: 'Mueve los sliders y mira cuánto tendrías ahorrando cada mes durante años.', href: '/#calculadora', link: 'Ir a la calculadora →' },
+  { id: 'quiz', badge: '2 min', title: 'Haz el quiz y gana tu primer XP', desc: '5 preguntas rápidas sobre dinero. Acertar te da XP y sube tu nivel.', href: '/#quiz', link: 'Hacer el quiz →' },
+  { id: 'duoinvest', badge: '3 min', title: 'Empieza tu racha en DuoInvest', desc: 'Completa el primer nivel (Ahorro y fondos) y empieza tu racha diaria.', href: '/ruta.html', link: 'Abrir DuoInvest →' },
+  { id: 'bote', badge: '1 min', title: 'Crea tu primer bote de ahorro', desc: 'En "Mi panel", crea una meta de ahorro (vacaciones, coche, lo que sea) y aporta algo, aunque sea 1€.', href: '/', link: 'Abrir Mi panel →' },
+  { id: 'premium', badge: 'opcional', title: 'Mira qué desbloquea Premium', desc: 'Búsquedas ilimitadas, alertas de precio, cartera simulada y más. No hace falta ahora, pero échale un ojo.', href: '/premium.html', link: 'Ver planes →' },
+];
+
+function cargarProgreso() {
+  try { return JSON.parse(localStorage.getItem('mosca_primeros_pasos') || '{}'); } catch(e) { return {}; }
+}
+function guardarProgreso(p) {
+  localStorage.setItem('mosca_primeros_pasos', JSON.stringify(p));
+}
+let _progreso = cargarProgreso();
+
+function toggle(id) {
+  _progreso[id] = !_progreso[id];
+  guardarProgreso(_progreso);
+  render();
+}
+
+function render() {
+  const wrap = document.getElementById('stepsWrap');
+  wrap.innerHTML = PASOS.map(p => {
+    const done = !!_progreso[p.id];
+    return `<div class="stepcard ${done ? 'done' : ''}">
+      <div class="stepbox" onclick="toggle('${p.id}')">${done ? '✓' : ''}</div>
+      <div class="stepinfo">
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        <a class="go" href="${p.href}">${p.link}</a>
+      </div>
+      <span class="step-badge">${p.badge}</span>
+    </div>`;
+  }).join('');
+
+  const completados = PASOS.filter(p => _progreso[p.id]).length;
+  document.getElementById('progressFill').style.width = (completados / PASOS.length * 100) + '%';
+  document.getElementById('progressTxt').textContent = `${completados} de ${PASOS.length} completados`;
+  document.getElementById('celebrate').classList.toggle('show', completados === PASOS.length);
+}
+
+render();
+</script>
+</body>
+</html>

@@ -428,6 +428,9 @@ function acceptAge() {
             <a href="/ruta.html" data-i18n="navRuta">🎮 DuoInvest</a>
             <a href="/guia.html" data-i18n="navGuia">📘 Guía</a>
           </div>
+          <div class="dropdown-links" style="display:flex">
+            <a href="/primeros-pasos.html" data-i18n="navPrimerosPasos">🚀 Primeros pasos</a>
+          </div>
         </div>
       </div>
       <div id="navAuth">
@@ -1253,7 +1256,7 @@ function fmtEUR(amount, decimales) {
 }
 const I18N = {
   es: {
-    navPremium: '⭐ Premium', navEntrar: 'Entrar', navGuia: '📘 Guía', navRuta: '🎮 DuoInvest', lblMoneda: 'Moneda', lblIdioma: 'Idioma',
+    navPremium: '⭐ Premium', navEntrar: 'Entrar', navGuia: '📘 Guía', navRuta: '🎮 DuoInvest', lblMoneda: 'Moneda', lblIdioma: 'Idioma', navPrimerosPasos: '🚀 Primeros pasos',
     safetyBar: '<strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.',
     heroTag: 'Disponible ahora · Gratis',
     heroTitle: 'Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em>',
@@ -1278,7 +1281,7 @@ const I18N = {
     footerPriv: 'Privacidad', footerTerms: 'Términos', footerContact: 'Contacto', footerCopy: '© 2025 Mosca · Plataforma educativa · No somos asesores financieros',
   },
   en: {
-    navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language',
+    navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language', navPrimerosPasos: '🚀 First steps',
     safetyBar: '<strong>18+ only · Financial education, not advice.</strong> We never manage your money. Investing carries risk of loss.',
     heroTag: 'Available now · Free',
     heroTitle: 'Your money<br>is bored.<br><em>Do <span class="mano">something</span>.</em>',
@@ -3192,7 +3195,8 @@ function renderStock(el, d, ticker) {
     <div class="modal-emoji">🪰</div>
     <h3>¡Apuntado!</h3>
     <p>Te avisaremos de todas las novedades antes que nadie. Mientras tanto, ya puedes usar laBolsabro gratis.</p>
-    <button class="modal-btn" onclick="document.getElementById('modal').classList.remove('open')">Perfecto</button>
+    <a href="/primeros-pasos.html" class="modal-btn" style="display:block;text-decoration:none;margin-bottom:10px;">Ver primeros pasos →</a>
+    <button class="modal-btn" style="background:transparent;border:1px solid var(--border2);color:var(--text2)" onclick="document.getElementById('modal').classList.remove('open')">Ahora no</button>
   </div>
 </div>
 
