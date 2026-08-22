@@ -621,27 +621,42 @@ function acceptAge() {
       <div id="historialRow" style="display:none;padding:10px 24px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;align-items:center;">
         <span style="font-size:12px;color:var(--text3);margin-right:4px;">🕐 Recientes:</span>
       </div>
-      <div style="padding:12px 24px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;">
-        <span style="font-size:12px;color:var(--text3);margin-right:4px;">Prueba con:</span>
-        <button class="quick-btn" onclick="doTicker('AAPL')">Apple</button>
-        <button class="quick-btn" onclick="doTicker('MSFT')">Microsoft</button>
-        <button class="quick-btn" onclick="doTicker('NVDA')">NVIDIA</button>
-        <button class="quick-btn" onclick="doTicker('TSLA')">Tesla</button>
-        <button class="quick-btn" onclick="doTicker('ASML')">ASML</button>
-        <button class="quick-btn" onclick="doTicker('ITX.MC')">Inditex</button>
-        <button class="quick-btn" onclick="doTicker('IBE.MC')">Iberdrola</button>
-        <button class="quick-btn" onclick="doTicker('SAN.MC')">Santander</button>
-        <button class="quick-btn" onclick="doTicker('TEF.MC')">Telefónica</button>
-        <button class="quick-btn" onclick="doTicker('REP.MC')">Repsol</button>
-        <button class="quick-btn" onclick="doTicker('NEM')">Newmont</button>
-        <button class="quick-btn" onclick="doTicker('WPM')">Wheaton</button>
-        <button class="quick-btn" onclick="doTicker('MC.PA')">LVMH</button>
-        <button class="quick-btn" onclick="doTicker('SAP')">SAP</button>
-        <button class="quick-btn" onclick="doTicker('NESN.SW')">Nestlé</button>
-        <button class="quick-btn" onclick="doTicker('VOW3.DE')">Volkswagen</button>
-        <button class="quick-btn" onclick="doTicker('OR.PA')">L'Oréal</button>
-        <button class="quick-btn" onclick="doTicker('BTC')">Bitcoin</button>
-        <button class="quick-btn" onclick="doTicker('ETH')">Ethereum</button>
+      <div style="padding:10px 24px 0;border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="sector-tab active" onclick="filtrarSector('todos', this)">Todos</button>
+        <button class="sector-tab" onclick="filtrarSector('tech', this)">💻 Tecnología</button>
+        <button class="sector-tab" onclick="filtrarSector('lujo', this)">👜 Lujo y consumo</button>
+        <button class="sector-tab" onclick="filtrarSector('auto', this)">🚗 Automóvil</button>
+        <button class="sector-tab" onclick="filtrarSector('energia', this)">⚡ Energía</button>
+        <button class="sector-tab" onclick="filtrarSector('metales', this)">⛏️ Metales y minería</button>
+        <button class="sector-tab" onclick="filtrarSector('banca', this)">🏦 Banca y telecom</button>
+        <button class="sector-tab" onclick="filtrarSector('cripto', this)">₿ Cripto</button>
+      </div>
+      <div id="quickTickers" style="padding:12px 24px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="quick-btn" data-sector="tech" onclick="doTicker('AAPL')">Apple</button>
+        <button class="quick-btn" data-sector="tech" onclick="doTicker('MSFT')">Microsoft</button>
+        <button class="quick-btn" data-sector="tech" onclick="doTicker('NVDA')">NVIDIA</button>
+        <button class="quick-btn" data-sector="tech" onclick="doTicker('GOOGL')">Google</button>
+        <button class="quick-btn" data-sector="tech" onclick="doTicker('META')">Meta</button>
+        <button class="quick-btn" data-sector="tech" onclick="doTicker('AMZN')">Amazon</button>
+        <button class="quick-btn" data-sector="tech" onclick="doTicker('ASML')">ASML</button>
+        <button class="quick-btn" data-sector="tech" onclick="doTicker('SAP')">SAP</button>
+        <button class="quick-btn" data-sector="lujo" onclick="doTicker('MC.PA')">LVMH</button>
+        <button class="quick-btn" data-sector="lujo" onclick="doTicker('OR.PA')">L'Oréal</button>
+        <button class="quick-btn" data-sector="lujo" onclick="doTicker('NESN.SW')">Nestlé</button>
+        <button class="quick-btn" data-sector="lujo" onclick="doTicker('ITX.MC')">Inditex</button>
+        <button class="quick-btn" data-sector="auto" onclick="doTicker('TSLA')">Tesla</button>
+        <button class="quick-btn" data-sector="auto" onclick="doTicker('VOW3.DE')">Volkswagen</button>
+        <button class="quick-btn" data-sector="energia" onclick="doTicker('REP.MC')">Repsol</button>
+        <button class="quick-btn" data-sector="energia" onclick="doTicker('IBE.MC')">Iberdrola</button>
+        <button class="quick-btn" data-sector="metales" onclick="doTicker('NEM')">Newmont</button>
+        <button class="quick-btn" data-sector="metales" onclick="doTicker('WPM')">Wheaton</button>
+        <button class="quick-btn" data-sector="metales" onclick="doTicker('GOLD')">Barrick Gold</button>
+        <button class="quick-btn" data-sector="metales" onclick="doTicker('FCX')">Freeport</button>
+        <button class="quick-btn" data-sector="banca" onclick="doTicker('SAN.MC')">Santander</button>
+        <button class="quick-btn" data-sector="banca" onclick="doTicker('TEF.MC')">Telefónica</button>
+        <button class="quick-btn" data-sector="banca" onclick="doTicker('BBVA.MC')">BBVA</button>
+        <button class="quick-btn" data-sector="cripto" onclick="doTicker('BTC')">Bitcoin</button>
+        <button class="quick-btn" data-sector="cripto" onclick="doTicker('ETH')">Ethereum</button>
       </div>
       <div id="stockResult" style="padding:24px;min-height:120px;display:flex;align-items:center;justify-content:center;">
         <p style="font-size:14px;color:var(--text3);text-align:center;">Escribe Apple, Tesla, Inditex... lo que sea, nano. Te digo yo si renta o no. 🪰</p>
@@ -655,6 +670,9 @@ function acceptAge() {
     <style>
     .quick-btn { padding:5px 12px;background:var(--card2);border:1px solid var(--border2);border-radius:100px;font-size:12px;color:var(--text2);cursor:pointer;font-family:inherit;transition:all 0.15s; }
     .quick-btn:hover { border-color:var(--green);color:var(--green); }
+    .sector-tab { padding:7px 14px;background:transparent;border:none;border-bottom:2px solid transparent;font-size:12.5px;font-weight:600;color:var(--text3);cursor:pointer;font-family:inherit;white-space:nowrap; }
+    .sector-tab:hover { color:var(--text2); }
+    .sector-tab.active { color:var(--green); border-bottom-color:var(--green); }
     .suggest-item { display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.1s; }
     .suggest-item:last-child { border-bottom:none; }
     .suggest-item:hover { background:var(--card2); }
@@ -1147,6 +1165,13 @@ function fmtMiles(n) {
 function doTicker(ticker) {
   document.getElementById('stockInput').value = ticker;
   doSearch();
+}
+function filtrarSector(sector, btn) {
+  document.querySelectorAll('.sector-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#quickTickers .quick-btn').forEach(b => {
+    b.style.display = (sector === 'todos' || b.dataset.sector === sector) ? 'inline-block' : 'none';
+  });
 }
 
 const CACHE_TTL = 60 * 60 * 1000;
