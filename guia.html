@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N0QGYLXGSL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-N0QGYLXGSL');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía del principiante — laBolsabro</title>
+  <meta name="description" content="Cómo empezar a invertir desde cero: riesgo, diversificación, interés compuesto y cómo valorar una empresa, explicado en cristiano.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#0a0a0a; --card:#141414; --card2:#1c1c1c; --border:#2a2a2a; --border2:#333; --green:#22c55e; --green-glow:rgba(34,197,94,0.12); --yellow:#facc15; --yellow-dim:rgba(250,204,21,0.1); --purple:#a78bfa; --red:#f87171; --text:#f5f5f5; --text2:#a3a3a3; --text3:#525252; }
+    body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 760px; margin: 0 auto; padding: 0 24px; height: 62px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-mark { width: 36px; height: 36px; background: var(--yellow); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .logo-text { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.03em; }
+    .logo-sub { font-size: 11px; font-weight: 700; color: var(--green); }
+    .back { font-size: 13.5px; color: var(--text2); text-decoration: none; }
+    .back:hover { color: var(--text); }
+    .hero { max-width: 760px; margin: 0 auto; padding: 64px 24px 40px; }
+    .tag { display: inline-flex; align-items: center; gap: 8px; background: var(--green-glow); border: 1px solid rgba(34,197,94,0.25); color: var(--green); padding: 6px 16px; border-radius: 100px; font-size: 12.5px; font-weight: 700; margin-bottom: 22px; }
+    h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px; }
+    .lede { font-size: 17px; color: var(--text2); max-width: 60ch; }
+    .content { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+    .step { border-top: 1px solid var(--border); padding: 40px 0; }
+    .step:first-child { border-top: none; }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; background: var(--card2); color: var(--yellow); font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+    .step h2 { font-size: 21px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .step p { color: var(--text2); font-size: 15px; margin-bottom: 12px; }
+    .step p:last-child { margin-bottom: 0; }
+    .step ul { color: var(--text2); font-size: 15px; padding-left: 20px; margin-bottom: 12px; }
+    .step li { margin-bottom: 6px; }
+    .step strong { color: var(--text); }
+    .callout { background: var(--yellow-dim); border: 1px solid rgba(250,204,21,0.25); border-radius: 14px; padding: 18px 22px; margin: 16px 0; font-size: 15px; color: var(--text); }
+    .callout-green { background: var(--green-glow); border-color: rgba(34,197,94,0.3); }
+    .terms { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .term-chip { background: var(--card2); border: 1px solid var(--border2); border-radius: 100px; padding: 7px 14px; font-size: 13px; color: var(--text2); }
+    .avoid-list li { color: var(--red); opacity: 0.9; }
+    .avoid-list li::marker { color: var(--red); }
+    .final-q { background: var(--card); border: 1px solid var(--border2); border-radius: 16px; padding: 28px; margin-top: 8px; }
+    .final-q p { color: var(--text); font-size: 16px; font-weight: 600; }
+    .roadmap { max-width: 760px; margin: 0 auto 60px; padding: 0 24px; }
+    .roadmap-box { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; padding: 28px; }
+    .roadmap-box h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--green); margin-bottom: 18px; }
+    .roadmap-item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .roadmap-item:last-child { border-bottom: none; }
+    .roadmap-n { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--green-glow); color: var(--green); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+    .roadmap-item div p:first-child { font-weight: 700; font-size: 14.5px; margin-bottom: 2px; }
+    .roadmap-item div p:last-child { font-size: 13.5px; color: var(--text3); }
+    .closing { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
+    .closing-box { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; padding: 32px; }
+    .closing-box p { color: var(--text2); font-size: 15px; margin-bottom: 20px; }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { display: inline-block; padding: 13px 26px; border-radius: 100px; font-size: 14.5px; font-weight: 700; text-decoration: none; }
+    .btn-green { background: var(--green); color: #000; }
+    .btn-out { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
+    footer { text-align:center; padding:2rem 1.5rem; border-top:1px solid var(--border); color:var(--text3); font-size:0.82rem; }
+    footer a { color: var(--text3); }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <div class="logo-mark">🪰</div>
+      <div><div class="logo-text">Mosca</div><div class="logo-sub">laBolsabro</div></div>
+    </a>
+    <a class="back" href="/">← Volver</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="tag">📘 Guía del principiante</div>
+  <h1>Cómo invertir desde cero, sin saltarte lo importante.</h1>
+  <p class="lede">Para quien empieza, lo que más importa no es aprender a elegir acciones rápido, sino entender cómo funciona la inversión y controlar el riesgo. Aquí tienes los 10 puntos, en orden.</p>
+</div>
+
+<div class="roadmap">
+  <div class="roadmap-box">
+    <h3>Los pasos, en orden</h3>
+    <div class="roadmap-item">
+      <div class="roadmap-n">1</div>
+      <div><p>Fondo de emergencia</p><p>3–6 meses de gastos ahorrados aparte, antes de invertir nada.</p></div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-n">2</div>
+      <div><p>Elimina la deuda cara</p><p>Tarjetas de crédito, préstamos rápidos... eso primero, siempre.</p></div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-n">3</div>
+      <div><p>Invierte periódicamente</p><p>Una cantidad fija cada mes, no de golpe ni por impulso.</p></div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-n">4</div>
+      <div><p>Empieza diversificado</p><p>Un ETF/fondo indexado antes que acciones individuales sueltas.</p></div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-n">5</div>
+      <div><p>Aguanta el tiempo</p><p>Años, no meses. El interés compuesto necesita paciencia para notarse.</p></div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-n">6</div>
+      <div><p>Aprende a analizar empresas</p><p>Solo cuando lo anterior esté asentado, empieza a mirar acciones concretas.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <h2>Entender qué estás comprando</h2>
+    <p>Una acción representa una pequeña participación en una empresa. Si compras Microsoft, por ejemplo, estás comprando una parte de Microsoft — y tu rentabilidad dependerá, entre otras cosas, de cómo evolucione el negocio y de lo que el mercado esté dispuesto a pagar por ella.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <h2>Rentabilidad y riesgo van juntos</h2>
+    <p>No existe una inversión con alta rentabilidad garantizada y poco riesgo. En general:</p>
+    <ul>
+      <li>Más rentabilidad potencial → más riesgo.</li>
+      <li>Menos riesgo → normalmente menor rentabilidad potencial.</li>
+    </ul>
+    <div class="callout">El objetivo no es eliminar el riesgo, sino asumir riesgos que entiendas y puedas soportar.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <h2>El tiempo es una ventaja enorme</h2>
+    <p>Para un principiante, suele ser más importante invertir durante muchos años que intentar acertar qué hará la bolsa el próximo mes.</p>
+    <p>Invertir periódicamente permite aprovechar el interés compuesto: las ganancias generan nuevas ganancias con el paso del tiempo.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <h2>Diversificación</h2>
+    <p>No conviene depender de una sola empresa. En lugar de poner todo en Microsoft, Meta o cualquier otra compañía, puedes diversificar entre:</p>
+    <ul>
+      <li>distintas empresas</li>
+      <li>distintos sectores</li>
+      <li>distintos países</li>
+      <li>distintos tipos de activos</li>
+    </ul>
+    <div class="callout callout-green">Para alguien que empieza, los fondos indexados/ETF diversificados suelen ser mucho más sencillos de entender que construir una cartera de muchas acciones individuales.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <h2>Aprender a valorar una empresa</h2>
+    <p>Si quieres invertir en acciones individuales, aprende al menos a mirar:</p>
+    <ul>
+      <li><strong>Ingresos</strong> — cuánto vende la empresa.</li>
+      <li><strong>Beneficio</strong> — cuánto gana después de gastos.</li>
+      <li><strong>Flujo de caja</strong> — cuánto dinero genera realmente.</li>
+      <li><strong>Deuda</strong> — cuánto debe.</li>
+      <li><strong>Crecimiento</strong> — si ventas y beneficios están aumentando.</li>
+      <li><strong>Ventaja competitiva</strong> — qué hace difícil que otros la desplacen.</li>
+      <li><strong>Valoración</strong> — cuánto estás pagando por esos beneficios.</li>
+    </ul>
+    <p>Una empresa excelente no necesariamente es una buena inversión si pagas demasiado por ella.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-num">6</div>
+    <h2>No confundas una empresa buena con una acción barata</h2>
+    <p>Este es uno de los conceptos más importantes. Microsoft puede ser una empresa extraordinaria, pero eso no significa que comprar sus acciones a cualquier precio sea una buena inversión.</p>
+    <div class="final-q"><p>¿Cuánto vale el negocio y cuánto estoy pagando por él?</p></div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">7</div>
+    <h2>Evitar errores típicos</h2>
+    <p>Al comenzar, intenta evitar:</p>
+    <ul class="avoid-list">
+      <li>invertir dinero que necesitarás pronto</li>
+      <li>endeudarte para invertir</li>
+      <li>perseguir acciones que han subido muchísimo</li>
+      <li>vender por pánico cuando cae la bolsa</li>
+      <li>comprar porque alguien lo recomienda en TikTok/YouTube</li>
+      <li>concentrar todo el dinero en una empresa</li>
+      <li>hacer trading frecuente sin saber exactamente qué estás haciendo</li>
+      <li>ignorar comisiones e impuestos</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-num">8</div>
+    <h2>Antes de invertir, crea una base financiera</h2>
+    <p>Una secuencia razonable sería:</p>
+    <div class="callout">Ingresos → fondo de emergencia → eliminar deuda cara → inversión periódica → diversificación → aprender a asumir más riesgo si corresponde.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">9</div>
+    <h2>Aprende estos conceptos primero</h2>
+    <p>Si quieres aprender desde cero, prioriza estos 10 conceptos:</p>
+    <div class="terms">
+      <span class="term-chip">Acción</span>
+      <span class="term-chip">Índice</span>
+      <span class="term-chip">ETF / fondo indexado</span>
+      <span class="term-chip">Rentabilidad</span>
+      <span class="term-chip">Riesgo y volatilidad</span>
+      <span class="term-chip">Interés compuesto</span>
+      <span class="term-chip">Diversificación</span>
+      <span class="term-chip">Capitalización bursátil</span>
+      <span class="term-chip">PER (P/E)</span>
+      <span class="term-chip">Flujo de caja</span>
+    </div>
+    <p>Después, pasa a balance, cuenta de resultados, deuda, dividendos, valoración y análisis de empresas.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-num">10</div>
+    <h2>La pregunta fundamental</h2>
+    <p>Antes de comprar cualquier inversión, deberías poder responder:</p>
+    <div class="final-q"><p>¿Qué estoy comprando, por qué lo compro, cuánto riesgo estoy asumiendo, cuánto estoy pagando y qué haré si baja un 30–50%?</p></div>
+    <p style="margin-top:16px">Si no puedes responderlas, probablemente todavía no entiendes suficientemente la inversión.</p>
+  </div>
+
+</div>
+
+<div class="closing">
+  <div class="closing-box">
+    <p>Si estás empezando literalmente desde cero, no empieces estudiando qué acciones comprar. Empieza aprendiendo cómo funciona una cartera diversificada, los ETF/indexados, el riesgo y el interés compuesto. Después, analiza empresas como Microsoft, Meta, Apple o Amazon como casos prácticos — con el analizador y el comparador de laBolsabro.</p>
+    <div class="cta-row">
+      <a class="btn btn-green" href="/#stocks">Analizar mi primera empresa →</a>
+      <a class="btn btn-out" href="/#glosario">Ver biblioteca de términos</a>
+    </div>
+  </div>
+</div>
+
+<footer>© 2025 Mosca · <a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a> · <a href="mailto:hola@labolsabro.com">Contacto</a></footer>
+</body>
+</html>
