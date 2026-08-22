@@ -402,7 +402,7 @@ function acceptAge() {
       <div class="settings-wrap">
         <button class="nav-icon-btn" onclick="toggleSettingsMenu()">⚙️</button>
         <div id="settingsMenu" class="dropdown-panel">
-          <label class="dropdown-label">Moneda</label>
+          <label class="dropdown-label" data-i18n="lblMoneda">Moneda</label>
           <select id="currencySelect" onchange="cambiarMoneda(this.value)">
             <option value="USD">🇺🇸 USD</option>
             <option value="EUR">🇪🇺 EUR</option>
@@ -419,7 +419,7 @@ function acceptAge() {
             <option value="CLP">🇨🇱 CLP</option>
             <option value="PEN">🇵🇪 PEN</option>
           </select>
-          <label class="dropdown-label" style="margin-top:12px">Idioma</label>
+          <label class="dropdown-label" style="margin-top:12px" data-i18n="lblIdioma">Idioma</label>
           <select id="langSelect" onchange="cambiarIdioma(this.value)">
             <option value="es">🇪🇸 Español</option>
             <option value="en">🇬🇧 English</option>
@@ -1253,7 +1253,7 @@ function fmtEUR(amount, decimales) {
 }
 const I18N = {
   es: {
-    navPremium: '⭐ Premium', navEntrar: 'Entrar', navGuia: '📘 Guía', navRuta: '🎮 DuoInvest',
+    navPremium: '⭐ Premium', navEntrar: 'Entrar', navGuia: '📘 Guía', navRuta: '🎮 DuoInvest', lblMoneda: 'Moneda', lblIdioma: 'Idioma',
     safetyBar: '<strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.',
     heroTag: 'Disponible ahora · Gratis',
     heroTitle: 'Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em>',
@@ -1278,7 +1278,7 @@ const I18N = {
     footerPriv: 'Privacidad', footerTerms: 'Términos', footerContact: 'Contacto', footerCopy: '© 2025 Mosca · Plataforma educativa · No somos asesores financieros',
   },
   en: {
-    navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest',
+    navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language',
     safetyBar: '<strong>18+ only · Financial education, not advice.</strong> We never manage your money. Investing carries risk of loss.',
     heroTag: 'Available now · Free',
     heroTitle: 'Your money<br>is bored.<br><em>Do <span class="mano">something</span>.</em>',
