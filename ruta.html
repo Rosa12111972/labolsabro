@@ -143,9 +143,20 @@ const AREAS = [
   { id: 'ahorro', nombre: 'Ahorro y fondos', desc: 'La base antes de invertir nada', emoji: '🐷', tipo: 'quiz' },
   { id: 'bolsa', nombre: 'Bolsa y valoración', desc: 'PER, dividendos, qué es una acción', emoji: '📈', tipo: 'quiz' },
   { id: 'inversion', nombre: 'Inversión y fondos', desc: 'ETFs, diversificación, largo plazo', emoji: '💼', tipo: 'quiz' },
+  { id: 'analisis', nombre: 'Analiza una empresa', desc: 'El método paso a paso, con la propia app', emoji: '🔍', tipo: 'metodo' },
   { id: 'geoeconomia', nombre: 'Geoeconomía', desc: 'Cómo el mundo mueve tu cartera', emoji: '🌍', tipo: 'lectura', href: '/geoeconomia.html' },
   { id: 'avanzado', nombre: 'Análisis avanzado', desc: 'ROIC, WACC, DCF — nivel experto', emoji: '🔬', tipo: 'premium', href: '/#quiz' },
 ];
+
+const METODO_PASOS = [
+  { titulo: '1. Mira el semáforo primero', texto: '🟢 Verde = está barata para su sector. 🟡 Amarillo = precio justo. 🔴 Rojo = está cara. Es lo primero que debes mirar, antes que cualquier número.' },
+  { titulo: '2. Fíjate en la puntuación (0-10)', texto: 'Resume en un solo número la valoración, el crecimiento y la rentabilidad de la empresa. Por encima de 7 suele ser una empresa sólida; por debajo de 4, con dudas.' },
+  { titulo: '3. Compara el PER con el PEG', texto: 'Un PER alto no siempre es malo — si la empresa crece muy rápido, puede justificarlo. El PEG te dice si ese precio "tiene sentido" según cuánto crece.' },
+  { titulo: '4. Mira margen y ROE', texto: 'El margen te dice si gestiona bien los costes. El ROE te dice si rentabiliza bien el dinero de los accionistas. Ambos altos = negocio de calidad.' },
+  { titulo: '5. Revisa deuda y caja', texto: 'Poca deuda y caja generosa = balance sólido, aguanta bien las crisis. Mucha deuda y poca caja = más riesgo si las cosas se tuercen.' },
+  { titulo: '6. Lee los pros y contras', texto: 'Cada análisis y cada PDF te resume automáticamente lo bueno y lo malo de la empresa en frases claras. Léelo siempre antes de decidir nada.' },
+];
+let _metodoIdx = 0;
 
 let _user = null;
 let _progreso = {};
@@ -210,6 +221,12 @@ function abrirNodo(id) {
       <a href="${area.href}" target="_blank" style="display:block;margin-bottom:14px;color:var(--green);font-weight:700;text-decoration:none;">Abrir "${area.nombre}" →</a>
       <button class="readbtn" onclick="completarLectura()">Ya lo he leído, marcar como completado</button>`;
     document.getElementById('readOverlay').classList.add('open');
+    return;
+  }
+  if (area.tipo === 'metodo') {
+    _metodoIdx = 0;
+    document.getElementById('readOverlay').classList.add('open');
+    renderMetodoPaso();
     return;
   }
   _qIdx = 0; _qScore = 0; _qXP = 0;
@@ -284,6 +301,32 @@ async function finalizarNodo() {
   renderPath();
 }
 
+function renderMetodoPaso() {
+  const paso = METODO_PASOS[_metodoIdx];
+  const esUltimo = _metodoIdx === METODO_PASOS.length - 1;
+  document.getElementById('readTitle').textContent = `🔍 Analiza una empresa`;
+  document.getElementById('readBody').innerHTML = `
+    <div style="display:flex;gap:5px;margin-bottom:18px">${METODO_PASOS.map((_, i) => `<div style="height:5px;flex:1;border-radius:3px;background:${i <= _metodoIdx ? 'var(--green)' : 'var(--border2)'}"></div>`).join('')}</div>
+    <h3 style="font-size:16.5px;margin-bottom:10px">${paso.titulo}</h3>
+    <p style="color:var(--text2);font-size:14.5px;line-height:1.6;margin-bottom:22px">${paso.texto}</p>
+    <button class="readbtn" onclick="${esUltimo ? 'completarMetodo()' : 'siguienteMetodoPaso()'}">${esUltimo ? '¡Ya sé el método! Terminar' : 'Siguiente →'}</button>`;
+}
+function siguienteMetodoPaso() {
+  _metodoIdx++;
+  renderMetodoPaso();
+}
+async function completarMetodo() {
+  await _sb.from('learning_progress').upsert({ user_id: _user.id, area: 'analisis', completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
+  _progreso['analisis'] = true;
+  document.getElementById('readBody').innerHTML = `<div style="text-align:center;padding:10px 0">
+    <div style="font-size:48px;margin-bottom:12px">🎉</div>
+    <h2 style="margin-bottom:8px">¡Método aprendido!</h2>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:20px">Ahora ponlo en práctica con una empresa de verdad.</p>
+    <a href="/#stocks" style="display:block;margin-bottom:10px;background:var(--green);color:#000;font-weight:700;padding:13px;border-radius:100px;text-decoration:none;">Analizar una empresa real →</a>
+    <button class="readbtn" style="background:transparent;border:1px solid var(--border2);color:var(--text2)" onclick="cerrarNodo()">Cerrar</button>
+  </div>`;
+  renderPath();
+}
 async function completarLectura() {
   await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
   _progreso[_nodoActual.id] = true;
