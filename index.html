@@ -1392,7 +1392,7 @@ function clearUser() {
   _userPlan = 'free';
   _jars = [];
   _invertidoSimulado = 0;
-  document.getElementById('navAuth').innerHTML = '<button class="nav-btn" onclick="openAuthModal()">Entrar</button>';
+  document.getElementById('navAuth').innerHTML = `<button class="nav-btn" onclick="openAuthModal()" data-i18n="navEntrar">${(I18N[_idioma]||I18N.es).navEntrar}</button>`;
   cargarXPTotal();
   renderHeroMockup();
 }
