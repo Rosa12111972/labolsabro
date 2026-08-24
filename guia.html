@@ -49,6 +49,10 @@
     .avoid-list li::marker { color: var(--red); }
     .final-q { background: var(--card); border: 1px solid var(--border2); border-radius: 16px; padding: 28px; margin-top: 8px; }
     .final-q p { color: var(--text); font-size: 16px; font-weight: 600; }
+    .deflist { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+    .defitem { background: var(--card2); border-radius: 12px; padding: 14px 18px; }
+    .defitem .term { font-weight: 700; font-size: 14.5px; color: var(--green); margin-bottom: 4px; }
+    .defitem .def { font-size: 13.5px; color: var(--text2); }
     .roadmap { max-width: 760px; margin: 0 auto 60px; padding: 0 24px; }
     .roadmap-box { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; padding: 28px; }
     .roadmap-box h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--green); margin-bottom: 18px; }
@@ -198,25 +202,32 @@
     <h2>Antes de invertir, crea una base financiera</h2>
     <p>Una secuencia razonable sería:</p>
     <div class="callout">Ingresos → fondo de emergencia → eliminar deuda cara → inversión periódica → diversificación → aprender a asumir más riesgo si corresponde.</div>
+    <div class="deflist">
+      <div class="defitem"><div class="term">Ingresos</div><div class="def">Lo que entra cada mes: sueldo, negocio propio, lo que sea. Es la base — sin ingresos estables, todo lo demás va a medias.</div></div>
+      <div class="defitem"><div class="term">Fondo de emergencia</div><div class="def">Ahorro aparte, fácil de sacar, para imprevistos (paro, avería, salud). Normalmente 3-6 meses de gastos cubiertos, antes de invertir nada.</div></div>
+      <div class="defitem"><div class="term">Eliminar deuda cara</div><div class="def">Pagar primero las deudas con intereses altos (tarjetas de crédito, préstamos rápidos). Ese interés es una pérdida garantizada mayor que casi cualquier ganancia de invertir.</div></div>
+      <div class="defitem"><div class="term">Inversión periódica</div><div class="def">Meter una cantidad fija cada mes, en vez de intentar acertar el momento perfecto del mercado. Más constancia, menos estrés.</div></div>
+      <div class="defitem"><div class="term">Diversificación</div><div class="def">Repartir el dinero entre distintas empresas, sectores y países, para que un problema puntual en uno no te afecte a todo el conjunto.</div></div>
+    </div>
   </div>
 
   <div class="step">
     <div class="step-num">9</div>
     <h2>Aprende estos conceptos primero</h2>
     <p>Si quieres aprender desde cero, prioriza estos 10 conceptos:</p>
-    <div class="terms">
-      <span class="term-chip">Acción</span>
-      <span class="term-chip">Índice</span>
-      <span class="term-chip">ETF / fondo indexado</span>
-      <span class="term-chip">Rentabilidad</span>
-      <span class="term-chip">Riesgo y volatilidad</span>
-      <span class="term-chip">Interés compuesto</span>
-      <span class="term-chip">Diversificación</span>
-      <span class="term-chip">Capitalización bursátil</span>
-      <span class="term-chip">PER (P/E)</span>
-      <span class="term-chip">Flujo de caja</span>
+    <div class="deflist">
+      <div class="defitem"><div class="term">Acción</div><div class="def">Un trocito de la propiedad de una empresa. Si la compras, te haces socio, por pequeño que sea el trozo.</div></div>
+      <div class="defitem"><div class="term">Índice</div><div class="def">Una lista de empresas que representa un mercado o sector (ej: el S&P 500 son las 500 mayores de EE. UU.). Sirve de termómetro y de base para los fondos indexados.</div></div>
+      <div class="defitem"><div class="term">ETF / fondo indexado</div><div class="def">Un fondo que compra automáticamente todas las empresas de un índice. Diversificación instantánea y comisiones muy bajas.</div></div>
+      <div class="defitem"><div class="term">Rentabilidad</div><div class="def">Cuánto gana o pierde tu dinero en un periodo, normalmente en porcentaje. Es el "resultado" de una inversión.</div></div>
+      <div class="defitem"><div class="term">Riesgo y volatilidad</div><div class="def">El riesgo es la posibilidad de perder dinero. La volatilidad es cuánto sube y baja el precio en el camino — más volatilidad no siempre es más riesgo real a largo plazo.</div></div>
+      <div class="defitem"><div class="term">Interés compuesto</div><div class="def">Ganar intereses sobre tus intereses anteriores, no solo sobre el dinero inicial. Con el tiempo, hace que el dinero crezca de forma exponencial.</div></div>
+      <div class="defitem"><div class="term">Diversificación</div><div class="def">Repartir el dinero entre distintas inversiones para que un problema en una no arrastre a todo el conjunto.</div></div>
+      <div class="defitem"><div class="term">Capitalización bursátil</div><div class="def">Lo que vale toda la empresa en bolsa (precio de la acción × número de acciones). Indica el tamaño real del negocio.</div></div>
+      <div class="defitem"><div class="term">PER (P/E)</div><div class="def">Precio entre beneficio por acción. Indica cuántos años tardarías en recuperar lo pagado solo con los beneficios de la empresa. Cuanto más bajo, en principio más barata.</div></div>
+      <div class="defitem"><div class="term">Flujo de caja</div><div class="def">El dinero real que entra y sale del negocio. Más fiable que el beneficio contable porque es más difícil de maquillar.</div></div>
     </div>
-    <p>Después, pasa a balance, cuenta de resultados, deuda, dividendos, valoración y análisis de empresas.</p>
+    <p style="margin-top:16px">Después, pasa a balance, cuenta de resultados, deuda, dividendos, valoración y análisis de empresas.</p>
   </div>
 
   <div class="step">
