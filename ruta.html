@@ -194,17 +194,21 @@ function renderRacha(dias) {
   else { wrap.style.display = 'none'; }
 }
 async function registrarRacha() {
-  const hoy = new Date().toISOString().slice(0, 10);
-  const { data: prof } = await _sb.from('profiles').select('racha_dias,ultima_actividad').eq('id', _user.id).single();
-  const ultima = prof?.ultima_actividad || null;
-  let nueva = prof?.racha_dias || 0;
-  if (ultima !== hoy) {
-    const ayer = new Date(); ayer.setDate(ayer.getDate() - 1);
-    const ayerStr = ayer.toISOString().slice(0, 10);
-    nueva = (ultima === ayerStr) ? nueva + 1 : 1;
-    await _sb.from('profiles').update({ racha_dias: nueva, ultima_actividad: hoy }).eq('id', _user.id);
+  try {
+    const hoy = new Date().toISOString().slice(0, 10);
+    const { data: prof } = await _sb.from('profiles').select('racha_dias,ultima_actividad').eq('id', _user.id).single();
+    const ultima = prof?.ultima_actividad || null;
+    let nueva = prof?.racha_dias || 0;
+    if (ultima !== hoy) {
+      const ayer = new Date(); ayer.setDate(ayer.getDate() - 1);
+      const ayerStr = ayer.toISOString().slice(0, 10);
+      nueva = (ultima === ayerStr) ? nueva + 1 : 1;
+      await _sb.from('profiles').update({ racha_dias: nueva, ultima_actividad: hoy }).eq('id', _user.id);
+    }
+    renderRacha(nueva);
+  } catch (e) {
+    console.error('Error registrando la racha:', e);
   }
-  renderRacha(nueva);
 }
 
 let _user = null;
@@ -347,14 +351,19 @@ async function finalizarNodo() {
   const pct = _qScore / total;
   const el = document.getElementById('quizArea');
   if (pct >= UMBRAL_APROBADO) {
-    await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
-    await registrarRacha();
-    if (_qXP > 0) {
-      const { data: prof } = await _sb.from('profiles').select('total_xp').eq('id', _user.id).single();
-      const nuevoXP = (prof?.total_xp || 0) + _qXP;
-      await _sb.from('profiles').update({ total_xp: nuevoXP }).eq('id', _user.id);
-      document.getElementById('rutaXP').textContent = nuevoXP;
-      document.getElementById('rutaNivel').textContent = Math.floor(nuevoXP / 100) + 1;
+    try {
+      const { error: errUpsert } = await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
+      if (errUpsert) console.error('Error guardando progreso del nivel:', errUpsert);
+      await registrarRacha();
+      if (_qXP > 0) {
+        const { data: prof } = await _sb.from('profiles').select('total_xp').eq('id', _user.id).single();
+        const nuevoXP = (prof?.total_xp || 0) + _qXP;
+        await _sb.from('profiles').update({ total_xp: nuevoXP }).eq('id', _user.id);
+        document.getElementById('rutaXP').textContent = nuevoXP;
+        document.getElementById('rutaNivel').textContent = Math.floor(nuevoXP / 100) + 1;
+      }
+    } catch (e) {
+      console.error('Error guardando el progreso en el servidor:', e);
     }
     _progreso[_nodoActual.id] = true;
     const next = siguienteArea(_nodoActual.id);
@@ -391,8 +400,13 @@ function siguienteMetodoPaso() {
   renderMetodoPaso();
 }
 async function completarMetodo() {
-  await _sb.from('learning_progress').upsert({ user_id: _user.id, area: 'analisis', completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
-  await registrarRacha();
+  try {
+    const { error } = await _sb.from('learning_progress').upsert({ user_id: _user.id, area: 'analisis', completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
+    if (error) console.error('Error guardando progreso del método:', error);
+    await registrarRacha();
+  } catch (e) {
+    console.error('Error guardando el progreso en el servidor:', e);
+  }
   _progreso['analisis'] = true;
   const next = siguienteArea('analisis');
   const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
@@ -408,8 +422,13 @@ async function completarMetodo() {
   renderPath();
 }
 async function completarLectura() {
-  await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
-  await registrarRacha();
+  try {
+    const { error } = await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
+    if (error) console.error('Error guardando progreso de la lectura:', error);
+    await registrarRacha();
+  } catch (e) {
+    console.error('Error guardando el progreso en el servidor:', e);
+  }
   _progreso[_nodoActual.id] = true;
   const next = siguienteArea(_nodoActual.id);
   const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
