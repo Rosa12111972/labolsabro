@@ -238,11 +238,13 @@ function renderPath() {
   const wrap = document.getElementById('pathWrap');
   wrap.innerHTML = AREAS.map((area, i) => {
     const done = !!_progreso[area.id];
+    const prevDone = i === 0 || !!_progreso[AREAS[i - 1].id];
     let estado, circleClass, statusTxt, statusClass;
     if (done) { estado = 'done'; circleClass = 'done'; statusTxt = '✓ Completado'; statusClass = 'done'; }
     else if (area.tipo === 'premium' && !window._esPremium) { circleClass = 'premium-lock'; statusTxt = '🔒 Premium'; statusClass = 'locked'; }
-    else { circleClass = 'available'; statusTxt = 'Empezar →'; statusClass = 'available'; }
-    const clickable = true;
+    else if (prevDone) { circleClass = 'available'; statusTxt = 'Empezar →'; statusClass = 'available'; }
+    else { circleClass = 'locked'; statusTxt = 'Bloqueado'; statusClass = 'locked'; }
+    const clickable = done || (area.tipo === 'premium' && !window._esPremium) || prevDone;
     return `<div class="node ${done ? 'done' : ''}">
       <button class="node-circle ${circleClass}" ${clickable ? `onclick="abrirNodo('${area.id}')"` : 'disabled'}>${done ? '✓' : area.emoji}</button>
       <div class="node-info">
