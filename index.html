@@ -1132,6 +1132,20 @@ const METRIC_INFO = {
   'Bono indexado a la inflación': '💡 Un bono cuyo cupón o valor nominal se ajusta según sube la inflación real, para proteger tu poder de compra. Un bono a tipo fijo normal, en cambio, paga siempre lo mismo aunque los precios se disparen.',
   'Fiscalidad de los bonos': '💡 Los cupones que cobras de un bono tributan en general como rendimiento del capital mobiliario en la declaración de la renta, igual que otros ingresos que te generan tus ahorros e inversiones.',
   'Riesgo de reinversión': '💡 El riesgo de que, cuando tu bono vence, solo puedas reinvertir ese dinero a tipos de interés más bajos que los que tenías antes — típico cuando los tipos han caído durante la vida del bono.',
+  'Base del ahorro': '💡 El apartado del IRPF donde tributan tus ganancias de invertir: plusvalías por vender, dividendos e intereses. Tiene sus propios tramos, distintos de los que aplican a tu nómina (base general).',
+  'Plusvalía': '💡 La diferencia positiva entre lo que pagaste por una inversión y lo que sacas al venderla. Es sobre esa ganancia, no sobre el total vendido, sobre lo que pagas impuestos.',
+  'Minusvalía': '💡 Lo contrario a la plusvalía: la pérdida que sufres al vender una inversión por menos de lo que pagaste. Puede usarse para compensar y pagar menos impuestos por otras ganancias del mismo año.',
+  'Tramos del ahorro': '💡 Las ganancias en la base del ahorro tributan de forma progresiva por tramos, igual que tu sueldo: solo la parte que entra en cada tramo paga ese tipo, no todo el importe al tipo más alto.',
+  'Retención': '💡 Un adelanto a cuenta del impuesto que Hacienda cobra automáticamente sobre dividendos o intereses en el momento de pagártelos. Luego se ajusta en tu declaración anual, a favor o en contra.',
+  'Traspaso entre fondos': '💡 Cambiar tu dinero de un fondo de inversión a otro sin que Hacienda lo considere una venta. No tributas en ese momento, aunque el fondo tenga ganancias acumuladas — el impuesto se pospone hasta que reembolses de verdad.',
+  'Fiscalidad de los ETF': '💡 A diferencia de los fondos tradicionales, en España los ETF no permiten hacer traspasos sin tributar: si cambias de uno a otro, pagas impuestos por la ganancia en ese momento, aunque sigas "invertido".',
+  'Declaración de la renta e inversión': '💡 Tu bróker suele informar a Hacienda de tus operaciones, que aparecen precargadas en tu borrador. Pero revisar que esté todo correcto y presentar la declaración final sigue siendo responsabilidad tuya.',
+  'FIFO': '💡 "First In, First Out": si compraste lo mismo en momentos distintos, Hacienda entiende que al vender una parte, vendes primero lo que compraste antes, aunque todas las unidades sean idénticas entre sí.',
+  'Compensación de pérdidas y ganancias': '💡 Restar tus pérdidas de tus ganancias del mismo año (y, dentro de un límite, incluso entre distintos tipos de rendimiento) antes de calcular cuánto pagas de impuestos. Tributas por el resultado neto, no por cada operación suelta.',
+  'Regla de los dos meses': '💡 Norma "antiabuso": si vendes con pérdidas y recompras lo mismo en los dos meses siguientes, esa pérdida no se puede usar todavía en tu declaración — se pospone hasta que la recompra quede fuera de ese plazo.',
+  'Doble imposición internacional': '💡 Cuando cobras dividendos de otro país, ese país suele retenerte algo primero. Gracias a los convenios entre países, esa retención suele poder deducirse en tu declaración española, para no pagar el mismo impuesto dos veces.',
+  'Residencia fiscal': '💡 El país donde declaras y pagas impuestos por tus ganancias no depende de dónde tenga su sede tu bróker, sino de dónde resides fiscalmente tú.',
+  'Impuesto sobre el Patrimonio': '💡 A diferencia del IRPF (que grava lo que ganas en el año), este impuesto grava el valor total de lo que posees en una fecha concreta — una "foto fija" de tu patrimonio, y solo aplica a partir de ciertos importes.',
 };
 
 const GLOSARIO_CATEGORIAS = {
@@ -1160,6 +1174,11 @@ const GLOSARIO_CATEGORIAS = {
   'Rating crediticio': 'Renta fija', 'Renta fija': 'Renta fija', 'TIR': 'Renta fija', 'Prima de riesgo': 'Renta fija',
   'Curva de tipos': 'Renta fija', 'Mercado primario y secundario': 'Renta fija', 'Bono indexado a la inflación': 'Renta fija',
   'Fiscalidad de los bonos': 'Renta fija', 'Riesgo de reinversión': 'Renta fija',
+  'Base del ahorro': 'Fiscalidad', 'Plusvalía': 'Fiscalidad', 'Minusvalía': 'Fiscalidad', 'Tramos del ahorro': 'Fiscalidad',
+  'Retención': 'Fiscalidad', 'Traspaso entre fondos': 'Fiscalidad', 'Fiscalidad de los ETF': 'Fiscalidad',
+  'Declaración de la renta e inversión': 'Fiscalidad', 'FIFO': 'Fiscalidad', 'Compensación de pérdidas y ganancias': 'Fiscalidad',
+  'Regla de los dos meses': 'Fiscalidad', 'Doble imposición internacional': 'Fiscalidad', 'Residencia fiscal': 'Fiscalidad',
+  'Impuesto sobre el Patrimonio': 'Fiscalidad',
 };
 
 let _glosarioAbierto = null;
