@@ -1116,6 +1116,22 @@ const METRIC_INFO = {
   'REIT': '💡 Una sociedad que invierte en inmuebles (oficinas, centros comerciales, alquileres...) y cotiza en bolsa como si fuera una acción. Te da exposición al ladrillo sin tener que comprar un piso entero ni lidiar con inquilinos.',
   'Drawdown': '💡 La mayor caída que ha sufrido una inversión desde un máximo hasta el mínimo posterior. Te ayuda a saber, en el peor momento histórico, cuánto habrías visto caer tu dinero — y si aguantarías psicológicamente algo así.',
   'Ratio de Sharpe': '💡 Compara la rentabilidad de una inversión con el riesgo (volatilidad) que hizo falta asumir para conseguirla. Dos inversiones pueden ganar lo mismo, pero la que lo consigue con menos sustos por el camino tiene mejor ratio de Sharpe.',
+  'Bono del Estado': '💡 Le prestas dinero al Estado a cambio de que te devuelva el importe prestado en una fecha futura, pagándote unos intereses (el cupón) mientras tanto. Es la forma en la que los países se financian.',
+  'Cupón': '💡 El pago periódico de intereses que recibes por tener un bono, normalmente cada año. Es el "sueldo" que te paga el bono mientras esperas a que llegue su vencimiento.',
+  'Valor nominal': '💡 La cantidad que el emisor se compromete a devolverte al vencimiento del bono, y sobre la que se calcula el cupón. El precio al que lo compras en el mercado puede ser distinto: más caro o más barato que ese nominal.',
+  'Vencimiento': '💡 La fecha pactada en la que el emisor te devuelve el valor nominal completo del bono. Puede ser a pocos meses vista o a varias décadas, según el tipo de bono.',
+  'Riesgo país': '💡 La probabilidad que el mercado percibe de que un país no pueda pagar su deuda. Cuanto mayor sea ese riesgo percibido, más interés exigen los inversores para prestarle dinero a ese país.',
+  'Precio de un bono y tipos de interés': '💡 Se mueven en direcciones opuestas: cuando suben los tipos de interés generales, los bonos antiguos con cupón fijo más bajo se vuelven menos atractivos y su precio baja para compensar — y viceversa cuando los tipos bajan.',
+  'Letra del Tesoro': '💡 Deuda pública española a corto plazo (hasta 18 meses). Los Bonos del Estado son a 3-5 años y las Obligaciones del Estado a 10 años o más — la misma familia de producto, distinto plazo.',
+  'Rating crediticio': '💡 La nota que ponen agencias como Moody\'s o S&P a la solvencia de un país o una empresa (AAA, BB, etc.), según lo probable que vean que pague su deuda. Peor nota, más interés suele tener que ofrecer para financiarse.',
+  'Renta fija': '💡 Así se llama a los bonos porque, salvo impago, ya conoces de antemano el calendario de pagos (cupones) y el importe que recibirás al vencimiento — a diferencia de una acción, donde nada está garantizado por adelantado.',
+  'TIR': '💡 La Tasa Interna de Rentabilidad de un bono: la rentabilidad total que obtienes si lo compras hoy y lo mantienes hasta el vencimiento, contando tanto los cupones como la diferencia entre lo que pagaste y lo que te devolverán.',
+  'Prima de riesgo': '💡 La diferencia de rentabilidad entre el bono de un país y el de otro considerado más seguro (normalmente Alemania, en la eurozona), al mismo plazo. Cuanto mayor la prima, menos confianza tiene el mercado en ese país.',
+  'Curva de tipos': '💡 Un gráfico que compara el interés que pagan los bonos según su plazo: corto, medio y largo. Normalmente es ascendente (más plazo, más interés), pero cuando se "invierte" ha anticipado varias recesiones históricamente.',
+  'Mercado primario y secundario': '💡 En el mercado primario compras el bono directamente al Estado cuando lo emite, en una subasta. En el mercado secundario lo compras a otro inversor que ya lo tenía, a un precio que varía según la oferta y la demanda.',
+  'Bono indexado a la inflación': '💡 Un bono cuyo cupón o valor nominal se ajusta según sube la inflación real, para proteger tu poder de compra. Un bono a tipo fijo normal, en cambio, paga siempre lo mismo aunque los precios se disparen.',
+  'Fiscalidad de los bonos': '💡 Los cupones que cobras de un bono tributan en general como rendimiento del capital mobiliario en la declaración de la renta, igual que otros ingresos que te generan tus ahorros e inversiones.',
+  'Riesgo de reinversión': '💡 El riesgo de que, cuando tu bono vence, solo puedas reinvertir ese dinero a tipos de interés más bajos que los que tenías antes — típico cuando los tipos han caído durante la vida del bono.',
 };
 
 const GLOSARIO_CATEGORIAS = {
@@ -1139,6 +1155,11 @@ const GLOSARIO_CATEGORIAS = {
   'Historial crediticio': 'Finanzas personales', 'Amortización anticipada': 'Finanzas personales', 'Regla del 72': 'Finanzas personales',
   'Rebalanceo de cartera': 'Riesgo', 'Asset allocation': 'Riesgo', 'TER': 'Valoración', 'Value investing': 'Valoración',
   'REIT': 'General', 'Drawdown': 'Riesgo', 'Ratio de Sharpe': 'Riesgo',
+  'Bono del Estado': 'Renta fija', 'Cupón': 'Renta fija', 'Valor nominal': 'Renta fija', 'Vencimiento': 'Renta fija',
+  'Riesgo país': 'Renta fija', 'Precio de un bono y tipos de interés': 'Renta fija', 'Letra del Tesoro': 'Renta fija',
+  'Rating crediticio': 'Renta fija', 'Renta fija': 'Renta fija', 'TIR': 'Renta fija', 'Prima de riesgo': 'Renta fija',
+  'Curva de tipos': 'Renta fija', 'Mercado primario y secundario': 'Renta fija', 'Bono indexado a la inflación': 'Renta fija',
+  'Fiscalidad de los bonos': 'Renta fija', 'Riesgo de reinversión': 'Renta fija',
 };
 
 let _glosarioAbierto = null;
