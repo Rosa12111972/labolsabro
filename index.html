@@ -1070,6 +1070,24 @@ const METRIC_INFO = {
   'Payout ratio': '💡 Qué parte de lo que gana se reparte en dividendos. Si es 30%, guarda el 70% para crecer o pagar deuda. Payout muy alto (90%+) puede ser señal de que no le queda mucho margen para invertir en el futuro.',
   'Volatilidad': '💡 Cuánto sube y baja el precio en poco tiempo. Alta volatilidad = sustos frecuentes, arriba y abajo. Baja volatilidad = más tranquila, pero también crece más despacio normalmente.',
   'Liquidez': '💡 Lo fácil que es comprar o vender sin mover mucho el precio. Empresas grandes tienen mucha liquidez (compras y vendes al instante). Empresas pequeñas, menos — a veces cuesta salir sin perder pasta.',
+  'Fondo de emergencia': '💡 Ahorro aparte, fácil de sacar YA, para cuando la vida se tuerce (paro, avería, algo médico). Nada de tenerlo en bolsa — tiene que estar disponible el día que lo necesites, no cuando el mercado esté bien. 3-6 meses de gastos es lo recomendado.',
+  'Regla 50/30/20': '💡 Reparte lo que ganas cada mes: 50% para lo necesario (alquiler, comida), 30% para lo que te apetezca, y 20% para ahorrar o invertir. Sencilla de recordar y suficiente para empezar sin agobiarte con Excel.',
+  'Inflación': '💡 La subida general de precios. Si tu dinero está quieto en el banco sin generar nada, cada año compra un poco menos. Por eso "ahorrar" a secas no basta — necesitas que tu dinero rente al menos lo que sube la inflación.',
+  'Acción': '💡 Un trocito de la propiedad de una empresa. Si compras una acción de Apple, te haces socio, por pequeño que sea el trozo — y ganas o pierdes según cómo le vaya al negocio.',
+  'Diversificación': '💡 No meter todos los huevos en la misma cesta. Repartir el dinero entre empresas, sectores y países distintos, para que un problema puntual en uno no te hunda la cartera entera.',
+  'Largo plazo': '💡 Mantener la inversión durante años, aguantando las subidas y bajadas por el camino, en vez de vender en cuanto el mercado se pone nervioso. Cuanto más tiempo aguantas, menos importan los sustos del día a día.',
+  'DCA': '💡 Dollar Cost Averaging, o "aportación periódica" en cristiano: meter la misma cantidad cada mes pase lo que pase, en vez de intentar adivinar el momento perfecto para comprar. Suaviza el precio medio y te quita la presión de acertar.',
+  'Riesgo de concentración': '💡 Tener demasiado dinero metido en muy pocas inversiones. Si todo depende de una sola empresa o sector, un problema ahí te golpea mucho más fuerte que si estuvieras repartido.',
+  'ROIC': '💡 Cuánto beneficio saca la empresa por cada euro metido en el negocio, contando deuda y capital propio. Un ROIC alto y sostenido en el tiempo suele ser señal de que tiene una ventaja competitiva de verdad.',
+  'WACC': '💡 El coste medio que le cuesta a la empresa financiarse, mezclando lo que paga por su deuda y lo que exigen sus accionistas. Es el listón mínimo que un proyecto tiene que superar para que merezca la pena hacerlo.',
+  'DCF': '💡 Descuento de flujos de caja: un método para calcular cuánto vale una empresa hoy sumando el dinero que se espera que genere en el futuro, ajustado porque un euro dentro de 10 años vale menos que uno ahora mismo.',
+  'EV/EBITDA': '💡 Como el PER pero más completo — compara el valor total de la empresa (incluida su deuda) con su beneficio operativo. Sirve para comparar empresas con niveles de deuda muy distintos de forma más justa que el PER.',
+  'Quick ratio': '💡 También llamado prueba ácida: mide si la empresa puede pagar sus deudas a corto plazo sin contar el inventario (que puede tardar en venderse). Cuanto más alto, más fácil lo tiene para cubrir lo que debe ya mismo.',
+  'Apalancamiento operativo': '💡 Cuánto le afectan a la empresa los cambios en ventas, según cuántos costes fijos tenga. Con costes fijos altos, un cambio pequeño en ventas puede disparar (o hundir) el beneficio mucho más.',
+  'Short interest': '💡 Cuántos inversores han apostado a que el precio de la acción va a bajar (posiciones cortas). Un short interest alto es señal de pesimismo del mercado sobre esa empresa.',
+  'Duración de un bono': '💡 No es solo "cuánto falta para que venza" — mide lo sensible que es el precio del bono a los cambios de tipos de interés. A más duración, más se mueve el precio cuando suben o bajan los tipos.',
+  'Spread de crédito': '💡 Lo "extra" que paga una empresa por su deuda comparado con la deuda pública, considerada más segura. Cuanto más riesgo se le percibe, mayor es ese spread.',
+  'FCF yield': '💡 El dinero real que genera la empresa (Free Cash Flow) comparado con lo que cuesta comprarla en bolsa. Un yield alto puede indicar que está barata generando mucha caja de verdad.',
 };
 
 const GLOSARIO_CATEGORIAS = {
@@ -1080,6 +1098,11 @@ const GLOSARIO_CATEGORIAS = {
   'Reinversión del negocio': 'Salud financiera', 'Flujo caja operativo': 'Salud financiera', 'Free Cash Flow': 'Salud financiera', 'Deuda/Patrimonio': 'Salud financiera', 'Liquidez': 'Salud financiera',
   'Beta': 'Riesgo', 'Rango 52 semanas': 'Riesgo', 'Volatilidad': 'Riesgo',
   'Empleados': 'General', 'Interés compuesto': 'General', 'ETF': 'General', 'Fondo indexado': 'General',
+  'Fondo de emergencia': 'Finanzas personales', 'Regla 50/30/20': 'Finanzas personales', 'Inflación': 'Finanzas personales',
+  'Acción': 'General', 'Largo plazo': 'General', 'DCA': 'General',
+  'Diversificación': 'Riesgo', 'Riesgo de concentración': 'Riesgo',
+  'ROIC': 'Avanzado', 'WACC': 'Avanzado', 'DCF': 'Avanzado', 'EV/EBITDA': 'Avanzado', 'Quick ratio': 'Avanzado',
+  'Apalancamiento operativo': 'Avanzado', 'Short interest': 'Avanzado', 'Duración de un bono': 'Avanzado', 'Spread de crédito': 'Avanzado', 'FCF yield': 'Avanzado',
 };
 
 let _glosarioAbierto = null;
@@ -1087,7 +1110,21 @@ function initGlosario() {
   const cats = [...new Set(Object.values(GLOSARIO_CATEGORIAS))];
   const sel = document.getElementById('glosarioCat');
   if (sel) cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
+
+  const termino = new URLSearchParams(location.search).get('termino');
+  if (termino) {
+    const match = Object.keys(METRIC_INFO).find(t => t.toLowerCase() === termino.toLowerCase());
+    if (match) {
+      _glosarioAbierto = match;
+      const search = document.getElementById('glosarioSearch');
+      if (search) search.value = match;
+    }
+  }
   renderGlosario();
+  if (termino) {
+    const sec = document.getElementById('biblioteca');
+    if (sec) setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
 }
 function renderGlosario() {
   const grid = document.getElementById('glosarioGrid');
@@ -3008,7 +3045,7 @@ function renderStock(el, d, ticker) {
   </section>
 </div>
 
-<section>
+<section id="biblioteca">
   <div class="pill">Biblioteca</div>
   <h2>Términos financieros<br>en cristiano.</h2>
   <p class="sub">¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier término y te lo explicamos como si tuvieras 15 años.</p>
