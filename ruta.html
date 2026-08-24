@@ -224,11 +224,14 @@ async function init() {
   document.getElementById('pathWrap').style.display = 'block';
   document.getElementById('xpBar').style.display = 'flex';
 
-  const { data: prog } = await _sb.from('learning_progress').select('area,completado').eq('user_id', _user.id);
+  const { data: prog, error: errProg } = await _sb.from('learning_progress').select('area,completado').eq('user_id', _user.id);
+  if (errProg) console.error('[DuoInvest] Error cargando progreso guardado:', errProg.message || errProg, errProg);
+  else console.log('[DuoInvest] Progreso cargado:', prog);
   _progreso = {};
   (prog || []).forEach(p => { _progreso[p.area] = p.completado; });
 
-  const { data: profile } = await _sb.from('profiles').select('total_xp,plan,racha_dias').eq('id', _user.id).single();
+  const { data: profile, error: errProfile } = await _sb.from('profiles').select('total_xp,plan,racha_dias').eq('id', _user.id).single();
+  if (errProfile) console.error('[DuoInvest] Error cargando perfil (XP/racha):', errProfile.message || errProfile, errProfile);
   const xp = profile?.total_xp || 0;
   document.getElementById('rutaXP').textContent = xp;
   document.getElementById('rutaNivel').textContent = Math.floor(xp / 100) + 1;
@@ -352,13 +355,18 @@ async function finalizarNodo() {
   const el = document.getElementById('quizArea');
   if (pct >= UMBRAL_APROBADO) {
     try {
+      console.log('[DuoInvest] Guardando nivel completado:', _nodoActual.id, 'user:', _user?.id);
       const { error: errUpsert } = await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
-      if (errUpsert) console.error('Error guardando progreso del nivel:', errUpsert);
+      if (errUpsert) console.error('[DuoInvest] Error guardando progreso del nivel:', errUpsert.message || errUpsert, errUpsert);
+      else console.log('[DuoInvest] Progreso del nivel guardado OK');
       await registrarRacha();
       if (_qXP > 0) {
-        const { data: prof } = await _sb.from('profiles').select('total_xp').eq('id', _user.id).single();
+        const { data: prof, error: errSelect } = await _sb.from('profiles').select('total_xp').eq('id', _user.id).single();
+        if (errSelect) console.error('[DuoInvest] Error leyendo XP actual:', errSelect.message || errSelect, errSelect);
         const nuevoXP = (prof?.total_xp || 0) + _qXP;
-        await _sb.from('profiles').update({ total_xp: nuevoXP }).eq('id', _user.id);
+        const { error: errUpdateXP } = await _sb.from('profiles').update({ total_xp: nuevoXP }).eq('id', _user.id);
+        if (errUpdateXP) console.error('[DuoInvest] Error guardando XP:', errUpdateXP.message || errUpdateXP, errUpdateXP);
+        else console.log('[DuoInvest] XP guardado OK:', nuevoXP);
         document.getElementById('rutaXP').textContent = nuevoXP;
         document.getElementById('rutaNivel').textContent = Math.floor(nuevoXP / 100) + 1;
       }
