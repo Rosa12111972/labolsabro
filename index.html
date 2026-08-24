@@ -1424,8 +1424,8 @@ async function setUser(user) {
     localStorage.removeItem('mosca_total_xp');
     await _sb.from('profiles').update({ total_xp: _totalXP }).eq('id', user.id);
   }
-  renderXPBadge();
-  renderRachaBadge();
+  if (typeof renderXPBadge === 'function') renderXPBadge();
+  if (typeof renderRachaBadge === 'function') renderRachaBadge();
   await cargarPanelData();
   const navAuth = document.getElementById('navAuth');
   const isPremium = _userPlan !== 'free';
@@ -1480,8 +1480,8 @@ function clearUser() {
   _jars = [];
   _invertidoSimulado = 0;
   document.getElementById('navAuth').innerHTML = `<button class="nav-btn" onclick="openAuthModal()" data-i18n="navEntrar">${(I18N[_idioma]||I18N.es).navEntrar}</button>`;
-  cargarXPTotal();
-  renderHeroMockup();
+  if (typeof cargarXPTotal === 'function') cargarXPTotal();
+  if (typeof renderHeroMockup === 'function') renderHeroMockup();
 }
 
 async function signOut() {
