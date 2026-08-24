@@ -1100,6 +1100,22 @@ const METRIC_INFO = {
   'Correlación entre activos': '💡 Cuánto se mueven dos inversiones en la misma dirección. Si suben y bajan siempre juntas, tener las dos no te protege de nada — diversificar de verdad es mezclar activos con correlación baja, que no reaccionan igual a lo mismo.',
   'Backtesting': '💡 Probar una estrategia de inversión simulándola con datos del pasado, para ver qué rentabilidad habría dado. Cuidado: que algo funcionara genial en el pasado no garantiza que vaya a repetirse — es fácil "ajustar" una estrategia a posteriori para que parezca perfecta.',
   'Rentabilidad por dividendo': '💡 El dividendo anual dividido entre el precio de la acción, en porcentaje. Si una acción vale 50€ y paga 2€ al año, la rentabilidad por dividendo es del 4% — como un interés que cobras solo por tener la acción, encima de lo que suba o baje el precio.',
+  'TAE': '💡 La Tasa Anual Equivalente: el interés real de un producto contando comisiones y cada cuánto se pagan los intereses. Es más fiable que el TIN (el tipo "de etiqueta") para comparar dos productos entre sí.',
+  'Coste de oportunidad': '💡 Lo que dejas de ganar por elegir una opción en vez de otra. Si tienes dinero parado sin invertir, el coste de oportunidad es la rentabilidad que te estás perdiendo por no tenerlo trabajando en otro sitio.',
+  'Deuda buena y mala': '💡 La deuda buena financia algo que te genera valor o ingresos (una hipoteca barata, estudiar). La deuda mala financia consumo con intereses altísimos (tarjetas de crédito, préstamos rápidos) que te cuesta mucho más de lo que aporta.',
+  'Depósito a plazo fijo': '💡 Metes tu dinero un tiempo determinado (6 meses, 1 año...) a cambio de algo más de interés que una cuenta normal. La pega: no puedes tocarlo sin penalización hasta que acabe el plazo.',
+  'Gastos fijos y variables': '💡 Los fijos se repiten cada mes con un importe parecido (alquiler, seguros, suscripciones). Los variables cambian según lo que decidas gastar (ocio, ropa, restaurantes) — son los que más margen tienes para ajustar.',
+  'Págate a ti mismo primero': '💡 En vez de ahorrar "lo que sobra" a final de mes (que casi siempre es poco), separas el ahorro nada más cobrar, como si fuera una factura más. Le das al ahorro la misma prioridad que a cualquier gasto fijo.',
+  'Historial crediticio': '💡 El "currículum" de cómo pagas tus deudas: si llegas a tiempo, si has tenido impagos... Un buen historial hace que los bancos te ofrezcan mejores condiciones si algún día necesitas pedir financiación.',
+  'Amortización anticipada': '💡 Pagar por adelantado parte de una deuda (como una hipoteca) antes de lo pactado. Reduces la deuda y te ahorras los intereses futuros de esa parte — es como una inversión sin riesgo con rentabilidad igual al interés que te ahorras.',
+  'Regla del 72': '💡 Divide 72 entre la rentabilidad anual (en %) y obtienes, aproximadamente, los años que tarda tu dinero en duplicarse. Al 8% anual, por ejemplo, tu dinero se dobla en unos 9 años (72÷8).',
+  'Rebalanceo de cartera': '💡 Con el tiempo, unos activos suben más que otros y tu cartera se desvía del reparto que decidiste al principio. Rebalancear es vender un poco de lo que ha crecido de más y comprar lo que se ha quedado corto, para volver a tu plan.',
+  'Asset allocation': '💡 Cómo repartes tu dinero entre grandes tipos de activo: acciones, bonos, efectivo, inmuebles... Es la decisión que más pesa en el riesgo y la rentabilidad de una cartera, más incluso que elegir qué acciones concretas comprar.',
+  'TER': '💡 Total Expense Ratio: el porcentaje anual que te cobra un fondo por gestionarlo, todo incluido. Parece poco (0,1% frente a 1,5%), pero mantenido durante décadas la diferencia en el resultado final es enorme.',
+  'Value investing': '💡 Buscar empresas que cotizan baratas respecto a lo que ganan ahora mismo, apostando a que el mercado las está infravalorando. Es el estilo contrario al "growth", que paga más por el crecimiento futuro esperado.',
+  'REIT': '💡 Una sociedad que invierte en inmuebles (oficinas, centros comerciales, alquileres...) y cotiza en bolsa como si fuera una acción. Te da exposición al ladrillo sin tener que comprar un piso entero ni lidiar con inquilinos.',
+  'Drawdown': '💡 La mayor caída que ha sufrido una inversión desde un máximo hasta el mínimo posterior. Te ayuda a saber, en el peor momento histórico, cuánto habrías visto caer tu dinero — y si aguantarías psicológicamente algo así.',
+  'Ratio de Sharpe': '💡 Compara la rentabilidad de una inversión con el riesgo (volatilidad) que hizo falta asumir para conseguirla. Dos inversiones pueden ganar lo mismo, pero la que lo consigue con menos sustos por el camino tiene mejor ratio de Sharpe.',
 };
 
 const GLOSARIO_CATEGORIAS = {
@@ -1118,6 +1134,11 @@ const GLOSARIO_CATEGORIAS = {
   'Recompra de acciones': 'Rentabilidad', 'Valor contable': 'Valoración', 'Insider buying': 'General', 'Sector cíclico': 'Riesgo',
   'Moat': 'General', 'Análisis técnico': 'General', 'Dilución': 'Rentabilidad', 'Free float': 'Riesgo', 'Guidance': 'General',
   'Correlación entre activos': 'Riesgo', 'Backtesting': 'General', 'Rentabilidad por dividendo': 'Dividendos',
+  'TAE': 'Finanzas personales', 'Coste de oportunidad': 'Finanzas personales', 'Deuda buena y mala': 'Finanzas personales',
+  'Depósito a plazo fijo': 'Finanzas personales', 'Gastos fijos y variables': 'Finanzas personales', 'Págate a ti mismo primero': 'Finanzas personales',
+  'Historial crediticio': 'Finanzas personales', 'Amortización anticipada': 'Finanzas personales', 'Regla del 72': 'Finanzas personales',
+  'Rebalanceo de cartera': 'Riesgo', 'Asset allocation': 'Riesgo', 'TER': 'Valoración', 'Value investing': 'Valoración',
+  'REIT': 'General', 'Drawdown': 'Riesgo', 'Ratio de Sharpe': 'Riesgo',
 };
 
 let _glosarioAbierto = null;
