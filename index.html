@@ -1104,7 +1104,7 @@ function renderGlosario() {
     const abierto = _glosarioAbierto === t;
     return `<div style="background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:16px 18px;cursor:pointer;" onclick="toggleGlosarioTerm('${t.replace(/'/g,"\\'")}')">
       <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div style="font-weight:700;font-size:14px">${t}</div>
+        <div style="font-weight:700;font-size:14px;color:var(--green)">${t}</div>
         <span style="font-size:11px;color:var(--text3);background:var(--card2);padding:2px 8px;border-radius:100px">${GLOSARIO_CATEGORIAS[t] || 'General'}</span>
       </div>
       ${abierto ? `<div style="margin-top:10px;font-size:13px;color:var(--text2);line-height:1.6">${METRIC_INFO[t]}</div>` : ''}
