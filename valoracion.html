@@ -11,8 +11,8 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geoeconomía para inversores — laBolsabro</title>
-  <meta name="description" content="Qué temas de geopolítica y geoeconomía merece la pena seguir como inversor, y cómo razonar sobre ellos sin caer en predecir titulares.">
+  <title>Valoración de empresas — laBolsabro</title>
+  <meta name="description" content="Cómo saber si una empresa está cara o barata: múltiplos, descuento de flujos de caja y los errores más comunes al valorar.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -28,22 +28,19 @@
     .back { font-size: 13.5px; color: var(--text2); text-decoration: none; }
     .back:hover { color: var(--text); }
     .hero { max-width: 760px; margin: 0 auto; padding: 64px 24px 40px; }
-    .tag { display: inline-flex; align-items: center; gap: 8px; background: var(--purple-dim); border: 1px solid rgba(167,139,250,0.3); color: var(--purple); padding: 6px 16px; border-radius: 100px; font-size: 12.5px; font-weight: 700; margin-bottom: 22px; }
+    .tag { display: inline-flex; align-items: center; gap: 8px; background: var(--yellow-dim); border: 1px solid rgba(250,204,21,0.3); color: var(--yellow); padding: 6px 16px; border-radius: 100px; font-size: 12.5px; font-weight: 700; margin-bottom: 22px; }
     h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px; }
     .lede { font-size: 17px; color: var(--text2); max-width: 62ch; }
     .content { max-width: 760px; margin: 0 auto; padding: 0 24px 60px; }
     .topics { display: grid; gap: 14px; margin-bottom: 48px; }
     .topic { background: var(--card); border: 1px solid var(--border2); border-radius: 14px; padding: 18px 22px; }
     .topic h3 { font-size: 15.5px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
-    .topic-n { flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px; background: var(--purple-dim); color: var(--purple); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+    .topic-n { flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px; background: var(--yellow-dim); color: var(--yellow); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
     .topic p { font-size: 14px; color: var(--text2); padding-left: 34px; }
     .framework { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; padding: 30px; margin-bottom: 40px; }
     .framework h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
     .framework > p { color: var(--text2); font-size: 14.5px; margin-bottom: 18px; }
     .not-this { display: flex; align-items: center; gap: 10px; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; font-size: 14.5px; color: var(--red); }
-    .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0; }
-    .flow-step { color: var(--green); font-size: 13.5px; font-weight: 700; border-bottom: 2px dotted rgba(34,197,94,0.4); padding-bottom: 2px; }
-    .flow-arrow { color: var(--text3); font-size: 16px; }
     .example { background: var(--card2); border-radius: 12px; padding: 16px 18px; font-size: 13.5px; color: var(--text2); }
     .example strong { color: var(--text); }
     .areas { background: var(--yellow-dim); border: 1px solid rgba(250,204,21,0.25); border-radius: 18px; padding: 28px; margin-bottom: 8px; }
@@ -72,68 +69,55 @@
       <div class="logo-mark">🪰</div>
       <div><div class="logo-text">Mosca</div><div class="logo-sub">laBolsabro</div></div>
     </a>
-    <a class="back" href="/guia.html">← Guía del principiante</a>
+    <a class="back" href="/contabilidad.html">← Contabilidad</a>
   </div>
 </nav>
 
 <div class="hero">
-  <div class="tag">🌍 Geoeconomía para inversores</div>
-  <h1>Lo que pasa en el mundo también mueve tu cartera.</h1>
-  <p class="lede">Si inviertes en empresas como Microsoft o Meta, entender geopolítica y geoeconomía importa. Pero como factores que afectan a los negocios de verdad — no como titulares que te dicen cuándo comprar o vender.</p>
+  <div class="tag">🎯 Valoración de empresas</div>
+  <h1>Una empresa buena no es lo mismo que una acción barata.</h1>
+  <p class="lede">Valorar es intentar responder a una pregunta simple con herramientas nada simples: ¿cuánto vale de verdad este negocio, y cuánto me están pidiendo por él?</p>
 </div>
 
 <div class="content">
-  <div class="topics">
-    <div class="topic"><h3><span class="topic-n">1</span>EE. UU. vs. China</h3><p>Comercio, tecnología, chips, inteligencia artificial, restricciones a las exportaciones y cadenas de suministro.</p></div>
-    <div class="topic"><h3><span class="topic-n">2</span>Tipos de interés y bancos centrales</h3><p>La Reserva Federal (Fed) y el BCE influyen muchísimo en el precio de acciones, bonos, crédito y divisas.</p></div>
-    <div class="topic"><h3><span class="topic-n">3</span>Inflación y energía</h3><p>Petróleo, gas, electricidad y materias primas afectan a los costes de las empresas y al poder adquisitivo.</p></div>
-    <div class="topic"><h3><span class="topic-n">4</span>Dólar y divisas</h3><p>Si inviertes desde España en empresas estadounidenses, el tipo EUR/USD también puede afectar a tu rentabilidad.</p></div>
-    <div class="topic"><h3><span class="topic-n">5</span>China y las cadenas de suministro</h3><p>Muchas empresas dependen directa o indirectamente de China, Taiwán y otros países asiáticos.</p></div>
-    <div class="topic"><h3><span class="topic-n">6</span>Semiconductores</h3><p>Fundamentales para IA, centros de datos, coches, teléfonos y prácticamente toda la tecnología moderna. Taiwán tiene una importancia estratégica enorme.</p></div>
-    <div class="topic"><h3><span class="topic-n">7</span>Guerras y conflictos internacionales</h3><p>Pueden afectar energía, transporte, materias primas, gasto público y confianza de los mercados.</p></div>
-    <div class="topic"><h3><span class="topic-n">8</span>Política industrial y regulación</h3><p>Subvenciones, aranceles, impuestos y regulación pueden beneficiar o perjudicar sectores concretos.</p></div>
-    <div class="topic"><h3><span class="topic-n">9</span>Desglobalización / regionalización</h3><p>Las empresas intentan reducir dependencias y diversificar cadenas de suministro. Esto cambia dónde se construyen fábricas y centros de datos.</p></div>
-    <div class="topic"><h3><span class="topic-n">10</span>Demografía</h3><p>Envejecimiento de la población, inmigración y crecimiento demográfico afectan al consumo, empleo, pensiones y crecimiento económico.</p></div>
+  <div class="framework">
+    <h2>Las dos familias de métodos</h2>
+    <p>Casi todo lo que se usa para valorar una empresa cae en una de estas dos categorías:</p>
+    <div class="not-this" style="background:var(--green-glow);border-color:rgba(34,197,94,0.3);color:var(--green)">📐 <span><strong>Múltiplos:</strong> comparar el precio con algo que la empresa genera (beneficio, ventas, caja) — PER, EV/EBITDA, P/B.</span></div>
+    <div class="not-this" style="background:var(--purple-dim);border-color:rgba(167,139,250,0.3);color:var(--purple)">🔮 <span><strong>Descuento de flujos (DCF):</strong> estimar todo el dinero futuro que generará y traerlo a valor de hoy.</span></div>
+    <div class="example"><strong>En la práctica:</strong> los múltiplos son rápidos pero superficiales (comparan con el mercado, que también puede estar equivocado). El DCF es más riguroso pero depende de asunciones sobre el futuro que nadie puede predecir con certeza. Los inversores serios usan ambos como contraste.</div>
   </div>
 
-  <div class="framework">
-    <h2>Cómo pensar como inversor, no como titular</h2>
-    <p>Cuando leas una noticia geoeconómica, evita la pregunta reflejo:</p>
-    <div class="not-this">🚫 <span>"¿Subirá o bajará la bolsa?"</span></div>
-    <p>Piensa en cadena, paso a paso:</p>
-    <div class="flow">
-      <span class="flow-step">Cambio geoeconómico</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">¿Qué empresas/sectores afecta?</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">¿Cómo afecta a ingresos, costes o beneficios?</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">¿Durante cuánto tiempo?</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-step">¿El mercado ya lo ha descontado?</span>
-    </div>
-    <div class="example"><strong>Ejemplo:</strong> Restricciones de EE. UU. a chips → empresas de semiconductores → menor acceso a determinados mercados → posible impacto en ventas → impacto diferente según la empresa.</div>
+  <div class="topics">
+    <div class="topic"><h3><span class="topic-n">1</span>PER (Precio/Beneficio)</h3><p>Cuántas veces pagas el beneficio anual. El múltiplo más usado y también el más simplista — no dice nada del crecimiento ni de la deuda.</p></div>
+    <div class="topic"><h3><span class="topic-n">2</span>EV/EBITDA</h3><p>Compara el valor total de la empresa (incluida su deuda) con su beneficio operativo. Más justo que el PER para comparar empresas con estructuras de deuda distintas.</p></div>
+    <div class="topic"><h3><span class="topic-n">3</span>P/B (Precio/Valor contable)</h3><p>Compara el precio con el patrimonio neto de la empresa. Útil en bancos y aseguradoras, menos en empresas de servicios o tecnología con pocos activos físicos.</p></div>
+    <div class="topic"><h3><span class="topic-n">4</span>Descuento de flujos de caja (DCF)</h3><p>Proyecta el dinero que generará la empresa en los próximos años y lo trae a valor presente. Tan bueno como las suposiciones que metas dentro — "basura entra, basura sale".</p></div>
+    <div class="topic"><h3><span class="topic-n">5</span>Comparables</h3><p>Mirar a qué múltiplo cotizan empresas parecidas del mismo sector. Rápido, pero asume que el mercado ya valora bien a esas otras empresas — no siempre es cierto.</p></div>
+    <div class="topic"><h3><span class="topic-n">6</span>Valor intrínseco vs precio de mercado</h3><p>El precio es lo que marca la bolsa hoy. El valor intrínseco es lo que tú (o tu modelo) crees que vale de verdad. Invertir con criterio es buscar diferencias grandes entre ambos.</p></div>
+    <div class="topic"><h3><span class="topic-n">7</span>Margen de seguridad</h3><p>Comprar con un descuento respecto a tu estimación de valor, para que si te equivocas un poco, no pierdas dinero. Cuanta más incertidumbre, mayor margen conviene exigir.</p></div>
+    <div class="topic"><h3><span class="topic-n">8</span>Errores comunes al valorar</h3><p>Extrapolar el crecimiento actual para siempre, ignorar la deuda, comparar empresas de sectores distintos, o enamorarse de la empresa y ajustar el modelo para que "salga bien".</p></div>
   </div>
 
   <div class="areas">
     <h3>Las 6 áreas básicas de un inversor</h3>
     <div class="area-chips">
       <a class="area-chip" href="/contabilidad.html">Contabilidad</a>
-      <a class="area-chip" href="/valoracion.html">Valoración de empresas</a>
+      <span class="area-chip current">Valoración de empresas</span>
       <a class="area-chip" href="/macroeconomia.html">Macroeconomía</a>
       <a class="area-chip" href="/mercados.html">Mercados financieros</a>
       <a class="area-chip" href="/riesgo.html">Gestión del riesgo</a>
-      <span class="area-chip current">Geoeconomía</span>
+      <a class="area-chip" href="/geoeconomia.html">Geoeconomía</a>
     </div>
   </div>
 </div>
 
 <div class="closing">
   <div class="closing-box">
-    <p>Ese tipo de razonamiento en cadena es mucho más útil que intentar predecir el mercado a partir de titulares. Ahora aplícalo: analiza una empresa real y mira qué factores geoeconómicos le afectan de verdad.</p>
+    <p>Ningún método de valoración es perfecto — todos dependen de asunciones sobre el futuro. Lo importante no es tener razón siempre, sino tener un criterio consistente y un margen de seguridad cuando te equivocas.</p>
     <div class="cta-row">
-      <a class="btn btn-green" href="/#stocks">Analizar una empresa →</a>
-      <a class="btn btn-out" href="/guia.html">← Volver a la guía</a>
+      <a class="btn btn-green" href="/#stocks">Practicar con una empresa real →</a>
+      <a class="btn btn-out" href="/macroeconomia.html">Siguiente: Macroeconomía →</a>
     </div>
   </div>
 </div>
