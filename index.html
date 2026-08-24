@@ -1088,6 +1088,18 @@ const METRIC_INFO = {
   'Duración de un bono': '💡 No es solo "cuánto falta para que venza" — mide lo sensible que es el precio del bono a los cambios de tipos de interés. A más duración, más se mueve el precio cuando suben o bajan los tipos.',
   'Spread de crédito': '💡 Lo "extra" que paga una empresa por su deuda comparado con la deuda pública, considerada más segura. Cuanto más riesgo se le percibe, mayor es ese spread.',
   'FCF yield': '💡 El dinero real que genera la empresa (Free Cash Flow) comparado con lo que cuesta comprarla en bolsa. Un yield alto puede indicar que está barata generando mucha caja de verdad.',
+  'Recompra de acciones': '💡 La empresa compra sus propias acciones en el mercado y las retira. Quedan menos acciones en circulación, así que el beneficio se reparte entre menos trozos — el BPA sube aunque el beneficio total no haya crecido nada.',
+  'Valor contable': '💡 Lo que valdría la empresa si vendiera todos sus activos y pagara todas sus deudas — el patrimonio neto, vamos. Comparar el precio en bolsa con el valor contable te dice si pagas mucho o poco por cada euro de patrimonio real.',
+  'Insider buying': '💡 Cuando los directivos o dueños de la empresa compran acciones de su propia compañía con su propio dinero. Suele verse como buena señal — nadie mejor que ellos conoce el negocio por dentro, y si apuestan su pasta es porque confían.',
+  'Sector cíclico': '💡 Sectores como construcción, automóvil o lujo, que van muy ligados al ciclo económico: lo petan cuando la economía va bien y sufren fuerte en las crisis. Lo contrario son los sectores defensivos (alimentación, salud), que aguantan mejor pase lo que pase.',
+  'Moat': '💡 Literalmente "foso" — lo que protege a una empresa de que la competencia le quite el negocio. Puede ser una marca fuerte, patentes, economías de escala o que cambiar de proveedor sea muy caro para el cliente. Cuanto más ancho el foso, más le va a costar hundirla a la competencia.',
+  'Análisis técnico': '💡 Estudiar gráficos, patrones de precio y volumen para intentar predecir hacia dónde va a moverse una acción a corto plazo. Es el polo opuesto al análisis fundamental (mirar el negocio de verdad) — aquí lo único que importa es el propio gráfico.',
+  'Dilución': '💡 Cuando la empresa emite acciones nuevas (por ejemplo, para conseguir dinero), el beneficio total se reparte entre más trozos. Si eras dueño de una parte de la tarta, ahora hay más comensales y tu trozo (y el BPA) se hace más pequeño.',
+  'Free float': '💡 El porcentaje de acciones de una empresa que realmente se puede comprar y vender en el mercado — el resto está en manos de fundadores, el estado o accionistas que no las mueven. Un free float bajo significa menos liquidez y precios que se mueven más bruscamente.',
+  'Guidance': '💡 Las previsiones que da la propia empresa sobre cómo le van a ir las ventas o el beneficio los próximos meses. El mercado reacciona muchas veces más al guidance (lo que viene) que al resultado que acaba de presentar (lo que ya pasó).',
+  'Correlación entre activos': '💡 Cuánto se mueven dos inversiones en la misma dirección. Si suben y bajan siempre juntas, tener las dos no te protege de nada — diversificar de verdad es mezclar activos con correlación baja, que no reaccionan igual a lo mismo.',
+  'Backtesting': '💡 Probar una estrategia de inversión simulándola con datos del pasado, para ver qué rentabilidad habría dado. Cuidado: que algo funcionara genial en el pasado no garantiza que vaya a repetirse — es fácil "ajustar" una estrategia a posteriori para que parezca perfecta.',
+  'Rentabilidad por dividendo': '💡 El dividendo anual dividido entre el precio de la acción, en porcentaje. Si una acción vale 50€ y paga 2€ al año, la rentabilidad por dividendo es del 4% — como un interés que cobras solo por tener la acción, encima de lo que suba o baje el precio.',
 };
 
 const GLOSARIO_CATEGORIAS = {
@@ -1103,6 +1115,9 @@ const GLOSARIO_CATEGORIAS = {
   'Diversificación': 'Riesgo', 'Riesgo de concentración': 'Riesgo',
   'ROIC': 'Avanzado', 'WACC': 'Avanzado', 'DCF': 'Avanzado', 'EV/EBITDA': 'Avanzado', 'Quick ratio': 'Avanzado',
   'Apalancamiento operativo': 'Avanzado', 'Short interest': 'Avanzado', 'Duración de un bono': 'Avanzado', 'Spread de crédito': 'Avanzado', 'FCF yield': 'Avanzado',
+  'Recompra de acciones': 'Rentabilidad', 'Valor contable': 'Valoración', 'Insider buying': 'General', 'Sector cíclico': 'Riesgo',
+  'Moat': 'General', 'Análisis técnico': 'General', 'Dilución': 'Rentabilidad', 'Free float': 'Riesgo', 'Guidance': 'General',
+  'Correlación entre activos': 'Riesgo', 'Backtesting': 'General', 'Rentabilidad por dividendo': 'Dividendos',
 };
 
 let _glosarioAbierto = null;
