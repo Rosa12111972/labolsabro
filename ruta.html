@@ -356,11 +356,13 @@ async function finalizarNodo() {
       document.getElementById('rutaNivel').textContent = Math.floor(nuevoXP / 100) + 1;
     }
     _progreso[_nodoActual.id] = true;
+    const next = siguienteArea(_nodoActual.id);
+    const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
     el.innerHTML = `<div style="text-align:center;padding:20px 0">
       <div style="font-size:48px;margin-bottom:12px">🎉</div>
       <h2 style="margin-bottom:8px">¡Nivel superado!</h2>
       <p style="color:var(--text2);font-size:14px;margin-bottom:20px">${_qScore}/${total} correctas · +${_qXP} XP</p>
-      <button class="readbtn" onclick="cerrarNodo()">Continuar</button>
+      <button class="readbtn" onclick="irNivelSiguiente('${next && !nextLocked ? next.id : ''}')">${next && !nextLocked ? `Siguiente: ${next.emoji} ${next.nombre} →` : 'Continuar'}</button>
     </div>`;
   } else {
     el.innerHTML = `<div style="text-align:center;padding:20px 0">
@@ -391,12 +393,16 @@ async function completarMetodo() {
   await _sb.from('learning_progress').upsert({ user_id: _user.id, area: 'analisis', completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
   await registrarRacha();
   _progreso['analisis'] = true;
+  const next = siguienteArea('analisis');
+  const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
   document.getElementById('readBody').innerHTML = `<div style="text-align:center;padding:10px 0">
     <div style="font-size:48px;margin-bottom:12px">🎉</div>
     <h2 style="margin-bottom:8px">¡Método aprendido!</h2>
     <p style="color:var(--text2);font-size:14px;margin-bottom:20px">Ahora ponlo en práctica con una empresa de verdad.</p>
     <a href="/#stocks" style="display:block;margin-bottom:10px;background:var(--green);color:#000;font-weight:700;padding:13px;border-radius:100px;text-decoration:none;">Analizar una empresa real →</a>
-    <button class="readbtn" style="background:transparent;border:1px solid var(--border2);color:var(--text2)" onclick="cerrarNodo()">Cerrar</button>
+    ${next && !nextLocked
+      ? `<button class="readbtn" onclick="irNivelSiguiente('${next.id}')">Siguiente: ${next.emoji} ${next.nombre} →</button>`
+      : `<button class="readbtn" style="background:transparent;border:1px solid var(--border2);color:var(--text2)" onclick="cerrarNodo()">Cerrar</button>`}
   </div>`;
   renderPath();
 }
@@ -404,8 +410,22 @@ async function completarLectura() {
   await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
   await registrarRacha();
   _progreso[_nodoActual.id] = true;
+  const next = siguienteArea(_nodoActual.id);
+  const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
   cerrarNodo();
   renderPath();
+  if (next && !nextLocked) abrirNodo(next.id);
+}
+
+function siguienteArea(id) {
+  const i = AREAS.findIndex(a => a.id === id);
+  if (i === -1 || i === AREAS.length - 1) return null;
+  return AREAS[i + 1];
+}
+function irNivelSiguiente(nextId) {
+  cerrarNodo();
+  renderPath();
+  if (nextId) abrirNodo(nextId);
 }
 
 function cerrarNodo() {
