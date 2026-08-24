@@ -1273,10 +1273,10 @@ function fmtMonedaConvertida(amount, from) {
 function fmtEUR(amount, decimales) {
   const dec = decimales !== undefined ? decimales : (_userCurrency === 'JPY' ? 0 : 2);
   if (_userCurrency === 'EUR' || !_fxRates) {
-    return Math.round(amount).toLocaleString('es-ES') + ' €';
+    return amount.toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + ' €';
   }
   const conv = convertirMoneda(amount, 'EUR', _userCurrency);
-  if (conv === null) return Math.round(amount).toLocaleString('es-ES') + ' €';
+  if (conv === null) return amount.toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + ' €';
   return `${SIMBOLOS_MONEDA[_userCurrency]||''}${conv.toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec })} ${_userCurrency}`;
 }
 const I18N = {
