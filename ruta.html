@@ -119,23 +119,52 @@ const _sb = supabase.createClient(
 
 const PREGUNTAS_POR_AREA = {
   ahorro: [
-    { q: '¿Qué es el interés compuesto?', ops: ['Pagar intereses por una deuda', 'Ganar intereses sobre tus intereses anteriores', 'Un tipo de cuenta bancaria', 'Un impuesto sobre el ahorro'], ok: 1, exp: 'Ganas intereses no solo sobre tu dinero inicial, sino también sobre los intereses ya generados. Con el tiempo, crece de forma exponencial.' },
-    { q: '¿Qué es un fondo de emergencia?', ops: ['Dinero para invertir cuando la bolsa cae', 'Ahorro aparte para imprevistos (paro, avería, salud)', 'Un préstamo del banco', 'El dinero de vacaciones'], ok: 1, exp: 'Es pasta separada, fácil de sacar, para cuando la vida se tuerce. Se recomiendan 3-6 meses de gastos ahorrados ahí.' },
-    { q: '¿Qué es la regla del 50/30/20?', ops: ['50% acciones, 30% bonos, 20% cripto', '50% necesidades, 30% ocio, 20% ahorro', 'Un descuento por compra anticipada', 'Ahorrar 20€ por cada 50€ ganados'], ok: 1, exp: '50% para gastos necesarios, 30% para lo que quieras, 20% para ahorrar o invertir. Guía simple para repartir tus ingresos.' },
-    { q: '¿Qué es la inflación?', ops: ['La subida del precio de las acciones', 'La subida general de precios, que hace que tu dinero valga menos con el tiempo', 'Un impuesto bancario', 'Cuando el banco central baja los tipos'], ok: 1, exp: 'Si tu dinero está quieto sin generar nada, cada año compra menos cosas. Por eso invertir ayuda a que no pierda poder de compra.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es el interés compuesto?', ops: ['Pagar intereses por una deuda', 'Un tipo de cuenta bancaria', 'Ganar intereses sobre tus intereses anteriores', 'Un impuesto sobre el ahorro'], ok: 2, exp: 'Ganas intereses no solo sobre tu dinero inicial, sino también sobre los intereses ya generados. Con el tiempo, crece de forma exponencial.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es un fondo de emergencia?', ops: ['Dinero para invertir cuando la bolsa cae', 'Un préstamo del banco', 'El dinero de vacaciones', 'Ahorro aparte para imprevistos (paro, avería, salud)'], ok: 3, exp: 'Es pasta separada, fácil de sacar, para cuando la vida se tuerce. Se recomiendan 3-6 meses de gastos ahorrados ahí.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es la regla del 50/30/20?', ops: ['50% necesidades, 30% ocio, 20% ahorro', '50% acciones, 30% bonos, 20% cripto', 'Un descuento por compra anticipada', 'Ahorrar 20€ por cada 50€ ganados'], ok: 0, exp: '50% para gastos necesarios, 30% para lo que quieras, 20% para ahorrar o invertir. Guía simple para repartir tus ingresos.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es la inflación?', ops: ['La subida del precio de las acciones', 'Un impuesto bancario', 'La subida general de precios, que hace que tu dinero valga menos con el tiempo', 'Cuando el banco central baja los tipos'], ok: 2, exp: 'Si tu dinero está quieto sin generar nada, cada año compra menos cosas. Por eso invertir ayuda a que no pierda poder de compra.' },
+    { dif: 1, tipo: 'vf', q: 'Tener todo tu dinero parado en la cuenta corriente es la mejor forma de protegerlo de la inflación.', ok: false, exp: 'Falso. Si no genera nada, cada año pierde poder de compra frente a la inflación. Necesita al menos rentabilidad que la compense.' },
+    { dif: 2, tipo: 'mc', q: '¿Dónde conviene tener el fondo de emergencia?', ops: ['En acciones, para que crezca más', 'En algo líquido y seguro (cuenta remunerada), no en bolsa', 'En criptomonedas', 'Prestado a un familiar'], ok: 1, exp: 'El fondo de emergencia tiene que estar disponible YA cuando lo necesites, no sujeto a que el mercado esté bien ese día.' },
+    { dif: 2, tipo: 'mc', q: '¿Cuántos meses de gastos se suele recomendar para el fondo de emergencia?', ops: ['1 mes', '12-24 meses', '3-6 meses', 'Ninguno, mejor invertirlo todo'], ok: 2, exp: 'Entre 3 y 6 meses de gastos cubiertos es el rango habitual, según lo estable que sea tu situación laboral.' },
+    { dif: 2, tipo: 'vf', q: 'El interés compuesto beneficia más cuanto antes empieces, aunque al principio metas poco dinero.', ok: true, exp: 'Verdadero. El tiempo es el ingrediente que más multiplica el interés compuesto — empezar pronto pesa más que meter mucho tarde.' },
+    { dif: 2, tipo: 'mc', q: 'Ganas 2.000 € al mes. Con la regla 50/30/20, ¿cuánto deberías destinar a ahorro/inversión?', ops: ['1.000 €', '600 €', '400 €', '200 €'], ok: 2, exp: 'El 20% de 2.000 € son 400 €. Ese es el tramo pensado para ahorrar o invertir cada mes.' },
+    { dif: 3, tipo: 'mc', q: 'Con una inflación del 5% anual y tu dinero sin generar ningún interés, ¿qué pasa con tu poder adquisitivo?', ops: ['Pierde valor cada año', 'Gana valor', 'Se mantiene exactamente igual', 'Depende del banco donde lo tengas'], ok: 0, exp: 'Cada año que pasa, esos mismos euros compran un poco menos. Por eso "ahorrar" sin más no basta a largo plazo.' },
   ],
   bolsa: [
-    { q: '¿Qué significa que una acción tiene un PER de 10x?', ops: ['La empresa gana 10 veces más que la competencia', 'El precio es 10 veces el beneficio anual por acción', 'Ha subido un 10% este año', 'Hay 10 accionistas mayoritarios'], ok: 1, exp: 'El PER indica cuántas veces pagas los beneficios anuales de la empresa. PER 10x = tardarías 10 años en recuperar la inversión solo con beneficios.' },
-    { q: '¿Qué es el EBITDA?', ops: ['El beneficio neto después de impuestos', 'El beneficio antes de intereses, impuestos, depreciación y amortización', 'El total de ventas', 'La deuda total'], ok: 1, exp: 'Mide el beneficio operativo antes de restar intereses, impuestos, depreciación y amortización. Sirve para comparar rentabilidad "pura" entre empresas.' },
-    { q: '¿Qué es un dividendo?', ops: ['Una comisión del broker', 'Parte del beneficio que la empresa reparte entre accionistas', 'El precio de venta de la acción', 'Un impuesto sobre la bolsa'], ok: 1, exp: 'Es la parte del beneficio que la empresa decide repartir entre quienes tienen sus acciones, en vez de reinvertirlo todo.' },
-    { q: '¿Qué es una acción?', ops: ['Un préstamo a una empresa', 'Un trocito de la propiedad de una empresa', 'Un seguro de vida', 'Un impuesto sobre ventas'], ok: 1, exp: 'Una acción es una parte de la propiedad de una empresa. Si la compras, te haces socio, por pequeño que sea el trozo.' },
-    { q: '¿Qué es la capitalización bursátil?', ops: ['El dinero que gana la empresa cada año', 'Lo que vale toda la empresa en bolsa (precio x nº acciones)', 'La deuda total de la empresa', 'El dividendo anual'], ok: 1, exp: 'Es el valor total de la empresa en el mercado. Apple o Microsoft valen billones; una empresa pequeña, millones.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué significa que una acción tiene un PER de 10x?', ops: ['La empresa gana 10 veces más que la competencia', 'Ha subido un 10% este año', 'Hay 10 accionistas mayoritarios', 'El precio es 10 veces el beneficio anual por acción'], ok: 3, exp: 'El PER indica cuántas veces pagas los beneficios anuales de la empresa. PER 10x = tardarías 10 años en recuperar la inversión solo con beneficios.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es el EBITDA?', ops: ['El beneficio neto después de impuestos', 'El beneficio antes de intereses, impuestos, depreciación y amortización', 'El total de ventas', 'La deuda total'], ok: 1, exp: 'Mide el beneficio operativo antes de restar intereses, impuestos, depreciación y amortización. Sirve para comparar rentabilidad "pura" entre empresas.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es un dividendo?', ops: ['Una comisión del broker', 'El precio de venta de la acción', 'Parte del beneficio que la empresa reparte entre accionistas', 'Un impuesto sobre la bolsa'], ok: 2, exp: 'Es la parte del beneficio que la empresa decide repartir entre quienes tienen sus acciones, en vez de reinvertirlo todo.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es una acción?', ops: ['Un préstamo a una empresa', 'Un trocito de la propiedad de una empresa', 'Un seguro de vida', 'Un impuesto sobre ventas'], ok: 1, exp: 'Una acción es una parte de la propiedad de una empresa. Si la compras, te haces socio, por pequeño que sea el trozo.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es la capitalización bursátil?', ops: ['El dinero que gana la empresa cada año', 'La deuda total de la empresa', 'El dividendo anual', 'Lo que vale toda la empresa en bolsa (precio × nº acciones)'], ok: 3, exp: 'Es el valor total de la empresa en el mercado. Apple o Microsoft valen billones; una empresa pequeña, millones.' },
+    { dif: 2, tipo: 'vf', q: 'Un PER más alto siempre significa que una empresa es peor inversión que una con PER más bajo.', ok: false, exp: 'Falso. Si crece mucho más rápido, un PER alto puede estar justificado. Por eso existe el PEG, que relaciona precio con crecimiento.' },
+    { dif: 2, tipo: 'mc', q: '¿Qué mide el ROE?', ops: ['Cuánta deuda tiene la empresa', 'Cuánto vende la empresa', 'Cuánto beneficio genera por cada euro de capital de los accionistas', 'El precio de la acción'], ok: 2, exp: 'El ROE (retorno sobre el capital) mide qué tan bien rentabiliza la empresa el dinero que pusieron los accionistas.' },
+    { dif: 2, tipo: 'vf', q: 'El margen neto indica qué porcentaje de las ventas se convierte finalmente en beneficio.', ok: true, exp: 'Verdadero. Margen neto = beneficio neto ÷ ventas. Cuanto más alto, mejor gestiona sus costes la empresa.' },
+    { dif: 3, tipo: 'mc', q: 'Dos empresas del mismo sector tienen el mismo PER, pero una crece el doble de rápido que la otra. ¿Cuál suele ser mejor opción?', ops: ['La que crece más rápido', 'La que crece más despacio', 'Da igual, el PER ya lo dice todo', 'Ninguna, solo importa el precio'], ok: 0, exp: 'A igual precio (PER), más crecimiento futuro suele ser mejor negocio — el precio "vale más" en relación a lo que la empresa va a generar.' },
+    { dif: 3, tipo: 'mc', q: 'Una empresa con Beta de 2, ¿cómo se comporta frente al mercado?', ops: ['Se mueve igual que el mercado', 'Se mueve el doble que el mercado (más volátil)', 'Se mueve la mitad que el mercado', 'No tiene relación con el mercado'], ok: 1, exp: 'Beta 2 significa que si el mercado sube o baja un 1%, la acción tiende a moverse un 2% — el doble de intensidad, en ambos sentidos.' },
   ],
   inversion: [
-    { q: '¿Qué es un fondo indexado?', ops: ['Un fondo gestionado por un experto que elige acciones', 'Un fondo que replica automáticamente un índice como el S&P 500', 'Una cuenta de ahorro con alta rentabilidad', 'Un tipo de criptomoneda estable'], ok: 1, exp: 'Compra automáticamente todas las empresas de un índice en sus proporciones exactas. Comisiones muy bajas al no tener gestor activo.' },
-    { q: '¿Qué es diversificar?', ops: ['Meterlo todo en tu empresa favorita', 'Repartir el dinero en varias inversiones distintas para reducir riesgo', 'Cambiarlo todo a otra moneda', 'Guardarlo en efectivo'], ok: 1, exp: 'No poner todos los huevos en la misma cesta. Si una inversión va mal, las demás pueden compensarlo.' },
-    { q: '¿Qué significa invertir "a largo plazo"?', ops: ['Comprar y vender el mismo día', 'Mantener la inversión años, aguantando subidas y bajadas', 'Invertir solo en empresas antiguas', 'Meter el dinero en un plazo fijo'], ok: 1, exp: 'Aguantar años, no vender en cuanto el mercado baja un poco. Cuanto más tiempo mantienes, menos importan los sustos del día a día.' },
-    { q: '¿Qué es un ETF?', ops: ['Una acción individual muy volátil', 'Un fondo que cotiza en bolsa como una acción pero contiene muchas empresas dentro', 'Un tipo de bono del estado', 'Una cuenta de broker'], ok: 1, exp: 'Compras 1 ETF y tienes un trocito de cientos de empresas de golpe. Diversificación fácil y barata.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es un fondo indexado?', ops: ['Un fondo gestionado por un experto que elige acciones', 'Un fondo que replica automáticamente un índice como el S&P 500', 'Una cuenta de ahorro con alta rentabilidad', 'Un tipo de criptomoneda estable'], ok: 1, exp: 'Compra automáticamente todas las empresas de un índice en sus proporciones exactas. Comisiones muy bajas al no tener gestor activo.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es diversificar?', ops: ['Meterlo todo en tu empresa favorita', 'Repartir el dinero en varias inversiones distintas para reducir riesgo', 'Cambiarlo todo a otra moneda', 'Guardarlo en efectivo'], ok: 1, exp: 'No poner todos los huevos en la misma cesta. Si una inversión va mal, las demás pueden compensarlo.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué significa invertir "a largo plazo"?', ops: ['Comprar y vender el mismo día', 'Mantener la inversión años, aguantando subidas y bajadas', 'Invertir solo en empresas antiguas', 'Meter el dinero en un plazo fijo'], ok: 1, exp: 'Aguantar años, no vender en cuanto el mercado baja un poco. Cuanto más tiempo mantienes, menos importan los sustos del día a día.' },
+    { dif: 1, tipo: 'mc', q: '¿Qué es un ETF?', ops: ['Una acción individual muy volátil', 'Un fondo que cotiza en bolsa como una acción pero contiene muchas empresas dentro', 'Un tipo de bono del estado', 'Una cuenta de broker'], ok: 1, exp: 'Compras 1 ETF y tienes un trocito de cientos de empresas de golpe. Diversificación fácil y barata.' },
+    { dif: 1, tipo: 'vf', q: 'Diversificar significa comprar solo empresas del mismo sector para especializarte en él.', ok: false, exp: 'Falso, es justo lo contrario: diversificar es repartir entre sectores, países y tipos de activo distintos, no concentrarte en uno.' },
+    { dif: 2, tipo: 'mc', q: '¿Cuál es la principal ventaja de un fondo indexado frente a uno gestionado activamente?', ops: ['Siempre gana más dinero, sin excepción', 'Te lo explica un asesor personal', 'Puedes elegir tú las empresas cada semana', 'Comisiones mucho más bajas al no haber gestor activo'], ok: 3, exp: 'Al no pagar a un equipo gestor que elige acciones, las comisiones son mucho menores — y a largo plazo eso pesa mucho en la rentabilidad final.' },
+    { dif: 2, tipo: 'mc', q: '¿Qué es el DCA (aportación periódica)?', ops: ['Invertir la misma cantidad cada mes, sin importar si el mercado sube o baja', 'Invertir todo tu dinero de golpe cuando crees que el precio está bajo', 'Vender cuando el mercado cae para evitar pérdidas', 'Comprar solo cuando una acción está de moda'], ok: 0, exp: 'Aportar la misma cantidad cada mes suaviza el precio medio de compra y te quita la presión de "acertar el momento perfecto".' },
+    { dif: 2, tipo: 'vf', q: 'Vender en pánico cuando el mercado cae mucho suele ser una buena estrategia a largo plazo.', ok: false, exp: 'Falso. Vender en el peor momento convierte una caída temporal en una pérdida real. Históricamente, aguantar suele compensar más.' },
+    { dif: 2, tipo: 'mc', q: 'Si inviertes en un solo ETF de un índice mundial, ¿en cuántas empresas distintas tienes un trocito?', ops: ['1', '10', 'Varios cientos o miles, según el índice', 'Ninguna, es dinero virtual'], ok: 2, exp: 'Un ETF de un índice global puede incluir desde algunos cientos hasta varios miles de empresas distintas, todo en un solo producto.' },
+    { dif: 3, tipo: 'mc', q: '¿Qué es el riesgo de concentración?', ops: ['El riesgo de perder la concentración mientras inviertes', 'Un tipo de comisión bancaria', 'El riesgo de que el mercado cierre', 'Tener demasiado dinero en muy pocas inversiones, sin diversificar'], ok: 3, exp: 'Si todo tu dinero depende de una sola empresa o sector, un problema ahí te afecta mucho más que si estuvieras repartido.' },
+  ],
+  avanzado: [
+    { dif: 3, tipo: 'mc', q: '¿Qué mide el ROIC (retorno sobre el capital invertido)?', ops: ['Cuánto beneficio genera la empresa por cada euro invertido en el negocio, deuda y capital incluidos', 'El precio de la acción dividido entre el beneficio', 'El porcentaje de deuda sobre el total del balance', 'El crecimiento anual de las ventas'], ok: 0, exp: 'El ROIC mide la eficiencia real generando beneficio con TODO el capital usado (propio y deuda). Un ROIC alto y sostenido suele indicar ventaja competitiva fuerte.' },
+    { dif: 3, tipo: 'mc', q: '¿Qué es el WACC?', ops: ['El precio medio de la acción en el último año', 'El porcentaje de beneficio que se reparte en dividendos', 'El coste medio que le cuesta a la empresa financiarse, combinando deuda y capital propio', 'La rentabilidad media del sector'], ok: 2, exp: 'El WACC es el "coste del dinero" de la empresa: combina el coste de la deuda y lo que exigen los accionistas por su capital.' },
+    { dif: 3, tipo: 'mc', q: '¿Para qué sirve un modelo de valoración por descuento de flujos de caja (DCF)?', ops: ['Para calcular el precio medio histórico de una acción', 'Para calcular el valor de una empresa según el dinero que se espera que genere en el futuro, traído a valor de hoy', 'Para calcular impuestos sobre plusvalías', 'Para calcular la comisión de un broker'], ok: 1, exp: 'El DCF estima cuánto vale una empresa hoy sumando el dinero que generará en el futuro, ajustado porque un euro hoy vale más que uno dentro de 10 años.' },
+    { dif: 3, tipo: 'mc', q: '¿Qué añade el EV/EBITDA frente al PER?', ops: ['Es exactamente lo mismo que el PER, solo cambia el nombre', 'Solo sirve para empresas que no tienen beneficios', 'Mide la liquidez a corto plazo', 'Tiene en cuenta también la deuda de la empresa, no solo el precio de la acción'], ok: 3, exp: 'El EV/EBITDA usa el valor de la empresa incluyendo su deuda, así que compara empresas con estructuras de deuda distintas de forma más justa que el PER.' },
+    { dif: 3, tipo: 'vf', q: 'El quick ratio (prueba ácida) incluye el inventario de la empresa para medir su liquidez.', ok: false, exp: 'Falso. El quick ratio excluye el inventario a propósito, porque puede tardar en venderse — mide solo lo que es fácil de convertir en dinero YA.' },
+    { dif: 3, tipo: 'mc', q: '¿Qué es el apalancamiento operativo?', ops: ['La cantidad de deuda bancaria que tiene', 'El número de empleados por sucursal', 'Cómo de sensible es su beneficio a cambios en las ventas, según su proporción de costes fijos', 'El tipo de interés que paga por sus créditos'], ok: 2, exp: 'Una empresa con muchos costes fijos amplifica tanto las subidas como las bajadas de beneficio cuando cambian sus ventas.' },
+    { dif: 3, tipo: 'mc', q: '¿Qué significa que una acción tenga un "short interest" alto?', ops: ['Que paga un dividendo muy alto', 'Que muchos inversores han apostado a que el precio va a bajar (posiciones cortas)', 'Que tiene mucha liquidez en el mercado', 'Que ha subido mucho en poco tiempo'], ok: 1, exp: 'El short interest mide cuántas acciones están "prestadas" para venderlas apostando a que bajarán — indica pesimismo del mercado sobre la empresa.' },
+    { dif: 3, tipo: 'vf', q: 'La duración de un bono mide únicamente los años que quedan hasta su vencimiento.', ok: false, exp: 'Falso. La duración mide la SENSIBILIDAD del precio del bono a los cambios de tipos de interés, no solo el tiempo restante.' },
+    { dif: 3, tipo: 'mc', q: '¿Qué es el "spread de crédito" de un bono corporativo?', ops: ['La diferencia de rentabilidad entre ese bono y un bono del estado considerado sin riesgo', 'La comisión que cobra el banco por comprarlo', 'El porcentaje de bonos en cartera frente a acciones', 'El plazo hasta el vencimiento'], ok: 0, exp: 'El spread es lo "extra" que paga una empresa frente a la deuda pública para compensar el riesgo de que no pague. Más riesgo percibido, mayor spread.' },
+    { dif: 3, tipo: 'mc', q: '¿Qué es el "free cash flow yield"?', ops: ['El porcentaje de caja que se reparte como dividendo', 'La diferencia entre ingresos y gastos operativos', 'El free cash flow de la empresa dividido entre su valor en bolsa', 'El crecimiento anual del flujo de caja'], ok: 2, exp: 'El FCF yield compara el dinero real que genera la empresa con lo que cuesta comprarla en bolsa. Un yield alto puede indicar que está barata generando mucha caja.' },
   ],
 };
 
@@ -251,15 +280,38 @@ function abrirNodo(id) {
     return;
   }
   _qIdx = 0; _qScore = 0; _qXP = 0;
+  prepararSesion(area);
   document.getElementById('quizOverlay').classList.add('open');
   renderPregunta();
 }
 
+function shuffleArr(a) { return [...a].sort(() => Math.random() - 0.5); }
+const PREGUNTAS_POR_INTENTO = 6;
+const UMBRAL_APROBADO = 0.65;
+let _sesionPreguntas = [];
+
+const DIF_LABEL = { 1: '🟢 Fácil', 2: '🟡 Media', 3: '🔴 Difícil' };
+function prepararSesion(area) {
+  const pool = PREGUNTAS_POR_AREA[area.id] || [];
+  const elegidas = shuffleArr(pool).slice(0, Math.min(PREGUNTAS_POR_INTENTO, pool.length));
+  elegidas.sort((a, b) => a.dif - b.dif);
+  _sesionPreguntas = elegidas.map(p => {
+    if (p.tipo === 'vf') {
+      return { q: p.q, ops: ['✅ Verdadero', '❌ Falso'], ok: p.ok ? 0 : 1, exp: p.exp, dif: p.dif };
+    }
+    const correcta = p.ops[p.ok];
+    const opsShuffled = shuffleArr(p.ops);
+    return { q: p.q, ops: opsShuffled, ok: opsShuffled.indexOf(correcta), exp: p.exp, dif: p.dif };
+  });
+}
+
 function renderPregunta() {
-  const preguntas = PREGUNTAS_POR_AREA[_nodoActual.id];
-  const p = preguntas[_qIdx];
+  const p = _sesionPreguntas[_qIdx];
   const el = document.getElementById('quizArea');
-  el.innerHTML = `<div class="qnum">${_nodoActual.emoji} ${_nodoActual.nombre} · Pregunta ${_qIdx + 1} de ${preguntas.length}</div>
+  el.innerHTML = `<div class="qnum" style="display:flex;justify-content:space-between;align-items:center">
+      <span>${_nodoActual.emoji} ${_nodoActual.nombre} · Pregunta ${_qIdx + 1} de ${_sesionPreguntas.length}</span>
+      <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;background:var(--card2)">${DIF_LABEL[p.dif] || ''}</span>
+    </div>
     <div class="qtext">${p.q}</div>
     <div id="opts">${p.ops.map((o, i) => `<button class="opt" onclick="responder(${i})">${o}</button>`).join('')}</div>
     <div class="fb" id="fb"></div>
@@ -267,8 +319,7 @@ function renderPregunta() {
 }
 
 function responder(i) {
-  const preguntas = PREGUNTAS_POR_AREA[_nodoActual.id];
-  const p = preguntas[_qIdx];
+  const p = _sesionPreguntas[_qIdx];
   const correct = i === p.ok;
   document.querySelectorAll('#opts .opt').forEach(b => b.onclick = null);
   const btns = document.querySelectorAll('#opts .opt');
@@ -285,17 +336,16 @@ function responder(i) {
 }
 
 async function siguientePregunta() {
-  const preguntas = PREGUNTAS_POR_AREA[_nodoActual.id];
   _qIdx++;
-  if (_qIdx >= preguntas.length) { await finalizarNodo(); return; }
+  if (_qIdx >= _sesionPreguntas.length) { await finalizarNodo(); return; }
   renderPregunta();
 }
 
 async function finalizarNodo() {
-  const preguntas = PREGUNTAS_POR_AREA[_nodoActual.id];
-  const pct = _qScore / preguntas.length;
+  const total = _sesionPreguntas.length;
+  const pct = _qScore / total;
   const el = document.getElementById('quizArea');
-  if (pct >= 0.5) {
+  if (pct >= UMBRAL_APROBADO) {
     await _sb.from('learning_progress').upsert({ user_id: _user.id, area: _nodoActual.id, completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
     await registrarRacha();
     if (_qXP > 0) {
@@ -309,14 +359,14 @@ async function finalizarNodo() {
     el.innerHTML = `<div style="text-align:center;padding:20px 0">
       <div style="font-size:48px;margin-bottom:12px">🎉</div>
       <h2 style="margin-bottom:8px">¡Nivel superado!</h2>
-      <p style="color:var(--text2);font-size:14px;margin-bottom:20px">${_qScore}/${preguntas.length} correctas · +${_qXP} XP</p>
+      <p style="color:var(--text2);font-size:14px;margin-bottom:20px">${_qScore}/${total} correctas · +${_qXP} XP</p>
       <button class="readbtn" onclick="cerrarNodo()">Continuar</button>
     </div>`;
   } else {
     el.innerHTML = `<div style="text-align:center;padding:20px 0">
       <div style="font-size:48px;margin-bottom:12px">🪰</div>
       <h2 style="margin-bottom:8px">Casi, pero no</h2>
-      <p style="color:var(--text2);font-size:14px;margin-bottom:20px">${_qScore}/${preguntas.length} correctas. Necesitas al menos la mitad para desbloquear el siguiente nivel.</p>
+      <p style="color:var(--text2);font-size:14px;margin-bottom:20px">${_qScore}/${total} correctas. Necesitas al menos un ${Math.round(UMBRAL_APROBADO*100)}% para desbloquear el siguiente nivel. Las preguntas cambian cada intento, ¡así que presta atención!</p>
       <button class="readbtn" onclick="abrirNodo('${_nodoActual.id}')">Reintentar</button>
     </div>`;
   }
