@@ -34,25 +34,28 @@
     .xpbar { max-width: 320px; margin: 24px auto 0; background: var(--card2); border-radius: 100px; padding: 8px 16px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px; color: var(--text2); border: 1px solid var(--border2); }
     #loginGate { max-width: 400px; margin: 60px auto; padding: 0 24px; text-align: center; }
     #loginGate a { color: var(--green); font-weight: 700; }
-    .path { max-width: 420px; margin: 40px auto 80px; padding: 0 24px; position: relative; }
-    .node { display: flex; align-items: center; gap: 18px; margin-bottom: 8px; position: relative; padding-bottom: 40px; }
-    .node:last-child { padding-bottom: 0; }
-    .node::before { content:''; position: absolute; left: 27px; top: 56px; bottom: -8px; width: 2px; background: var(--border2); }
-    .node:last-child::before { display: none; }
-    .node.done::before { background: var(--green); }
-    .node-circle { flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border: none; position: relative; z-index: 1; }
-    .node-circle.locked { background: var(--card2); border: 2px solid var(--border2); cursor: not-allowed; color: var(--text3); }
-    .node-circle.available { background: var(--green); color: #000; box-shadow: 0 0 0 5px var(--green-glow); animation: pulse 2s infinite; }
-    .node-circle.done { background: var(--green-glow); border: 2px solid var(--green); color: var(--green); }
-    .node-circle.premium-lock { background: var(--yellow-dim); border: 2px solid rgba(250,204,21,0.4); color: var(--yellow); cursor: pointer; }
-    @keyframes pulse { 0%,100%{ box-shadow: 0 0 0 5px var(--green-glow); } 50%{ box-shadow: 0 0 0 9px var(--green-glow); } }
-    .node-info { flex: 1; }
-    .node-title { font-weight: 700; font-size: 15.5px; margin-bottom: 2px; }
-    .node-desc { font-size: 12.5px; color: var(--text3); }
-    .node-status { font-size: 11px; font-weight: 700; margin-top: 4px; }
-    .node-status.available { color: var(--green); }
-    .node-status.done { color: var(--green); }
-    .node-status.locked { color: var(--text3); }
+    .path { max-width: 480px; margin: 40px auto 80px; padding: 0 24px; position: relative; }
+    .path-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
+    .ronda-banner { position: relative; z-index: 1; text-align: center; margin: 44px 0 30px; }
+    .ronda-banner:first-child { margin-top: 0; }
+    .ronda-banner span { display: inline-block; background: var(--card2); border: 1px solid var(--border2); color: var(--text2); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 20px; border-radius: 100px; }
+    .node-row { position: relative; z-index: 1; display: flex; margin-bottom: 34px; }
+    .node-row:last-child { margin-bottom: 0; }
+    .node-col { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 92px; }
+    .node-circle { flex-shrink: 0; width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; border: none; position: relative; z-index: 1; box-shadow: 0 4px 0 rgba(0,0,0,0.25); transition: transform 0.15s; }
+    .node-circle:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.25); }
+    .node-circle.locked { background: var(--card2); border: 2px solid var(--border2); cursor: not-allowed; color: var(--text3); box-shadow: 0 4px 0 var(--border); }
+    .node-circle.available { background: var(--green); color: #000; box-shadow: 0 5px 0 #16a34a; animation: pulse 2s infinite; }
+    .node-circle.done { background: var(--green-glow); border: 2px solid var(--green); color: var(--green); box-shadow: 0 4px 0 rgba(34,197,94,0.25); }
+    .node-circle.premium-lock { background: var(--yellow-dim); border: 2px solid rgba(250,204,21,0.4); color: var(--yellow); cursor: pointer; box-shadow: 0 4px 0 rgba(250,204,21,0.2); }
+    @keyframes pulse { 0%,100%{ box-shadow: 0 5px 0 #16a34a, 0 0 0 5px var(--green-glow); } 50%{ box-shadow: 0 5px 0 #16a34a, 0 0 0 9px var(--green-glow); } }
+    .node-title { font-weight: 700; font-size: 12px; text-align: center; line-height: 1.3; color: var(--text2); }
+    .node-row.done .node-title, .node-row.available .node-title { color: var(--text); }
+    .node-status { display: none; }
+    .start-badge { position: absolute; top: -38px; background: var(--green); color: #000; font-size: 11.5px; font-weight: 700; padding: 6px 14px; border-radius: 100px; white-space: nowrap; animation: bob 1.6s ease-in-out infinite; }
+    .start-badge::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid var(--green); }
+    @keyframes bob { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-5px); } }
+    .node-col { position: relative; }
 
     .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:1000; align-items:center; justify-content:center; padding:16px; }
     .overlay.open { display:flex; }
@@ -242,22 +245,22 @@ const PREGUNTAS_POR_AREA = {
 
 const AREAS = [
   // Ronda 1 — Fundamentos
-  { id: 'ahorro', nombre: 'Ahorro y fondos I', desc: 'La base antes de invertir nada', emoji: '🐷', tipo: 'quiz' },
+  { id: 'ahorro', nombre: 'Ahorro y fondos I', desc: 'La base antes de invertir nada', emoji: '🐷', tipo: 'quiz', ronda: 'Ronda 1 · Fundamentos' },
   { id: 'bolsa1', nombre: 'Bolsa I: Fundamentos', desc: 'PER, dividendos, qué es una acción', emoji: '📈', tipo: 'quiz' },
   { id: 'inversion1', nombre: 'Inversión I: Fundamentos', desc: 'ETFs, diversificación, largo plazo', emoji: '💼', tipo: 'quiz' },
   // Ronda 2 — Intermedio
-  { id: 'ahorro2', nombre: 'Ahorro y fondos II', desc: 'TAE, deuda buena y mala, coste de oportunidad', emoji: '🐖', tipo: 'quiz' },
+  { id: 'ahorro2', nombre: 'Ahorro y fondos II', desc: 'TAE, deuda buena y mala, coste de oportunidad', emoji: '🐖', tipo: 'quiz', ronda: 'Ronda 2 · Intermedio' },
   { id: 'bolsa2', nombre: 'Bolsa II: Intermedio', desc: 'Márgenes, recompras, moat, ciclicidad', emoji: '📊', tipo: 'quiz' },
   { id: 'inversion2', nombre: 'Inversión II: Intermedio', desc: 'Rebalanceo, TER, value vs growth, REITs', emoji: '⚖️', tipo: 'quiz' },
   // Práctica
-  { id: 'analisis', nombre: 'Analiza una empresa', desc: 'El método paso a paso, con la propia app', emoji: '🔍', tipo: 'metodo' },
+  { id: 'analisis', nombre: 'Analiza una empresa', desc: 'El método paso a paso, con la propia app', emoji: '🔍', tipo: 'metodo', ronda: 'Práctica' },
   { id: 'geoeconomia', nombre: 'Geoeconomía', desc: 'Cómo el mundo mueve tu cartera', emoji: '🌍', tipo: 'lectura', href: '/geoeconomia.html' },
   // Ronda 3 — Avanzado, con cálculos
-  { id: 'ahorro3', nombre: 'Ahorro y fondos III', desc: 'Regla del 72, TAE real, casos con números', emoji: '🧮', tipo: 'quiz' },
+  { id: 'ahorro3', nombre: 'Ahorro y fondos III', desc: 'Regla del 72, TAE real, casos con números', emoji: '🧮', tipo: 'quiz', ronda: 'Ronda 3 · Avanzado' },
   { id: 'bolsa3', nombre: 'Bolsa III: Avanzado', desc: 'Casos prácticos y cálculos reales', emoji: '📐', tipo: 'quiz' },
   { id: 'inversion3', nombre: 'Inversión III: Avanzado', desc: 'Drawdown, ratio de Sharpe, casos reales', emoji: '🎯', tipo: 'quiz' },
   // Capstone Premium
-  { id: 'avanzado', nombre: 'Análisis avanzado', desc: 'ROIC, WACC, DCF — nivel experto', emoji: '🔬', tipo: 'premium', href: '/#quiz' },
+  { id: 'avanzado', nombre: 'Análisis avanzado', desc: 'ROIC, WACC, DCF — nivel experto', emoji: '🔬', tipo: 'premium', href: '/#quiz', ronda: 'Experto · Premium' },
 ];
 
 const METODO_PASOS = [
@@ -324,27 +327,65 @@ async function init() {
   renderPath();
 }
 
+const ZIGZAG_AMPLITUDE = 95;
 function renderPath() {
   const wrap = document.getElementById('pathWrap');
-  wrap.innerHTML = AREAS.map((area, i) => {
+  let html = '';
+  let wave = 0;
+  let startBadgeDone = false;
+  AREAS.forEach((area, i) => {
+    if (area.ronda) html += `<div class="ronda-banner"><span>${area.ronda}</span></div>`;
     const done = !!_progreso[area.id];
     const prevDone = i === 0 || !!_progreso[AREAS[i - 1].id];
-    let estado, circleClass, statusTxt, statusClass;
-    if (done) { estado = 'done'; circleClass = 'done'; statusTxt = '✓ Completado'; statusClass = 'done'; }
-    else if (area.tipo === 'premium' && !window._esPremium) { circleClass = 'premium-lock'; statusTxt = '🔒 Premium'; statusClass = 'locked'; }
-    else if (prevDone) { circleClass = 'available'; statusTxt = 'Empezar →'; statusClass = 'available'; }
-    else { circleClass = 'locked'; statusTxt = 'Bloqueado'; statusClass = 'locked'; }
+    let circleClass, estado;
+    if (done) { circleClass = 'done'; estado = 'done'; }
+    else if (area.tipo === 'premium' && !window._esPremium) { circleClass = 'premium-lock'; estado = 'locked'; }
+    else if (prevDone) { circleClass = 'available'; estado = 'available'; }
+    else { circleClass = 'locked'; estado = 'locked'; }
     const clickable = done || (area.tipo === 'premium' && !window._esPremium) || prevDone;
-    return `<div class="node ${done ? 'done' : ''}">
-      <button class="node-circle ${circleClass}" ${clickable ? `onclick="abrirNodo('${area.id}')"` : 'disabled'}>${done ? '✓' : area.emoji}</button>
-      <div class="node-info">
+    const offset = Math.round(Math.sin(wave * 1.05) * ZIGZAG_AMPLITUDE);
+    wave++;
+    const showBadge = estado === 'available' && !startBadgeDone;
+    if (showBadge) startBadgeDone = true;
+    html += `<div class="node-row ${estado}">
+      <div class="node-col" style="transform:translateX(${offset}px)">
+        ${showBadge ? `<div class="start-badge">Empieza aquí</div>` : ''}
+        <button class="node-circle ${circleClass}" ${clickable ? `onclick="abrirNodo('${area.id}')"` : 'disabled'}>${done ? '✓' : area.emoji}</button>
         <div class="node-title">${area.nombre}</div>
-        <div class="node-desc">${area.desc}</div>
-        <div class="node-status ${statusClass}">${statusTxt}</div>
       </div>
     </div>`;
-  }).join('');
+  });
+  wrap.innerHTML = `<svg class="path-svg"><path id="pathCurveBg" fill="none" stroke="var(--border2)" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/><path id="pathCurveDone" fill="none" stroke="var(--green)" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/></svg>` + html;
+  drawPathCurve();
 }
+
+function drawPathCurve() {
+  const wrap = document.getElementById('pathWrap');
+  const bg = document.getElementById('pathCurveBg');
+  const doneLine = document.getElementById('pathCurveDone');
+  const circles = wrap.querySelectorAll('.node-circle');
+  if (circles.length < 2) return;
+  const wrapRect = wrap.getBoundingClientRect();
+  const points = Array.from(circles).map(c => {
+    const r = c.getBoundingClientRect();
+    return { x: r.left + r.width / 2 - wrapRect.left, y: r.top + r.height / 2 - wrapRect.top };
+  });
+  const buildPath = (pts) => {
+    if (pts.length < 2) return '';
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 1; i < pts.length; i++) {
+      const prev = pts[i - 1], cur = pts[i];
+      const midY = (prev.y + cur.y) / 2;
+      d += ` C ${prev.x} ${midY}, ${cur.x} ${midY}, ${cur.x} ${cur.y}`;
+    }
+    return d;
+  };
+  bg.setAttribute('d', buildPath(points));
+  let doneCount = 0;
+  while (doneCount < AREAS.length && !!_progreso[AREAS[doneCount].id]) doneCount++;
+  doneLine.setAttribute('d', doneCount > 0 ? buildPath(points.slice(0, doneCount + 1)) : '');
+}
+window.addEventListener('resize', () => { if (document.getElementById('pathWrap').style.display !== 'none') drawPathCurve(); });
 
 function abrirNodo(id) {
   const area = AREAS.find(a => a.id === id);
