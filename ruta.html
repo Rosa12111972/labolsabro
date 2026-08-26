@@ -496,6 +496,7 @@ const AREAS = [
   { id: 'analisis', nombre: 'Analiza una empresa', desc: 'El método paso a paso, con la propia app', emoji: '🔍', tipo: 'metodo', ronda: 'Práctica' },
   { id: 'geoeconomia', nombre: 'Geoeconomía', desc: 'Cómo el mundo mueve tu cartera', emoji: '🌍', tipo: 'lectura', href: '/geoeconomia.html' },
   { id: 'buffett', nombre: 'Warren Buffett', desc: 'Círculo de competencia, moat, margen de seguridad', emoji: '🎩', tipo: 'quiz' },
+  { id: 'dueno', nombre: '¿Qué harías si fueras el dueño?', desc: 'Reparte el beneficio de 3 empresas distintas', emoji: '👑', tipo: 'dueno' },
   // Ronda 3 — Avanzado, con cálculos
   { id: 'ahorro3', nombre: 'Ahorro y fondos III', desc: 'Regla del 72, TAE real, casos con números', emoji: '🧮', tipo: 'quiz', ronda: 'Ronda 3 · Avanzado' },
   { id: 'bolsa3', nombre: 'Bolsa III: Avanzado', desc: 'Casos prácticos y cálculos reales', emoji: '📐', tipo: 'quiz' },
@@ -520,6 +521,33 @@ const METODO_PASOS = [
   { titulo: '7. Lee los pros y contras', texto: 'Cada análisis y cada PDF te resume automáticamente lo bueno y lo malo de la empresa en frases claras. Léelo siempre antes de decidir nada.' },
 ];
 let _metodoIdx = 0;
+
+const DUENO_CATEGORIAS = ['Crecimiento / expansión', 'I+D (investigación y desarrollo)', 'Reducción de deuda', 'Adquisiciones', 'Dividendos', 'Liquidez (guardarlo en caja)'];
+const DUENO_ESCENARIOS = [
+  {
+    empresa: 'NovaTech (ficticia)',
+    emoji: '🚀',
+    contexto: 'Empresa de software en pleno crecimiento. Su producto gana cuota de mercado rápido, pero la competencia es feroz y necesita seguir innovando para no quedarse atrás. Casi no tiene deuda.',
+    beneficio: '500 millones €',
+    reveal: 'Las empresas tecnológicas en fase de crecimiento fuerte, con poca deuda y un mercado que aún pueden ganar, suelen priorizar reinvertir la mayor parte del beneficio en crecimiento e I+D. Repartir mucho dividendo ahora significaría renunciar a expandirse mientras la ventaja competitiva todavía se está construyendo.',
+  },
+  {
+    empresa: 'Consumo Estable S.A. (ficticia)',
+    emoji: '🧴',
+    contexto: 'Fabricante de productos de consumo básico con una marca muy asentada desde hace décadas. El mercado apenas crece, pero genera caja de forma muy estable año tras año. Deuda baja y controlada.',
+    beneficio: '800 millones €',
+    reveal: 'En sectores maduros con pocas oportunidades de crecimiento fuerte, reinvertir todo el beneficio no suele generar tanto valor adicional. Por eso este tipo de empresas suele repartir una parte importante en dividendos y recompras de acciones, devolviendo el exceso de caja a sus accionistas.',
+  },
+  {
+    empresa: 'Industrial Norte (ficticia)',
+    emoji: '🏭',
+    contexto: 'Empresa industrial que ha crecido mucho en los últimos años a base de pedir deuda para comprar fábricas y competidores. Su ratio deuda/patrimonio está bastante por encima de la media del sector.',
+    beneficio: '300 millones €',
+    reveal: 'Con niveles de deuda ya elevados, suele ser prioritario destinar buena parte del beneficio a reducirla antes de repartir dividendos o seguir haciendo adquisiciones — para no quedar demasiado expuestos si el negocio se complica o suben los tipos de interés.',
+  },
+];
+let _duenoIdx = 0;
+let _duenoRespuestas = [];
 
 function renderRacha(dias) {
   const wrap = document.getElementById('rutaRachaWrap');
@@ -656,6 +684,13 @@ function abrirNodo(id) {
     _metodoIdx = 0;
     document.getElementById('readOverlay').classList.add('open');
     renderMetodoPaso();
+    return;
+  }
+  if (area.tipo === 'dueno') {
+    _duenoIdx = 0;
+    _duenoRespuestas = [];
+    document.getElementById('readOverlay').classList.add('open');
+    renderDuenoEscenario();
     return;
   }
   _qIdx = 0; _qScore = 0; _qXP = 0;
@@ -879,6 +914,85 @@ async function completarLectura() {
   cerrarNodo();
   renderPath();
   if (next && !nextLocked) abrirNodo(next.id);
+}
+
+const DUENO_XP = 30;
+function renderDuenoEscenario() {
+  const esc = DUENO_ESCENARIOS[_duenoIdx];
+  document.getElementById('readTitle').textContent = `👑 ¿Qué harías si fueras el dueño?`;
+  document.getElementById('readBody').innerHTML = `
+    <div style="display:flex;gap:5px;margin-bottom:18px">${DUENO_ESCENARIOS.map((_, i) => `<div style="height:5px;flex:1;border-radius:3px;background:${i <= _duenoIdx ? 'var(--green)' : 'var(--border2)'}"></div>`).join('')}</div>
+    <div style="font-size:32px;margin-bottom:6px">${esc.emoji}</div>
+    <h3 style="font-size:16.5px;margin-bottom:8px">${esc.empresa}</h3>
+    <p style="color:var(--text2);font-size:14px;line-height:1.6;margin-bottom:10px">${esc.contexto}</p>
+    <p style="font-size:13.5px;font-weight:700;color:var(--yellow);margin-bottom:18px">Beneficio de este año: ${esc.beneficio}</p>
+    <p style="font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:10px">Reparte el 100% de ese beneficio entre estas categorías (tiene que sumar 100):</p>
+    ${DUENO_CATEGORIAS.map((c, i) => `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+        <label style="font-size:13px;color:var(--text)">${c}</label>
+        <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+          <input type="number" id="dueno_${i}" min="0" max="100" value="0" oninput="actualizarTotalDueno()" style="width:56px;padding:8px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:14px;font-family:inherit;text-align:right;">
+          <span style="font-size:13px;color:var(--text3)">%</span>
+        </div>
+      </div>`).join('')}
+    <div style="text-align:right;font-size:13px;font-weight:700;margin-bottom:16px" id="duenoTotal">Total: 0%</div>
+    <label style="display:block;font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:6px">¿Por qué repartirías así el beneficio?</label>
+    <textarea id="duenoPorque" placeholder="Explica tu razonamiento con tus propias palabras..." style="width:100%;min-height:60px;padding:12px 14px;margin-bottom:12px;border-radius:10px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:14px;font-family:inherit;resize:vertical;"></textarea>
+    <div id="duenoError" style="display:none;color:var(--red);font-size:13px;margin-bottom:12px">El reparto tiene que sumar exactamente 100%, y cuenta tu razonamiento antes de continuar.</div>
+    <button class="readbtn" onclick="verDuenoReveal()">Ver qué se suele hacer en casos así →</button>`;
+}
+function actualizarTotalDueno() {
+  const total = DUENO_CATEGORIAS.reduce((s, _, i) => s + (Number(document.getElementById(`dueno_${i}`).value) || 0), 0);
+  const el = document.getElementById('duenoTotal');
+  el.textContent = `Total: ${total}%`;
+  el.style.color = total === 100 ? 'var(--green)' : 'var(--red)';
+}
+function verDuenoReveal() {
+  const total = DUENO_CATEGORIAS.reduce((s, _, i) => s + (Number(document.getElementById(`dueno_${i}`).value) || 0), 0);
+  const porque = document.getElementById('duenoPorque').value.trim();
+  if (total !== 100 || !porque) { document.getElementById('duenoError').style.display = 'block'; return; }
+  _duenoRespuestas.push({ empresa: DUENO_ESCENARIOS[_duenoIdx].empresa, porque });
+  const esc = DUENO_ESCENARIOS[_duenoIdx];
+  const esUltimo = _duenoIdx === DUENO_ESCENARIOS.length - 1;
+  document.getElementById('readBody').innerHTML = `
+    <div style="font-size:32px;margin-bottom:6px">${esc.emoji}</div>
+    <h3 style="font-size:16.5px;margin-bottom:12px">${esc.empresa}</h3>
+    <div style="background:var(--green-glow);border:1px solid rgba(34,197,94,0.3);border-radius:12px;padding:16px 18px;margin-bottom:20px">
+      <p style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px">Lo que se suele hacer en casos así</p>
+      <p style="font-size:14px;color:var(--text2);line-height:1.6">${esc.reveal}</p>
+    </div>
+    <p style="font-size:12.5px;color:var(--text3);margin-bottom:20px">No hay una única respuesta "correcta" — lo que importa es el razonamiento detrás de tu reparto, no acertar un número exacto.</p>
+    <button class="readbtn" onclick="${esUltimo ? 'completarDueno()' : 'siguienteDueno()'}">${esUltimo ? 'Terminar el reto' : 'Siguiente empresa →'}</button>`;
+}
+function siguienteDueno() {
+  _duenoIdx++;
+  renderDuenoEscenario();
+}
+async function completarDueno() {
+  try {
+    const { error } = await _sb.from('learning_progress').upsert({ user_id: _user.id, area: 'dueno', completado: true, updated_at: new Date().toISOString() }, { onConflict: 'user_id,area' });
+    if (error) console.error('Error guardando progreso del reto:', error);
+    await registrarRacha();
+    const { data: prof } = await _sb.from('profiles').select('total_xp').eq('id', _user.id).single();
+    const nuevoXP = (prof?.total_xp || 0) + DUENO_XP;
+    await _sb.from('profiles').update({ total_xp: nuevoXP }).eq('id', _user.id);
+    document.getElementById('rutaXP').textContent = nuevoXP;
+    document.getElementById('rutaNivel').textContent = Math.floor(nuevoXP / 100) + 1;
+  } catch (e) {
+    console.error('Error guardando el progreso en el servidor:', e);
+  }
+  _progreso['dueno'] = true;
+  const next = siguienteArea('dueno');
+  const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
+  document.getElementById('readBody').innerHTML = `<div style="text-align:center;padding:10px 0">
+    <div style="font-size:48px;margin-bottom:12px">👑</div>
+    <h2 style="margin-bottom:8px">¡Reto completado!</h2>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:20px">+${DUENO_XP} XP por razonar 3 repartos distintos, no por acertar un número.</p>
+    ${next && !nextLocked
+      ? `<button class="readbtn" onclick="irNivelSiguiente('${next.id}')">Siguiente: ${next.emoji} ${next.nombre} →</button>`
+      : `<button class="readbtn" style="background:transparent;border:1px solid var(--border2);color:var(--text2)" onclick="cerrarNodo()">Cerrar</button>`}
+  </div>`;
+  renderPath();
 }
 
 function siguienteArea(id) {
