@@ -2412,6 +2412,46 @@ function generarReinversion(d) {
   return `De cada 100€ que gana, reparte ${reparte.toFixed(0)}€ en dividendos a los accionistas y reinvierte ${reinvierte.toFixed(0)}€ en el propio negocio: nuevos productos, expansión, tecnología o pagar deuda.`;
 }
 
+const CLIENTES_POR_SECTOR = {
+  'Technology': 'Principalmente empresas y consumidores que usan su software, hardware o servicios digitales.',
+  'Consumer Cyclical': 'Consumidores particulares que gastan en productos o servicios no esenciales (moda, ocio, automóvil...).',
+  'Consumer Defensive': 'Consumidores particulares que compran productos de uso cotidiano, con demanda bastante estable.',
+  'Financial Services': 'Particulares y empresas que usan sus productos financieros: cuentas, préstamos, seguros o gestión de inversiones.',
+  'Energy': 'Otras empresas, industrias y consumidores finales que dependen de la energía que produce o distribuye.',
+  'Healthcare': 'Pacientes, hospitales, aseguradoras y sistemas de salud que usan sus tratamientos, servicios o tecnología médica.',
+  'Industrials': 'Principalmente otras empresas: fábricas, constructoras o compañías que usan su maquinaria, servicios o logística.',
+  'Basic Materials': 'Otras industrias que usan sus materias primas como insumo para fabricar sus propios productos.',
+  'Communication Services': 'Consumidores y anunciantes que usan sus redes, contenido o servicios de comunicación.',
+  'Utilities': 'Hogares y empresas de su zona de cobertura, que dependen del suministro que ofrece (electricidad, agua, gas).',
+  'Real Estate': 'Inquilinos, compradores o empresas que alquilan o compran los inmuebles que gestiona.',
+  'default': 'No tenemos datos concretos sobre sus clientes — conviene investigarlo directamente en sus informes anuales.',
+};
+
+function generarRespuestasChecklist(d, ticker, sector, score) {
+  const { contras } = generarProsContras(d, sector);
+  const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados` : '';
+  const industriaTxt = d.industry ? `, dentro de la industria de ${d.industry}` : '';
+  const ingresoTxt = d.crecimientoIng !== null && d.crecimientoIng !== undefined
+    ? `Sus ingresos ${d.crecimientoIng >= 0 ? 'han crecido' : 'han caído'} un ${Math.abs(d.crecimientoIng * 100).toFixed(1)}% en el último periodo reportado.`
+    : 'No tenemos datos de la evolución reciente de sus ingresos.';
+  const epsTxt = d.crecimientoEps !== null && d.crecimientoEps !== undefined
+    ? ` El beneficio por acción ${d.crecimientoEps >= 0 ? 'ha crecido' : 'ha caído'} un ${Math.abs(d.crecimientoEps * 100).toFixed(1)}%.`
+    : '';
+  const payout = d.payoutRatio !== null && d.payoutRatio !== undefined ? Math.min(1, Math.max(0, d.payoutRatio)) : null;
+  return [
+    { q: '¿Qué hace la empresa?', a: `${d.nombre || ticker} opera en el sector ${d.sector || 'no disponible'}${industriaTxt}.${empleadosTxt}.` },
+    { q: '¿En qué sector opera?', a: `${d.sector || 'Sector no disponible'}${industriaTxt}.` },
+    { q: '¿Cómo genera sus ingresos?', a: SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'] },
+    { q: '¿Quiénes son sus clientes?', a: CLIENTES_POR_SECTOR[d.sector] || CLIENTES_POR_SECTOR['default'] },
+    { q: '¿Qué hace con el dinero que genera?', a: generarReinversion(d) },
+    { q: '¿Cuánto reinvierte en el negocio?', a: payout !== null ? `Reinvierte aproximadamente el ${((1 - payout) * 100).toFixed(0)}% de su beneficio en el propio negocio, en vez de repartirlo en dividendos.` : 'No tenemos datos suficientes de payout para calcularlo.' },
+    { q: '¿Cómo ha evolucionado financieramente?', a: ingresoTxt + epsTxt },
+    { q: '¿Qué riesgos tiene su actividad?', a: contras.join('. ') + '.' },
+    { q: '¿Qué perspectivas puede tener a largo plazo?', a: generarVeredictoIndividual(d, score, ticker).texto },
+    { q: '¿Por qué considero que es una inversión adecuada para mi estrategia?', a: null },
+  ];
+}
+
 function generarVeredictoIndividual(d, score, ticker) {
   if (score === null) return { emoji: '❓', titulo: 'Sin datos suficientes', texto: `No tenemos suficientes datos financieros de ${ticker} para dar un veredicto fiable.` };
   const { pros, contras } = generarProsContras(d, d.sector);
@@ -2602,34 +2642,34 @@ function descargarPDF() {
   doc.text('No inviertas por intuición: investiga antes de decidir', pad, y2);
   y2 += 8;
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(60, 60, 60);
-  const introChecklist = doc.splitTextToSize('Que el precio suba o baje no es, por sí solo, una razón para invertir. Antes de decidir, respóndete a estas preguntas sobre esta empresa:', W - pad * 2);
+  const introChecklist = doc.splitTextToSize('Que el precio suba o baje no es, por sí solo, una razón para invertir. Estas son las preguntas clave sobre esta empresa, respondidas con los datos de este análisis:', W - pad * 2);
   y2 = checkBreak(y2, introChecklist.length * 5.2 + 4);
   doc.text(introChecklist, pad, y2);
   y2 += introChecklist.length * 5.2 + 6;
 
-  const checklistPreguntas = [
-    '¿Qué hace la empresa?',
-    '¿En qué sector opera?',
-    '¿Cómo genera sus ingresos?',
-    '¿Quiénes son sus clientes?',
-    '¿Qué hace con el dinero que genera?',
-    '¿Cuánto reinvierte en el negocio?',
-    '¿Cómo ha evolucionado financieramente?',
-    '¿Qué riesgos tiene su actividad?',
-    '¿Qué perspectivas puede tener a largo plazo?',
-    '¿Por qué considero que es una inversión adecuada para mi estrategia?',
-  ];
-  doc.setFontSize(10);
-  checklistPreguntas.forEach(p => {
-    const lines = doc.splitTextToSize(p, W - pad * 2 - 8);
-    const needed = lines.length * 5.2 + 2;
-    y2 = checkBreak(y2, needed);
-    doc.setTextColor(161, 98, 7); doc.setFont('helvetica', 'bold'); doc.text('•', pad, y2);
-    doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
-    doc.text(lines, pad + 6, y2);
-    y2 += needed;
+  const checklistRespuestas = generarRespuestasChecklist(d, ticker, d.sector, score);
+  checklistRespuestas.forEach(({ q, a }) => {
+    const qLines = doc.splitTextToSize(q, W - pad * 2 - 8);
+    y2 = checkBreak(y2, qLines.length * 5.2 + 8);
+    doc.setTextColor(161, 98, 7); doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+    doc.text('•', pad, y2);
+    doc.text(qLines, pad + 6, y2);
+    y2 += qLines.length * 5.2 + 3;
+    if (a) {
+      const aLines = doc.splitTextToSize(a, W - pad * 2 - 10);
+      y2 = checkBreak(y2, aLines.length * 5 + 6);
+      doc.setTextColor(80, 80, 80); doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+      doc.text(aLines, pad + 6, y2);
+      y2 += aLines.length * 5 + 7;
+    } else {
+      const aLines = doc.splitTextToSize('Esto solo lo puedes responder tú: depende de tus objetivos, tu horizonte temporal y cuánto riesgo estás dispuesto a asumir.', W - pad * 2 - 10);
+      y2 = checkBreak(y2, aLines.length * 5 + 6);
+      doc.setTextColor(120, 120, 120); doc.setFont('helvetica', 'italic'); doc.setFontSize(9.5);
+      doc.text(aLines, pad + 6, y2);
+      y2 += aLines.length * 5 + 7;
+    }
   });
-  y2 += 10;
+  y2 += 6;
 
   y2 = checkBreak(y2, 22);
   doc.setFillColor(20, 20, 20);
