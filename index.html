@@ -2597,6 +2597,40 @@ function descargarPDF() {
   doc.text(reinvLines, pad, y2);
   y2 += reinvLines.length * 5.5 + 14;
 
+  y2 = checkBreak(y2, 24);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
+  doc.text('No inviertas por intuición: investiga antes de decidir', pad, y2);
+  y2 += 8;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(60, 60, 60);
+  const introChecklist = doc.splitTextToSize('Que el precio suba o baje no es, por sí solo, una razón para invertir. Antes de decidir, respóndete a estas preguntas sobre esta empresa:', W - pad * 2);
+  y2 = checkBreak(y2, introChecklist.length * 5.2 + 4);
+  doc.text(introChecklist, pad, y2);
+  y2 += introChecklist.length * 5.2 + 6;
+
+  const checklistPreguntas = [
+    '¿Qué hace la empresa?',
+    '¿En qué sector opera?',
+    '¿Cómo genera sus ingresos?',
+    '¿Quiénes son sus clientes?',
+    '¿Qué hace con el dinero que genera?',
+    '¿Cuánto reinvierte en el negocio?',
+    '¿Cómo ha evolucionado financieramente?',
+    '¿Qué riesgos tiene su actividad?',
+    '¿Qué perspectivas puede tener a largo plazo?',
+    '¿Por qué considero que es una inversión adecuada para mi estrategia?',
+  ];
+  doc.setFontSize(10);
+  checklistPreguntas.forEach(p => {
+    const lines = doc.splitTextToSize(p, W - pad * 2 - 8);
+    const needed = lines.length * 5.2 + 2;
+    y2 = checkBreak(y2, needed);
+    doc.setTextColor(161, 98, 7); doc.setFont('helvetica', 'bold'); doc.text('•', pad, y2);
+    doc.setTextColor(60, 60, 60); doc.setFont('helvetica', 'normal');
+    doc.text(lines, pad + 6, y2);
+    y2 += needed;
+  });
+  y2 += 10;
+
   y2 = checkBreak(y2, 22);
   doc.setFillColor(20, 20, 20);
   doc.roundedRect(pad, y2, W - pad * 2, 22, 4, 4, 'F');
