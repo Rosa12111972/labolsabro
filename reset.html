@@ -53,15 +53,21 @@
     </div>
   </div>
   <script>
-    const _sb = supabase.createClient(
-      'https://vbzhcogjyyjbjvwrtuaz.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiemhjb2dqeXlqYmp2d3J0dWF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMzg2NjQsImV4cCI6MjEwMDgxNDY2NH0.xsfE2omrJef5UnqECQfWy6w_USYVTsBW2JrGIDKSYvE'
-    );
+    let _sb = null;
+    try {
+      _sb = supabase.createClient(
+        'https://vbzhcogjyyjbjvwrtuaz.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiemhjb2dqeXlqYmp2d3J0dWF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMzg2NjQsImV4cCI6MjEwMDgxNDY2NH0.xsfE2omrJef5UnqECQfWy6w_USYVTsBW2JrGIDKSYvE'
+      );
+    } catch (e) {
+      console.warn('Supabase no disponible:', e);
+    }
 
     async function updatePass() {
       const p1 = document.getElementById('pass1').value;
       const p2 = document.getElementById('pass2').value;
       const err = document.getElementById('errBox');
+      if (!_sb) { err.textContent = 'Servicio no disponible en este momento. Inténtalo de nuevo más tarde.'; err.style.display = 'block'; return; }
       if (p1.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres'; err.style.display = 'block'; return; }
       if (p1 !== p2) { err.textContent = 'Las contraseñas no coinciden'; err.style.display = 'block'; return; }
       const { error } = await _sb.auth.updateUser({ password: p1 });
