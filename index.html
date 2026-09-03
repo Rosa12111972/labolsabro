@@ -1372,6 +1372,7 @@ let _currentUser = null;
 let _userPlan = 'free';
 let _lastTicker = '';
 let _bonusBusquedas = 0;
+let _pruebasGratisUsadas = 0;
 let _premiumBonusUntil = null;
 let _referralCode = '';
 
@@ -1471,7 +1472,7 @@ const I18N = {
     heroNote: 'Gratis · <strong style="color:var(--text2)">Sin tarjeta de crédito</strong> · Sin permanencia',
     pricingPill: 'Precios', pricingTitle: 'Sin letra pequeña.', pricingSub: 'Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.',
     tierFree: 'Gratis', mes: '/mes', freeDesc: 'Para empezar y ver si laBolsabro te va. Sin límite de tiempo.',
-    freeF1: 'Analizador básico de acciones', freeF2: 'Calculadora de interés compuesto', freeF3: '3 búsquedas al día', freeBtn: 'Usar gratis',
+    freeF1: 'Analizador de acciones', freeF2: 'Calculadora de interés compuesto', freeF3: '3 pruebas gratis (de por vida)', freeBtn: 'Usar gratis',
     hotBadge: 'Más popular', tierJunior: 'Inversor Junior', juniorDesc: 'Para el que empieza a invertir y quiere entender el mercado sin complicaciones.',
     juniorF1: 'Análisis completo de empresas', juniorF2: 'Búsquedas ilimitadas', juniorF3: 'Comparador de empresas', juniorF4: 'Recordatorios personalizables', juniorBtn: 'Empezar Junior',
     tierSenior: 'Inversor Senior', seniorDesc: 'Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.',
@@ -1496,7 +1497,7 @@ const I18N = {
     heroNote: 'Free · <strong style="color:var(--text2)">No credit card</strong> · Cancel anytime',
     pricingPill: 'Pricing', pricingTitle: 'No fine print.', pricingSub: 'Start free. Upgrade whenever you want. No commitment.',
     tierFree: 'Free', mes: '/mo', freeDesc: 'To get started and see if laBolsabro is for you. No time limit.',
-    freeF1: 'Basic stock analyzer', freeF2: 'Compound interest calculator', freeF3: '3 searches a day', freeBtn: 'Use for free',
+    freeF1: 'Stock analyzer', freeF2: 'Compound interest calculator', freeF3: '3 free trials (lifetime)', freeBtn: 'Use for free',
     hotBadge: 'Most popular', tierJunior: 'Investor Junior', juniorDesc: 'For beginners who want to understand the market without the complexity.',
     juniorF1: 'Full company analysis', juniorF2: 'Unlimited searches', juniorF3: 'Company comparator', juniorF4: 'Custom reminders', juniorBtn: 'Start Junior',
     tierSenior: 'Investor Senior', seniorDesc: 'For investors who want advanced analysis and custom alerts.',
@@ -1580,11 +1581,11 @@ function generarCodigoReferido(userId) {
 
 async function setUser(user) {
   _currentUser = user;
-  let { data } = await _sb.from('profiles').select('plan,referral_code,bonus_busquedas,referred_by,total_xp,premium_bonus_until,racha_dias').eq('id', user.id).single();
+  let { data } = await _sb.from('profiles').select('plan,referral_code,bonus_busquedas,referred_by,total_xp,premium_bonus_until,racha_dias,pruebas_gratis_usadas').eq('id', user.id).single();
   if (!data) {
     const code = generarCodigoReferido(user.id);
     await _sb.from('profiles').insert({ id: user.id, plan: 'free', referral_code: code });
-    data = { plan: 'free', referral_code: code, bonus_busquedas: 0, referred_by: null, total_xp: 0, premium_bonus_until: null };
+    data = { plan: 'free', referral_code: code, bonus_busquedas: 0, referred_by: null, total_xp: 0, premium_bonus_until: null, pruebas_gratis_usadas: 0 };
     await procesarReferidoPendiente(user.id);
     const { data: fresh } = await _sb.from('profiles').select('premium_bonus_until').eq('id', user.id).single();
     data.premium_bonus_until = fresh?.premium_bonus_until || null;
@@ -1597,6 +1598,7 @@ async function setUser(user) {
   _userPlan = bonusActivo && data.plan === 'free' ? 'junior' : (data?.plan || 'free');
   _premiumBonusUntil = bonusActivo ? data.premium_bonus_until : null;
   _bonusBusquedas = data?.bonus_busquedas || 0;
+  _pruebasGratisUsadas = data?.pruebas_gratis_usadas || 0;
   _referralCode = data?.referral_code || '';
   _totalXP = data?.total_xp || 0;
   _rachaDias = data?.racha_dias || 0;
@@ -1661,6 +1663,7 @@ function clearUser() {
   _userPlan = 'free';
   _jars = [];
   _invertidoSimulado = 0;
+  _pruebasGratisUsadas = 0;
   document.getElementById('navAuth').innerHTML = `<button class="nav-btn" onclick="openAuthModal()" data-i18n="navEntrar">${(I18N[_idioma]||I18N.es).navEntrar}</button>`;
   if (typeof cargarXPTotal === 'function') cargarXPTotal();
   if (typeof renderHeroMockup === 'function') renderHeroMockup();
@@ -2245,38 +2248,38 @@ async function submitAuth() {
 
 initAuth();
 
-// Límite diario de búsquedas
-const DAILY_LIMIT = 3;
-function getBusquedasHoy() {
-  try {
-    const raw = localStorage.getItem('mosca_busquedas');
-    if (!raw) return { fecha: '', count: 0 };
-    return JSON.parse(raw);
-  } catch(e) { return { fecha: '', count: 0 }; }
-}
-function incrementarBusqueda() {
-  const hoy = new Date().toDateString();
-  const data = getBusquedasHoy();
-  const count = data.fecha === hoy ? data.count + 1 : 1;
-  localStorage.setItem('mosca_busquedas', JSON.stringify({ fecha: hoy, count }));
-  return count;
-}
-function busquedasRestantes() {
+// Pruebas gratis de por vida (analizador + calculadora, contador compartido)
+const PRUEBAS_GRATIS = 3;
+function pruebasRestantes() {
   if (_userPlan !== 'free') return 999;
-  const hoy = new Date().toDateString();
-  const data = getBusquedasHoy();
-  const limiteConBonus = DAILY_LIMIT + (_bonusBusquedas || 0);
-  if (data.fecha !== hoy) return limiteConBonus;
-  return Math.max(0, limiteConBonus - data.count);
+  const limiteConBonus = PRUEBAS_GRATIS + (_bonusBusquedas || 0);
+  return Math.max(0, limiteConBonus - (_pruebasGratisUsadas || 0));
+}
+async function consumirPrueba() {
+  if (_userPlan !== 'free') return;
+  _pruebasGratisUsadas = (_pruebasGratisUsadas || 0) + 1;
+  if (_currentUser && _sb) {
+    try { await _sb.from('profiles').update({ pruebas_gratis_usadas: _pruebasGratisUsadas }).eq('id', _currentUser.id); }
+    catch (e) { console.error('[pruebas] Error guardando contador:', e); }
+  }
 }
 
 function mostrarLimiteAlcanzado(el) {
   el.innerHTML = `<div style="text-align:center;padding:32px 16px">
     <div style="font-size:40px;margin-bottom:16px">🔒</div>
-    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Has agotado tus 3 búsquedas de hoy</div>
-    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">El plan gratuito incluye 3 análisis al día.<br>Mañana se renueva automáticamente — o pasa a Premium y analiza sin límite.</div>
+    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Has usado tus 3 pruebas gratis</div>
+    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">El plan gratuito incluye 3 pruebas de por vida (análisis de empresas o calculadora, como prefieras).<br>Pasa a Premium para seguir usando laBolsabro sin límite.</div>
     <a href="/premium.html" style="display:inline-block;background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;text-decoration:none;margin-bottom:12px">Ver planes Premium →</a>
     <div style="font-size:12px;color:var(--text3);margin-top:8px">Desde ${fmtEUR(5.99)}/mes · Cancela cuando quieras</div>
+  </div>`;
+}
+
+function mostrarLoginRequerido(el) {
+  el.innerHTML = `<div style="text-align:center;padding:32px 16px">
+    <div style="font-size:40px;margin-bottom:16px">🔐</div>
+    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Regístrate gratis para usar esta herramienta</div>
+    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">Tienes 3 pruebas gratis esperándote: analiza empresas o usa la calculadora, lo que prefieras.</div>
+    <button onclick="openAuthModal()" style="background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;border:none;cursor:pointer;font-family:inherit">Crear cuenta gratis →</button>
   </div>`;
 }
 
@@ -2284,10 +2287,11 @@ async function doSearch() {
   const ticker = document.getElementById('stockInput').value.trim().toUpperCase();
   if (!ticker) return;
   const el = document.getElementById('stockResult');
+  if (!_currentUser) { mostrarLoginRequerido(el); return; }
   const cached = cacheGet(ticker);
   if (cached) { if (cached.tipo === 'crypto') renderCrypto(el, cached); else renderStock(el, cached, ticker); return; }
-  // Comprobar límite diario (solo para búsquedas nuevas, no cacheadas)
-  if (busquedasRestantes() <= 0) { mostrarLimiteAlcanzado(el); return; }
+  // Comprobar pruebas gratis restantes (solo para búsquedas nuevas, no cacheadas)
+  if (pruebasRestantes() <= 0) { mostrarLimiteAlcanzado(el); return; }
   const loadMsgs = ['🪰 Un momento, que la mosca está mirando los números...','🪰 Dame un segundo, que esto tiene más letra que un contrato...','🪰 Preguntando a la bolsa, que no es tan rápida...','🪰 Buscando ' + ticker + '... casi casi...'];
   el.innerHTML = '<p style="font-size:14px;color:var(--text3);">' + loadMsgs[Math.floor(Math.random()*loadMsgs.length)] + '</p>';
   try {
@@ -2306,21 +2310,21 @@ async function doSearch() {
     if (!d || !d.precio) throw new Error('no data');
     cacheSet(ticker, d);
     addHistorial(ticker, d.nombre || ticker);
-    const usadas = incrementarBusqueda();
-    const restantes = DAILY_LIMIT + (_bonusBusquedas || 0) - usadas;
+    await consumirPrueba();
+    const restantes = pruebasRestantes();
     if (d.tipo === 'crypto') renderCrypto(el, d);
     else renderStock(el, d, ticker);
     guardarHistorialPremium(ticker, d.nombre || ticker, d.precio, d.tipo === 'crypto' ? null : (_pdfData ? _pdfData.score : null));
     _lastTicker = d.ticker || ticker;
-    if (restantes > 0) {
+    if (_userPlan === 'free' && restantes > 0) {
       const aviso = document.createElement('div');
       aviso.style.cssText = 'font-size:12px;color:var(--text3);text-align:right;padding:4px 0;';
-      aviso.textContent = restantes === 1 ? `⚡ Solo te queda 1 búsqueda gratis hoy, crack` : `⚡ Te quedan ${restantes} búsquedas gratis hoy`;
+      aviso.textContent = restantes === 1 ? `⚡ Te queda 1 prueba gratis` : `⚡ Te quedan ${restantes} pruebas gratis`;
       el.appendChild(aviso);
     }
   } catch(e) {
     const t = document.getElementById('stockInput').value.trim().toUpperCase();
-    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🤷</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">Uff nano, "${t}" no me suena de ná</p><p style="font-size:13px;color:var(--text3);line-height:1.8">Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
+    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🤷</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">Uy, "${t}" no me suena de nada</p><p style="font-size:13px;color:var(--text3);line-height:1.8">Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
   }
 }
 
@@ -3056,14 +3060,14 @@ function renderStock(el, d, ticker) {
       <div style="background:var(--card);padding:24px">
         <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px">Inversión inicial</label>
         <div style="display:flex;align-items:center;gap:8px">
-          <input type="number" id="calcInicial" value="1000" min="0" max="1000000" step="100" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcular()">
+          <input type="number" id="calcInicial" value="1000" min="0" max="1000000" step="100" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcularInteractivo()">
           <span style="font-size:16px;color:var(--text3)">€</span>
         </div>
       </div>
       <div style="background:var(--card);padding:24px">
         <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px">Aporte mensual</label>
         <div style="display:flex;align-items:center;gap:8px">
-          <input type="number" id="calcMensual" value="100" min="0" max="10000" step="10" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcular()">
+          <input type="number" id="calcMensual" value="100" min="0" max="10000" step="10" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcularInteractivo()">
           <span style="font-size:16px;color:var(--text3)">€/mes</span>
         </div>
       </div>
@@ -3073,7 +3077,7 @@ function renderStock(el, d, ticker) {
         <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Rentabilidad anual esperada</label>
         <span id="calcTasaVal" style="font-size:20px;font-weight:700;color:var(--green)">7%</span>
       </div>
-      <input type="range" id="calcTasa" min="1" max="15" step="0.5" value="7" style="width:100%;accent-color:var(--green)" oninput="calcular()">
+      <input type="range" id="calcTasa" min="1" max="15" step="0.5" value="7" style="width:100%;accent-color:var(--green)" oninput="calcularInteractivo()">
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:4px">
         <span>1% — cuenta remunerada</span><span>7-8% — fondo indexado histórico</span><span>15% — optimista</span>
       </div>
@@ -3122,10 +3126,20 @@ function renderStock(el, d, ticker) {
 
   <script>
   let calcAnios = 20;
+  let _pruebaCalcConsumida = false;
+  async function calcularInteractivo() {
+    if (!_currentUser) { openAuthModal(); return; }
+    if (!_pruebaCalcConsumida) {
+      if (pruebasRestantes() <= 0) { alert('Has usado tus 3 pruebas gratis. Pasa a Premium para seguir usando laBolsabro sin límite.'); return; }
+      await consumirPrueba();
+      _pruebaCalcConsumida = true;
+    }
+    calcular();
+  }
   function setAnios(n) {
     calcAnios = n;
     document.querySelectorAll('.anio-btn').forEach(b => { b.classList.toggle('anio-sel', parseInt(b.dataset.a) === n); });
-    calcular();
+    calcularInteractivo();
   }
   function fmt(n) { return fmtEUR(n, 0); }
   function calcular() {
@@ -3193,9 +3207,9 @@ function renderStock(el, d, ticker) {
   <p class="sub">Mueve los sliders y ve cómo crece tu dinero con el interés compuesto. La magia del tiempo y la constancia.</p>
   <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:32px;max-width:680px;">
     <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:28px;">
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Ahorro mensual</span><span style="font-weight:700;color:var(--text)" id="simMonthlyLabel">50 €</span></div><input type="range" id="simMonthly" min="10" max="500" step="5" value="50" oninput="calcSim()" style="width:100%;accent-color:var(--green)"></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Años ahorrando</span><span style="font-weight:700;color:var(--text)" id="simYearsLabel">10 años</span></div><input type="range" id="simYears" min="1" max="40" step="1" value="10" oninput="calcSim()" style="width:100%;accent-color:var(--green)"></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Rentabilidad anual estimada</span><span style="font-weight:700;color:var(--text)" id="simRateLabel">7%</span></div><input type="range" id="simRate" min="1" max="15" step="0.5" value="7" oninput="calcSim()" style="width:100%;accent-color:var(--green)"><p style="font-size:11px;color:var(--text3);margin-top:6px;">Fondos indexados históricamente ~7% anual. Rentabilidad pasada no garantiza futura.</p></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Ahorro mensual</span><span style="font-weight:700;color:var(--text)" id="simMonthlyLabel">50 €</span></div><input type="range" id="simMonthly" min="10" max="500" step="5" value="50" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Años ahorrando</span><span style="font-weight:700;color:var(--text)" id="simYearsLabel">10 años</span></div><input type="range" id="simYears" min="1" max="40" step="1" value="10" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Rentabilidad anual estimada</span><span style="font-weight:700;color:var(--text)" id="simRateLabel">7%</span></div><input type="range" id="simRate" min="1" max="15" step="0.5" value="7" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"><p style="font-size:11px;color:var(--text3);margin-top:6px;">Fondos indexados históricamente ~7% anual. Rentabilidad pasada no garantiza futura.</p></div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
       <div style="background:var(--card2);border-radius:12px;padding:16px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Dinero que metes</div><div style="font-size:20px;font-weight:700;color:var(--text)" id="simInvested">6.000 €</div></div>
@@ -3285,7 +3299,7 @@ function renderStock(el, d, ticker) {
     <h2 data-i18n="pricingTitle">Sin letra pequeña.</h2>
     <p class="sub" data-i18n="pricingSub">Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.</p>
     <div class="price-grid">
-      <div class="price-card"><div class="price-tier" data-i18n="tierFree">Gratis</div><div class="price-num">0 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="freeDesc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="freeF1">Analizador básico de acciones</span></li><li><span>✓</span> <span data-i18n="freeF2">Calculadora de interés compuesto</span></li><li><span>✓</span> <span data-i18n="freeF3">3 búsquedas al día</span></li></ul><a class="price-btn price-btn-out" href="/#stocks" data-i18n="freeBtn">Usar gratis</a></div>
+      <div class="price-card"><div class="price-tier" data-i18n="tierFree">Gratis</div><div class="price-num">0 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="freeDesc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="freeF1">Analizador de acciones</span></li><li><span>✓</span> <span data-i18n="freeF2">Calculadora de interés compuesto</span></li><li><span>✓</span> <span data-i18n="freeF3">3 pruebas gratis (de por vida)</span></li></ul><a class="price-btn price-btn-out" href="/#stocks" data-i18n="freeBtn">Usar gratis</a></div>
       <div class="price-card hot"><div class="hot-badge" data-i18n="hotBadge">Más popular</div><div class="price-tier" data-i18n="tierJunior">Inversor Junior</div><div class="price-num" id="precioJuniorCard">5,99 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="juniorDesc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="juniorF1">Análisis completo de empresas</span></li><li><span>✓</span> <span data-i18n="juniorF2">Búsquedas ilimitadas</span></li><li><span>✓</span> <span data-i18n="juniorF3">Comparador de empresas</span></li><li><span>✓</span> <span data-i18n="juniorF4">Recordatorios personalizables</span></li></ul><a class="price-btn price-btn-solid" href="/premium.html" data-i18n="juniorBtn">Empezar Junior</a></div>
       <div class="price-card"><div class="price-tier" data-i18n="tierSenior">Inversor Senior</div><div class="price-num" id="precioSeniorCard">9,99 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="seniorDesc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="seniorF1">Todo del plan Junior</span></li><li><span>✓</span> <span data-i18n="seniorF2">Comparador avanzado por sector</span></li><li><span>✓</span> <span data-i18n="seniorF3">Alertas de valor personalizadas</span></li><li><span>✓</span> <span data-i18n="seniorF4">Historial de análisis personal</span></li><li><span>✓</span> <span data-i18n="seniorF5">Acceso prioritario a novedades</span></li></ul><a class="price-btn price-btn-out" href="/premium.html" data-i18n="seniorBtn">Empezar Senior</a></div>
     </div>
@@ -3562,6 +3576,16 @@ resetIdleTimer();
 function toggleFaq(btn) { const item = btn.parentElement; const wasOpen = item.classList.contains('open'); document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open')); if (!wasOpen) item.classList.add('open'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modal').classList.remove('open'); });
 
+let _pruebaSimConsumida = false;
+async function calcSimInteractivo() {
+  if (!_currentUser) { openAuthModal(); return; }
+  if (!_pruebaSimConsumida) {
+    if (pruebasRestantes() <= 0) { alert('Has usado tus 3 pruebas gratis. Pasa a Premium para seguir usando laBolsabro sin límite.'); return; }
+    await consumirPrueba();
+    _pruebaSimConsumida = true;
+  }
+  calcSim();
+}
 function calcSim() {
   const monthly = parseFloat(document.getElementById('simMonthly').value);
   const years = parseInt(document.getElementById('simYears').value);
