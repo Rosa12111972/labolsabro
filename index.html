@@ -443,7 +443,7 @@ function acceptAge() {
 <section class="hero">
   <div class="hero-tag"><div class="tag-dot"></div> <span data-i18n="heroTag">Disponible ahora · Gratis</span></div>
   <h1 data-i18n-html="heroTitle">Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em></h1>
-  <p class="hero-sub" data-i18n="heroSub">La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones de adulto. Solo tu dinero haciendo algo.</p>
+  <p class="hero-sub" data-i18n="heroSub">La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones. Solo tu dinero haciendo algo.</p>
   <form action="https://formspree.io/f/mqevbzvb" method="POST" onsubmit="handleForm(event)" class="form-row" style="flex-wrap:wrap;justify-content:center;">
     <input type="email" name="email" id="heroEmail" placeholder="tu@email.com" required />
     <button type="submit" data-i18n="heroBtn">Empezar gratis</button>
@@ -659,7 +659,7 @@ function acceptAge() {
         <button class="quick-btn" data-sector="cripto" onclick="doTicker('ETH')">Ethereum</button>
       </div>
       <div id="stockResult" style="padding:24px;min-height:120px;display:flex;align-items:center;justify-content:center;">
-        <p style="font-size:14px;color:var(--text3);text-align:center;">Escribe Apple, Tesla, Inditex... lo que sea, nano. Te digo yo si renta o no. 🪰</p>
+        <p style="font-size:14px;color:var(--text3);text-align:center;">Escribe Apple, Tesla, Inditex... lo que sea. Te digo yo si renta o no. 🪰</p>
       </div>
       <div style="padding:12px 24px;font-size:11px;color:var(--text3);background:var(--card2);border-top:1px solid var(--border);line-height:1.6;">
         ⚠️ <strong style="color:var(--text2)">Datos de Yahoo Finance · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br>
@@ -1048,23 +1048,23 @@ function renderHistorial() {
 const METRIC_INFO = {
   'PER actual': '💡 Imagina que la empresa es un piso de alquiler. El PER te dice cuántos años tardarías en recuperar lo que pagaste con los beneficios que genera. PER 20 = 20 años. Cuanto más bajo, más barata está. Fácil, ¿no?',
   'PEG ratio': '💡 Es el PER pero con más cabeza. Tiene en cuenta que si la empresa crece rápido, igual merece pagar más por ella. Menos de 1 = chollo. Entre 1 y 2 = precio razonable. Más de 2 = uff, te la están vendiendo cara.',
-  'PER estimado': '💡 Como el PER normal pero mirando al futuro, home. Usa los beneficios que se esperan el año que viene, no los del pasado. Si está bajo, el mercado espera que la empresa lo pete.',
-  'Crecimiento BPA': '💡 BPA = cuánto gana la empresa por cada acción. Si sube cada año, la empresa cada vez gana más pasta. Como si tu sueldo subiera todos los años — buena señal, nano.',
-  'Crecimiento ingresos': '💡 Cuánto más está vendiendo respecto al año anterior. Si vende más = está creciendo, está petando. Si vende menos = algo va mal, ojo.',
-  'ROE': '💡 Si metes 100€ en el negocio y el ROE es 20%, el negocio genera 20€ al año. Por encima del 15% mola. Por encima del 30% es una bestialidad, tío.',
+  'PER estimado': '💡 Como el PER normal pero mirando al futuro. Usa los beneficios que se esperan el año que viene, no los del pasado. Si está bajo, el mercado espera que la empresa crezca fuerte.',
+  'Crecimiento BPA': '💡 BPA = cuánto gana la empresa por cada acción. Si sube cada año, la empresa cada vez gana más pasta. Como si tu sueldo subiera todos los años — buena señal.',
+  'Crecimiento ingresos': '💡 Cuánto más está vendiendo respecto al año anterior. Si vende más = está creciendo bien. Si vende menos = algo va mal, ojo.',
+  'ROE': '💡 Si metes 100€ en el negocio y el ROE es 20%, el negocio genera 20€ al año. Por encima del 15% es buena señal. Por encima del 30% es excelente.',
   'Cap. mercado': '💡 Lo que vale toda la empresa en bolsa. Empresas grandes como Apple valen billones. Las pequeñas valen millones. Más grande = más estable y menos locuras de precio.',
   'Dividendo': '💡 Pasta que la empresa te paga cada año solo por tener sus acciones. Si el dividendo es 3%, por cada 1.000€ te dan 30€ al año sin vender nada. Como cobrar un alquiler sin ser casero 😌',
   'EPS': '💡 El beneficio total de la empresa dividido entre todas sus acciones. Si es positivo, la empresa gana dinero. Si es negativo, está perdiendo pasta. Tan simple como eso.',
   'Margen neto': '💡 De cada 100€ que vende, cuánto se queda después de pagar todo. Margen 20% = se queda 20€ de cada 100€. Cuanto más alto, más crack es gestionando el negocio.',
   'Reinversión del negocio': '💡 El dinero que gana, ¿lo reinvierte en crecer o se lo reparte? Alto = apuesta por el futuro. Bajo = prefiere repartir dividendos. Ninguno es malo, pero dice mucho de la empresa.',
   'Flujo caja operativo': '💡 La pasta real que entra por el negocio del día a día. Es más fiable que los beneficios porque es difícil de manipular. Si es alto y positivo, el negocio funciona de verdad, no es humo.',
-  'Free Cash Flow': '💡 El dinero que sobra de verdad después de pagar todo lo necesario. Si es positivo, la empresa tiene cash para crecer, pagar dividendos o reducir deudas. Si es negativo... macho, que alguien mire eso.',
+  'Free Cash Flow': '💡 El dinero que sobra de verdad después de pagar todo lo necesario. Si es positivo, la empresa tiene cash para crecer, pagar dividendos o reducir deudas. Si es negativo, es una señal de alerta a revisar.',
   'Beta': '💡 Mide qué tan nerviosa es la acción. Beta 1 = se mueve igual que el mercado. Beta 2 = sube y baja el doble. Beta 0.5 = más tranquilita. Si tienes el corazón débil, busca beta baja 😅',
   'Rango 52 semanas': '💡 El precio más bajo y más alto del último año. Si ahora está cerca del mínimo, igual es oportunidad. Si está cerca del máximo, está cara cara. Útil para no comprar en el peor momento.',
   'Empleados': '💡 Cuánta gente trabaja ahí. Una empresa con 100.000 empleados es un monstruo. Con 500, es pequeña. Más grande no significa mejor, pero da contexto del tamaño real del negocio.',
   'Interés compuesto': '💡 Ganar intereses sobre los intereses que ya ganaste antes, no solo sobre lo que metiste. Al principio no se nota, pero con años se vuelve una bola de nieve. Por eso empezar joven es una pasada, aunque metas poco.',
   'EBITDA': '💡 El beneficio operativo antes de intereses, impuestos, depreciación y amortización. Vale para comparar empresas sin que la contabilidad rara distorsione la foto. Cuanto más alto respecto a las ventas, mejor gestionado va el negocio.',
-  'ETF': '💡 Un fondo que cotiza en bolsa como si fuera una acción, pero por dentro tiene un montón de empresas. Compras 1 ETF y tienes un trocito de 500 empresas de golpe. Diversificación fácil, tío.',
+  'ETF': '💡 Un fondo que cotiza en bolsa como si fuera una acción, pero por dentro tiene un montón de empresas. Compras 1 ETF y tienes un trocito de 500 empresas de golpe. Diversificación fácil.',
   'Fondo indexado': '💡 Un fondo que copia automáticamente un índice (tipo S&P 500) sin que nadie decida qué comprar. Al no haber gestor, las comisiónes son bajísimas. A largo plazo, casi siempre gana a los fondos "listos" gestionados a mano.',
   'Deuda/Patrimonio': '💡 Cuánta deuda tiene la empresa comparada con lo que es suyo de verdad. Si es 200%, debe el doble de lo que posee — ojo ahí. Por debajo de 50-100% suele ser un balance más tranquilo.',
   'Payout ratio': '💡 Qué parte de lo que gana se reparte en dividendos. Si es 30%, guarda el 70% para crecer o pagar deuda. Payout muy alto (90%+) puede ser señal de que no le queda mucho margen para invertir en el futuro.',
@@ -1275,7 +1275,7 @@ function renderGlosario() {
     const matchesCat = !cat || GLOSARIO_CATEGORIAS[t] === cat;
     return matchesQ && matchesCat;
   }).sort();
-  if (!terms.length) { grid.innerHTML = '<p style="color:var(--text3);font-size:14px;grid-column:1/-1;padding:20px 0;text-align:center">No hay ningún término que encaje con eso, illo.</p>'; return; }
+  if (!terms.length) { grid.innerHTML = '<p style="color:var(--text3);font-size:14px;grid-column:1/-1;padding:20px 0;text-align:center">No hay ningún término que encaje con eso.</p>'; return; }
   grid.innerHTML = terms.map(t => {
     const abierto = _glosarioAbierto === t;
     return `<div style="background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:16px 18px;cursor:pointer;" onclick="toggleGlosarioTerm('${t.replace(/'/g,"\\'")}')">
@@ -1321,13 +1321,13 @@ function semaforo(pe, sector, peg) {
   if (pe === null || pe <= 0) return { cls: 'sem-gray', ico: '❓', titulo: 'Sin datos de PER', desc: 'La empresa no tiene PER disponible — puede estar en pérdidas o ser de reciente cotización.' };
   const ref = PER_SECTORES[sector] || PER_SECTORES['default'];
   if (peg && peg > 0) {
-    if (peg < 1)   return { cls: 'sem-green',  ico: '🟢', titulo: `¡Esto está tirao, nano! (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x pero crece un montón — con PEG ${peg.toFixed(2)}x el mercado aún no se ha enterao. Igual renta echarle un ojo 👀` };
+    if (peg < 1)   return { cls: 'sem-green',  ico: '🟢', titulo: `¡Esto está muy barato! (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x pero crece un montón — con PEG ${peg.toFixed(2)}x el mercado todavía no lo ha notado. Igual renta echarle un ojo 👀` };
     if (peg <= 2)  return { cls: 'sem-yellow', ico: '🟡', titulo: `Bien pero sin volverse loco (PEG ${peg.toFixed(2)}x)`, desc: `PER de ${pe.toFixed(1)}x. El PEG de ${peg.toFixed(2)}x dice que el precio está más o menos acorde con lo que crece. Ni ganga ni robo.` };
     return           { cls: 'sem-red',    ico: '🔴', titulo: `Uff, esto está carete (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x y PEG de ${peg.toFixed(2)}x. Macho, pagas mucho incluso pa lo que crece. No sé yo si renta...` };
   }
   if (pe < ref.bajo) return { cls: 'sem-green',  ico: '🟢', titulo: `Precio bajo para su sector — puede rentar`,  desc: `PER de ${pe.toFixed(1)}x está por debajo de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Ostres, igual es una oportunidad 👀` };
   if (pe <= ref.alto) return { cls: 'sem-yellow', ico: '🟡', titulo: `Precio justo — ni cara ni barata`, desc: `PER de ${pe.toFixed(1)}x está en la media del sector ${ref.nombre} (${ref.bajo}x–${ref.alto}x). No está mal, pero tampoco es un chollo.` };
-  return               { cls: 'sem-red',    ico: '🔴', titulo: `Va de sobrada — precio alto para su sector`,   desc: `PER de ${pe.toFixed(1)}x está por encima de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Pagas de más, tío. Ten cuidado.` };
+  return               { cls: 'sem-red',    ico: '🔴', titulo: `Va de sobrada — precio alto para su sector`,   desc: `PER de ${pe.toFixed(1)}x está por encima de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Pagas de más. Ten cuidado.` };
 }
 
 function fmtMiles(n) {
@@ -1466,7 +1466,7 @@ const I18N = {
     safetyBar: '<strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.',
     heroTag: 'Disponible ahora · Gratis',
     heroTitle: 'Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em>',
-    heroSub: 'La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones de adulto. Solo tu dinero haciendo algo.',
+    heroSub: 'La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones. Solo tu dinero haciendo algo.',
     heroBtn: 'Empezar gratis',
     heroNote: 'Gratis · <strong style="color:var(--text2)">Sin tarjeta de crédito</strong> · Sin permanencia',
     pricingPill: 'Precios', pricingTitle: 'Sin letra pequeña.', pricingSub: 'Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.',
@@ -1836,11 +1836,11 @@ function cerrarInvitar() { document.getElementById('inviteOverlay').classList.re
 function closeInviteIfBg(e) { if (e.target.id === 'inviteOverlay') cerrarInvitar(); }
 function copiarInviteLink() {
   const link = `https://labolsabro.com?ref=${_referralCode}`;
-  navigator.clipboard.writeText(link).then(() => alert('Link copiado, illo. Ahora a mandarlo 🚀'));
+  navigator.clipboard.writeText(link).then(() => alert('Link copiado. Ahora a mandarlo 🚀'));
 }
 function compartirInviteWhatsapp() {
   const link = `https://labolsabro.com?ref=${_referralCode}`;
-  const texto = `🪰 Illo, mira esta app de bolsa y ahorro que mola un montón: ${link}\nSi te apuntas con mi link nos llevamos búsquedas gratis los dos, gratis total 🔥`;
+  const texto = `🪰 Mira esta app de bolsa y ahorro: ${link}\nSi te apuntas con mi link, los dos conseguimos búsquedas gratis 🔥`;
   window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
 }
 
@@ -1968,7 +1968,7 @@ async function renderPanel() {
 
   const botesEl = document.getElementById('panelBotes');
   if (!_jars.length) {
-    botesEl.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Aún no tienes botes. Crea el primero, illo.</p>';
+    botesEl.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Aún no tienes botes. Crea el primero.</p>';
   } else {
     botesEl.innerHTML = _jars.map(j => `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
       <div>
@@ -2198,7 +2198,7 @@ async function enviarMensajeChat() {
       pintarMensajeChat('mosca', data.respuesta);
       _chatHistorial.push({ role: 'mosca', texto: data.respuesta });
     } else {
-      pintarMensajeChat('mosca', 'Uy, se me ha ido la cabeza un momento. Prueba otra vez, illo.');
+      pintarMensajeChat('mosca', 'Uy, se me ha ido la cabeza un momento. Prueba otra vez.');
     }
   } catch (e) {
     document.getElementById('chatLoading')?.remove();
@@ -2288,7 +2288,7 @@ async function doSearch() {
   if (cached) { if (cached.tipo === 'crypto') renderCrypto(el, cached); else renderStock(el, cached, ticker); return; }
   // Comprobar límite diario (solo para búsquedas nuevas, no cacheadas)
   if (busquedasRestantes() <= 0) { mostrarLimiteAlcanzado(el); return; }
-  const loadMsgs = ['🪰 Un momento, que la mosca está mirando los números...','🪰 Illo, dame un seg que esto tiene más letra que un contrato...','🪰 Preguntando a la bolsa, home, que no es tan rápida...','🪰 Buscando ' + ticker + '... casi casi...'];
+  const loadMsgs = ['🪰 Un momento, que la mosca está mirando los números...','🪰 Dame un segundo, que esto tiene más letra que un contrato...','🪰 Preguntando a la bolsa, que no es tan rápida...','🪰 Buscando ' + ticker + '... casi casi...'];
   el.innerHTML = '<p style="font-size:14px;color:var(--text3);">' + loadMsgs[Math.floor(Math.random()*loadMsgs.length)] + '</p>';
   try {
     const base = apiBase();
@@ -3339,7 +3339,7 @@ function renderStock(el, d, ticker) {
   <div class="auth-box" style="text-align:center">
     <button class="auth-close" onclick="cerrarInvitar()">×</button>
     <div style="font-size:40px;margin-bottom:8px">🪰🔥</div>
-    <h2>Trae a un colega, illo</h2>
+    <h2>Trae a un colega</h2>
     <p>Cada crack que se apunte con tu link os lleváis <strong style="color:var(--yellow)">3 días de Premium GRATIS</strong>, tú y él. Búsquedas ilimitadas, cartera simulada, alertas... todo desbloqueado. Sin trampa ni cartón.</p>
     <div style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text);word-break:break-all;margin-bottom:14px;" id="inviteLinkBox"></div>
     <button class="auth-submit" onclick="copiarInviteLink()" style="margin-bottom:10px">📋 Copiar link</button>
@@ -3523,7 +3523,7 @@ const IDLE_MESSAGES = [
   { text: 'Illo, ¿te has quedado dormido o qué? Mira cuánto podrías tener ahorrado en 10 años, que flipas.', cta: 'Flipar ahora', action: () => scrollToId('simMonthly') },
   { text: 'Ey crack, ¿vas a analizar algo o solo estás mirando? Prueba con AAPL, TSLA... lo que te suene.', cta: 'Venga, va', action: () => scrollToId('stockInput') },
   { text: '¿Te crees que sabes de bolsa? Demuéstralo, valiente. 2 minutos y salimos de dudas.', cta: 'Reto aceptado', action: () => scrollToId('quizCard') },
-  { text: 'Bro, sigues ahí? Trae a un colega y os lleváis 3 días de Premium gratis los dos.', cta: 'Invitar', action: () => { if (_currentUser) abrirInvitar(); else openAuthModal(); } },
+  { text: '¿Sigues ahí? Trae a un colega y os lleváis 3 días de Premium gratis los dos.', cta: 'Invitar', action: () => { if (_currentUser) abrirInvitar(); else openAuthModal(); } },
 ];
 let _idleTimer = null;
 let _idleShown = false;
@@ -3588,7 +3588,7 @@ const preguntas = [
   { cat: 'Inversión', nivel: 'basico', q: '¿Qué es un fondo indexado?', ops: ['Un fondo gestiónado por un experto que elige las mejores acciónes', 'Un fondo que replica automáticamente un índice como el S&P 500', 'Una cuenta de ahorro con alta rentabilidad', 'Un tipo de criptomoneda estable'], ok: 1, exp: 'Un fondo indexado compra automáticamente todas las empresas de un índice en sus proporciones exactas. Al no tener un gestor activo, las comisiónes son muy bajas. Históricamente, estos fondos baten a la mayoría de gestores activos a largo plazo.' },
   { cat: 'Ahorro', nivel: 'basico', q: '¿Qué es la regla del 50/30/20?', ops: ['Invertir el 50% en acciónes, 30% en bonos y 20% en crypto', '50% para necesidades, 30% para ocio y 20% para ahorro', '50% de descuento en compras planificadas con 30 días de antelación', 'Ahorrar 20€ por cada 50€ que ganas en 30 días'], ok: 1, exp: 'La regla 50/30/20 es una guía simple para distribuir tus ingresos: 50% para gastos necesarios, 30% para lo que quieras y 20% para ahorrar o invertir.' },
   { cat: 'Bolsa', nivel: 'basico', q: '¿Qué es una acción?', ops: ['Un préstamo que le haces a una empresa', 'Un trocito de la propiedad de una empresa', 'Un tipo de seguro de vida', 'Un impuesto sobre las ventas'], ok: 1, exp: 'Una acción es una parte de la propiedad de una empresa. Si compras acciones, te conviertes en socio, por pequeño que sea el trozo. Si la empresa gana valor, tu parte también.' },
-  { cat: 'Inversión', nivel: 'basico', q: '¿Qué es diversificar tu dinero?', ops: ['Meterlo todo en la empresa que más te gusta', 'Repartirlo en varias inversiones distintas para reducir el riesgo', 'Cambiarlo a otra moneda', 'Guardarlo todo en efectivo'], ok: 1, exp: 'Diversificar es no poner todos los huevos en la misma cesta. Si repartes tu dinero en varias empresas, sectores o países, si una lo hace mal, las demás pueden compensarlo. Menos riesgo, tío.' },
+  { cat: 'Inversión', nivel: 'basico', q: '¿Qué es diversificar tu dinero?', ops: ['Meterlo todo en la empresa que más te gusta', 'Repartirlo en varias inversiones distintas para reducir el riesgo', 'Cambiarlo a otra moneda', 'Guardarlo todo en efectivo'], ok: 1, exp: 'Diversificar es no poner todos los huevos en la misma cesta. Si repartes tu dinero en varias empresas, sectores o países, si una lo hace mal, las demás pueden compensarlo. Menos riesgo.' },
   { cat: 'Ahorro', nivel: 'basico', q: '¿Qué es un fondo de emergencia?', ops: ['Dinero para invertir en bolsa cuando cae mucho', 'Ahorro guardado aparte para imprevistos (paro, avería, salud)', 'Un préstamo que pides al banco en caso de emergencia', 'El dinero que gastas en vacaciones'], ok: 1, exp: 'El fondo de emergencia es pasta que tienes separada, fácil de sacar, para cuando la vida te la juega: te quedas sin curro, se rompe el coche, lo que sea. Se recomienda tener entre 3 y 6 meses de gastos ahorrados ahí.' },
   { cat: 'Bolsa', nivel: 'basico', q: '¿Qué es la inflación y cómo afecta a tu ahorro?', ops: ['Es cuando sube el precio de las acciónes', 'Es la subida general de precios, que hace que tu dinero valga menos con el tiempo', 'Es un impuesto que paga el banco', 'Es cuando el banco central baja los tipos de interés'], ok: 1, exp: 'La inflación es la subida de precios en general. Si tu dinero está quieto en una cuenta al 0%, cada año puede comprar menos cosas. Por eso invertir (y no solo ahorrar) ayuda a que tu dinero no pierda poder de compra.' },
   { cat: 'Inversión', nivel: 'basico', q: '¿Qué significa invertir "a largo plazo"?', ops: ['Comprar y vender el mismo día para ganar rápido', 'Mantener la inversión durante años, aguantando las subidas y bajadas', 'Invertir solo en empresas muy antiguas', 'Meter el dinero en un plazo fijo del banco'], ok: 1, exp: 'Invertir a largo plazo significa aguantar años, no vender en cuanto el mercado baja un poco. Históricamente, cuanto más tiempo mantienes la inversión, menos importan los sustos del día a día.' },
