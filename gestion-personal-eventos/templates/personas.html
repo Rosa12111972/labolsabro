@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Personas{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Personas</h1>
+  <a class="button" href="{{ url_for('persona_nueva') }}">+ Nueva persona</a>
+</div>
+
+{% if personas %}
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Rol</th>
+      <th>Teléfono</th>
+      <th>Zona</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in personas %}
+    <tr>
+      <td>{{ p.nombre }}</td>
+      <td>{{ p.rol | role_label }}</td>
+      <td>{{ p.telefono or "—" }}</td>
+      <td>{{ p.zona or "—" }}</td>
+      <td class="actions">
+        <a href="{{ url_for('persona_disponibilidad', persona_id=p.id) }}">Disponibilidad</a>
+        <a href="{{ url_for('persona_editar', persona_id=p.id) }}">Editar</a>
+        <form method="post" action="{{ url_for('persona_eliminar', persona_id=p.id) }}"
+              onsubmit="return confirm('¿Eliminar a {{ p.nombre }}? Esto borra también su disponibilidad.');">
+          <button type="submit" class="link-danger">Eliminar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">Todavía no hay personas registradas.</p>
+{% endif %}
+{% endblock %}

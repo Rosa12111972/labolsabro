@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Buscar disponibles{% endblock %}
+{% block content %}
+<h1>¿Quién está disponible?</h1>
+
+<form method="get" class="inline-form">
+  <label for="fecha">Fecha</label>
+  <input type="date" id="fecha" name="fecha" value="{{ fecha }}" required>
+
+  <label for="franja">Franja</label>
+  <select id="franja" name="franja">
+    <option value="" {{ "selected" if not franja }}>Cualquiera</option>
+    {% for f in FRANJAS %}
+    <option value="{{ f }}" {{ "selected" if franja == f }}>{{ f | franja_label }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="rol">Rol</label>
+  <select id="rol" name="rol">
+    <option value="" {{ "selected" if not rol }}>Cualquiera</option>
+    {% for r in ROLES %}
+    <option value="{{ r }}" {{ "selected" if rol == r }}>{{ r | role_label }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Buscar</button>
+</form>
+
+{% if resultados %}
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Rol</th>
+      <th>Franja</th>
+      <th>Teléfono</th>
+      <th>Zona</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in resultados %}
+    <tr>
+      <td>{{ r.nombre }}</td>
+      <td>{{ r.rol | role_label }}</td>
+      <td>{{ r.franja | franja_label }}</td>
+      <td>{{ r.telefono or "—" }}</td>
+      <td>{{ r.zona or "—" }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">Nadie marcado como disponible para esos filtros.</p>
+{% endif %}
+{% endblock %}

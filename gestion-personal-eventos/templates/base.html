@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Gestión de personal{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% if session.get('user_id') %}
+  <nav class="topnav">
+    <span class="brand">Gestión de personal</span>
+    <a href="{{ url_for('buscar') }}">Buscar disponibles</a>
+    <a href="{{ url_for('personas_list') }}">Personas</a>
+    <span class="spacer"></span>
+    <span class="user">{{ session.get('username') }}</span>
+    <a href="{{ url_for('logout') }}">Salir</a>
+  </nav>
+  {% endif %}
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for m in messages %}<li>{{ m }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

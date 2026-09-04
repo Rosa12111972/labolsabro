@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ "Editar persona" if persona_id else "Nueva persona" }}{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>{{ "Editar persona" if persona_id else "Nueva persona" }}</h1>
+  <form method="post">
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" name="nombre" value="{{ persona.nombre if persona else '' }}" required autofocus>
+
+    <label for="rol">Rol</label>
+    <select id="rol" name="rol" required>
+      <option value="" disabled {{ "selected" if not persona }}>Selecciona un rol</option>
+      {% for r in ROLES %}
+      <option value="{{ r }}" {{ "selected" if persona and persona.rol == r }}>{{ r | role_label }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="telefono">Teléfono de contacto</label>
+    <input type="text" id="telefono" name="telefono" value="{{ persona.telefono if persona else '' }}">
+
+    <label for="zona">Ciudad / zona donde puede trabajar</label>
+    <input type="text" id="zona" name="zona" value="{{ persona.zona if persona else '' }}">
+
+    <div class="form-actions">
+      <button type="submit">Guardar</button>
+      <a class="button-secondary" href="{{ url_for('personas_list') }}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

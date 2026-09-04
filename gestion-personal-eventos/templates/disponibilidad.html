@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Disponibilidad de {{ persona.nombre }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Disponibilidad de {{ persona.nombre }}</h1>
+  <a href="{{ url_for('personas_list') }}">&larr; Volver a personas</a>
+</div>
+<p class="subtitle">{{ persona.rol | role_label }}{% if persona.zona %} · {{ persona.zona }}{% endif %}</p>
+
+<div class="card">
+  <h2>Marcar un día</h2>
+  <form method="post" class="inline-form">
+    <label for="fecha">Fecha</label>
+    <input type="date" id="fecha" name="fecha" value="{{ today }}" required>
+
+    <label for="franja">Franja</label>
+    <select id="franja" name="franja" required>
+      {% for f in FRANJAS %}
+      <option value="{{ f }}">{{ f | franja_label }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="estado">Estado</label>
+    <select id="estado" name="estado" required>
+      {% for e in ESTADOS %}
+      <option value="{{ e }}">{{ e | estado_label }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">Guardar</button>
+  </form>
+  <p class="hint">Si ya existe una entrada para esa fecha y franja, se actualiza el estado.</p>
+</div>
+
+<h2>Días marcados</h2>
+{% if entradas %}
+<table>
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Franja</th>
+      <th>Estado</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for e in entradas %}
+    <tr class="estado-{{ e.estado }}">
+      <td>{{ e.fecha }}</td>
+      <td>{{ e.franja | franja_label }}</td>
+      <td>{{ e.estado | estado_label }}</td>
+      <td class="actions">
+        <form method="post" action="{{ url_for('disponibilidad_eliminar', entrada_id=e.id) }}"
+              onsubmit="return confirm('¿Eliminar esta entrada?');">
+          <button type="submit" class="link-danger">Eliminar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">Todavía no hay días marcados para esta persona.</p>
+{% endif %}
+{% endblock %}
