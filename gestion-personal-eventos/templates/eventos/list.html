@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Eventos{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Eventos</h1>
+  <a class="button" href="{{ url_for('eventos.nuevo') }}">+ Nuevo evento</a>
+</div>
+
+<form method="get" class="inline-form">
+  <label for="cuando">Cuándo</label>
+  <select id="cuando" name="cuando">
+    <option value="" {{ "selected" if not cuando }}>Todos</option>
+    <option value="proximos" {{ "selected" if cuando == "proximos" }}>Próximos</option>
+    <option value="pasados" {{ "selected" if cuando == "pasados" }}>Pasados</option>
+  </select>
+
+  <label for="estado">Estado</label>
+  <select id="estado" name="estado">
+    <option value="" {{ "selected" if not estado }}>Cualquiera</option>
+    {% for e in ESTADOS %}
+    <option value="{{ e }}" {{ "selected" if estado == e }}>{{ e | estado_evento_label }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="tipo">Tipo</label>
+  <select id="tipo" name="tipo">
+    <option value="" {{ "selected" if not tipo }}>Cualquiera</option>
+    {% for t in TIPOS %}
+    <option value="{{ t }}" {{ "selected" if tipo == t }}>{{ t | tipo_label }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="cliente">Cliente</label>
+  <input type="text" id="cliente" name="cliente" value="{{ cliente }}" placeholder="Buscar por cliente...">
+
+  <button type="submit">Filtrar</button>
+</form>
+
+{% if eventos %}
+<table>
+  <thead>
+    <tr>
+      <th>Evento</th>
+      <th>Cliente</th>
+      <th>Tipo</th>
+      <th>Fechas</th>
+      <th>Estado</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ev in eventos %}
+    <tr>
+      <td><a href="{{ url_for('eventos.detalle', evento_id=ev.id) }}">{{ ev.nombre }}</a></td>
+      <td>{{ ev.cliente or "—" }}</td>
+      <td>{{ ev.tipo | tipo_label }}</td>
+      <td>
+        {{ ev.fecha_inicio }}{% if ev.fecha_fin and ev.fecha_fin != ev.fecha_inicio %} → {{ ev.fecha_fin }}{% endif %}
+      </td>
+      <td><span class="estado-badge estado-{{ ev.estado }}">{{ ev.estado | estado_evento_label }}</span></td>
+      <td class="actions"><a href="{{ url_for('eventos.detalle', evento_id=ev.id) }}">Ver</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">No hay eventos con esos filtros.</p>
+{% endif %}
+{% endblock %}

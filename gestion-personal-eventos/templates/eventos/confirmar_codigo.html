@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Confirmar disponibilidad{% endblock %}
+{% block content %}
+<div class="card login-card">
+  <h1>Confirmar disponibilidad</h1>
+  <p class="subtitle">Introduce el código de acceso del evento para confirmar tu disponibilidad.</p>
+  <form method="post">
+    <label for="codigo">Código de acceso</label>
+    <input type="text" id="codigo" name="codigo" placeholder="ej. A1B2C3D4" autofocus required
+           style="text-transform: uppercase; letter-spacing: 0.15em; font-size: 1.2rem; text-align: center;">
+    <div class="form-actions">
+      <button type="submit">Acceder</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

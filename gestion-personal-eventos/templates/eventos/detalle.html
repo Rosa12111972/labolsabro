@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}{{ evento.nombre }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>{{ evento.nombre }}</h1>
+    <p class="subtitle">
+      {{ evento.tipo | tipo_label }}
+      {% if evento.cliente %} · {{ evento.cliente }}{% endif %}
+      · <span class="estado-badge estado-{{ evento.estado }}">{{ evento.estado | estado_evento_label }}</span>
+    </p>
+  </div>
+  <div class="actions">
+    <a class="button-secondary" href="{{ url_for('eventos.confirmaciones', evento_id=evento.id) }}">Confirmaciones</a>
+    <a class="button-secondary" href="{{ url_for('eventos.editar', evento_id=evento.id) }}">Editar</a>
+    <form method="post" action="{{ url_for('eventos.eliminar', evento_id=evento.id) }}"
+          onsubmit="return confirm('¿Eliminar el evento \'{{ evento.nombre }}\'? Se borran también sus recursos y su timeline.');">
+      <button type="submit" class="link-danger">Eliminar</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Estado del evento</h2>
+  <form method="post" action="{{ url_for('eventos.cambiar_estado', evento_id=evento.id) }}" class="inline-form">
+    <select name="estado">
+      {% for e in ESTADOS %}
+      <option value="{{ e }}" {{ "selected" if evento.estado == e }}>{{ e | estado_evento_label }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Actualizar estado</button>
+  </form>
+</div>
+
+{% if evento.codigo_acceso %}
+<div class="card">
+  <h2>Código de acceso para el personal</h2>
+  <p>Comparte este código para que el personal confirme su disponibilidad:</p>
+  <p style="font-size: 1.5rem; font-weight: 700; letter-spacing: 0.2em; color: var(--accent); font-family: monospace;">
+    {{ evento.codigo_acceso }}
+  </p>
+  <p class="hint">
+    Enlace directo: <a href="{{ url_for('eventos.confirmar_form', codigo=evento.codigo_acceso) }}">{{ url_for('eventos.confirmar_form', codigo=evento.codigo_acceso, _external=True) }}</a>
+    · <a href="{{ url_for('eventos.confirmaciones', evento_id=evento.id) }}">Ver confirmaciones</a>
+  </p>
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>Datos del evento</h2>
+  <dl class="detail-grid">
+    <div><dt>Fechas</dt><dd>{{ evento.fecha_inicio }}{% if evento.fecha_fin and evento.fecha_fin != evento.fecha_inicio %} → {{ evento.fecha_fin }}{% endif %}</dd></div>
+    <div><dt>Horario</dt><dd>{{ evento.hora_inicio or "—" }} a {{ evento.hora_fin or "—" }}</dd></div>
+    <div><dt>Ubicación</dt><dd>{{ evento.ubicacion or "—" }}</dd></div>
+    <div><dt>Invitados previstos</dt><dd>{{ evento.num_invitados or "—" }}</dd></div>
+    <div><dt>Presupuesto</dt><dd>{{ "%.2f €"|format(evento.presupuesto) if evento.presupuesto else "—" }}</dd></div>
+  </dl>
+  {% if evento.notas %}
+  <h3>Notas / requisitos especiales</h3>
+  <p class="notas">{{ evento.notas }}</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Recursos necesarios</h2>
+  <p class="hint">Lista manual por ahora — todavía no se conecta con la disponibilidad real de Personal ni Flota.</p>
+  <form method="post" action="{{ url_for('eventos.recurso_nuevo', evento_id=evento.id) }}" class="inline-form">
+    <select name="categoria">
+      {% for c in CATEGORIAS_RECURSO %}
+      <option value="{{ c }}">{{ c | categoria_label }}</option>
+      {% endfor %}
+    </select>
+    <input type="text" name="descripcion" placeholder="ej. camarero, furgoneta 9 plazas..." required>
+    <input type="number" name="cantidad" min="1" value="1" style="width:5rem;">
+    <button type="submit">Añadir</button>
+  </form>
+
+  {% if recursos %}
+  <table>
+    <thead><tr><th>Categoría</th><th>Descripción</th><th>Cantidad</th><th>Asignado</th><th></th></tr></thead>
+    <tbody>
+      {% for r in recursos %}
+      <tr>
+        <td>{{ r.categoria | categoria_label }}</td>
+        <td>{{ r.descripcion }}</td>
+        <td>{{ r.cantidad }}</td>
+        <td>
+          <form method="post" action="{{ url_for('eventos.recurso_toggle', recurso_id=r.id) }}">
+            <button type="submit" class="checklist-toggle {{ 'checked' if r.asignado }}">
+              {{ "✓ Asignado" if r.asignado else "Sin asignar" }}
+            </button>
+          </form>
+        </td>
+        <td class="actions">
+          <form method="post" action="{{ url_for('eventos.recurso_eliminar', recurso_id=r.id) }}"
+                onsubmit="return confirm('¿Eliminar este recurso?');">
+            <button type="submit" class="link-danger">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">Todavía no has añadido recursos necesarios.</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Línea de tiempo</h2>
+  <p class="hint">Agenda simple de hitos — sin cálculo de traslados ni márgenes todavía.</p>
+  <form method="post" action="{{ url_for('eventos.hito_nuevo', evento_id=evento.id) }}" class="inline-form">
+    <input type="time" name="hora" required>
+    <input type="text" name="descripcion" placeholder="ej. llegada de invitados" required>
+    <button type="submit">Añadir hito</button>
+  </form>
+
+  {% if hitos %}
+  <ol class="timeline">
+    {% for h in hitos %}
+    <li>
+      <span class="timeline-hora">{{ h.hora }}</span>
+      <span class="timeline-desc">{{ h.descripcion }}</span>
+      <form method="post" action="{{ url_for('eventos.hito_eliminar', hito_id=h.id) }}"
+            onsubmit="return confirm('¿Eliminar este hito?');">
+        <button type="submit" class="link-danger">Eliminar</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <p class="empty">Todavía no hay hitos en la agenda de este evento.</p>
+  {% endif %}
+</div>
+{% endblock %}

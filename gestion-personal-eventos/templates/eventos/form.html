@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ "Editar evento" if evento_id else "Nuevo evento" }}{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>{{ "Editar evento" if evento_id else "Nuevo evento" }}</h1>
+  <form method="post">
+    <label for="nombre">Nombre del evento</label>
+    <input type="text" id="nombre" name="nombre" value="{{ evento.nombre if evento else '' }}" required autofocus>
+
+    <label for="cliente">Cliente</label>
+    <input type="text" id="cliente" name="cliente" value="{{ evento.cliente if evento else '' }}">
+
+    <label for="tipo">Tipo de evento</label>
+    <select id="tipo" name="tipo" required>
+      <option value="" disabled {{ "selected" if not evento }}>Selecciona un tipo</option>
+      {% for t in TIPOS %}
+      <option value="{{ t }}" {{ "selected" if evento and evento.tipo == t }}>{{ t | tipo_label }}</option>
+      {% endfor %}
+    </select>
+
+    <div class="form-row">
+      <div>
+        <label for="fecha_inicio">Fecha de inicio</label>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ evento.fecha_inicio if evento else '' }}" required>
+      </div>
+      <div>
+        <label for="fecha_fin">Fecha de fin (si dura varios días)</label>
+        <input type="date" id="fecha_fin" name="fecha_fin" value="{{ evento.fecha_fin if evento else '' }}">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div>
+        <label for="hora_inicio">Hora de llegada / inicio</label>
+        <input type="time" id="hora_inicio" name="hora_inicio" value="{{ evento.hora_inicio if evento else '' }}">
+      </div>
+      <div>
+        <label for="hora_fin">Hora estimada de fin</label>
+        <input type="time" id="hora_fin" name="hora_fin" value="{{ evento.hora_fin if evento else '' }}">
+      </div>
+    </div>
+
+    <label for="ubicacion">Ubicación / venue</label>
+    <input type="text" id="ubicacion" name="ubicacion" value="{{ evento.ubicacion if evento else '' }}" placeholder="Texto libre por ahora">
+
+    <div class="form-row">
+      <div>
+        <label for="num_invitados">Nº de invitados/asistentes previsto</label>
+        <input type="number" id="num_invitados" name="num_invitados" min="0" value="{{ evento.num_invitados if evento and evento.num_invitados else '' }}">
+      </div>
+      <div>
+        <label for="presupuesto">Presupuesto asignado (opcional)</label>
+        <input type="number" id="presupuesto" name="presupuesto" min="0" step="0.01" value="{{ evento.presupuesto if evento and evento.presupuesto else '' }}">
+      </div>
+    </div>
+
+    <label for="notas">Notas generales / requisitos especiales</label>
+    <textarea id="notas" name="notas" rows="4">{{ evento.notas if evento else '' }}</textarea>
+
+    <div class="form-actions">
+      <button type="submit">Guardar</button>
+      <a class="button-secondary" href="{{ url_for('eventos.detalle', evento_id=evento_id) if evento_id else url_for('eventos.index') }}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

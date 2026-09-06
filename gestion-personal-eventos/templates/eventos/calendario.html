@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Calendario de eventos{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{{ nombre_mes | capitalize }} {{ anio }}</h1>
+  <div class="cal-nav">
+    <a class="button-secondary" href="{{ url_for('eventos.calendario', anio=anio, mes=mes-1) }}">&larr; Anterior</a>
+    <a class="button-secondary" href="{{ url_for('eventos.calendario') }}">Hoy</a>
+    <a class="button-secondary" href="{{ url_for('eventos.calendario', anio=anio, mes=mes+1) }}">Siguiente &rarr;</a>
+  </div>
+</div>
+
+<div class="calendar">
+  <div class="calendar-weekdays">
+    <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+  </div>
+  {% for semana in semanas %}
+  <div class="calendar-week">
+    {% for dia in semana %}
+      {% if dia %}
+      <div class="calendar-day {{ 'today' if dia == hoy.day and mes == hoy.month and anio == hoy.year }}">
+        <span class="day-num">{{ dia }}</span>
+        {% for ev in eventos_por_dia.get(dia, []) %}
+        <a class="cal-event estado-{{ ev.estado }}" href="{{ url_for('eventos.detalle', evento_id=ev.id) }}">{{ ev.nombre }}</a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="calendar-day empty-day"></div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Confirmaciones — {{ evento.nombre }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Confirmaciones</h1>
+    <p class="subtitle">{{ evento.nombre }} · {{ evento.fecha_inicio }}{% if evento.fecha_fin and evento.fecha_fin != evento.fecha_inicio %} → {{ evento.fecha_fin }}{% endif %}</p>
+  </div>
+  <a class="button-secondary" href="{{ url_for('eventos.detalle', evento_id=evento.id) }}">Volver al evento</a>
+</div>
+
+<div class="card">
+  <h2>Código de acceso</h2>
+  <p>Comparte este código con el personal para que confirmen su disponibilidad:</p>
+  <p style="font-size: 1.8rem; font-weight: 700; letter-spacing: 0.2em; color: var(--accent); font-family: monospace;">
+    {{ evento.codigo_acceso }}
+  </p>
+  <p class="hint">Enlace directo: {{ url_for('eventos.confirmar_form', codigo=evento.codigo_acceso, _external=True) }}</p>
+</div>
+
+{% set disponibles = respuestas | selectattr("disponible") | list %}
+{% set no_disponibles = respuestas | rejectattr("disponible") | list %}
+
+<div class="card" style="border-top-color: var(--ok);">
+  <h2 style="color: var(--ok);">Disponibles ({{ disponibles | length }})</h2>
+  {% if disponibles %}
+  <table>
+    <thead><tr><th>Nombre</th><th>Rol</th><th>Teléfono</th><th>Disponible desde</th><th>Comentario</th><th>Respondió</th></tr></thead>
+    <tbody>
+      {% for r in disponibles %}
+      <tr>
+        <td>{{ r.nombre }}</td>
+        <td>{{ r.rol | role_label }}</td>
+        <td>{{ r.telefono or "—" }}</td>
+        <td>{{ r.disponible_desde or "Desde el inicio" }}</td>
+        <td>{{ r.comentario or "—" }}</td>
+        <td style="font-size: 0.8rem; color: var(--muted);">{{ r.respondido_at[:16] | replace("T", " ") }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">Nadie ha confirmado disponibilidad todavía.</p>
+  {% endif %}
+</div>
+
+<div class="card" style="border-top-color: var(--danger);">
+  <h2 style="color: var(--danger);">No disponibles ({{ no_disponibles | length }})</h2>
+  {% if no_disponibles %}
+  <table>
+    <thead><tr><th>Nombre</th><th>Rol</th><th>Comentario</th><th>Respondió</th></tr></thead>
+    <tbody>
+      {% for r in no_disponibles %}
+      <tr>
+        <td>{{ r.nombre }}</td>
+        <td>{{ r.rol | role_label }}</td>
+        <td>{{ r.comentario or "—" }}</td>
+        <td style="font-size: 0.8rem; color: var(--muted);">{{ r.respondido_at[:16] | replace("T", " ") }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">Nadie ha dicho que no puede.</p>
+  {% endif %}
+</div>
+
+<div class="card" style="border-top-color: var(--warn);">
+  <h2 style="color: var(--warn);">Sin responder ({{ sin_responder | length }})</h2>
+  {% if sin_responder %}
+  <table>
+    <thead><tr><th>Nombre</th><th>Rol</th><th>Teléfono</th><th>Zona</th></tr></thead>
+    <tbody>
+      {% for p in sin_responder %}
+      <tr>
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.rol | role_label }}</td>
+        <td>{{ p.telefono or "—" }}</td>
+        <td>{{ p.zona or "—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">Todo el personal ha respondido.</p>
+  {% endif %}
+</div>
+{% endblock %}

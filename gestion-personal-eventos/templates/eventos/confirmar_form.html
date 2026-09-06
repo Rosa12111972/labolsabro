@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Confirmar — {{ evento.nombre }}{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 540px; margin: 2rem auto;">
+  <h1>{{ evento.nombre }}</h1>
+  <dl class="detail-grid">
+    <div><dt>Fechas</dt><dd>{{ evento.fecha_inicio }}{% if evento.fecha_fin and evento.fecha_fin != evento.fecha_inicio %} → {{ evento.fecha_fin }}{% endif %}</dd></div>
+    <div><dt>Horario</dt><dd>{{ evento.hora_inicio or "—" }} a {{ evento.hora_fin or "—" }}</dd></div>
+    <div><dt>Ubicación</dt><dd>{{ evento.ubicacion or "—" }}</dd></div>
+    <div><dt>Tipo</dt><dd>{{ evento.tipo | tipo_label }}</dd></div>
+  </dl>
+</div>
+
+{% if enviado %}
+<div class="card" style="max-width: 540px; margin: 0 auto; border-top-color: var(--ok);">
+  <h2 style="color: var(--ok);">Respuesta registrada</h2>
+  <p>Tu confirmación se ha guardado correctamente. Puedes cerrar esta página o cambiar tu respuesta enviando el formulario de nuevo.</p>
+  <div class="form-actions">
+    <a class="button-secondary" href="{{ url_for('eventos.confirmar_form', codigo=evento.codigo_acceso) }}">Cambiar respuesta</a>
+  </div>
+</div>
+{% else %}
+<div class="card" style="max-width: 540px; margin: 0 auto;">
+  <h2>Tu disponibilidad</h2>
+  <form method="post">
+    <label for="persona_id">¿Quién eres?</label>
+    <select id="persona_id" name="persona_id" required>
+      <option value="" disabled selected>Selecciona tu nombre</option>
+      {% for p in personas %}
+      <option value="{{ p.id }}">{{ p.nombre }} ({{ p.rol | role_label }})</option>
+      {% endfor %}
+    </select>
+
+    <label>¿Estás disponible para este evento?</label>
+    <div style="display: flex; gap: 1.5rem; margin: 0.5rem 0;">
+      <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 1rem; color: var(--text);">
+        <input type="radio" name="disponible" value="1" required> Sí, estoy disponible
+      </label>
+      <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 1rem; color: var(--text);">
+        <input type="radio" name="disponible" value="0"> No puedo
+      </label>
+    </div>
+
+    <label for="disponible_desde">Si solo puedes parte del evento, ¿desde qué fecha y hora? (opcional)</label>
+    <input type="datetime-local" id="disponible_desde" name="disponible_desde">
+
+    <label for="comentario">Comentario (opcional)</label>
+    <textarea id="comentario" name="comentario" rows="3" placeholder="ej. Solo puedo hasta las 22h, necesito transporte..."></textarea>
+
+    <div class="form-actions">
+      <button type="submit">Enviar confirmación</button>
+    </div>
+  </form>
+</div>
+{% endif %}
+{% endblock %}
