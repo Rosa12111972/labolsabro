@@ -6,7 +6,10 @@
     <h1>Confirmaciones</h1>
     <p class="subtitle">{{ evento.nombre }} · {{ evento.fecha_inicio }}{% if evento.fecha_fin and evento.fecha_fin != evento.fecha_inicio %} → {{ evento.fecha_fin }}{% endif %}</p>
   </div>
-  <a class="button-secondary" href="{{ url_for('eventos.detalle', evento_id=evento.id) }}">Volver al evento</a>
+  <div class="actions">
+    <a class="button" href="{{ url_for('eventos.asignar', evento_id=evento.id) }}">+ Asignar personal</a>
+    <a class="button-secondary" href="{{ url_for('eventos.detalle', evento_id=evento.id) }}">Volver al evento</a>
+  </div>
 </div>
 
 <div class="card">
@@ -25,13 +28,14 @@
   <h2 style="color: var(--ok);">Disponibles ({{ disponibles | length }})</h2>
   {% if disponibles %}
   <table>
-    <thead><tr><th>Nombre</th><th>Rol</th><th>Teléfono</th><th>Disponible desde</th><th>Comentario</th><th>Respondió</th></tr></thead>
+    <thead><tr><th>Nombre</th><th>Rol</th><th>Teléfono</th><th>Email</th><th>Disponible desde</th><th>Comentario</th><th>Respondió</th></tr></thead>
     <tbody>
       {% for r in disponibles %}
       <tr>
         <td>{{ r.nombre }}</td>
         <td>{{ r.rol | role_label }}</td>
         <td>{{ r.telefono or "—" }}</td>
+        <td>{{ r.email or "—" }}</td>
         <td>{{ r.disponible_desde or "Desde el inicio" }}</td>
         <td>{{ r.comentario or "—" }}</td>
         <td style="font-size: 0.8rem; color: var(--muted);">{{ r.respondido_at[:16] | replace("T", " ") }}</td>
@@ -66,23 +70,64 @@
 </div>
 
 <div class="card" style="border-top-color: var(--warn);">
-  <h2 style="color: var(--warn);">Sin responder ({{ sin_responder | length }})</h2>
-  {% if sin_responder %}
+  <h2 style="color: var(--warn);">Pendientes de respuesta ({{ pendientes | length }})</h2>
+  {% if pendientes %}
   <table>
-    <thead><tr><th>Nombre</th><th>Rol</th><th>Teléfono</th><th>Zona</th></tr></thead>
+    <thead><tr><th>Nombre</th><th>Rol</th><th>Email</th><th>Estado envío</th><th>Asignada</th><th></th></tr></thead>
     <tbody>
-      {% for p in sin_responder %}
+      {% for a in pendientes %}
       <tr>
-        <td>{{ p.nombre }}</td>
-        <td>{{ p.rol | role_label }}</td>
-        <td>{{ p.telefono or "—" }}</td>
-        <td>{{ p.zona or "—" }}</td>
+        <td>{{ a.nombre }}</td>
+        <td>{{ a.rol | role_label }}</td>
+        <td>{{ a.email or "—" }}</td>
+        <td>
+          {% if a.recordatorio_enviado_at %}
+            <span style="color: var(--danger);">Recordatorio enviado</span>
+            <span style="font-size: 0.75rem; color: var(--muted); display: block;">{{ a.recordatorio_enviado_at[:16] | replace("T", " ") }}</span>
+          {% elif a.email_enviado_at %}
+            <span style="color: var(--accent);">Email enviado</span>
+            <span style="font-size: 0.75rem; color: var(--muted); display: block;">{{ a.email_enviado_at[:16] | replace("T", " ") }}</span>
+          {% else %}
+            <span style="color: var(--muted);">Sin notificar</span>
+          {% endif %}
+        </td>
+        <td style="font-size: 0.8rem; color: var(--muted);">{{ a.asignado_at[:16] | replace("T", " ") }}</td>
+        <td class="actions">
+          {% if a.email %}
+          <form method="post" action="{{ url_for('eventos.reenviar_email', evento_id=evento.id, asig_id=a.id) }}" style="display: inline;">
+            <button type="submit" class="button-secondary" style="font-size: 0.8rem; padding: 0.25rem 0.6rem;">Reenviar email</button>
+          </form>
+          {% endif %}
+          <form method="post" action="{{ url_for('eventos.desasignar', evento_id=evento.id, asig_id=a.id) }}"
+                onsubmit="return confirm('¿Desasignar a {{ a.nombre }}?');" style="display: inline;">
+            <button type="submit" class="link-danger">Quitar</button>
+          </form>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
   {% else %}
-  <p class="empty">Todo el personal ha respondido.</p>
+  <p class="empty">Todas las personas asignadas han respondido.</p>
   {% endif %}
 </div>
+
+{% if sin_asignar %}
+<div class="card" style="border-top-color: var(--muted);">
+  <h2 style="color: var(--muted);">Sin asignar ({{ sin_asignar | length }})</h2>
+  <p class="hint">Estas personas no están asignadas a este evento. <a href="{{ url_for('eventos.asignar', evento_id=evento.id) }}">Asignar personal</a></p>
+  <table>
+    <thead><tr><th>Nombre</th><th>Rol</th><th>Zona</th></tr></thead>
+    <tbody>
+      {% for p in sin_asignar %}
+      <tr>
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.rol | role_label }}</td>
+        <td>{{ p.zona or "—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
 {% endblock %}

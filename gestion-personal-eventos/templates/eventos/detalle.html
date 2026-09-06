@@ -11,6 +11,7 @@
     </p>
   </div>
   <div class="actions">
+    <a class="button" href="{{ url_for('eventos.asignar', evento_id=evento.id) }}">Asignar personal</a>
     <a class="button-secondary" href="{{ url_for('eventos.confirmaciones', evento_id=evento.id) }}">Confirmaciones</a>
     <a class="button-secondary" href="{{ url_for('eventos.editar', evento_id=evento.id) }}">Editar</a>
     <form method="post" action="{{ url_for('eventos.eliminar', evento_id=evento.id) }}"

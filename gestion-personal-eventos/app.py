@@ -13,6 +13,7 @@ from sections.personal.routes import bp as personal_bp
 def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-key-cambia-esto-en-produccion")
+    app.config["BASE_URL"] = os.environ.get("BASE_URL", "http://127.0.0.1:5000")
 
     app.teardown_appcontext(close_db)
     register_cli(app)
@@ -38,4 +39,8 @@ if __name__ == "__main__":
         with app.app_context():
             init_db(app)
             create_default_admin()
+
+    from scheduler import init_scheduler
+    init_scheduler(app)
+
     app.run(debug=True, port=5000, use_reloader=False)

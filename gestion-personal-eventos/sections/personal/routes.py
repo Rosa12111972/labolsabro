@@ -55,6 +55,7 @@ def _persona_form_data():
         "nombre": request.form.get("nombre", "").strip(),
         "rol": request.form.get("rol", ""),
         "telefono": request.form.get("telefono", "").strip(),
+        "email": request.form.get("email", "").strip(),
         "zona": request.form.get("zona", "").strip(),
     }
 
@@ -69,8 +70,8 @@ def persona_nueva():
         else:
             db = get_db()
             db.execute(
-                "INSERT INTO personas (nombre, rol, telefono, zona) VALUES (?, ?, ?, ?)",
-                (data["nombre"], data["rol"], data["telefono"], data["zona"]),
+                "INSERT INTO personas (nombre, rol, telefono, email, zona) VALUES (?, ?, ?, ?, ?)",
+                (data["nombre"], data["rol"], data["telefono"], data["email"], data["zona"]),
             )
             db.commit()
             return redirect(url_for("personal.personas_list"))
@@ -91,8 +92,8 @@ def persona_editar(persona_id):
             flash("El nombre y el rol son obligatorios.")
             return render_template("personal/persona_form.html", persona=data, persona_id=persona_id)
         db.execute(
-            "UPDATE personas SET nombre = ?, rol = ?, telefono = ?, zona = ? WHERE id = ?",
-            (data["nombre"], data["rol"], data["telefono"], data["zona"], persona_id),
+            "UPDATE personas SET nombre = ?, rol = ?, telefono = ?, email = ?, zona = ? WHERE id = ?",
+            (data["nombre"], data["rol"], data["telefono"], data["email"], data["zona"], persona_id),
         )
         db.commit()
         return redirect(url_for("personal.personas_list"))

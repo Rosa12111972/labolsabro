@@ -16,6 +16,7 @@ CREATE TABLE personas (
     nombre TEXT NOT NULL,
     rol TEXT NOT NULL CHECK(rol IN ('conductor', 'camarero', 'azafata', 'tecnico')),
     telefono TEXT,
+    email TEXT,
     zona TEXT
 );
 
@@ -61,6 +62,16 @@ CREATE TABLE evento_hitos (
     evento_id INTEGER NOT NULL REFERENCES eventos(id) ON DELETE CASCADE,
     hora TEXT NOT NULL,
     descripcion TEXT NOT NULL
+);
+
+CREATE TABLE evento_asignaciones (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    evento_id INTEGER NOT NULL REFERENCES eventos(id) ON DELETE CASCADE,
+    persona_id INTEGER NOT NULL REFERENCES personas(id) ON DELETE CASCADE,
+    asignado_at TEXT NOT NULL,
+    email_enviado_at TEXT,
+    recordatorio_enviado_at TEXT,
+    UNIQUE(evento_id, persona_id)
 );
 
 CREATE TABLE confirmaciones (

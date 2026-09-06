@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Asignar personal — {{ evento.nombre }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Asignar personal</h1>
+    <p class="subtitle">{{ evento.nombre }} · {{ evento.fecha_inicio }}{% if evento.fecha_fin and evento.fecha_fin != evento.fecha_inicio %} → {{ evento.fecha_fin }}{% endif %}</p>
+  </div>
+  <a class="button-secondary" href="{{ url_for('eventos.confirmaciones', evento_id=evento.id) }}">Volver</a>
+</div>
+
+{% if disponibles %}
+<div class="card">
+  <p>Selecciona las personas que quieres asignar a este evento. Si tienen email, se les enviará automáticamente el código de confirmación.</p>
+  <form method="post">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 2.5rem;">
+            <input type="checkbox" id="select-all" title="Seleccionar todas">
+          </th>
+          <th>Nombre</th>
+          <th>Rol</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Zona</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in disponibles %}
+        <tr>
+          <td><input type="checkbox" name="persona_ids" value="{{ p.id }}"></td>
+          <td>{{ p.nombre }}</td>
+          <td>{{ p.rol | role_label }}</td>
+          <td>{{ p.telefono or "—" }}</td>
+          <td>{{ p.email or "—" }}</td>
+          <td>{{ p.zona or "—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="form-actions" style="margin-top: 1rem;">
+      <button type="submit">Asignar seleccionadas</button>
+    </div>
+  </form>
+</div>
+<script>
+document.getElementById('select-all').addEventListener('change', function() {
+  document.querySelectorAll('input[name="persona_ids"]').forEach(function(cb) {
+    cb.checked = this.checked;
+  }.bind(this));
+});
+</script>
+{% else %}
+<div class="card">
+  <p class="empty">Todas las personas ya están asignadas a este evento.</p>
+</div>
+{% endif %}
+{% endblock %}

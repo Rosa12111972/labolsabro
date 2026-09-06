@@ -2,7 +2,7 @@ import calendar as calendar_module
 import secrets
 from datetime import date, datetime
 
-from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, current_app, flash, redirect, render_template, request, url_for
 
 from auth import login_required
 from extensions import get_db
@@ -375,6 +375,133 @@ def hito_eliminar(hito_id):
     return redirect(url_for("eventos.detalle", evento_id=hito["evento_id"]))
 
 
+# ── Asignaciones de personal a eventos ──
+
+
+@bp.route("/<int:evento_id>/asignar", methods=["GET", "POST"])
+@login_required
+def asignar(evento_id):
+    db = get_db()
+    evento = _get_evento_or_404(db, evento_id)
+
+    ya_asignados = {
+        r["persona_id"]
+        for r in db.execute(
+            "SELECT persona_id FROM evento_asignaciones WHERE evento_id = ?", (evento_id,)
+        ).fetchall()
+    }
+    todas = db.execute("SELECT * FROM personas ORDER BY nombre").fetchall()
+    disponibles = [p for p in todas if p["id"] not in ya_asignados]
+
+    if request.method == "POST":
+        persona_ids = request.form.getlist("persona_ids")
+        if not persona_ids:
+            flash("Selecciona al menos una persona.")
+            return render_template(
+                "eventos/asignar.html", evento=evento, disponibles=disponibles,
+            )
+
+        from email_service import enviar_asignacion
+
+        base_url = current_app.config.get("BASE_URL", "http://127.0.0.1:5000")
+        asignados = 0
+        emails_ok = 0
+
+        for pid_str in persona_ids:
+            try:
+                pid = int(pid_str)
+            except ValueError:
+                continue
+            persona = db.execute("SELECT * FROM personas WHERE id = ?", (pid,)).fetchone()
+            if not persona or pid in ya_asignados:
+                continue
+
+            now = datetime.utcnow().isoformat()
+            email_enviado = None
+
+            if persona["email"]:
+                try:
+                    ok = enviar_asignacion(
+                        persona["nombre"], persona["email"], evento["nombre"],
+                        evento["fecha_inicio"], evento["ubicacion"],
+                        evento["codigo_acceso"], base_url,
+                    )
+                    if ok:
+                        email_enviado = now
+                        emails_ok += 1
+                except Exception as exc:
+                    flash(f"Error enviando email a {persona['nombre']}: {exc}")
+
+            db.execute(
+                """
+                INSERT INTO evento_asignaciones (evento_id, persona_id, asignado_at, email_enviado_at)
+                VALUES (?, ?, ?, ?)
+                """,
+                (evento_id, pid, now, email_enviado),
+            )
+            asignados += 1
+            ya_asignados.add(pid)
+
+        db.commit()
+        msg = f"{asignados} persona(s) asignada(s)."
+        if emails_ok:
+            msg += f" {emails_ok} email(s) enviado(s)."
+        flash(msg)
+        return redirect(url_for("eventos.confirmaciones", evento_id=evento_id))
+
+    return render_template("eventos/asignar.html", evento=evento, disponibles=disponibles)
+
+
+@bp.route("/<int:evento_id>/asignaciones/<int:asig_id>/reenviar", methods=["POST"])
+@login_required
+def reenviar_email(evento_id, asig_id):
+    db = get_db()
+    evento = _get_evento_or_404(db, evento_id)
+    asig = db.execute(
+        "SELECT a.*, p.nombre, p.email FROM evento_asignaciones a JOIN personas p ON p.id = a.persona_id WHERE a.id = ?",
+        (asig_id,),
+    ).fetchone()
+    if asig is None:
+        abort(404)
+    if not asig["email"]:
+        flash(f"{asig['nombre']} no tiene email registrado.")
+        return redirect(url_for("eventos.confirmaciones", evento_id=evento_id))
+
+    from email_service import enviar_asignacion
+
+    base_url = current_app.config.get("BASE_URL", "http://127.0.0.1:5000")
+    try:
+        ok = enviar_asignacion(
+            asig["nombre"], asig["email"], evento["nombre"],
+            evento["fecha_inicio"], evento["ubicacion"],
+            evento["codigo_acceso"], base_url,
+        )
+        if ok:
+            db.execute(
+                "UPDATE evento_asignaciones SET email_enviado_at = ? WHERE id = ?",
+                (datetime.utcnow().isoformat(), asig_id),
+            )
+            db.commit()
+            flash(f"Email reenviado a {asig['nombre']}.")
+        else:
+            flash("SMTP no configurado — email no enviado.")
+    except Exception as exc:
+        flash(f"Error enviando email: {exc}")
+
+    return redirect(url_for("eventos.confirmaciones", evento_id=evento_id))
+
+
+@bp.route("/<int:evento_id>/asignaciones/<int:asig_id>/eliminar", methods=["POST"])
+@login_required
+def desasignar(evento_id, asig_id):
+    db = get_db()
+    _get_evento_or_404(db, evento_id)
+    db.execute("DELETE FROM evento_asignaciones WHERE id = ? AND evento_id = ?", (asig_id, evento_id))
+    db.commit()
+    flash("Persona desasignada del evento.")
+    return redirect(url_for("eventos.confirmaciones", evento_id=evento_id))
+
+
 # ── Ruta pública: confirmación de disponibilidad por código ──
 
 
@@ -453,9 +580,10 @@ def confirmar_form(codigo):
 def confirmaciones(evento_id):
     db = get_db()
     evento = _get_evento_or_404(db, evento_id)
+
     respuestas = db.execute(
         """
-        SELECT c.*, p.nombre, p.rol, p.telefono
+        SELECT c.*, p.nombre, p.rol, p.telefono, p.email
         FROM confirmaciones c
         JOIN personas p ON p.id = c.persona_id
         WHERE c.evento_id = ?
@@ -463,12 +591,29 @@ def confirmaciones(evento_id):
         """,
         (evento_id,),
     ).fetchall()
-    todas_personas = db.execute("SELECT * FROM personas ORDER BY nombre").fetchall()
     ids_respondieron = {r["persona_id"] for r in respuestas}
-    sin_responder = [p for p in todas_personas if p["id"] not in ids_respondieron]
+
+    asignaciones = db.execute(
+        """
+        SELECT a.*, p.nombre, p.rol, p.telefono, p.email
+        FROM evento_asignaciones a
+        JOIN personas p ON p.id = a.persona_id
+        WHERE a.evento_id = ?
+        ORDER BY a.asignado_at DESC
+        """,
+        (evento_id,),
+    ).fetchall()
+    ids_asignados = {a["persona_id"] for a in asignaciones}
+
+    pendientes = [a for a in asignaciones if a["persona_id"] not in ids_respondieron]
+
+    todas_personas = db.execute("SELECT * FROM personas ORDER BY nombre").fetchall()
+    sin_asignar = [p for p in todas_personas if p["id"] not in ids_asignados and p["id"] not in ids_respondieron]
+
     return render_template(
         "eventos/confirmaciones.html",
         evento=evento,
         respuestas=respuestas,
-        sin_responder=sin_responder,
+        pendientes=pendientes,
+        sin_asignar=sin_asignar,
     )
