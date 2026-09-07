@@ -443,7 +443,7 @@ function acceptAge() {
 <section class="hero">
   <div class="hero-tag"><div class="tag-dot"></div> <span data-i18n="heroTag">Disponible ahora · Gratis</span></div>
   <h1 data-i18n-html="heroTitle">Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em></h1>
-  <p class="hero-sub" data-i18n="heroSub">La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones de adulto. Solo tu dinero haciendo algo.</p>
+  <p class="hero-sub" data-i18n="heroSub">La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones. Solo tu dinero haciendo algo.</p>
   <form action="https://formspree.io/f/mqevbzvb" method="POST" onsubmit="handleForm(event)" class="form-row" style="flex-wrap:wrap;justify-content:center;">
     <input type="email" name="email" id="heroEmail" placeholder="tu@email.com" required />
     <button type="submit" data-i18n="heroBtn">Empezar gratis</button>
@@ -524,7 +524,7 @@ function acceptAge() {
           <li><span class="c-g">✓</span> Análisis completo de empresas</li>
           <li><span class="c-g">✓</span> Búsquedas ilimitadas</li>
           <li><span class="c-g">✓</span> Comparador de empresas</li>
-          <li><span class="c-g">✓</span> Calculadora de interés compuesto</li>
+          <li><span class="c-g">✓</span> Simulador de ahorro e inversión</li>
           <li><span class="c-g">✓</span> Recordatorios personalizables</li>
         </ul>
       </div>
@@ -535,6 +535,7 @@ function acceptAge() {
         <div class="mode-desc">Análisis avanzado, alertas personalizadas e historial completo. Para tomar decisiones con información de calidad.</div>
         <ul class="mode-list">
           <li><span class="c-p">✓</span> Todo del plan Junior</li>
+          <li><span class="c-p">✓</span> Calculadora de interés compuesto</li>
           <li><span class="c-p">✓</span> Comparador avanzado por sector</li>
           <li><span class="c-p">✓</span> Alertas de valor personalizadas</li>
           <li><span class="c-p">✓</span> Historial de análisis personal</li>
@@ -659,7 +660,7 @@ function acceptAge() {
         <button class="quick-btn" data-sector="cripto" onclick="doTicker('ETH')">Ethereum</button>
       </div>
       <div id="stockResult" style="padding:24px;min-height:120px;display:flex;align-items:center;justify-content:center;">
-        <p style="font-size:14px;color:var(--text3);text-align:center;">Escribe Apple, Tesla, Inditex... lo que sea, nano. Te digo yo si renta o no. 🪰</p>
+        <p style="font-size:14px;color:var(--text3);text-align:center;">Escribe Apple, Tesla, Inditex... lo que sea. Te digo yo si renta o no. 🪰</p>
       </div>
       <div style="padding:12px 24px;font-size:11px;color:var(--text3);background:var(--card2);border-top:1px solid var(--border);line-height:1.6;">
         ⚠️ <strong style="color:var(--text2)">Datos de Yahoo Finance · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br>
@@ -1048,23 +1049,23 @@ function renderHistorial() {
 const METRIC_INFO = {
   'PER actual': '💡 Imagina que la empresa es un piso de alquiler. El PER te dice cuántos años tardarías en recuperar lo que pagaste con los beneficios que genera. PER 20 = 20 años. Cuanto más bajo, más barata está. Fácil, ¿no?',
   'PEG ratio': '💡 Es el PER pero con más cabeza. Tiene en cuenta que si la empresa crece rápido, igual merece pagar más por ella. Menos de 1 = chollo. Entre 1 y 2 = precio razonable. Más de 2 = uff, te la están vendiendo cara.',
-  'PER estimado': '💡 Como el PER normal pero mirando al futuro, home. Usa los beneficios que se esperan el año que viene, no los del pasado. Si está bajo, el mercado espera que la empresa lo pete.',
-  'Crecimiento BPA': '💡 BPA = cuánto gana la empresa por cada acción. Si sube cada año, la empresa cada vez gana más pasta. Como si tu sueldo subiera todos los años — buena señal, nano.',
-  'Crecimiento ingresos': '💡 Cuánto más está vendiendo respecto al año anterior. Si vende más = está creciendo, está petando. Si vende menos = algo va mal, ojo.',
-  'ROE': '💡 Si metes 100€ en el negocio y el ROE es 20%, el negocio genera 20€ al año. Por encima del 15% mola. Por encima del 30% es una bestialidad, tío.',
+  'PER estimado': '💡 Como el PER normal pero mirando al futuro. Usa los beneficios que se esperan el año que viene, no los del pasado. Si está bajo, el mercado espera que la empresa crezca fuerte.',
+  'Crecimiento BPA': '💡 BPA = cuánto gana la empresa por cada acción. Si sube cada año, la empresa cada vez gana más pasta. Como si tu sueldo subiera todos los años — buena señal.',
+  'Crecimiento ingresos': '💡 Cuánto más está vendiendo respecto al año anterior. Si vende más = está creciendo bien. Si vende menos = algo va mal, ojo.',
+  'ROE': '💡 Si metes 100€ en el negocio y el ROE es 20%, el negocio genera 20€ al año. Por encima del 15% es buena señal. Por encima del 30% es excelente.',
   'Cap. mercado': '💡 Lo que vale toda la empresa en bolsa. Empresas grandes como Apple valen billones. Las pequeñas valen millones. Más grande = más estable y menos locuras de precio.',
   'Dividendo': '💡 Pasta que la empresa te paga cada año solo por tener sus acciones. Si el dividendo es 3%, por cada 1.000€ te dan 30€ al año sin vender nada. Como cobrar un alquiler sin ser casero 😌',
   'EPS': '💡 El beneficio total de la empresa dividido entre todas sus acciones. Si es positivo, la empresa gana dinero. Si es negativo, está perdiendo pasta. Tan simple como eso.',
   'Margen neto': '💡 De cada 100€ que vende, cuánto se queda después de pagar todo. Margen 20% = se queda 20€ de cada 100€. Cuanto más alto, más crack es gestionando el negocio.',
   'Reinversión del negocio': '💡 El dinero que gana, ¿lo reinvierte en crecer o se lo reparte? Alto = apuesta por el futuro. Bajo = prefiere repartir dividendos. Ninguno es malo, pero dice mucho de la empresa.',
   'Flujo caja operativo': '💡 La pasta real que entra por el negocio del día a día. Es más fiable que los beneficios porque es difícil de manipular. Si es alto y positivo, el negocio funciona de verdad, no es humo.',
-  'Free Cash Flow': '💡 El dinero que sobra de verdad después de pagar todo lo necesario. Si es positivo, la empresa tiene cash para crecer, pagar dividendos o reducir deudas. Si es negativo... macho, que alguien mire eso.',
+  'Free Cash Flow': '💡 El dinero que sobra de verdad después de pagar todo lo necesario. Si es positivo, la empresa tiene cash para crecer, pagar dividendos o reducir deudas. Si es negativo, es una señal de alerta a revisar.',
   'Beta': '💡 Mide qué tan nerviosa es la acción. Beta 1 = se mueve igual que el mercado. Beta 2 = sube y baja el doble. Beta 0.5 = más tranquilita. Si tienes el corazón débil, busca beta baja 😅',
   'Rango 52 semanas': '💡 El precio más bajo y más alto del último año. Si ahora está cerca del mínimo, igual es oportunidad. Si está cerca del máximo, está cara cara. Útil para no comprar en el peor momento.',
   'Empleados': '💡 Cuánta gente trabaja ahí. Una empresa con 100.000 empleados es un monstruo. Con 500, es pequeña. Más grande no significa mejor, pero da contexto del tamaño real del negocio.',
   'Interés compuesto': '💡 Ganar intereses sobre los intereses que ya ganaste antes, no solo sobre lo que metiste. Al principio no se nota, pero con años se vuelve una bola de nieve. Por eso empezar joven es una pasada, aunque metas poco.',
   'EBITDA': '💡 El beneficio operativo antes de intereses, impuestos, depreciación y amortización. Vale para comparar empresas sin que la contabilidad rara distorsione la foto. Cuanto más alto respecto a las ventas, mejor gestionado va el negocio.',
-  'ETF': '💡 Un fondo que cotiza en bolsa como si fuera una acción, pero por dentro tiene un montón de empresas. Compras 1 ETF y tienes un trocito de 500 empresas de golpe. Diversificación fácil, tío.',
+  'ETF': '💡 Un fondo que cotiza en bolsa como si fuera una acción, pero por dentro tiene un montón de empresas. Compras 1 ETF y tienes un trocito de 500 empresas de golpe. Diversificación fácil.',
   'Fondo indexado': '💡 Un fondo que copia automáticamente un índice (tipo S&P 500) sin que nadie decida qué comprar. Al no haber gestor, las comisiónes son bajísimas. A largo plazo, casi siempre gana a los fondos "listos" gestionados a mano.',
   'Deuda/Patrimonio': '💡 Cuánta deuda tiene la empresa comparada con lo que es suyo de verdad. Si es 200%, debe el doble de lo que posee — ojo ahí. Por debajo de 50-100% suele ser un balance más tranquilo.',
   'Payout ratio': '💡 Qué parte de lo que gana se reparte en dividendos. Si es 30%, guarda el 70% para crecer o pagar deuda. Payout muy alto (90%+) puede ser señal de que no le queda mucho margen para invertir en el futuro.',
@@ -1275,7 +1276,7 @@ function renderGlosario() {
     const matchesCat = !cat || GLOSARIO_CATEGORIAS[t] === cat;
     return matchesQ && matchesCat;
   }).sort();
-  if (!terms.length) { grid.innerHTML = '<p style="color:var(--text3);font-size:14px;grid-column:1/-1;padding:20px 0;text-align:center">No hay ningún término que encaje con eso, illo.</p>'; return; }
+  if (!terms.length) { grid.innerHTML = '<p style="color:var(--text3);font-size:14px;grid-column:1/-1;padding:20px 0;text-align:center">No hay ningún término que encaje con eso.</p>'; return; }
   grid.innerHTML = terms.map(t => {
     const abierto = _glosarioAbierto === t;
     return `<div style="background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:16px 18px;cursor:pointer;" onclick="toggleGlosarioTerm('${t.replace(/'/g,"\\'")}')">
@@ -1321,13 +1322,13 @@ function semaforo(pe, sector, peg) {
   if (pe === null || pe <= 0) return { cls: 'sem-gray', ico: '❓', titulo: 'Sin datos de PER', desc: 'La empresa no tiene PER disponible — puede estar en pérdidas o ser de reciente cotización.' };
   const ref = PER_SECTORES[sector] || PER_SECTORES['default'];
   if (peg && peg > 0) {
-    if (peg < 1)   return { cls: 'sem-green',  ico: '🟢', titulo: `¡Esto está tirao, nano! (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x pero crece un montón — con PEG ${peg.toFixed(2)}x el mercado aún no se ha enterao. Igual renta echarle un ojo 👀` };
+    if (peg < 1)   return { cls: 'sem-green',  ico: '🟢', titulo: `¡Esto está muy barato! (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x pero crece un montón — con PEG ${peg.toFixed(2)}x el mercado todavía no lo ha notado. Igual renta echarle un ojo 👀` };
     if (peg <= 2)  return { cls: 'sem-yellow', ico: '🟡', titulo: `Bien pero sin volverse loco (PEG ${peg.toFixed(2)}x)`, desc: `PER de ${pe.toFixed(1)}x. El PEG de ${peg.toFixed(2)}x dice que el precio está más o menos acorde con lo que crece. Ni ganga ni robo.` };
     return           { cls: 'sem-red',    ico: '🔴', titulo: `Uff, esto está carete (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x y PEG de ${peg.toFixed(2)}x. Macho, pagas mucho incluso pa lo que crece. No sé yo si renta...` };
   }
   if (pe < ref.bajo) return { cls: 'sem-green',  ico: '🟢', titulo: `Precio bajo para su sector — puede rentar`,  desc: `PER de ${pe.toFixed(1)}x está por debajo de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Ostres, igual es una oportunidad 👀` };
   if (pe <= ref.alto) return { cls: 'sem-yellow', ico: '🟡', titulo: `Precio justo — ni cara ni barata`, desc: `PER de ${pe.toFixed(1)}x está en la media del sector ${ref.nombre} (${ref.bajo}x–${ref.alto}x). No está mal, pero tampoco es un chollo.` };
-  return               { cls: 'sem-red',    ico: '🔴', titulo: `Va de sobrada — precio alto para su sector`,   desc: `PER de ${pe.toFixed(1)}x está por encima de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Pagas de más, tío. Ten cuidado.` };
+  return               { cls: 'sem-red',    ico: '🔴', titulo: `Va de sobrada — precio alto para su sector`,   desc: `PER de ${pe.toFixed(1)}x está por encima de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Pagas de más. Ten cuidado.` };
 }
 
 function fmtMiles(n) {
@@ -1359,14 +1360,20 @@ function cacheSet(ticker, data) {
 }
 
 // Auth Supabase
-const _sb = supabase.createClient(
-  'https://vbzhcogjyyjbjvwrtuaz.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiemhjb2dqeXlqYmp2d3J0dWF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMzg2NjQsImV4cCI6MjEwMDgxNDY2NH0.xsfE2omrJef5UnqECQfWy6w_USYVTsBW2JrGIDKSYvE'
-);
+let _sb = null;
+try {
+  _sb = supabase.createClient(
+    'https://vbzhcogjyyjbjvwrtuaz.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZiemhjb2dqeXlqYmp2d3J0dWF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUyMzg2NjQsImV4cCI6MjEwMDgxNDY2NH0.xsfE2omrJef5UnqECQfWy6w_USYVTsBW2JrGIDKSYvE'
+  );
+} catch (e) {
+  console.warn('Supabase no disponible, funciones de cuenta desactivadas:', e);
+}
 let _currentUser = null;
 let _userPlan = 'free';
 let _lastTicker = '';
 let _bonusBusquedas = 0;
+let _pruebasGratisUsadas = 0;
 let _premiumBonusUntil = null;
 let _referralCode = '';
 
@@ -1461,12 +1468,12 @@ const I18N = {
     safetyBar: '<strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.',
     heroTag: 'Disponible ahora · Gratis',
     heroTitle: 'Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em>',
-    heroSub: 'La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones de adulto. Solo tu dinero haciendo algo.',
+    heroSub: 'La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones. Solo tu dinero haciendo algo.',
     heroBtn: 'Empezar gratis',
     heroNote: 'Gratis · <strong style="color:var(--text2)">Sin tarjeta de crédito</strong> · Sin permanencia',
     pricingPill: 'Precios', pricingTitle: 'Sin letra pequeña.', pricingSub: 'Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.',
     tierFree: 'Gratis', mes: '/mes', freeDesc: 'Para empezar y ver si laBolsabro te va. Sin límite de tiempo.',
-    freeF1: 'Analizador básico de acciones', freeF2: 'Calculadora de interés compuesto', freeF3: '3 búsquedas al día', freeBtn: 'Usar gratis',
+    freeF1: 'Analizador de acciones', freeF2: 'Calculadora de interés compuesto', freeF3: '3 pruebas gratis (de por vida)', freeBtn: 'Usar gratis',
     hotBadge: 'Más popular', tierJunior: 'Inversor Junior', juniorDesc: 'Para el que empieza a invertir y quiere entender el mercado sin complicaciones.',
     juniorF1: 'Análisis completo de empresas', juniorF2: 'Búsquedas ilimitadas', juniorF3: 'Comparador de empresas', juniorF4: 'Recordatorios personalizables', juniorBtn: 'Empezar Junior',
     tierSenior: 'Inversor Senior', seniorDesc: 'Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.',
@@ -1491,7 +1498,7 @@ const I18N = {
     heroNote: 'Free · <strong style="color:var(--text2)">No credit card</strong> · Cancel anytime',
     pricingPill: 'Pricing', pricingTitle: 'No fine print.', pricingSub: 'Start free. Upgrade whenever you want. No commitment.',
     tierFree: 'Free', mes: '/mo', freeDesc: 'To get started and see if laBolsabro is for you. No time limit.',
-    freeF1: 'Basic stock analyzer', freeF2: 'Compound interest calculator', freeF3: '3 searches a day', freeBtn: 'Use for free',
+    freeF1: 'Stock analyzer', freeF2: 'Compound interest calculator', freeF3: '3 free trials (lifetime)', freeBtn: 'Use for free',
     hotBadge: 'Most popular', tierJunior: 'Investor Junior', juniorDesc: 'For beginners who want to understand the market without the complexity.',
     juniorF1: 'Full company analysis', juniorF2: 'Unlimited searches', juniorF3: 'Company comparator', juniorF4: 'Custom reminders', juniorBtn: 'Start Junior',
     tierSenior: 'Investor Senior', seniorDesc: 'For investors who want advanced analysis and custom alerts.',
@@ -1555,6 +1562,7 @@ cargarFx();
 
 let _accessToken = null;
 async function initAuth() {
+  if (!_sb) return;
   const { data: { session } } = await _sb.auth.getSession();
   _accessToken = session?.access_token || null;
   if (session?.user) await setUser(session.user);
@@ -1574,11 +1582,11 @@ function generarCodigoReferido(userId) {
 
 async function setUser(user) {
   _currentUser = user;
-  let { data } = await _sb.from('profiles').select('plan,referral_code,bonus_busquedas,referred_by,total_xp,premium_bonus_until,racha_dias').eq('id', user.id).single();
+  let { data } = await _sb.from('profiles').select('plan,referral_code,bonus_busquedas,referred_by,total_xp,premium_bonus_until,racha_dias,pruebas_gratis_usadas').eq('id', user.id).single();
   if (!data) {
     const code = generarCodigoReferido(user.id);
     await _sb.from('profiles').insert({ id: user.id, plan: 'free', referral_code: code });
-    data = { plan: 'free', referral_code: code, bonus_busquedas: 0, referred_by: null, total_xp: 0, premium_bonus_until: null };
+    data = { plan: 'free', referral_code: code, bonus_busquedas: 0, referred_by: null, total_xp: 0, premium_bonus_until: null, pruebas_gratis_usadas: 0 };
     await procesarReferidoPendiente(user.id);
     const { data: fresh } = await _sb.from('profiles').select('premium_bonus_until').eq('id', user.id).single();
     data.premium_bonus_until = fresh?.premium_bonus_until || null;
@@ -1591,6 +1599,7 @@ async function setUser(user) {
   _userPlan = bonusActivo && data.plan === 'free' ? 'junior' : (data?.plan || 'free');
   _premiumBonusUntil = bonusActivo ? data.premium_bonus_until : null;
   _bonusBusquedas = data?.bonus_busquedas || 0;
+  _pruebasGratisUsadas = data?.pruebas_gratis_usadas || 0;
   _referralCode = data?.referral_code || '';
   _totalXP = data?.total_xp || 0;
   _rachaDias = data?.racha_dias || 0;
@@ -1602,6 +1611,8 @@ async function setUser(user) {
   }
   if (typeof renderXPBadge === 'function') renderXPBadge();
   if (typeof renderRachaBadge === 'function') renderRachaBadge();
+  const biblioteca = document.getElementById('biblioteca');
+  if (biblioteca) biblioteca.style.display = '';
   await cargarPanelData();
   const navAuth = document.getElementById('navAuth');
   const isPremium = _userPlan !== 'free';
@@ -1655,6 +1666,9 @@ function clearUser() {
   _userPlan = 'free';
   _jars = [];
   _invertidoSimulado = 0;
+  _pruebasGratisUsadas = 0;
+  const biblioteca = document.getElementById('biblioteca');
+  if (biblioteca) biblioteca.style.display = 'none';
   document.getElementById('navAuth').innerHTML = `<button class="nav-btn" onclick="openAuthModal()" data-i18n="navEntrar">${(I18N[_idioma]||I18N.es).navEntrar}</button>`;
   if (typeof cargarXPTotal === 'function') cargarXPTotal();
   if (typeof renderHeroMockup === 'function') renderHeroMockup();
@@ -1830,11 +1844,11 @@ function cerrarInvitar() { document.getElementById('inviteOverlay').classList.re
 function closeInviteIfBg(e) { if (e.target.id === 'inviteOverlay') cerrarInvitar(); }
 function copiarInviteLink() {
   const link = `https://labolsabro.com?ref=${_referralCode}`;
-  navigator.clipboard.writeText(link).then(() => alert('Link copiado, illo. Ahora a mandarlo 🚀'));
+  navigator.clipboard.writeText(link).then(() => alert('Link copiado. Ahora a mandarlo 🚀'));
 }
 function compartirInviteWhatsapp() {
   const link = `https://labolsabro.com?ref=${_referralCode}`;
-  const texto = `🪰 Illo, mira esta app de bolsa y ahorro que mola un montón: ${link}\nSi te apuntas con mi link nos llevamos búsquedas gratis los dos, gratis total 🔥`;
+  const texto = `🪰 Mira esta app de bolsa y ahorro: ${link}\nSi te apuntas con mi link, los dos conseguimos búsquedas gratis 🔥`;
   window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
 }
 
@@ -1962,7 +1976,7 @@ async function renderPanel() {
 
   const botesEl = document.getElementById('panelBotes');
   if (!_jars.length) {
-    botesEl.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Aún no tienes botes. Crea el primero, illo.</p>';
+    botesEl.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Aún no tienes botes. Crea el primero.</p>';
   } else {
     botesEl.innerHTML = _jars.map(j => `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
       <div>
@@ -2192,7 +2206,7 @@ async function enviarMensajeChat() {
       pintarMensajeChat('mosca', data.respuesta);
       _chatHistorial.push({ role: 'mosca', texto: data.respuesta });
     } else {
-      pintarMensajeChat('mosca', 'Uy, se me ha ido la cabeza un momento. Prueba otra vez, illo.');
+      pintarMensajeChat('mosca', 'Uy, se me ha ido la cabeza un momento. Prueba otra vez.');
     }
   } catch (e) {
     document.getElementById('chatLoading')?.remove();
@@ -2239,38 +2253,38 @@ async function submitAuth() {
 
 initAuth();
 
-// Límite diario de búsquedas
-const DAILY_LIMIT = 3;
-function getBusquedasHoy() {
-  try {
-    const raw = localStorage.getItem('mosca_busquedas');
-    if (!raw) return { fecha: '', count: 0 };
-    return JSON.parse(raw);
-  } catch(e) { return { fecha: '', count: 0 }; }
-}
-function incrementarBusqueda() {
-  const hoy = new Date().toDateString();
-  const data = getBusquedasHoy();
-  const count = data.fecha === hoy ? data.count + 1 : 1;
-  localStorage.setItem('mosca_busquedas', JSON.stringify({ fecha: hoy, count }));
-  return count;
-}
-function busquedasRestantes() {
+// Pruebas gratis de por vida (analizador + calculadora, contador compartido)
+const PRUEBAS_GRATIS = 3;
+function pruebasRestantes() {
   if (_userPlan !== 'free') return 999;
-  const hoy = new Date().toDateString();
-  const data = getBusquedasHoy();
-  const limiteConBonus = DAILY_LIMIT + (_bonusBusquedas || 0);
-  if (data.fecha !== hoy) return limiteConBonus;
-  return Math.max(0, limiteConBonus - data.count);
+  const limiteConBonus = PRUEBAS_GRATIS + (_bonusBusquedas || 0);
+  return Math.max(0, limiteConBonus - (_pruebasGratisUsadas || 0));
+}
+async function consumirPrueba() {
+  if (_userPlan !== 'free') return;
+  _pruebasGratisUsadas = (_pruebasGratisUsadas || 0) + 1;
+  if (_currentUser && _sb) {
+    try { await _sb.from('profiles').update({ pruebas_gratis_usadas: _pruebasGratisUsadas }).eq('id', _currentUser.id); }
+    catch (e) { console.error('[pruebas] Error guardando contador:', e); }
+  }
 }
 
 function mostrarLimiteAlcanzado(el) {
   el.innerHTML = `<div style="text-align:center;padding:32px 16px">
     <div style="font-size:40px;margin-bottom:16px">🔒</div>
-    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Has agotado tus 3 búsquedas de hoy</div>
-    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">El plan gratuito incluye 3 análisis al día.<br>Mañana se renueva automáticamente — o pasa a Premium y analiza sin límite.</div>
+    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Has usado tus 3 pruebas gratis</div>
+    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">El plan gratuito incluye 3 pruebas de por vida (análisis de empresas o calculadora, como prefieras).<br>Pasa a Premium para seguir usando laBolsabro sin límite.</div>
     <a href="/premium.html" style="display:inline-block;background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;text-decoration:none;margin-bottom:12px">Ver planes Premium →</a>
     <div style="font-size:12px;color:var(--text3);margin-top:8px">Desde ${fmtEUR(5.99)}/mes · Cancela cuando quieras</div>
+  </div>`;
+}
+
+function mostrarLoginRequerido(el) {
+  el.innerHTML = `<div style="text-align:center;padding:32px 16px">
+    <div style="font-size:40px;margin-bottom:16px">🔐</div>
+    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Regístrate gratis para usar esta herramienta</div>
+    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">Tienes 3 pruebas gratis esperándote: analiza empresas o usa la calculadora, lo que prefieras.</div>
+    <button onclick="openAuthModal()" style="background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;border:none;cursor:pointer;font-family:inherit">Crear cuenta gratis →</button>
   </div>`;
 }
 
@@ -2278,11 +2292,12 @@ async function doSearch() {
   const ticker = document.getElementById('stockInput').value.trim().toUpperCase();
   if (!ticker) return;
   const el = document.getElementById('stockResult');
+  if (!_currentUser) { mostrarLoginRequerido(el); return; }
   const cached = cacheGet(ticker);
   if (cached) { if (cached.tipo === 'crypto') renderCrypto(el, cached); else renderStock(el, cached, ticker); return; }
-  // Comprobar límite diario (solo para búsquedas nuevas, no cacheadas)
-  if (busquedasRestantes() <= 0) { mostrarLimiteAlcanzado(el); return; }
-  const loadMsgs = ['🪰 Un momento, que la mosca está mirando los números...','🪰 Illo, dame un seg que esto tiene más letra que un contrato...','🪰 Preguntando a la bolsa, home, que no es tan rápida...','🪰 Buscando ' + ticker + '... casi casi...'];
+  // Comprobar pruebas gratis restantes (solo para búsquedas nuevas, no cacheadas)
+  if (pruebasRestantes() <= 0) { mostrarLimiteAlcanzado(el); return; }
+  const loadMsgs = ['🪰 Un momento, que la mosca está mirando los números...','🪰 Dame un segundo, que esto tiene más letra que un contrato...','🪰 Preguntando a la bolsa, que no es tan rápida...','🪰 Buscando ' + ticker + '... casi casi...'];
   el.innerHTML = '<p style="font-size:14px;color:var(--text3);">' + loadMsgs[Math.floor(Math.random()*loadMsgs.length)] + '</p>';
   try {
     const base = apiBase();
@@ -2300,21 +2315,21 @@ async function doSearch() {
     if (!d || !d.precio) throw new Error('no data');
     cacheSet(ticker, d);
     addHistorial(ticker, d.nombre || ticker);
-    const usadas = incrementarBusqueda();
-    const restantes = DAILY_LIMIT + (_bonusBusquedas || 0) - usadas;
+    await consumirPrueba();
+    const restantes = pruebasRestantes();
     if (d.tipo === 'crypto') renderCrypto(el, d);
     else renderStock(el, d, ticker);
     guardarHistorialPremium(ticker, d.nombre || ticker, d.precio, d.tipo === 'crypto' ? null : (_pdfData ? _pdfData.score : null));
     _lastTicker = d.ticker || ticker;
-    if (restantes > 0) {
+    if (_userPlan === 'free' && restantes > 0) {
       const aviso = document.createElement('div');
       aviso.style.cssText = 'font-size:12px;color:var(--text3);text-align:right;padding:4px 0;';
-      aviso.textContent = restantes === 1 ? `⚡ Solo te queda 1 búsqueda gratis hoy, crack` : `⚡ Te quedan ${restantes} búsquedas gratis hoy`;
+      aviso.textContent = restantes === 1 ? `⚡ Te queda 1 prueba gratis` : `⚡ Te quedan ${restantes} pruebas gratis`;
       el.appendChild(aviso);
     }
   } catch(e) {
     const t = document.getElementById('stockInput').value.trim().toUpperCase();
-    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🤷</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">Uff nano, "${t}" no me suena de ná</p><p style="font-size:13px;color:var(--text3);line-height:1.8">Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
+    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🤷</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">Uy, "${t}" no me suena de nada</p><p style="font-size:13px;color:var(--text3);line-height:1.8">Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
   }
 }
 
@@ -3050,14 +3065,14 @@ function renderStock(el, d, ticker) {
       <div style="background:var(--card);padding:24px">
         <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px">Inversión inicial</label>
         <div style="display:flex;align-items:center;gap:8px">
-          <input type="number" id="calcInicial" value="1000" min="0" max="1000000" step="100" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcular()">
+          <input type="number" id="calcInicial" value="1000" min="0" max="1000000" step="100" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcularInteractivo()">
           <span style="font-size:16px;color:var(--text3)">€</span>
         </div>
       </div>
       <div style="background:var(--card);padding:24px">
         <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px">Aporte mensual</label>
         <div style="display:flex;align-items:center;gap:8px">
-          <input type="number" id="calcMensual" value="100" min="0" max="10000" step="10" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcular()">
+          <input type="number" id="calcMensual" value="100" min="0" max="10000" step="10" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcularInteractivo()">
           <span style="font-size:16px;color:var(--text3)">€/mes</span>
         </div>
       </div>
@@ -3067,7 +3082,7 @@ function renderStock(el, d, ticker) {
         <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Rentabilidad anual esperada</label>
         <span id="calcTasaVal" style="font-size:20px;font-weight:700;color:var(--green)">7%</span>
       </div>
-      <input type="range" id="calcTasa" min="1" max="15" step="0.5" value="7" style="width:100%;accent-color:var(--green)" oninput="calcular()">
+      <input type="range" id="calcTasa" min="1" max="15" step="0.5" value="7" style="width:100%;accent-color:var(--green)" oninput="calcularInteractivo()">
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:4px">
         <span>1% — cuenta remunerada</span><span>7-8% — fondo indexado histórico</span><span>15% — optimista</span>
       </div>
@@ -3116,10 +3131,22 @@ function renderStock(el, d, ticker) {
 
   <script>
   let calcAnios = 20;
+  let _pruebaCalcConsumida = false;
+  async function calcularInteractivo() {
+    if (!_currentUser) { openAuthModal(); return; }
+    if (_userPlan === 'senior') { calcular(); return; }
+    if (_userPlan === 'junior') { alert('La calculadora de interés compuesto está disponible en el plan Senior. Consulta los planes en /premium.html'); return; }
+    if (!_pruebaCalcConsumida) {
+      if (pruebasRestantes() <= 0) { alert('Has usado tus 3 pruebas gratis. Pasa a Premium para seguir usando laBolsabro sin límite.'); return; }
+      await consumirPrueba();
+      _pruebaCalcConsumida = true;
+    }
+    calcular();
+  }
   function setAnios(n) {
     calcAnios = n;
     document.querySelectorAll('.anio-btn').forEach(b => { b.classList.toggle('anio-sel', parseInt(b.dataset.a) === n); });
-    calcular();
+    calcularInteractivo();
   }
   function fmt(n) { return fmtEUR(n, 0); }
   function calcular() {
@@ -3187,9 +3214,9 @@ function renderStock(el, d, ticker) {
   <p class="sub">Mueve los sliders y ve cómo crece tu dinero con el interés compuesto. La magia del tiempo y la constancia.</p>
   <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:32px;max-width:680px;">
     <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:28px;">
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Ahorro mensual</span><span style="font-weight:700;color:var(--text)" id="simMonthlyLabel">50 €</span></div><input type="range" id="simMonthly" min="10" max="500" step="5" value="50" oninput="calcSim()" style="width:100%;accent-color:var(--green)"></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Años ahorrando</span><span style="font-weight:700;color:var(--text)" id="simYearsLabel">10 años</span></div><input type="range" id="simYears" min="1" max="40" step="1" value="10" oninput="calcSim()" style="width:100%;accent-color:var(--green)"></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Rentabilidad anual estimada</span><span style="font-weight:700;color:var(--text)" id="simRateLabel">7%</span></div><input type="range" id="simRate" min="1" max="15" step="0.5" value="7" oninput="calcSim()" style="width:100%;accent-color:var(--green)"><p style="font-size:11px;color:var(--text3);margin-top:6px;">Fondos indexados históricamente ~7% anual. Rentabilidad pasada no garantiza futura.</p></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Ahorro mensual</span><span style="font-weight:700;color:var(--text)" id="simMonthlyLabel">50 €</span></div><input type="range" id="simMonthly" min="10" max="500" step="5" value="50" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Años ahorrando</span><span style="font-weight:700;color:var(--text)" id="simYearsLabel">10 años</span></div><input type="range" id="simYears" min="1" max="40" step="1" value="10" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Rentabilidad anual estimada</span><span style="font-weight:700;color:var(--text)" id="simRateLabel">7%</span></div><input type="range" id="simRate" min="1" max="15" step="0.5" value="7" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"><p style="font-size:11px;color:var(--text3);margin-top:6px;">Fondos indexados históricamente ~7% anual. Rentabilidad pasada no garantiza futura.</p></div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
       <div style="background:var(--card2);border-radius:12px;padding:16px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Dinero que metes</div><div style="font-size:20px;font-weight:700;color:var(--text)" id="simInvested">6.000 €</div></div>
@@ -3258,7 +3285,7 @@ function renderStock(el, d, ticker) {
   </section>
 </div>
 
-<section id="biblioteca">
+<section id="biblioteca" style="display:none">
   <div class="pill">Biblioteca</div>
   <h2>Términos financieros<br>en cristiano.</h2>
   <p class="sub">¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier término y te lo explicamos como si tuvieras 15 años.</p>
@@ -3279,7 +3306,7 @@ function renderStock(el, d, ticker) {
     <h2 data-i18n="pricingTitle">Sin letra pequeña.</h2>
     <p class="sub" data-i18n="pricingSub">Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.</p>
     <div class="price-grid">
-      <div class="price-card"><div class="price-tier" data-i18n="tierFree">Gratis</div><div class="price-num">0 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="freeDesc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="freeF1">Analizador básico de acciones</span></li><li><span>✓</span> <span data-i18n="freeF2">Calculadora de interés compuesto</span></li><li><span>✓</span> <span data-i18n="freeF3">3 búsquedas al día</span></li></ul><a class="price-btn price-btn-out" href="/#stocks" data-i18n="freeBtn">Usar gratis</a></div>
+      <div class="price-card"><div class="price-tier" data-i18n="tierFree">Gratis</div><div class="price-num">0 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="freeDesc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="freeF1">Analizador de acciones</span></li><li><span>✓</span> <span data-i18n="freeF2">Calculadora de interés compuesto</span></li><li><span>✓</span> <span data-i18n="freeF3">3 pruebas gratis (de por vida)</span></li></ul><a class="price-btn price-btn-out" href="/#stocks" data-i18n="freeBtn">Usar gratis</a></div>
       <div class="price-card hot"><div class="hot-badge" data-i18n="hotBadge">Más popular</div><div class="price-tier" data-i18n="tierJunior">Inversor Junior</div><div class="price-num" id="precioJuniorCard">5,99 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="juniorDesc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="juniorF1">Análisis completo de empresas</span></li><li><span>✓</span> <span data-i18n="juniorF2">Búsquedas ilimitadas</span></li><li><span>✓</span> <span data-i18n="juniorF3">Comparador de empresas</span></li><li><span>✓</span> <span data-i18n="juniorF4">Recordatorios personalizables</span></li></ul><a class="price-btn price-btn-solid" href="/premium.html" data-i18n="juniorBtn">Empezar Junior</a></div>
       <div class="price-card"><div class="price-tier" data-i18n="tierSenior">Inversor Senior</div><div class="price-num" id="precioSeniorCard">9,99 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="seniorDesc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="seniorF1">Todo del plan Junior</span></li><li><span>✓</span> <span data-i18n="seniorF2">Comparador avanzado por sector</span></li><li><span>✓</span> <span data-i18n="seniorF3">Alertas de valor personalizadas</span></li><li><span>✓</span> <span data-i18n="seniorF4">Historial de análisis personal</span></li><li><span>✓</span> <span data-i18n="seniorF5">Acceso prioritario a novedades</span></li></ul><a class="price-btn price-btn-out" href="/premium.html" data-i18n="seniorBtn">Empezar Senior</a></div>
     </div>
@@ -3333,7 +3360,7 @@ function renderStock(el, d, ticker) {
   <div class="auth-box" style="text-align:center">
     <button class="auth-close" onclick="cerrarInvitar()">×</button>
     <div style="font-size:40px;margin-bottom:8px">🪰🔥</div>
-    <h2>Trae a un colega, illo</h2>
+    <h2>Trae a un colega</h2>
     <p>Cada crack que se apunte con tu link os lleváis <strong style="color:var(--yellow)">3 días de Premium GRATIS</strong>, tú y él. Búsquedas ilimitadas, cartera simulada, alertas... todo desbloqueado. Sin trampa ni cartón.</p>
     <div style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text);word-break:break-all;margin-bottom:14px;" id="inviteLinkBox"></div>
     <button class="auth-submit" onclick="copiarInviteLink()" style="margin-bottom:10px">📋 Copiar link</button>
@@ -3517,7 +3544,7 @@ const IDLE_MESSAGES = [
   { text: 'Illo, ¿te has quedado dormido o qué? Mira cuánto podrías tener ahorrado en 10 años, que flipas.', cta: 'Flipar ahora', action: () => scrollToId('simMonthly') },
   { text: 'Ey crack, ¿vas a analizar algo o solo estás mirando? Prueba con AAPL, TSLA... lo que te suene.', cta: 'Venga, va', action: () => scrollToId('stockInput') },
   { text: '¿Te crees que sabes de bolsa? Demuéstralo, valiente. 2 minutos y salimos de dudas.', cta: 'Reto aceptado', action: () => scrollToId('quizCard') },
-  { text: 'Bro, sigues ahí? Trae a un colega y os lleváis 3 días de Premium gratis los dos.', cta: 'Invitar', action: () => { if (_currentUser) abrirInvitar(); else openAuthModal(); } },
+  { text: '¿Sigues ahí? Trae a un colega y os lleváis 3 días de Premium gratis los dos.', cta: 'Invitar', action: () => { if (_currentUser) abrirInvitar(); else openAuthModal(); } },
 ];
 let _idleTimer = null;
 let _idleShown = false;
@@ -3556,6 +3583,17 @@ resetIdleTimer();
 function toggleFaq(btn) { const item = btn.parentElement; const wasOpen = item.classList.contains('open'); document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open')); if (!wasOpen) item.classList.add('open'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modal').classList.remove('open'); });
 
+let _pruebaSimConsumida = false;
+async function calcSimInteractivo() {
+  if (!_currentUser) { openAuthModal(); return; }
+  if (_userPlan === 'junior' || _userPlan === 'senior') { calcSim(); return; }
+  if (!_pruebaSimConsumida) {
+    if (pruebasRestantes() <= 0) { alert('Has usado tus 3 pruebas gratis. Pasa a Premium para seguir usando laBolsabro sin límite.'); return; }
+    await consumirPrueba();
+    _pruebaSimConsumida = true;
+  }
+  calcSim();
+}
 function calcSim() {
   const monthly = parseFloat(document.getElementById('simMonthly').value);
   const years = parseInt(document.getElementById('simYears').value);
@@ -3582,7 +3620,7 @@ const preguntas = [
   { cat: 'Inversión', nivel: 'basico', q: '¿Qué es un fondo indexado?', ops: ['Un fondo gestiónado por un experto que elige las mejores acciónes', 'Un fondo que replica automáticamente un índice como el S&P 500', 'Una cuenta de ahorro con alta rentabilidad', 'Un tipo de criptomoneda estable'], ok: 1, exp: 'Un fondo indexado compra automáticamente todas las empresas de un índice en sus proporciones exactas. Al no tener un gestor activo, las comisiónes son muy bajas. Históricamente, estos fondos baten a la mayoría de gestores activos a largo plazo.' },
   { cat: 'Ahorro', nivel: 'basico', q: '¿Qué es la regla del 50/30/20?', ops: ['Invertir el 50% en acciónes, 30% en bonos y 20% en crypto', '50% para necesidades, 30% para ocio y 20% para ahorro', '50% de descuento en compras planificadas con 30 días de antelación', 'Ahorrar 20€ por cada 50€ que ganas en 30 días'], ok: 1, exp: 'La regla 50/30/20 es una guía simple para distribuir tus ingresos: 50% para gastos necesarios, 30% para lo que quieras y 20% para ahorrar o invertir.' },
   { cat: 'Bolsa', nivel: 'basico', q: '¿Qué es una acción?', ops: ['Un préstamo que le haces a una empresa', 'Un trocito de la propiedad de una empresa', 'Un tipo de seguro de vida', 'Un impuesto sobre las ventas'], ok: 1, exp: 'Una acción es una parte de la propiedad de una empresa. Si compras acciones, te conviertes en socio, por pequeño que sea el trozo. Si la empresa gana valor, tu parte también.' },
-  { cat: 'Inversión', nivel: 'basico', q: '¿Qué es diversificar tu dinero?', ops: ['Meterlo todo en la empresa que más te gusta', 'Repartirlo en varias inversiones distintas para reducir el riesgo', 'Cambiarlo a otra moneda', 'Guardarlo todo en efectivo'], ok: 1, exp: 'Diversificar es no poner todos los huevos en la misma cesta. Si repartes tu dinero en varias empresas, sectores o países, si una lo hace mal, las demás pueden compensarlo. Menos riesgo, tío.' },
+  { cat: 'Inversión', nivel: 'basico', q: '¿Qué es diversificar tu dinero?', ops: ['Meterlo todo en la empresa que más te gusta', 'Repartirlo en varias inversiones distintas para reducir el riesgo', 'Cambiarlo a otra moneda', 'Guardarlo todo en efectivo'], ok: 1, exp: 'Diversificar es no poner todos los huevos en la misma cesta. Si repartes tu dinero en varias empresas, sectores o países, si una lo hace mal, las demás pueden compensarlo. Menos riesgo.' },
   { cat: 'Ahorro', nivel: 'basico', q: '¿Qué es un fondo de emergencia?', ops: ['Dinero para invertir en bolsa cuando cae mucho', 'Ahorro guardado aparte para imprevistos (paro, avería, salud)', 'Un préstamo que pides al banco en caso de emergencia', 'El dinero que gastas en vacaciones'], ok: 1, exp: 'El fondo de emergencia es pasta que tienes separada, fácil de sacar, para cuando la vida te la juega: te quedas sin curro, se rompe el coche, lo que sea. Se recomienda tener entre 3 y 6 meses de gastos ahorrados ahí.' },
   { cat: 'Bolsa', nivel: 'basico', q: '¿Qué es la inflación y cómo afecta a tu ahorro?', ops: ['Es cuando sube el precio de las acciónes', 'Es la subida general de precios, que hace que tu dinero valga menos con el tiempo', 'Es un impuesto que paga el banco', 'Es cuando el banco central baja los tipos de interés'], ok: 1, exp: 'La inflación es la subida de precios en general. Si tu dinero está quieto en una cuenta al 0%, cada año puede comprar menos cosas. Por eso invertir (y no solo ahorrar) ayuda a que tu dinero no pierda poder de compra.' },
   { cat: 'Inversión', nivel: 'basico', q: '¿Qué significa invertir "a largo plazo"?', ops: ['Comprar y vender el mismo día para ganar rápido', 'Mantener la inversión durante años, aguantando las subidas y bajadas', 'Invertir solo en empresas muy antiguas', 'Meter el dinero en un plazo fijo del banco'], ok: 1, exp: 'Invertir a largo plazo significa aguantar años, no vender en cuanto el mercado baja un poco. Históricamente, cuanto más tiempo mantienes la inversión, menos importan los sustos del día a día.' },
