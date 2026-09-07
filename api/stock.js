@@ -83,10 +83,12 @@ async function fmpFetch(path) {
   const sep = path.includes('?') ? '&' : '?';
   const url = `${FMP_BASE}${path}${sep}apikey=${process.env.FMP_API_KEY}`;
   const r = await fetch(url);
-  const json = await r.json().catch(() => null);
+  const text = await r.text();
+  let json = null;
+  try { json = JSON.parse(text); } catch (e) {}
   if (json && json['Error Message']) throw new Error(json['Error Message']);
   if (json && !Array.isArray(json) && json.error) throw new Error(String(json.error));
-  if (!r.ok) throw new Error('Financial Modeling Prep no disponible');
+  if (!r.ok) throw new Error(`Financial Modeling Prep no disponible (HTTP ${r.status}): ${text.slice(0, 200)}`);
   return json;
 }
 
