@@ -524,7 +524,7 @@ function acceptAge() {
           <li><span class="c-g">✓</span> Análisis completo de empresas</li>
           <li><span class="c-g">✓</span> Búsquedas ilimitadas</li>
           <li><span class="c-g">✓</span> Comparador de empresas</li>
-          <li><span class="c-g">✓</span> Calculadora de interés compuesto</li>
+          <li><span class="c-g">✓</span> Simulador de ahorro e inversión</li>
           <li><span class="c-g">✓</span> Recordatorios personalizables</li>
         </ul>
       </div>
@@ -535,6 +535,7 @@ function acceptAge() {
         <div class="mode-desc">Análisis avanzado, alertas personalizadas e historial completo. Para tomar decisiones con información de calidad.</div>
         <ul class="mode-list">
           <li><span class="c-p">✓</span> Todo del plan Junior</li>
+          <li><span class="c-p">✓</span> Calculadora de interés compuesto</li>
           <li><span class="c-p">✓</span> Comparador avanzado por sector</li>
           <li><span class="c-p">✓</span> Alertas de valor personalizadas</li>
           <li><span class="c-p">✓</span> Historial de análisis personal</li>
@@ -3129,6 +3130,8 @@ function renderStock(el, d, ticker) {
   let _pruebaCalcConsumida = false;
   async function calcularInteractivo() {
     if (!_currentUser) { openAuthModal(); return; }
+    if (_userPlan === 'senior') { calcular(); return; }
+    if (_userPlan === 'junior') { alert('La calculadora de interés compuesto está disponible en el plan Senior. Consulta los planes en /premium.html'); return; }
     if (!_pruebaCalcConsumida) {
       if (pruebasRestantes() <= 0) { alert('Has usado tus 3 pruebas gratis. Pasa a Premium para seguir usando laBolsabro sin límite.'); return; }
       await consumirPrueba();
@@ -3579,6 +3582,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') document.get
 let _pruebaSimConsumida = false;
 async function calcSimInteractivo() {
   if (!_currentUser) { openAuthModal(); return; }
+  if (_userPlan === 'junior' || _userPlan === 'senior') { calcSim(); return; }
   if (!_pruebaSimConsumida) {
     if (pruebasRestantes() <= 0) { alert('Has usado tus 3 pruebas gratis. Pasa a Premium para seguir usando laBolsabro sin límite.'); return; }
     await consumirPrueba();
