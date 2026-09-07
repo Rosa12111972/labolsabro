@@ -1538,6 +1538,23 @@ const I18N = {
     notFoundPrefix: 'Uy,', notFoundSuffix: 'no me suena de nada',
     notFoundHint: 'Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰',
     notFoundUS: 'EE.UU.', notFoundES: 'España', notFoundEU: 'Europa',
+    calcPill: 'Calculadora de inversión', calcTitle: '¿Cuánto ganarías<br>en 20 años?', calcSub: 'El interés compuesto es la fuerza más poderosa de las finanzas. Ponle números a tu futuro.',
+    calcInicialLbl: 'Inversión inicial', calcMensualLbl: 'Aporte mensual', calcPerMonth: '€/mes',
+    calcTasaLbl: 'Rentabilidad anual esperada', calcTasa1: '1% — cuenta remunerada', calcTasa2: '7-8% — fondo indexado histórico', calcTasa3: '15% — optimista',
+    calcHorizonte: 'Horizonte temporal',
+    calcAnios5: '5 años', calcAnios10: '10 años', calcAnios20: '20 años', calcAnios30: '30 años', calcAnios40: '40 años',
+    calcTotalInv: 'Total invertido', calcInteresesGen: 'Intereses generados', calcValorFinal: 'Valor final', calcDesglose: 'Desglose año a año',
+    calcColAnio: 'Año', calcColInv: 'Invertido', calcColInt: 'Intereses', calcColTotal: 'Total', calcColMult: 'Multiplicador',
+    calcDisclaimer: '⚠️ Simulación educativa con rentabilidad constante. En la realidad los mercados fluctúan. El índice S&P 500 ha dado una media histórica de ~10% anual antes de inflación (7% ajustado). Rentabilidades pasadas no garantizan rentabilidades futuras.',
+    calcAnioRow: 'Año', calcPctInterest: '% son intereses',
+    calcSeniorOnly: 'La calculadora de interés compuesto está disponible en el plan Senior. Consulta los planes en /premium.html',
+    calcTrialsUsed: 'Has usado tus 3 pruebas gratis. Pasa a Premium para seguir usando laBolsabro sin límite.',
+    simPill: 'Simulador', simTitle: '¿Cuánto tendrás<br>si empiezas hoy?', simSub: 'Mueve los sliders y ve cómo crece tu dinero con el interés compuesto. La magia del tiempo y la constancia.',
+    simMonthlyLbl: 'Ahorro mensual', simYearsLbl: 'Años ahorrando', simRateLbl: 'Rentabilidad anual estimada',
+    simRateNote: 'Fondos indexados históricamente ~7% anual. Rentabilidad pasada no garantiza futura.',
+    simInvestedLbl: 'Dinero que metes', simEarnedLbl: 'Intereses ganados', simTotalLbl: 'Total final',
+    simYearSingular: 'año', simYearPlural: 'años',
+    simMessage: 'Con solo {monthly} al mes durante {years} años, el interés compuesto te genera {earned} extra sin hacer nada más. Eso es un {pct}% de ganancia sobre lo que aportaste.',
   },
   en: {
     navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language', navPrimerosPasos: '🚀 First steps',
@@ -1615,6 +1632,23 @@ const I18N = {
     notFoundPrefix: 'Oops,', notFoundSuffix: 'doesn\'t ring a bell',
     notFoundHint: 'Try the exact stock ticker — the fly doesn\'t guess 🪰',
     notFoundUS: 'US', notFoundES: 'Spain', notFoundEU: 'Europe',
+    calcPill: 'Investment calculator', calcTitle: 'How much would you earn<br>in 20 years?', calcSub: 'Compound interest is the most powerful force in finance. Put numbers to your future.',
+    calcInicialLbl: 'Initial investment', calcMensualLbl: 'Monthly contribution', calcPerMonth: '€/mo',
+    calcTasaLbl: 'Expected annual return', calcTasa1: '1% — savings account', calcTasa2: '7-8% — historical index fund', calcTasa3: '15% — optimistic',
+    calcHorizonte: 'Time horizon',
+    calcAnios5: '5 years', calcAnios10: '10 years', calcAnios20: '20 years', calcAnios30: '30 years', calcAnios40: '40 years',
+    calcTotalInv: 'Total invested', calcInteresesGen: 'Interest earned', calcValorFinal: 'Final value', calcDesglose: 'Year-by-year breakdown',
+    calcColAnio: 'Year', calcColInv: 'Invested', calcColInt: 'Interest', calcColTotal: 'Total', calcColMult: 'Multiplier',
+    calcDisclaimer: '⚠️ Educational simulation with constant returns. In reality markets fluctuate. The S&P 500 index has historically averaged ~10% annually before inflation (7% adjusted). Past performance does not guarantee future returns.',
+    calcAnioRow: 'Year', calcPctInterest: '% is interest',
+    calcSeniorOnly: 'The compound interest calculator is available on the Senior plan. Check the plans at /premium.html',
+    calcTrialsUsed: 'You\'ve used your 3 free trials. Upgrade to Premium to keep using laBolsabro with no limit.',
+    simPill: 'Simulator', simTitle: 'How much will you have<br>if you start today?', simSub: 'Move the sliders and watch your money grow with compound interest. The magic of time and consistency.',
+    simMonthlyLbl: 'Monthly savings', simYearsLbl: 'Years saving', simRateLbl: 'Estimated annual return',
+    simRateNote: 'Index funds have historically averaged ~7% annually. Past performance doesn\'t guarantee future returns.',
+    simInvestedLbl: 'Money you put in', simEarnedLbl: 'Interest earned', simTotalLbl: 'Final total',
+    simYearSingular: 'year', simYearPlural: 'years',
+    simMessage: 'With just {monthly} a month for {years} years, compound interest generates {earned} extra without doing anything else. That\'s a {pct}% gain on what you contributed.',
   }
 };
 let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
@@ -3179,70 +3213,70 @@ function renderStock(el, d, ticker) {
 </script>
 
 <section id="calculadora" style="display:none">
-  <div class="pill">Calculadora de inversión</div>
-  <h2>¿Cuánto ganarías<br>en 20 años?</h2>
-  <p class="sub">El interés compuesto es la fuerza más poderosa de las finanzas. Ponle números a tu futuro.</p>
+  <div class="pill" data-i18n="calcPill">Calculadora de inversión</div>
+  <h2 data-i18n-html="calcTitle">¿Cuánto ganarías<br>en 20 años?</h2>
+  <p class="sub" data-i18n="calcSub">El interés compuesto es la fuerza más poderosa de las finanzas. Ponle números a tu futuro.</p>
 
   <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:0">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
       <div style="background:var(--card);padding:24px">
-        <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px">Inversión inicial</label>
+        <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px" data-i18n="calcInicialLbl">Inversión inicial</label>
         <div style="display:flex;align-items:center;gap:8px">
           <input type="number" id="calcInicial" value="1000" min="0" max="1000000" step="100" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcularInteractivo()">
           <span style="font-size:16px;color:var(--text3)">€</span>
         </div>
       </div>
       <div style="background:var(--card);padding:24px">
-        <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px">Aporte mensual</label>
+        <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:8px" data-i18n="calcMensualLbl">Aporte mensual</label>
         <div style="display:flex;align-items:center;gap:8px">
           <input type="number" id="calcMensual" value="100" min="0" max="10000" step="10" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--border2);border-radius:10px;font-size:18px;font-weight:700;color:var(--text);font-family:inherit;outline:none;width:100%" oninput="calcularInteractivo()">
-          <span style="font-size:16px;color:var(--text3)">€/mes</span>
+          <span style="font-size:16px;color:var(--text3)" data-i18n="calcPerMonth">€/mes</span>
         </div>
       </div>
     </div>
     <div style="background:var(--card2);padding:24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em">Rentabilidad anual esperada</label>
+        <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em" data-i18n="calcTasaLbl">Rentabilidad anual esperada</label>
         <span id="calcTasaVal" style="font-size:20px;font-weight:700;color:var(--green)">7%</span>
       </div>
       <input type="range" id="calcTasa" min="1" max="15" step="0.5" value="7" style="width:100%;accent-color:var(--green)" oninput="calcularInteractivo()">
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:4px">
-        <span>1% — cuenta remunerada</span><span>7-8% — fondo indexado histórico</span><span>15% — optimista</span>
+        <span data-i18n="calcTasa1">1% — cuenta remunerada</span><span data-i18n="calcTasa2">7-8% — fondo indexado histórico</span><span data-i18n="calcTasa3">15% — optimista</span>
       </div>
     </div>
     <div style="background:var(--card);padding:20px 24px;border-bottom:1px solid var(--border)">
-      <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:12px">Horizonte temporal</label>
+      <label style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:12px" data-i18n="calcHorizonte">Horizonte temporal</label>
       <div style="display:flex;gap:8px;flex-wrap:wrap" id="aniosBtn">
-        <button onclick="setAnios(5)"  class="anio-btn" data-a="5">5 años</button>
-        <button onclick="setAnios(10)" class="anio-btn" data-a="10">10 años</button>
-        <button onclick="setAnios(20)" class="anio-btn anio-sel" data-a="20">20 años</button>
-        <button onclick="setAnios(30)" class="anio-btn" data-a="30">30 años</button>
-        <button onclick="setAnios(40)" class="anio-btn" data-a="40">40 años</button>
+        <button onclick="setAnios(5)"  class="anio-btn" data-a="5"><span data-i18n="calcAnios5">5 años</span></button>
+        <button onclick="setAnios(10)" class="anio-btn" data-a="10"><span data-i18n="calcAnios10">10 años</span></button>
+        <button onclick="setAnios(20)" class="anio-btn anio-sel" data-a="20"><span data-i18n="calcAnios20">20 años</span></button>
+        <button onclick="setAnios(30)" class="anio-btn" data-a="30"><span data-i18n="calcAnios30">30 años</span></button>
+        <button onclick="setAnios(40)" class="anio-btn" data-a="40"><span data-i18n="calcAnios40">40 años</span></button>
       </div>
     </div>
     <div style="padding:24px;background:var(--card2)">
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
         <div style="background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--border)">
-          <div style="font-size:11px;color:var(--text3);margin-bottom:4px">Total invertido</div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:4px" data-i18n="calcTotalInv">Total invertido</div>
           <div id="resInvertido" style="font-size:20px;font-weight:700;color:var(--text)">—</div>
         </div>
         <div style="background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--border)">
-          <div style="font-size:11px;color:var(--text3);margin-bottom:4px">Intereses generados</div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:4px" data-i18n="calcInteresesGen">Intereses generados</div>
           <div id="resIntereses" style="font-size:20px;font-weight:700;color:var(--green)">—</div>
         </div>
         <div style="background:var(--green);border-radius:12px;padding:16px">
-          <div style="font-size:11px;color:rgba(0,0,0,0.55);margin-bottom:4px">Valor final</div>
+          <div style="font-size:11px;color:rgba(0,0,0,0.55);margin-bottom:4px" data-i18n="calcValorFinal">Valor final</div>
           <div id="resTotal" style="font-size:20px;font-weight:700;color:#000">—</div>
         </div>
       </div>
-      <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Desglose año a año</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px" data-i18n="calcDesglose">Desglose año a año</div>
       <div style="overflow-x:auto">
         <table style="width:100%;border-collapse:collapse;font-size:13px" id="calcTabla">
-          <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px 10px;color:var(--text3);font-weight:500">Año</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500">Invertido</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500">Intereses</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500">Total</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500">Multiplicador</th></tr></thead>
+          <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px 10px;color:var(--text3);font-weight:500" data-i18n="calcColAnio">Año</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500" data-i18n="calcColInv">Invertido</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500" data-i18n="calcColInt">Intereses</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500" data-i18n="calcColTotal">Total</th><th style="text-align:right;padding:8px 10px;color:var(--text3);font-weight:500" data-i18n="calcColMult">Multiplicador</th></tr></thead>
           <tbody id="calcBody"></tbody>
         </table>
       </div>
-      <p style="font-size:11px;color:var(--text2);margin-top:12px;line-height:1.6">⚠️ Simulación educativa con rentabilidad constante. En la realidad los mercados fluctúan. El índice S&P 500 ha dado una media histórica de ~10% anual antes de inflación (7% ajustado). Rentabilidades pasadas no garantizan rentabilidades futuras.</p>
+      <p style="font-size:11px;color:var(--text2);margin-top:12px;line-height:1.6" data-i18n="calcDisclaimer">⚠️ Simulación educativa con rentabilidad constante. En la realidad los mercados fluctúan. El índice S&P 500 ha dado una media histórica de ~10% anual antes de inflación (7% ajustado). Rentabilidades pasadas no garantizan rentabilidades futuras.</p>
     </div>
   </div>
 
@@ -3258,9 +3292,9 @@ function renderStock(el, d, ticker) {
   async function calcularInteractivo() {
     if (!_currentUser) { openAuthModal(); return; }
     if (_userPlan === 'senior') { calcular(); return; }
-    if (_userPlan === 'junior') { alert('La calculadora de interés compuesto está disponible en el plan Senior. Consulta los planes en /premium.html'); return; }
+    if (_userPlan === 'junior') { alert(t('calcSeniorOnly')); return; }
     if (!_pruebaCalcConsumida) {
-      if (pruebasRestantes() <= 0) { alert('Has usado tus 3 pruebas gratis. Pasa a Premium para seguir usando laBolsabro sin límite.'); return; }
+      if (pruebasRestantes() <= 0) { alert(t('calcTrialsUsed')); return; }
       await consumirPrueba();
       _pruebaCalcConsumida = true;
     }
@@ -3294,7 +3328,7 @@ function renderStock(el, d, ticker) {
       const mult = (f.total / (inicial + mensual * 12 * f.year || 1));
       const pctInter = (f.inter / f.total * 100);
       const barW = Math.min(100, pctInter);
-      return `<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;color:var(--text);font-weight:600">Año ${f.year}</td><td style="padding:10px;text-align:right;color:var(--text2)">${fmt(f.inv)}</td><td style="padding:10px;text-align:right;color:var(--green)">${fmt(f.inter)}</td><td style="padding:10px;text-align:right;font-weight:700;color:var(--text)">${fmt(f.total)}</td><td style="padding:10px;text-align:right"><span style="color:var(--yellow);font-weight:600">${mult.toFixed(1)}x</span><div style="height:4px;background:var(--border);border-radius:2px;margin-top:4px"><div style="height:4px;background:var(--green);border-radius:2px;width:${barW}%"></div></div><div style="font-size:10px;color:var(--text3);margin-top:2px">${Math.round(pctInter)}% son intereses</div></td></tr>`;
+      return `<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;color:var(--text);font-weight:600">${t('calcAnioRow')} ${f.year}</td><td style="padding:10px;text-align:right;color:var(--text2)">${fmt(f.inv)}</td><td style="padding:10px;text-align:right;color:var(--green)">${fmt(f.inter)}</td><td style="padding:10px;text-align:right;font-weight:700;color:var(--text)">${fmt(f.total)}</td><td style="padding:10px;text-align:right"><span style="color:var(--yellow);font-weight:600">${mult.toFixed(1)}x</span><div style="height:4px;background:var(--border);border-radius:2px;margin-top:4px"><div style="height:4px;background:var(--green);border-radius:2px;width:${barW}%"></div></div><div style="font-size:10px;color:var(--text3);margin-top:2px">${Math.round(pctInter)}${t('calcPctInterest')}</div></td></tr>`;
     }).join('');
   }
   calcular();
@@ -3332,19 +3366,19 @@ function renderStock(el, d, ticker) {
 </div>
 
 <section id="simulador" style="display:none">
-  <div class="pill">Simulador</div>
-  <h2>¿Cuánto tendrás<br>si empiezas hoy?</h2>
-  <p class="sub">Mueve los sliders y ve cómo crece tu dinero con el interés compuesto. La magia del tiempo y la constancia.</p>
+  <div class="pill" data-i18n="simPill">Simulador</div>
+  <h2 data-i18n-html="simTitle">¿Cuánto tendrás<br>si empiezas hoy?</h2>
+  <p class="sub" data-i18n="simSub">Mueve los sliders y ve cómo crece tu dinero con el interés compuesto. La magia del tiempo y la constancia.</p>
   <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:32px;max-width:680px;">
     <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:28px;">
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Ahorro mensual</span><span style="font-weight:700;color:var(--text)" id="simMonthlyLabel">50 €</span></div><input type="range" id="simMonthly" min="10" max="500" step="5" value="50" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Años ahorrando</span><span style="font-weight:700;color:var(--text)" id="simYearsLabel">10 años</span></div><input type="range" id="simYears" min="1" max="40" step="1" value="10" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span>Rentabilidad anual estimada</span><span style="font-weight:700;color:var(--text)" id="simRateLabel">7%</span></div><input type="range" id="simRate" min="1" max="15" step="0.5" value="7" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"><p style="font-size:11px;color:var(--text3);margin-top:6px;">Fondos indexados históricamente ~7% anual. Rentabilidad pasada no garantiza futura.</p></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span data-i18n="simMonthlyLbl">Ahorro mensual</span><span style="font-weight:700;color:var(--text)" id="simMonthlyLabel">50 €</span></div><input type="range" id="simMonthly" min="10" max="500" step="5" value="50" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span data-i18n="simYearsLbl">Años ahorrando</span><span style="font-weight:700;color:var(--text)" id="simYearsLabel">10 años</span></div><input type="range" id="simYears" min="1" max="40" step="1" value="10" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text2);margin-bottom:8px;"><span data-i18n="simRateLbl">Rentabilidad anual estimada</span><span style="font-weight:700;color:var(--text)" id="simRateLabel">7%</span></div><input type="range" id="simRate" min="1" max="15" step="0.5" value="7" oninput="calcSimInteractivo()" style="width:100%;accent-color:var(--green)"><p style="font-size:11px;color:var(--text3);margin-top:6px;" data-i18n="simRateNote">Fondos indexados históricamente ~7% anual. Rentabilidad pasada no garantiza futura.</p></div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
-      <div style="background:var(--card2);border-radius:12px;padding:16px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Dinero que metes</div><div style="font-size:20px;font-weight:700;color:var(--text)" id="simInvested">6.000 €</div></div>
-      <div style="background:var(--card2);border-radius:12px;padding:16px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Intereses ganados</div><div style="font-size:20px;font-weight:700;color:var(--green)" id="simEarned">2.654 €</div></div>
-      <div style="background:var(--green-glow);border-radius:12px;padding:16px;border:1px solid rgba(34,197,94,0.2);text-align:center;"><div style="font-size:11px;color:var(--green);margin-bottom:6px;">Total final</div><div style="font-size:24px;font-weight:700;color:var(--green)" id="simTotal">8.654 €</div></div>
+      <div style="background:var(--card2);border-radius:12px;padding:16px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;" data-i18n="simInvestedLbl">Dinero que metes</div><div style="font-size:20px;font-weight:700;color:var(--text)" id="simInvested">6.000 €</div></div>
+      <div style="background:var(--card2);border-radius:12px;padding:16px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;" data-i18n="simEarnedLbl">Intereses ganados</div><div style="font-size:20px;font-weight:700;color:var(--green)" id="simEarned">2.654 €</div></div>
+      <div style="background:var(--green-glow);border-radius:12px;padding:16px;border:1px solid rgba(34,197,94,0.2);text-align:center;"><div style="font-size:11px;color:var(--green);margin-bottom:6px;" data-i18n="simTotalLbl">Total final</div><div style="font-size:24px;font-weight:700;color:var(--green)" id="simTotal">8.654 €</div></div>
     </div>
     <div style="background:var(--card2);border-radius:12px;padding:14px 18px;border:1px solid var(--border);"><p style="font-size:13px;color:var(--text2);line-height:1.6;" id="simMessage"></p></div>
   </div>
@@ -3711,7 +3745,7 @@ async function calcSimInteractivo() {
   if (!_currentUser) { openAuthModal(); return; }
   if (_userPlan === 'junior' || _userPlan === 'senior') { calcSim(); return; }
   if (!_pruebaSimConsumida) {
-    if (pruebasRestantes() <= 0) { alert('Has usado tus 3 pruebas gratis. Pasa a Premium para seguir usando laBolsabro sin límite.'); return; }
+    if (pruebasRestantes() <= 0) { alert(t('calcTrialsUsed')); return; }
     await consumirPrueba();
     _pruebaSimConsumida = true;
   }
@@ -3727,12 +3761,13 @@ function calcSim() {
   const earned = total - invested;
   const pct = Math.round((earned / invested) * 100);
   document.getElementById('simMonthlyLabel').textContent = fmtEUR(monthly, 0);
-  document.getElementById('simYearsLabel').textContent = years + ' año' + (years === 1 ? '' : 's');
+  document.getElementById('simYearsLabel').textContent = years + ' ' + (years === 1 ? t('simYearSingular') : t('simYearPlural'));
   document.getElementById('simRateLabel').textContent = parseFloat(document.getElementById('simRate').value).toFixed(1) + '%';
   document.getElementById('simInvested').textContent = fmtEUR(invested, 0);
   document.getElementById('simEarned').textContent = fmtEUR(earned, 0);
   document.getElementById('simTotal').textContent = fmtEUR(total, 0);
-  document.getElementById('simMessage').textContent = `Con solo ${fmtEUR(monthly, 0)} al mes durante ${years} años, el interés compuesto te genera ${fmtEUR(earned, 0)} extra sin hacer nada más. Eso es un ${pct}% de ganancia sobre lo que aportaste.`;
+  document.getElementById('simMessage').textContent = t('simMessage')
+    .replace('{monthly}', fmtEUR(monthly, 0)).replace('{years}', years).replace('{earned}', fmtEUR(earned, 0)).replace('{pct}', pct);
 }
 calcSim();
 
