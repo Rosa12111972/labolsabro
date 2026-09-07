@@ -597,39 +597,39 @@ function acceptAge() {
 
 <div class="stocks-bg" id="stocks" style="display:none">
   <section>
-    <div class="pill">Mosca Inversor · En vivo</div>
-    <h2>laBolsabro.<br>Datos reales ahora.</h2>
-    <p class="sub">Busca cualquier empresa que cotice en bolsa. Datos reales en tiempo real. El semáforo es educativo — no una recomendación de compra.</p>
+    <div class="pill" data-i18n="stocksPill">Mosca Inversor · En vivo</div>
+    <h2 data-i18n-html="stocksTitle">laBolsabro.<br>Datos reales ahora.</h2>
+    <p class="sub" data-i18n="stocksSub">Busca cualquier empresa que cotice en bolsa. Datos reales en tiempo real. El semáforo es educativo — no una recomendación de compra.</p>
 
     <div style="background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden;">
       <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
         <div style="flex:1;min-width:200px;position:relative;">
-          <input id="stockInput" type="text" placeholder="Escribe empresa o ticker: Apple, Tesla, NVDA, Bitcoin..." style="width:100%;padding:12px 18px;border-radius:100px;border:1px solid var(--border2);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;" autocomplete="off">
+          <input id="stockInput" type="text" placeholder="Escribe empresa o ticker: Apple, Tesla, NVDA, Bitcoin..." data-i18n-placeholder="stocksInputPh" style="width:100%;padding:12px 18px;border-radius:100px;border:1px solid var(--border2);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;" autocomplete="off">
           <div id="searchSuggestions" style="display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--border2);border-radius:16px;overflow:hidden;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.4)"></div>
         </div>
-        <button onclick="doSearch()" style="padding:12px 24px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Analizar</button>
-        <button onclick="toggleCompare()" id="compareToggle" style="padding:12px 20px;background:var(--card2);color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">⚖️ Comparar</button>
+        <button onclick="doSearch()" style="padding:12px 24px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;" data-i18n="stocksAnalizarBtn">Analizar</button>
+        <button onclick="toggleCompare()" id="compareToggle" style="padding:12px 20px;background:var(--card2);color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;" data-i18n="stocksCompararBtn">⚖️ Comparar</button>
       </div>
       <div id="compareRow" style="display:none;padding:14px 24px;border-bottom:1px solid var(--border);background:rgba(167,139,250,0.05);gap:10px;flex-wrap:wrap;align-items:center;">
-        <span style="font-size:13px;color:var(--purple);font-weight:700;">⚖️ Comparar con:</span>
+        <span style="font-size:13px;color:var(--purple);font-weight:700;" data-i18n="stocksCompararCon">⚖️ Comparar con:</span>
         <div style="flex:1;min-width:160px;position:relative;">
-          <input id="stockInput2" type="text" placeholder="Segunda empresa o ticker..." style="width:100%;padding:10px 16px;border-radius:100px;border:1px solid rgba(167,139,250,0.4);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;" autocomplete="off">
+          <input id="stockInput2" type="text" placeholder="Segunda empresa o ticker..." data-i18n-placeholder="stocksInput2Ph" style="width:100%;padding:10px 16px;border-radius:100px;border:1px solid rgba(167,139,250,0.4);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;" autocomplete="off">
           <div id="searchSuggestions2" style="display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--border2);border-radius:16px;overflow:hidden;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.4)"></div>
         </div>
-        <button onclick="doCompare()" style="padding:10px 20px;background:var(--purple);color:#000;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Comparar</button>
+        <button onclick="doCompare()" style="padding:10px 20px;background:var(--purple);color:#000;border:none;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;" data-i18n="stocksCompararBtn2">Comparar</button>
       </div>
       <div id="historialRow" style="display:none;padding:10px 24px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;align-items:center;">
-        <span style="font-size:12px;color:var(--text3);margin-right:4px;">🕐 Recientes:</span>
+        <span style="font-size:12px;color:var(--text3);margin-right:4px;" data-i18n="stocksRecientes">🕐 Recientes:</span>
       </div>
       <div style="padding:10px 24px 0;border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap;">
-        <button class="sector-tab active" onclick="filtrarSector('todos', this)">Todos</button>
-        <button class="sector-tab" onclick="filtrarSector('tech', this)">💻 Tecnología</button>
-        <button class="sector-tab" onclick="filtrarSector('lujo', this)">👜 Lujo y consumo</button>
-        <button class="sector-tab" onclick="filtrarSector('auto', this)">🚗 Automóvil</button>
-        <button class="sector-tab" onclick="filtrarSector('energia', this)">⚡ Energía</button>
-        <button class="sector-tab" onclick="filtrarSector('metales', this)">⛏️ Metales y minería</button>
-        <button class="sector-tab" onclick="filtrarSector('banca', this)">🏦 Banca y telecom</button>
-        <button class="sector-tab" onclick="filtrarSector('cripto', this)">₿ Cripto</button>
+        <button class="sector-tab active" onclick="filtrarSector('todos', this)" data-i18n="secTodos">Todos</button>
+        <button class="sector-tab" onclick="filtrarSector('tech', this)" data-i18n="secTech">💻 Tecnología</button>
+        <button class="sector-tab" onclick="filtrarSector('lujo', this)" data-i18n="secLujo">👜 Lujo y consumo</button>
+        <button class="sector-tab" onclick="filtrarSector('auto', this)" data-i18n="secAuto">🚗 Automóvil</button>
+        <button class="sector-tab" onclick="filtrarSector('energia', this)" data-i18n="secEnergia">⚡ Energía</button>
+        <button class="sector-tab" onclick="filtrarSector('metales', this)" data-i18n="secMetales">⛏️ Metales y minería</button>
+        <button class="sector-tab" onclick="filtrarSector('banca', this)" data-i18n="secBanca">🏦 Banca y telecom</button>
+        <button class="sector-tab" onclick="filtrarSector('cripto', this)" data-i18n="secCripto">₿ Cripto</button>
       </div>
       <div id="quickTickers" style="padding:12px 24px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;">
         <button class="quick-btn" data-sector="tech" onclick="doTicker('AAPL')">Apple</button>
@@ -659,9 +659,9 @@ function acceptAge() {
         <button class="quick-btn" data-sector="cripto" onclick="doTicker('ETH')">Ethereum</button>
       </div>
       <div id="stockResult" style="padding:24px;min-height:120px;display:flex;align-items:center;justify-content:center;">
-        <p style="font-size:14px;color:var(--text3);text-align:center;">Escribe Apple, Tesla, Inditex... lo que sea. Te digo yo si renta o no. 🪰</p>
+        <p style="font-size:14px;color:var(--text3);text-align:center;" data-i18n="stocksEmptyState">Escribe Apple, Tesla, Inditex... lo que sea. Te digo yo si renta o no. 🪰</p>
       </div>
-      <div style="padding:12px 24px;font-size:11px;color:var(--text2);background:var(--card2);border-top:1px solid var(--border);line-height:1.6;">
+      <div style="padding:12px 24px;font-size:11px;color:var(--text2);background:var(--card2);border-top:1px solid var(--border);line-height:1.6;" data-i18n-html="stocksDisclaimer">
         ⚠️ <strong style="color:var(--text2)">Datos de Financial Modeling Prep · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br>
         <strong style="color:#f87171">👨‍👩‍👧 Aviso para menores de edad:</strong> <span style="color:var(--text2)">Si eres menor de 18 años o estás bajo tutela, curatela o patria potestad, no puedes tomar decisiones de inversión por tu cuenta. Esta herramienta es exclusivamente educativa. Cualquier decisión real de inversión debe contar con la autorización expresa de tus padres o tutor legal, conforme a la legislación española vigente.</span>
       </div>
@@ -1555,6 +1555,14 @@ const I18N = {
     simInvestedLbl: 'Dinero que metes', simEarnedLbl: 'Intereses ganados', simTotalLbl: 'Total final',
     simYearSingular: 'año', simYearPlural: 'años',
     simMessage: 'Con solo {monthly} al mes durante {years} años, el interés compuesto te genera {earned} extra sin hacer nada más. Eso es un {pct}% de ganancia sobre lo que aportaste.',
+    stocksPill: 'Mosca Inversor · En vivo', stocksTitle: 'laBolsabro.<br>Datos reales ahora.',
+    stocksSub: 'Busca cualquier empresa que cotice en bolsa. Datos reales en tiempo real. El semáforo es educativo — no una recomendación de compra.',
+    stocksInputPh: 'Escribe empresa o ticker: Apple, Tesla, NVDA, Bitcoin...', stocksInput2Ph: 'Segunda empresa o ticker...',
+    stocksAnalizarBtn: 'Analizar', stocksCompararBtn: '⚖️ Comparar', stocksCompararBtn2: 'Comparar', stocksCompararCon: '⚖️ Comparar con:',
+    stocksRecientes: '🕐 Recientes:',
+    secTodos: 'Todos', secTech: '💻 Tecnología', secLujo: '👜 Lujo y consumo', secAuto: '🚗 Automóvil', secEnergia: '⚡ Energía', secMetales: '⛏️ Metales y minería', secBanca: '🏦 Banca y telecom', secCripto: '₿ Cripto',
+    stocksEmptyState: 'Escribe Apple, Tesla, Inditex... lo que sea. Te digo yo si renta o no. 🪰',
+    stocksDisclaimer: '⚠️ <strong style="color:var(--text2)">Datos de Financial Modeling Prep · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br><strong style="color:#f87171">👨‍👩‍👧 Aviso para menores de edad:</strong> <span style="color:var(--text2)">Si eres menor de 18 años o estás bajo tutela, curatela o patria potestad, no puedes tomar decisiones de inversión por tu cuenta. Esta herramienta es exclusivamente educativa. Cualquier decisión real de inversión debe contar con la autorización expresa de tus padres o tutor legal, conforme a la legislación española vigente.</span>',
   },
   en: {
     navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language', navPrimerosPasos: '🚀 First steps',
@@ -1649,6 +1657,14 @@ const I18N = {
     simInvestedLbl: 'Money you put in', simEarnedLbl: 'Interest earned', simTotalLbl: 'Final total',
     simYearSingular: 'year', simYearPlural: 'years',
     simMessage: 'With just {monthly} a month for {years} years, compound interest generates {earned} extra without doing anything else. That\'s a {pct}% gain on what you contributed.',
+    stocksPill: 'Mosca Investor · Live', stocksTitle: 'laBolsabro.<br>Real data, right now.',
+    stocksSub: 'Search any company listed on a stock exchange. Real, live data. The traffic light is educational — not a buy recommendation.',
+    stocksInputPh: 'Type a company or ticker: Apple, Tesla, NVDA, Bitcoin...', stocksInput2Ph: 'Second company or ticker...',
+    stocksAnalizarBtn: 'Analyze', stocksCompararBtn: '⚖️ Compare', stocksCompararBtn2: 'Compare', stocksCompararCon: '⚖️ Compare with:',
+    stocksRecientes: '🕐 Recent:',
+    secTodos: 'All', secTech: '💻 Technology', secLujo: '👜 Luxury & consumer', secAuto: '🚗 Automotive', secEnergia: '⚡ Energy', secMetales: '⛏️ Metals & mining', secBanca: '🏦 Banking & telecom', secCripto: '₿ Crypto',
+    stocksEmptyState: 'Type Apple, Tesla, Inditex... anything. I\'ll tell you if it\'s worth it. 🪰',
+    stocksDisclaimer: '⚠️ <strong style="color:var(--text2)">Data from Financial Modeling Prep · Educational only, not financial advice.</strong> The traffic light is a guide — each sector has different ranges. Investing carries the risk of loss.<br><br><strong style="color:#f87171">👨‍👩‍👧 Notice for minors:</strong> <span style="color:var(--text2)">If you are under 18, or under guardianship or parental authority, you may not make investment decisions on your own. This tool is exclusively educational. Any real investment decision must have the express authorization of your parents or legal guardian, in accordance with applicable Spanish law.</span>',
   }
 };
 let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
@@ -1670,6 +1686,10 @@ function aplicarIdioma() {
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
     const key = el.getAttribute('data-i18n-html');
     if (dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
   });
   const sel = document.getElementById('langSelect');
   if (sel) sel.value = _idioma;
