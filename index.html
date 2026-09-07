@@ -48,8 +48,8 @@
 html { scroll-behavior: smooth; }
 body { font-family: 'Space Grotesk', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
-.safety-bar { background: #111; border-bottom: 1px solid var(--border); text-align: center; padding: 10px 24px; font-size: 12px; color: var(--text); }
-.safety-bar strong { color: var(--text); }
+.safety-bar { background: #111; border-bottom: 1px solid var(--border); text-align: center; padding: 10px 24px; font-size: 12px; color: var(--text2); }
+.safety-bar strong { color: var(--text2); }
 
 nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
 .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 62px; display: flex; align-items: center; justify-content: space-between; }
@@ -182,8 +182,8 @@ h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1; lett
 .safe-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
 .safe-desc { font-size: 13px; color: var(--text2); line-height: 1.7; }
 .legal-box { background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius); padding: 20px 24px; }
-.legal-box p { font-size: 12px; color: var(--text); line-height: 1.9; }
-.legal-box strong { color: var(--text); }
+.legal-box p { font-size: 12px; color: var(--text2); line-height: 1.9; }
+.legal-box strong { color: var(--text2); }
 
 .price-bg { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); }
@@ -601,11 +601,6 @@ function acceptAge() {
     <h2>laBolsabro.<br>Datos reales ahora.</h2>
     <p class="sub">Busca cualquier empresa que cotice en bolsa. Datos reales en tiempo real. El semáforo es educativo — no una recomendación de compra.</p>
 
-    <div style="padding:14px 20px;margin-bottom:16px;background:var(--card2);border:1px solid var(--border2);border-radius:var(--radius);font-size:13px;color:var(--text);line-height:1.6;">
-      ⚠️ <strong style="color:var(--text)">Datos de Alpha Vantage · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br>
-      <strong style="color:#f87171">👨‍👩‍👧 Aviso para menores de edad:</strong> <span style="color:var(--text)">Si eres menor de 18 años o estás bajo tutela, curatela o patria potestad, no puedes tomar decisiones de inversión por tu cuenta. Esta herramienta es exclusivamente educativa. Cualquier decisión real de inversión debe contar con la autorización expresa de tus padres o tutor legal, conforme a la legislación española vigente.</span>
-    </div>
-
     <div style="background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden;">
       <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
         <div style="flex:1;min-width:200px;position:relative;">
@@ -665,6 +660,10 @@ function acceptAge() {
       </div>
       <div id="stockResult" style="padding:24px;min-height:120px;display:flex;align-items:center;justify-content:center;">
         <p style="font-size:14px;color:var(--text3);text-align:center;">Escribe Apple, Tesla, Inditex... lo que sea. Te digo yo si renta o no. 🪰</p>
+      </div>
+      <div style="padding:12px 24px;font-size:11px;color:var(--text2);background:var(--card2);border-top:1px solid var(--border);line-height:1.6;">
+        ⚠️ <strong style="color:var(--text2)">Datos de Alpha Vantage · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br>
+        <strong style="color:#f87171">👨‍👩‍👧 Aviso para menores de edad:</strong> <span style="color:var(--text2)">Si eres menor de 18 años o estás bajo tutela, curatela o patria potestad, no puedes tomar decisiones de inversión por tu cuenta. Esta herramienta es exclusivamente educativa. Cualquier decisión real de inversión debe contar con la autorización expresa de tus padres o tutor legal, conforme a la legislación española vigente.</span>
       </div>
     </div>
 
@@ -3135,7 +3134,7 @@ function renderStock(el, d, ticker) {
           <tbody id="calcBody"></tbody>
         </table>
       </div>
-      <p style="font-size:11px;color:var(--text3);margin-top:12px;line-height:1.6">⚠️ Simulación educativa con rentabilidad constante. En la realidad los mercados fluctúan. El índice S&P 500 ha dado una media histórica de ~10% anual antes de inflación (7% ajustado). Rentabilidades pasadas no garantizan rentabilidades futuras.</p>
+      <p style="font-size:11px;color:var(--text2);margin-top:12px;line-height:1.6">⚠️ Simulación educativa con rentabilidad constante. En la realidad los mercados fluctúan. El índice S&P 500 ha dado una media histórica de ~10% anual antes de inflación (7% ajustado). Rentabilidades pasadas no garantizan rentabilidades futuras.</p>
     </div>
   </div>
 
