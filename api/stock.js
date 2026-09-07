@@ -52,105 +52,98 @@ async function esPremium(req) {
   } catch (e) { return false; }
 }
 
-// Alpha Vantage: fuente con licencia real (sustituye al scraping de Yahoo Finance).
-// Free tier: ~25 peticiones/día compartidas por toda la web. Cada análisis usa 2
-// (GLOBAL_QUOTE + OVERVIEW), así que el límite real es de unos ~12 análisis nuevos
-// al día en el plan gratuito de Alpha Vantage (los resultados ya cacheados en el
-// navegador del usuario no cuentan). Si el tráfico crece, hay que subir de plan
-// en alphavantage.co — no hace falta cambiar código, solo la clave sigue igual.
-const AV_BASE = 'https://www.alphavantage.co/query';
+// Financial Modeling Prep: fuente con licencia real (sustituye al scraping de
+// Yahoo Finance, y antes de eso a Alpha Vantage). Free tier: ~250 peticiones/día
+// compartidas por toda la web. Cada análisis usa 2 (profile + ratios-ttm), así
+// que el límite real es de unos ~125 análisis nuevos al día en el plan gratuito
+// (los resultados ya cacheados en el navegador del usuario no cuentan). Si el
+// tráfico crece, hay que subir de plan en financialmodelingprep.com — no hace
+// falta cambiar código, solo la clave sigue igual.
+const FMP_BASE = 'https://financialmodelingprep.com/api/v3';
 
 function n(x) {
-  if (x === undefined || x === null || x === '' || x === 'None') return null;
+  if (x === undefined || x === null || x === '') return null;
   const v = parseFloat(x);
   return Number.isNaN(v) ? null : v;
 }
 
-async function avFetch(params) {
-  const url = `${AV_BASE}?${new URLSearchParams({ ...params, apikey: process.env.ALPHA_VANTAGE_KEY }).toString()}`;
+async function fmpFetch(path) {
+  const sep = path.includes('?') ? '&' : '?';
+  const url = `${FMP_BASE}${path}${sep}apikey=${process.env.FMP_API_KEY}`;
   const r = await fetch(url);
-  if (!r.ok) throw new Error('Alpha Vantage no disponible');
-  const json = await r.json();
-  if (json.Note || json.Information) throw new Error('Límite diario de Alpha Vantage alcanzado, inténtalo más tarde');
+  const json = await r.json().catch(() => null);
+  if (json && json['Error Message']) throw new Error(json['Error Message']);
+  if (!r.ok) throw new Error('Financial Modeling Prep no disponible');
   return json;
 }
 
 async function fetchStock(ticker) {
-  const [quoteRes, overviewRes] = await Promise.all([
-    avFetch({ function: 'GLOBAL_QUOTE', symbol: ticker }),
-    avFetch({ function: 'OVERVIEW', symbol: ticker }),
+  const [profileArr, ratiosArr] = await Promise.all([
+    fmpFetch(`/profile/${encodeURIComponent(ticker)}`),
+    fmpFetch(`/ratios-ttm/${encodeURIComponent(ticker)}`),
   ]);
-  const q = quoteRes['Global Quote'] || {};
-  const o = overviewRes || {};
-  if (!q['05. price'] && !o.Symbol) return null;
+  const p = Array.isArray(profileArr) ? profileArr[0] : null;
+  const r = Array.isArray(ratiosArr) ? ratiosArr[0] : null;
+  if (!p || !p.price) return null;
 
-  const nombre = o.Name || ticker;
-  const precio = n(q['05. price']);
-  const cambioPctStr = (q['10. change percent'] || '').replace('%', '');
-  const cambio = n(cambioPctStr);
-  const mktCap = n(o.MarketCapitalization);
-  const moneda = o.Currency || 'USD';
-  const dividendPerShare = n(o.DividendPerShare);
-  const eps = n(o.EPS);
+  const [min52, max52] = (p.range || '').split('-').map(n);
 
   return {
-    tipo: 'stock', ticker, nombre, precio, cambio, mktCap, moneda,
+    tipo: 'stock', ticker, nombre: p.companyName || ticker,
+    precio: n(p.price), cambio: n(p.changesPercentage), mktCap: n(p.mktCap), moneda: p.currency || 'USD',
 
     // Valoración
-    pe:          n(o.TrailingPE) ?? n(o.PERatio),
-    fpe:         n(o.ForwardPE),
-    peg:         n(o.PEGRatio),
-    pb:          n(o.PriceToBookRatio),
-    evEbitda:    n(o.EVToEBITDA),
-    evRevenue:   n(o.EVToRevenue),
+    pe:          n(r?.peRatioTTM),
+    fpe:         null,
+    peg:         n(r?.pegRatioTTM),
+    pb:          n(r?.priceToBookRatioTTM),
+    evEbitda:    n(r?.enterpriseValueMultipleTTM),
+    evRevenue:   n(r?.evToSalesTTM),
 
     // Rentabilidad
-    eps:         eps,
-    margen:      n(o.ProfitMargin),
-    roe:         n(o.ReturnOnEquityTTM),
-    roa:         n(o.ReturnOnAssetsTTM),
-    crecimientoEps: n(o.QuarterlyEarningsGrowthYOY),
-    crecimientoIng: n(o.QuarterlyRevenueGrowthYOY),
-    totalRevenue:   n(o.RevenueTTM),
+    eps:         n(p.eps) ?? n(r?.netIncomePerShareTTM),
+    margen:      n(r?.netProfitMarginTTM),
+    roe:         n(r?.returnOnEquityTTM),
+    roa:         n(r?.returnOnAssetsTTM),
+    crecimientoEps: null,
+    crecimientoIng: null,
+    totalRevenue:   null,
 
     // Reinversión y dividendo
-    payoutRatio:        (dividendPerShare != null && eps) ? dividendPerShare / eps : null,
-    freeCashflow:        null, // no disponible sin llamada extra (BALANCE_SHEET/CASH_FLOW) — limitado por cuota gratuita
+    payoutRatio:         n(r?.payoutRatioTTM),
+    freeCashflow:        null, // no disponible sin llamada extra (cash-flow-statement) — limitado por cuota gratuita
     operatingCashflow:   null,
     capitalExpenditures: null,
-    divY:          n(o.DividendYield),
-    dividendRate:  dividendPerShare,
+    divY:          n(r?.dividendYieldTTM),
+    dividendRate:  n(p.lastDiv),
 
-    // Salud financiera (no disponibles en el plan gratuito sin llamadas adicionales)
-    debtToEquity: null,
-    currentRatio: null,
-    quickRatio:   null,
+    // Salud financiera
+    debtToEquity: n(r?.debtEquityRatioTTM),
+    currentRatio: n(r?.currentRatioTTM),
+    quickRatio:   n(r?.quickRatioTTM),
     totalDebt:    null,
     totalCash:    null,
 
     // Mercado
-    beta:    n(o.Beta),
-    min52:   n(o['52WeekLow']),
-    max52:   n(o['52WeekHigh']),
+    beta:  n(p.beta),
+    min52: min52 ?? null,
+    max52: max52 ?? null,
 
     // Empresa
-    sector:    o.Sector || '',
-    industry:  o.Industry || '',
-    employees: o.FullTimeEmployees ? parseInt(o.FullTimeEmployees) : null,
+    sector:    p.sector || '',
+    industry:  p.industry || '',
+    employees: p.fullTimeEmployees ? parseInt(p.fullTimeEmployees) : null,
   };
 }
 
 async function fetchCrypto(raw, yTicker) {
-  const symbol = raw;
-  const res = await avFetch({ function: 'CURRENCY_EXCHANGE_RATE', from_currency: symbol, to_currency: 'USD' });
-  const r = res['Realtime Currency Exchange Rate'];
-  if (!r) return null;
+  const arr = await fmpFetch(`/quote/${encodeURIComponent(raw)}USD`);
+  const q = Array.isArray(arr) ? arr[0] : null;
+  if (!q || !q.price) return null;
   const info = CRYPTO_INFO[yTicker] || {};
-  const precio = n(r['5. Exchange Rate']);
   return {
-    tipo: 'crypto', ticker: raw, nombre: info.nombre || raw, precio,
-    cambio: null, // no disponible sin una llamada extra (limitado por cuota gratuita)
-    mktCap: null, moneda: 'USD',
+    tipo: 'crypto', ticker: raw, nombre: info.nombre || raw, precio: n(q.price),
+    cambio: n(q.changesPercentage), mktCap: n(q.marketCap), moneda: 'USD',
     viabilidad: info.viabilidad || '—', riesgo: info.riesgo || '—',
     rankMcap: info.rankMcap || null, tipoCrypto: info.tipo || '—', descripcion: info.descripcion || ''
   };
@@ -160,8 +153,8 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
-  if (!process.env.ALPHA_VANTAGE_KEY) {
-    return res.status(500).json({ error: 'Fuente de datos no configurada (falta ALPHA_VANTAGE_KEY)' });
+  if (!process.env.FMP_API_KEY) {
+    return res.status(500).json({ error: 'Fuente de datos no configurada (falta FMP_API_KEY)' });
   }
 
   if (!(await esPremium(req))) {
