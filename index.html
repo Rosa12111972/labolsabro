@@ -457,31 +457,31 @@ function acceptAge() {
         <div class="phone-pill-bar"><div class="phone-pill"></div></div>
         <div class="phone-body">
           <div class="p-top">
-            <div class="p-hi" id="pHola">Hola 👋</div>
+            <div class="p-hi" id="pHola" data-i18n="phoneHola">Hola 👋</div>
             <div class="p-lv" id="pLevel">Nv.1 · 0 XP</div>
           </div>
           <div class="p-bal">
-            <div class="p-bal-l">Saldo total</div>
+            <div class="p-bal-l" data-i18n="phoneSaldo">Saldo total</div>
             <div class="p-bal-n" id="pSaldoTotal">0,00 €</div>
-            <div class="p-bal-s" id="pSaldoDelta">Empieza a ahorrar para verlo crecer</div>
+            <div class="p-bal-s" id="pSaldoDelta" data-i18n="phoneSaldoDelta">Empieza a ahorrar para verlo crecer</div>
           </div>
           <div class="p-row">
             <div class="p-mini">
-              <div class="p-mini-l">Ahorrando</div>
+              <div class="p-mini-l" data-i18n="phoneAhorrando">Ahorrando</div>
               <div class="p-mini-v" id="pAhorrando">0 €</div>
               <div class="p-mini-s" id="pBotesN">0 botes</div>
             </div>
             <div class="p-mini">
-              <div class="p-mini-l">Invertido</div>
+              <div class="p-mini-l" data-i18n="phoneInvertido">Invertido</div>
               <div class="p-mini-v" id="pInvertido">0 €</div>
-              <div class="p-mini-s">simulado</div>
+              <div class="p-mini-s" data-i18n="phoneSimulado">simulado</div>
             </div>
           </div>
           <div class="p-reto" id="pRetoBox">
-            <div class="p-reto-l">⚡ Reto de hoy</div>
-            <div class="p-reto-t" id="pRetoTexto">Regístrate para tener tu panel de ahorro real.</div>
+            <div class="p-reto-l" data-i18n="phoneRetoLabel">⚡ Reto de hoy</div>
+            <div class="p-reto-t" id="pRetoTexto" data-i18n="phoneRetoTexto">Regístrate para tener tu panel de ahorro real.</div>
           </div>
-          <button id="pAbrirPanel" onclick="abrirPanel()" style="display:none;width:100%;margin-top:10px;background:var(--green);color:#000;font-weight:700;font-size:13px;padding:10px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;">Abrir mi panel</button>
+          <button id="pAbrirPanel" onclick="abrirPanel()" style="display:none;width:100%;margin-top:10px;background:var(--green);color:#000;font-weight:700;font-size:13px;padding:10px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;" data-i18n="phoneAbrirPanel">Abrir mi panel</button>
         </div>
       </div>
     </div>
@@ -492,53 +492,53 @@ function acceptAge() {
   <div class="stats-inner">
     <div class="stat-item">
       <div class="stat-num" style="color:var(--green)">18-25</div>
-      <div class="stat-label">Años · público objetivo</div>
+      <div class="stat-label" data-i18n="statAge">Años · público objetivo</div>
     </div>
     <div class="stat-item">
       <div class="stat-num">100%</div>
-      <div class="stat-label">Gratis para siempre</div>
+      <div class="stat-label" data-i18n="statFree">Gratis para siempre</div>
     </div>
     <div class="stat-item">
       <div class="stat-num" style="color:var(--yellow)" id="statDineroArriesgado">0 €</div>
-      <div class="stat-label">Dinero real arriesgado</div>
+      <div class="stat-label" data-i18n="statRisked">Dinero real arriesgado</div>
     </div>
     <div class="stat-item">
       <div class="stat-num">2 min</div>
-      <div class="stat-label">Para analizar una empresa</div>
+      <div class="stat-label" data-i18n="statSpeed">Para analizar una empresa</div>
     </div>
   </div>
 </div>
 
 <div class="bg-card">
   <section>
-    <div class="pill">Para quien es</div>
-    <h2>Dos planes.<br>Un objetivo.</h2>
-    <p class="sub">Tanto si empiezas desde cero como si ya sabes algo de bolsa, laBolsabro tiene lo que necesitas.</p>
+    <div class="pill" data-i18n="plansPill">Para quien es</div>
+    <h2 data-i18n-html="plansTitle">Dos planes.<br>Un objetivo.</h2>
+    <p class="sub" data-i18n="plansSub">Tanto si empiezas desde cero como si ya sabes algo de bolsa, laBolsabro tiene lo que necesitas.</p>
     <div class="modes">
       <div class="mode">
-        <div class="mode-badge mb-green">Inversor Junior · <span id="precioJuniorMode">5,99€</span>/mes</div>
+        <div class="mode-badge mb-green"><span data-i18n="tierJunior">Inversor Junior</span> · <span id="precioJuniorMode">5,99€</span>/<span data-i18n="mes">mes</span></div>
         <span class="mode-emoji">📊</span>
-        <div class="mode-title">Para el que empieza a invertir</div>
-        <div class="mode-desc">Entiende si una empresa está cara o barata sin necesidad de conocimientos previos. El semáforo hace el trabajo por ti.</div>
+        <div class="mode-title" data-i18n="modeJuniorTitle">Para el que empieza a invertir</div>
+        <div class="mode-desc" data-i18n="modeJuniorDesc">Entiende si una empresa está cara o barata sin necesidad de conocimientos previos. El semáforo hace el trabajo por ti.</div>
         <ul class="mode-list">
-          <li><span class="c-g">✓</span> Análisis completo de empresas</li>
-          <li><span class="c-g">✓</span> Búsquedas ilimitadas</li>
-          <li><span class="c-g">✓</span> Comparador de empresas</li>
-          <li><span class="c-g">✓</span> Simulador de ahorro e inversión</li>
-          <li><span class="c-g">✓</span> Recordatorios personalizables</li>
+          <li><span class="c-g">✓</span> <span data-i18n="juniorF1">Análisis completo de empresas</span></li>
+          <li><span class="c-g">✓</span> <span data-i18n="juniorF2">Búsquedas ilimitadas</span></li>
+          <li><span class="c-g">✓</span> <span data-i18n="juniorF3">Comparador de empresas</span></li>
+          <li><span class="c-g">✓</span> <span data-i18n="juniorF4">Simulador de ahorro e inversión</span></li>
+          <li><span class="c-g">✓</span> <span data-i18n="juniorF5">Recordatorios personalizables</span></li>
         </ul>
       </div>
       <div class="mode" style="border-left:1px solid var(--border)">
-        <div class="mode-badge mb-purple">Inversor Senior · <span id="precioSeniorMode">9,99€</span>/mes</div>
+        <div class="mode-badge mb-purple"><span data-i18n="tierSenior">Inversor Senior</span> · <span id="precioSeniorMode">9,99€</span>/<span data-i18n="mes">mes</span></div>
         <span class="mode-emoji">📈</span>
-        <div class="mode-title">Para el que quiere invertir con criterio</div>
-        <div class="mode-desc">Análisis avanzado, alertas personalizadas e historial completo. Para tomar decisiones con información de calidad.</div>
+        <div class="mode-title" data-i18n="modeSeniorTitle">Para el que quiere invertir con criterio</div>
+        <div class="mode-desc" data-i18n="modeSeniorDesc">Análisis avanzado, alertas personalizadas e historial completo. Para tomar decisiones con información de calidad.</div>
         <ul class="mode-list">
-          <li><span class="c-p">✓</span> Todo del plan Junior</li>
-          <li><span class="c-p">✓</span> Calculadora de interés compuesto</li>
-          <li><span class="c-p">✓</span> Comparador avanzado por sector</li>
-          <li><span class="c-p">✓</span> Alertas de valor personalizadas</li>
-          <li><span class="c-p">✓</span> Historial de análisis personal</li>
+          <li><span class="c-p">✓</span> <span data-i18n="seniorF1">Todo del plan Junior</span></li>
+          <li><span class="c-p">✓</span> <span data-i18n="seniorF2">Calculadora de interés compuesto</span></li>
+          <li><span class="c-p">✓</span> <span data-i18n="seniorF3">Comparador avanzado por sector</span></li>
+          <li><span class="c-p">✓</span> <span data-i18n="seniorF4">Alertas de valor personalizadas</span></li>
+          <li><span class="c-p">✓</span> <span data-i18n="seniorF5">Historial de análisis personal</span></li>
         </ul>
       </div>
     </div>
@@ -546,51 +546,51 @@ function acceptAge() {
 </div>
 
 <section>
-  <div class="pill">Por qué laBolsabro</div>
-  <h2>Bolsa en español.<br>Sin tecnicismos.</h2>
-  <p class="sub">Datos reales, explicaciones humanas. Diseñada para que cualquiera entienda si algo vale lo que cuesta.</p>
+  <div class="pill" data-i18n="whyPill">Por qué laBolsabro</div>
+  <h2 data-i18n-html="whyTitle">Bolsa en español.<br>Sin tecnicismos.</h2>
+  <p class="sub" data-i18n="whySub">Datos reales, explicaciones humanas. Diseñada para que cualquiera entienda si algo vale lo que cuesta.</p>
   <div class="feat-grid">
     <div class="feat">
       <span class="feat-emoji">🚦</span>
-      <div class="feat-title">Semáforo de valor</div>
-      <div class="feat-desc">Verde, amarillo o rojo. Sabes si una empresa está barata, justa o cara sin leer ningún balance ni informe anual.</div>
-      <span class="feat-tag" style="background:var(--green-glow);color:var(--green)">Un vistazo</span>
+      <div class="feat-title" data-i18n="feat1Title">Semáforo de valor</div>
+      <div class="feat-desc" data-i18n="feat1Desc">Verde, amarillo o rojo. Sabes si una empresa está barata, justa o cara sin leer ningún balance ni informe anual.</div>
+      <span class="feat-tag" style="background:var(--green-glow);color:var(--green)" data-i18n="feat1Tag">Un vistazo</span>
     </div>
     <div class="feat">
       <span class="feat-emoji">🎯</span>
-      <div class="feat-title">Puntuación global 0-10</div>
-      <div class="feat-desc">Un solo número que resume valoración, crecimiento y rentabilidad. Sin fórmulas, sin horas de análisis.</div>
-      <span class="feat-tag" style="background:var(--purple-dim);color:var(--purple)">Fácil de entender</span>
+      <div class="feat-title" data-i18n="feat2Title">Puntuación global 0-10</div>
+      <div class="feat-desc" data-i18n="feat2Desc">Un solo número que resume valoración, crecimiento y rentabilidad. Sin fórmulas, sin horas de análisis.</div>
+      <span class="feat-tag" style="background:var(--purple-dim);color:var(--purple)" data-i18n="feat2Tag">Fácil de entender</span>
     </div>
     <div class="feat">
       <span class="feat-emoji">⚖️</span>
-      <div class="feat-title">Comparador de empresas</div>
-      <div class="feat-desc">¿Apple o Microsoft? ¿Inditex o Zara? Ponlas una al lado de la otra y ve qué métricas gana cada una.</div>
-      <span class="feat-tag" style="background:var(--yellow-dim);color:var(--yellow)">Lado a lado</span>
+      <div class="feat-title" data-i18n="feat3Title">Comparador de empresas</div>
+      <div class="feat-desc" data-i18n="feat3Desc">¿Apple o Microsoft? ¿Inditex o Zara? Ponlas una al lado de la otra y ve qué métricas gana cada una.</div>
+      <span class="feat-tag" style="background:var(--yellow-dim);color:var(--yellow)" data-i18n="feat3Tag">Lado a lado</span>
     </div>
     <div class="feat">
       <span class="feat-emoji">🔬</span>
-      <div class="feat-title">Explicaciones en humano</div>
-      <div class="feat-desc">¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier métrica y te lo explicamos como si tuvieras 15 años.</div>
-      <span class="feat-tag" style="background:var(--green-glow);color:var(--green)">Sin jerga</span>
+      <div class="feat-title" data-i18n="feat4Title">Explicaciones en humano</div>
+      <div class="feat-desc" data-i18n="feat4Desc">¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier métrica y te lo explicamos como si tuvieras 15 años.</div>
+      <span class="feat-tag" style="background:var(--green-glow);color:var(--green)" data-i18n="feat4Tag">Sin jerga</span>
     </div>
     <div class="feat">
       <span class="feat-emoji">🌍</span>
-      <div class="feat-title">Mercados globales</div>
-      <div class="feat-desc">España, EEUU, Europa, crypto. NASDAQ, NYSE, Madrid, París, Fráncfort. Busca cualquier empresa que cotice en bolsa.</div>
-      <span class="feat-tag" style="background:var(--red-dim);color:var(--red)">Internacional</span>
+      <div class="feat-title" data-i18n="feat5Title">Mercados globales</div>
+      <div class="feat-desc" data-i18n="feat5Desc">España, EEUU, Europa, crypto. NASDAQ, NYSE, Madrid, París, Fráncfort. Busca cualquier empresa que cotice en bolsa.</div>
+      <span class="feat-tag" style="background:var(--red-dim);color:var(--red)" data-i18n="feat5Tag">Internacional</span>
     </div>
     <div class="feat">
       <span class="feat-emoji">📐</span>
-      <div class="feat-title">Calculadora de interés compuesto</div>
-      <div class="feat-desc">Pon números a tu futuro. ¿Cuánto tendrías en 20 años ahorrando 100€ al mes? La respuesta te va a sorprender.</div>
-      <span class="feat-tag" style="background:var(--purple-dim);color:var(--purple)">Tu futuro</span>
+      <div class="feat-title" data-i18n="feat6Title">Calculadora de interés compuesto</div>
+      <div class="feat-desc" data-i18n="feat6Desc">Pon números a tu futuro. ¿Cuánto tendrías en 20 años ahorrando 100€ al mes? La respuesta te va a sorprender.</div>
+      <span class="feat-tag" style="background:var(--purple-dim);color:var(--purple)" data-i18n="feat6Tag">Tu futuro</span>
     </div>
     <div class="feat" style="border-color:rgba(34,197,94,0.35)">
       <span class="feat-emoji">🎮</span>
-      <div class="feat-title">DuoInvest</div>
-      <div class="feat-desc">DuoInvest: niveles que se desbloquean uno a uno, racha diaria y XP. Aprendes de verdad, no solo lees.</div>
-      <a href="/ruta.html" class="feat-tag" style="background:var(--green-glow);color:var(--green);text-decoration:none">🔥 Empezar racha</a>
+      <div class="feat-title" data-i18n="feat7Title">DuoInvest</div>
+      <div class="feat-desc" data-i18n="feat7Desc">DuoInvest: niveles que se desbloquean uno a uno, racha diaria y XP. Aprendes de verdad, no solo lees.</div>
+      <a href="/ruta.html" class="feat-tag" style="background:var(--green-glow);color:var(--green);text-decoration:none" data-i18n="feat7Tag">🔥 Empezar racha</a>
     </div>
   </div>
 </section>
@@ -1486,6 +1486,34 @@ const I18N = {
     faqQ6: '¿Los datos son fiables?', faqA6: 'Los datos vienen de Financial Modeling Prep, un proveedor de datos bursátiles con licencia. Pueden tener un pequeño retraso respecto al mercado en tiempo real. Son orientativos y educativos, no para tomar decisiones de inversión.',
     ctaTitle: 'Tu dinero puede hacer algo.', ctaSubtag: 'laBolsabro. Y el ahorro también.', ctaText: 'Déjanos tu email y te contamos las novedades antes que nadie.', ctaBtn: 'Avisadme de novedades',
     footerPriv: 'Privacidad', footerTerms: 'Términos', footerContact: 'Contacto', footerCopy: '© 2025 Mosca · Plataforma educativa · No somos asesores financieros',
+    phoneHola: 'Hola 👋', phoneSaldo: 'Saldo total', phoneSaldoDelta: 'Empieza a ahorrar para verlo crecer',
+    phoneAhorrando: 'Ahorrando', phoneInvertido: 'Invertido', phoneSimulado: 'simulado',
+    phoneRetoLabel: '⚡ Reto de hoy', phoneRetoTexto: 'Regístrate para tener tu panel de ahorro real.', phoneAbrirPanel: 'Abrir mi panel',
+    phoneHolaName: 'Hola', phoneControl: 'Tu dinero, tu control', phoneBote: 'bote', phoneBotes: 'botes', phoneRetoOk: '✓ Reto de hoy completado, crack.',
+    statAge: 'Años · público objetivo', statFree: 'Gratis para siempre', statRisked: 'Dinero real arriesgado', statSpeed: 'Para analizar una empresa',
+    plansPill: 'Para quien es', plansTitle: 'Dos planes.<br>Un objetivo.', plansSub: 'Tanto si empiezas desde cero como si ya sabes algo de bolsa, laBolsabro tiene lo que necesitas.',
+    modeJuniorTitle: 'Para el que empieza a invertir', modeJuniorDesc: 'Entiende si una empresa está cara o barata sin necesidad de conocimientos previos. El semáforo hace el trabajo por ti.',
+    modeSeniorTitle: 'Para el que quiere invertir con criterio', modeSeniorDesc: 'Análisis avanzado, alertas personalizadas e historial completo. Para tomar decisiones con información de calidad.',
+    whyPill: 'Por qué laBolsabro', whyTitle: 'Bolsa en español.<br>Sin tecnicismos.', whySub: 'Datos reales, explicaciones humanas. Diseñada para que cualquiera entienda si algo vale lo que cuesta.',
+    feat1Title: 'Semáforo de valor', feat1Desc: 'Verde, amarillo o rojo. Sabes si una empresa está barata, justa o cara sin leer ningún balance ni informe anual.', feat1Tag: 'Un vistazo',
+    feat2Title: 'Puntuación global 0-10', feat2Desc: 'Un solo número que resume valoración, crecimiento y rentabilidad. Sin fórmulas, sin horas de análisis.', feat2Tag: 'Fácil de entender',
+    feat3Title: 'Comparador de empresas', feat3Desc: '¿Apple o Microsoft? ¿Inditex o Zara? Ponlas una al lado de la otra y ve qué métricas gana cada una.', feat3Tag: 'Lado a lado',
+    feat4Title: 'Explicaciones en humano', feat4Desc: '¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier métrica y te lo explicamos como si tuvieras 15 años.', feat4Tag: 'Sin jerga',
+    feat5Title: 'Mercados globales', feat5Desc: 'España, EEUU, Europa, crypto. NASDAQ, NYSE, Madrid, París, Fráncfort. Busca cualquier empresa que cotice en bolsa.', feat5Tag: 'Internacional',
+    feat6Title: 'Calculadora de interés compuesto', feat6Desc: 'Pon números a tu futuro. ¿Cuánto tendrías en 20 años ahorrando 100€ al mes? La respuesta te va a sorprender.', feat6Tag: 'Tu futuro',
+    feat7Title: 'DuoInvest', feat7Desc: 'DuoInvest: niveles que se desbloquean uno a uno, racha diaria y XP. Aprendes de verdad, no solo lees.', feat7Tag: '🔥 Empezar racha',
+    safePill: 'Tu seguridad primero', safeTitle: 'Aprendes.<br>No arriesgas.', safeSub: 'Mosca es educación financiera. Nunca tocamos tu dinero ni te empujamos a invertir sin entender lo que haces.',
+    safe1Title: 'No gestiónamos tu dinero', safe1Desc: 'No somos un banco ni una plataforma de inversión. No necesitas meter tu tarjeta ni conectar tu cuenta bancaria.',
+    safe2Title: 'Educación, no especulación', safe2Desc: 'Nunca te diremos "compra esto ahora". Te enseñamos a analizar datos públicos. La decisión de invertir es siempre tuya.',
+    safe3Title: 'Solo mayores de 18', safe3Desc: 'laBolsabro está dirigida exclusivamente a mayores de 18 años. Los menores de edad no deben utilizar las herramientas de análisis financiero.',
+    safe4Title: 'El riesgo siempre visible', safe4Desc: 'Cada vez que aparece información sobre bolsa, recordamos que invertir conlleva riesgo de perder dinero. Sin letra pequeña.',
+    safe5Title: 'Solo largo plazo', safe5Desc: 'Fondos indexados, ETFs, interés compuesto. Nunca trading diario, criptomonedas especulativas ni apalancamiento.',
+    safe6Title: 'Sin comisiones ocultas', safe6Desc: 'No cobramos comisiones de bancos ni brokers por recomendarte sus productos. Solo la suscripción. Sin conflictos de interés.',
+    legalNotice: '<strong>Aviso legal:</strong> Mosca es una plataforma de educación financiera en desarrollo. No estamos regulados como entidad de asesoramiento financiero bajo MiFID II ni como entidad de crédito. La información que ofrecemos sobre empresas y mercados tiene caracter exclusivamente educativo e informativo, basada en datos públicos disponibles. <strong>Invertir en bolsa conlleva riesgo de pérdida parcial o total del capital invertido.</strong> Las rentabilidades pasadas no garantizan rentabilidades futuras. Antes de tomar cualquier decisión de inversión con dinero real, consulta con un asesor financiero regulado por la CNMV.',
+    originPill: 'Por qué existe esto', originTitle: 'Nadie nos enseñó<br>a manejar el dinero.', originSub: 'En el instituto aprendimos ecuaciones de segundo grado, no qué es un PER ni cómo funciona el interés compuesto. laBolsabro es la clase que nos hubiera gustado tener.',
+    origin1: '🎯 Sin tecnicismos de banco ni sermones de asesor financiero. Si no lo entiende alguien de 15 años, lo reescribimos.',
+    origin2: '🔍 Datos reales de Financial Modeling Prep, no opiniones ni "consejos" disfrazados de análisis. Tú decides con información, nosotros no vendemos humo.',
+    origin3: '🚀 Estamos empezando y lo decimos claro: preferimos construir algo honesto poco a poco que inflar el producto con humo desde el primer día.',
   },
   en: {
     navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language', navPrimerosPasos: '🚀 First steps',
@@ -1511,6 +1539,34 @@ const I18N = {
     faqQ6: 'Is the data reliable?', faqA6: "Data comes from Financial Modeling Prep, a licensed market data provider. It may lag slightly behind real-time markets. It's informational and educational, not for making investment decisions.",
     ctaTitle: 'Your money can do something.', ctaSubtag: 'laBolsabro. So can your savings.', ctaText: "Leave us your email and we'll tell you about updates before anyone else.", ctaBtn: 'Notify me',
     footerPriv: 'Privacy', footerTerms: 'Terms', footerContact: 'Contact', footerCopy: '© 2025 Mosca · Educational platform · Not financial advisors',
+    phoneHola: 'Hi 👋', phoneSaldo: 'Total balance', phoneSaldoDelta: 'Start saving to watch it grow',
+    phoneAhorrando: 'Saving', phoneInvertido: 'Invested', phoneSimulado: 'simulated',
+    phoneRetoLabel: '⚡ Today\'s challenge', phoneRetoTexto: 'Sign up to get your real savings dashboard.', phoneAbrirPanel: 'Open my dashboard',
+    phoneHolaName: 'Hi', phoneControl: 'Your money, your control', phoneBote: 'jar', phoneBotes: 'jars', phoneRetoOk: '✓ Today\'s challenge completed, nice one.',
+    statAge: 'Years old · target audience', statFree: 'Free forever', statRisked: 'Real money at stake', statSpeed: 'To analyze a company',
+    plansPill: 'Who it\'s for', plansTitle: 'Two plans.<br>One goal.', plansSub: 'Whether you\'re starting from zero or already know some investing, laBolsabro has what you need.',
+    modeJuniorTitle: 'For those starting to invest', modeJuniorDesc: 'See if a company is cheap or expensive with no prior knowledge needed. The traffic light does the work for you.',
+    modeSeniorTitle: 'For those who invest with a plan', modeSeniorDesc: 'Advanced analysis, custom alerts and full history. Make decisions backed by quality information.',
+    whyPill: 'Why laBolsabro', whyTitle: 'Investing made plain.<br>No jargon.', whySub: 'Real data, human explanations. Built so anyone can tell if something is worth what it costs.',
+    feat1Title: 'Value traffic light', feat1Desc: 'Green, yellow or red. Know if a company is cheap, fair or expensive without reading a single balance sheet or annual report.', feat1Tag: 'At a glance',
+    feat2Title: 'Overall score 0-10', feat2Desc: 'One single number that sums up valuation, growth and profitability. No formulas, no hours of analysis.', feat2Tag: 'Easy to understand',
+    feat3Title: 'Company comparator', feat3Desc: 'Apple or Microsoft? Inditex or Zara? Put them side by side and see which metrics each one wins.', feat3Tag: 'Side by side',
+    feat4Title: 'Plain-language explanations', feat4Desc: 'What is the P/E ratio? What does ROE mean? Tap any metric and we explain it like you\'re 15.', feat4Tag: 'No jargon',
+    feat5Title: 'Global markets', feat5Desc: 'Spain, the US, Europe, crypto. NASDAQ, NYSE, Madrid, Paris, Frankfurt. Search any company listed on a stock exchange.', feat5Tag: 'International',
+    feat6Title: 'Compound interest calculator', feat6Desc: 'Put numbers to your future. How much would you have in 20 years saving €100 a month? The answer might surprise you.', feat6Tag: 'Your future',
+    feat7Title: 'DuoInvest', feat7Desc: 'DuoInvest: levels that unlock one by one, a daily streak and XP. You actually learn, not just read.', feat7Tag: '🔥 Start your streak',
+    safePill: 'Your safety first', safeTitle: 'You learn.<br>You don\'t risk.', safeSub: 'Mosca is financial education. We never touch your money or push you to invest without understanding what you\'re doing.',
+    safe1Title: 'We never manage your money', safe1Desc: 'We\'re not a bank or an investment platform. No need to add your card or connect your bank account.',
+    safe2Title: 'Education, not speculation', safe2Desc: 'We\'ll never tell you to "buy this now." We teach you to analyze public data. The investment decision is always yours.',
+    safe3Title: '18+ only', safe3Desc: 'laBolsabro is intended exclusively for adults 18 and over. Minors should not use the financial analysis tools.',
+    safe4Title: 'Risk always in view', safe4Desc: 'Whenever stock market information appears, we remind you that investing carries the risk of losing money. No fine print.',
+    safe5Title: 'Long term only', safe5Desc: 'Index funds, ETFs, compound interest. Never day trading, speculative cryptocurrencies or leverage.',
+    safe6Title: 'No hidden fees', safe6Desc: 'We don\'t take commissions from banks or brokers for recommending their products. Just the subscription. No conflicts of interest.',
+    legalNotice: '<strong>Legal notice:</strong> Mosca is a financial education platform in development. We are not regulated as a financial advisory firm under MiFID II, nor as a credit institution. The information we provide about companies and markets is exclusively educational and informational, based on publicly available data. <strong>Investing in the stock market carries the risk of partial or total loss of the capital invested.</strong> Past performance does not guarantee future returns. Before making any real-money investment decision, consult a financial advisor regulated by the CNMV.',
+    originPill: 'Why this exists', originTitle: 'Nobody taught us<br>how to handle money.', originSub: 'At school we learned quadratic equations, not what a P/E ratio is or how compound interest works. laBolsabro is the class we wish we\'d had.',
+    origin1: '🎯 No bank jargon, no lectures from a financial advisor. If a 15-year-old wouldn\'t understand it, we rewrite it.',
+    origin2: '🔍 Real data from Financial Modeling Prep, not opinions or "tips" dressed up as analysis. You decide with information — we don\'t sell hype.',
+    origin3: '🚀 We\'re just getting started and we say it plainly: we\'d rather build something honest step by step than inflate the product with hype from day one.',
   }
 };
 let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
@@ -1518,6 +1574,10 @@ function detectarIdiomaNavegador() {
   const langs = navigator.languages || [navigator.language || 'es'];
   for (const l of langs) { if (l.toLowerCase().startsWith('es')) return 'es'; }
   return 'en';
+}
+function t(key) {
+  const dict = I18N[_idioma] || I18N.es;
+  return dict[key] !== undefined ? dict[key] : (I18N.es[key] !== undefined ? I18N.es[key] : key);
 }
 function aplicarIdioma() {
   const dict = I18N[_idioma] || I18N.es;
@@ -1932,21 +1992,21 @@ function renderHeroMockup() {
   const hola = document.getElementById('pHola');
   const abrirBtn = document.getElementById('pAbrirPanel');
   if (!_currentUser) {
-    if (hola) hola.textContent = 'Hola 👋';
+    if (hola) hola.textContent = t('phoneHola');
     if (abrirBtn) abrirBtn.style.display = 'none';
     return;
   }
   const nivel = Math.floor((_totalXP || 0) / 100) + 1;
   const totalBotes = _jars.reduce((s, j) => s + parseFloat(j.saldo || 0), 0);
   const saldoTotal = totalBotes + parseFloat(_invertidoSimulado || 0);
-  document.getElementById('pHola').textContent = `Hola ${window._panelNombre} 👋`;
+  document.getElementById('pHola').textContent = `${t('phoneHolaName')} ${window._panelNombre} 👋`;
   document.getElementById('pLevel').textContent = `Nv.${nivel} · ${_totalXP || 0} XP`;
   document.getElementById('pSaldoTotal').textContent = fmtEUR(saldoTotal);
-  document.getElementById('pSaldoDelta').textContent = totalBotes === 0 && _invertidoSimulado === 0 ? 'Empieza a ahorrar para verlo crecer' : 'Tu dinero, tu control';
+  document.getElementById('pSaldoDelta').textContent = totalBotes === 0 && _invertidoSimulado === 0 ? t('phoneSaldoDelta') : t('phoneControl');
   document.getElementById('pAhorrando').textContent = fmtEUR(totalBotes, 0);
-  document.getElementById('pBotesN').textContent = `${_jars.length} bote${_jars.length === 1 ? '' : 's'}`;
+  document.getElementById('pBotesN').textContent = `${_jars.length} ${_jars.length === 1 ? t('phoneBote') : t('phoneBotes')}`;
   document.getElementById('pInvertido').textContent = fmtEUR(parseFloat(_invertidoSimulado || 0), 0);
-  document.getElementById('pRetoTexto').textContent = _retoCompletadoHoy ? '✓ Reto de hoy completado, crack.' : (_retoActual?.texto || '');
+  document.getElementById('pRetoTexto').textContent = _retoCompletadoHoy ? t('phoneRetoOk') : (_retoActual?.texto || '');
   if (abrirBtn) abrirBtn.style.display = 'block';
 }
 
@@ -3194,31 +3254,31 @@ function renderStock(el, d, ticker) {
 
 <br><br>
 
-  <div class="pill">Tu seguridad primero</div>
-  <h2>Aprendes.<br>No arriesgas.</h2>
-  <p class="sub">Mosca es educación financiera. Nunca tocamos tu dinero ni te empujamos a invertir sin entender lo que haces.</p>
+  <div class="pill" data-i18n="safePill">Tu seguridad primero</div>
+  <h2 data-i18n-html="safeTitle">Aprendes.<br>No arriesgas.</h2>
+  <p class="sub" data-i18n="safeSub">Mosca es educación financiera. Nunca tocamos tu dinero ni te empujamos a invertir sin entender lo que haces.</p>
   <div class="safe-grid">
-    <div class="safe-card"><span class="safe-ico">🔒</span><div class="safe-title">No gestiónamos tu dinero</div><div class="safe-desc">No somos un banco ni una plataforma de inversión. No necesitas meter tu tarjeta ni conectar tu cuenta bancaria.</div></div>
-    <div class="safe-card"><span class="safe-ico">📚</span><div class="safe-title">Educación, no especulación</div><div class="safe-desc">Nunca te diremos "compra esto ahora". Te enseñamos a analizar datos públicos. La decisión de invertir es siempre tuya.</div></div>
-    <div class="safe-card"><span class="safe-ico">🔞</span><div class="safe-title">Solo mayores de 18</div><div class="safe-desc">laBolsabro está dirigida exclusivamente a mayores de 18 años. Los menores de edad no deben utilizar las herramientas de análisis financiero.</div></div>
-    <div class="safe-card"><span class="safe-ico">⚠️</span><div class="safe-title">El riesgo siempre visible</div><div class="safe-desc">Cada vez que aparece información sobre bolsa, recordamos que invertir conlleva riesgo de perder dinero. Sin letra pequeña.</div></div>
-    <div class="safe-card"><span class="safe-ico">🐢</span><div class="safe-title">Solo largo plazo</div><div class="safe-desc">Fondos indexados, ETFs, interés compuesto. Nunca trading diario, criptomonedas especulativas ni apalancamiento.</div></div>
-    <div class="safe-card"><span class="safe-ico">🛡️</span><div class="safe-title">Sin comisiones ocultas</div><div class="safe-desc">No cobramos comisiones de bancos ni brokers por recomendarte sus productos. Solo la suscripción. Sin conflictos de interés.</div></div>
+    <div class="safe-card"><span class="safe-ico">🔒</span><div class="safe-title" data-i18n="safe1Title">No gestiónamos tu dinero</div><div class="safe-desc" data-i18n="safe1Desc">No somos un banco ni una plataforma de inversión. No necesitas meter tu tarjeta ni conectar tu cuenta bancaria.</div></div>
+    <div class="safe-card"><span class="safe-ico">📚</span><div class="safe-title" data-i18n="safe2Title">Educación, no especulación</div><div class="safe-desc" data-i18n="safe2Desc">Nunca te diremos "compra esto ahora". Te enseñamos a analizar datos públicos. La decisión de invertir es siempre tuya.</div></div>
+    <div class="safe-card"><span class="safe-ico">🔞</span><div class="safe-title" data-i18n="safe3Title">Solo mayores de 18</div><div class="safe-desc" data-i18n="safe3Desc">laBolsabro está dirigida exclusivamente a mayores de 18 años. Los menores de edad no deben utilizar las herramientas de análisis financiero.</div></div>
+    <div class="safe-card"><span class="safe-ico">⚠️</span><div class="safe-title" data-i18n="safe4Title">El riesgo siempre visible</div><div class="safe-desc" data-i18n="safe4Desc">Cada vez que aparece información sobre bolsa, recordamos que invertir conlleva riesgo de perder dinero. Sin letra pequeña.</div></div>
+    <div class="safe-card"><span class="safe-ico">🐢</span><div class="safe-title" data-i18n="safe5Title">Solo largo plazo</div><div class="safe-desc" data-i18n="safe5Desc">Fondos indexados, ETFs, interés compuesto. Nunca trading diario, criptomonedas especulativas ni apalancamiento.</div></div>
+    <div class="safe-card"><span class="safe-ico">🛡️</span><div class="safe-title" data-i18n="safe6Title">Sin comisiones ocultas</div><div class="safe-desc" data-i18n="safe6Desc">No cobramos comisiones de bancos ni brokers por recomendarte sus productos. Solo la suscripción. Sin conflictos de interés.</div></div>
   </div>
   <div class="legal-box">
-    <p><strong>Aviso legal:</strong> Mosca es una plataforma de educación financiera en desarrollo. No estamos regulados como entidad de asesoramiento financiero bajo MiFID II ni como entidad de crédito. La información que ofrecemos sobre empresas y mercados tiene caracter exclusivamente educativo e informativo, basada en datos públicos disponibles. <strong>Invertir en bolsa conlleva riesgo de pérdida parcial o total del capital invertido.</strong> Las rentabilidades pasadas no garantizan rentabilidades futuras. Antes de tomar cualquier decisión de inversión con dinero real, consulta con un asesor financiero regulado por la CNMV.</p>
+    <p data-i18n-html="legalNotice"><strong>Aviso legal:</strong> Mosca es una plataforma de educación financiera en desarrollo. No estamos regulados como entidad de asesoramiento financiero bajo MiFID II ni como entidad de crédito. La información que ofrecemos sobre empresas y mercados tiene caracter exclusivamente educativo e informativo, basada en datos públicos disponibles. <strong>Invertir en bolsa conlleva riesgo de pérdida parcial o total del capital invertido.</strong> Las rentabilidades pasadas no garantizan rentabilidades futuras. Antes de tomar cualquier decisión de inversión con dinero real, consulta con un asesor financiero regulado por la CNMV.</p>
   </div>
 </section>
 
 <div class="bg-card">
   <section>
-    <div class="pill">Por qué existe esto</div>
-    <h2>Nadie nos enseñó<br>a manejar el dinero.</h2>
-    <p class="sub">En el instituto aprendimos ecuaciones de segundo grado, no qué es un PER ni cómo funciona el interés compuesto. laBolsabro es la clase que nos hubiera gustado tener.</p>
+    <div class="pill" data-i18n="originPill">Por qué existe esto</div>
+    <h2 data-i18n-html="originTitle">Nadie nos enseñó<br>a manejar el dinero.</h2>
+    <p class="sub" data-i18n="originSub">En el instituto aprendimos ecuaciones de segundo grado, no qué es un PER ni cómo funciona el interés compuesto. laBolsabro es la clase que nos hubiera gustado tener.</p>
     <div class="testi-grid">
-      <div class="testi"><p class="testi-text">🎯 Sin tecnicismos de banco ni sermones de asesor financiero. Si no lo entiende alguien de 15 años, lo reescribimos.</p></div>
-      <div class="testi"><p class="testi-text">🔍 Datos reales de Financial Modeling Prep, no opiniones ni "consejos" disfrazados de análisis. Tú decides con información, nosotros no vendemos humo.</p></div>
-      <div class="testi"><p class="testi-text">🚀 Estamos empezando y lo decimos claro: preferimos construir algo honesto poco a poco que inflar el producto con humo desde el primer día.</p></div>
+      <div class="testi"><p class="testi-text" data-i18n="origin1">🎯 Sin tecnicismos de banco ni sermones de asesor financiero. Si no lo entiende alguien de 15 años, lo reescribimos.</p></div>
+      <div class="testi"><p class="testi-text" data-i18n="origin2">🔍 Datos reales de Financial Modeling Prep, no opiniones ni "consejos" disfrazados de análisis. Tú decides con información, nosotros no vendemos humo.</p></div>
+      <div class="testi"><p class="testi-text" data-i18n="origin3">🚀 Estamos empezando y lo decimos claro: preferimos construir algo honesto poco a poco que inflar el producto con humo desde el primer día.</p></div>
     </div>
   </section>
 </div>
