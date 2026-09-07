@@ -59,12 +59,24 @@ async function esPremium(req) {
 // (los resultados ya cacheados en el navegador del usuario no cuentan). Si el
 // tráfico crece, hay que subir de plan en financialmodelingprep.com — no hace
 // falta cambiar código, solo la clave sigue igual.
-const FMP_BASE = 'https://financialmodelingprep.com/api/v3';
+// Usa la API "stable" (query params) — la antigua /api/v3 (path params) dejó
+// de estar disponible para claves nuevas a partir del 31/08/2025.
+const FMP_BASE = 'https://financialmodelingprep.com/stable';
 
 function n(x) {
   if (x === undefined || x === null || x === '') return null;
   const v = parseFloat(x);
   return Number.isNaN(v) ? null : v;
+}
+
+// Distintas versiones de la API de FMP han usado nombres de campo distintos
+// para lo mismo (p.ej. mktCap vs marketCap). pick() prueba varios nombres.
+function pick(obj, keys) {
+  if (!obj) return undefined;
+  for (const k of keys) {
+    if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') return obj[k];
+  }
+  return undefined;
 }
 
 async function fmpFetch(path) {
@@ -73,54 +85,56 @@ async function fmpFetch(path) {
   const r = await fetch(url);
   const json = await r.json().catch(() => null);
   if (json && json['Error Message']) throw new Error(json['Error Message']);
+  if (json && !Array.isArray(json) && json.error) throw new Error(String(json.error));
   if (!r.ok) throw new Error('Financial Modeling Prep no disponible');
   return json;
 }
 
 async function fetchStock(ticker) {
   const [profileArr, ratiosArr] = await Promise.all([
-    fmpFetch(`/profile/${encodeURIComponent(ticker)}`),
-    fmpFetch(`/ratios-ttm/${encodeURIComponent(ticker)}`),
+    fmpFetch(`/profile?symbol=${encodeURIComponent(ticker)}`),
+    fmpFetch(`/ratios-ttm?symbol=${encodeURIComponent(ticker)}`),
   ]);
   const p = Array.isArray(profileArr) ? profileArr[0] : null;
   const r = Array.isArray(ratiosArr) ? ratiosArr[0] : null;
-  if (!p || !p.price) return null;
+  const precio = n(pick(p, ['price']));
+  if (!p || !precio) return null;
 
   const [min52, max52] = (p.range || '').split('-').map(n);
 
   return {
     tipo: 'stock', ticker, nombre: p.companyName || ticker,
-    precio: n(p.price), cambio: n(p.changesPercentage), mktCap: n(p.mktCap), moneda: p.currency || 'USD',
+    precio, cambio: n(pick(p, ['changePercentage', 'changesPercentage'])), mktCap: n(pick(p, ['marketCap', 'mktCap'])), moneda: p.currency || 'USD',
 
     // Valoración
-    pe:          n(r?.peRatioTTM),
+    pe:          n(pick(r, ['peRatioTTM', 'priceToEarningsRatioTTM'])),
     fpe:         null,
-    peg:         n(r?.pegRatioTTM),
-    pb:          n(r?.priceToBookRatioTTM),
-    evEbitda:    n(r?.enterpriseValueMultipleTTM),
-    evRevenue:   n(r?.evToSalesTTM),
+    peg:         n(pick(r, ['pegRatioTTM', 'priceToEarningsGrowthRatioTTM'])),
+    pb:          n(pick(r, ['priceToBookRatioTTM'])),
+    evEbitda:    n(pick(r, ['enterpriseValueMultipleTTM', 'evToEBITDATTM'])),
+    evRevenue:   n(pick(r, ['evToSalesTTM'])),
 
     // Rentabilidad
-    eps:         n(p.eps) ?? n(r?.netIncomePerShareTTM),
-    margen:      n(r?.netProfitMarginTTM),
-    roe:         n(r?.returnOnEquityTTM),
-    roa:         n(r?.returnOnAssetsTTM),
+    eps:         n(pick(p, ['eps'])) ?? n(pick(r, ['netIncomePerShareTTM'])),
+    margen:      n(pick(r, ['netProfitMarginTTM'])),
+    roe:         n(pick(r, ['returnOnEquityTTM'])),
+    roa:         n(pick(r, ['returnOnAssetsTTM'])),
     crecimientoEps: null,
     crecimientoIng: null,
     totalRevenue:   null,
 
     // Reinversión y dividendo
-    payoutRatio:         n(r?.payoutRatioTTM),
+    payoutRatio:         n(pick(r, ['payoutRatioTTM'])),
     freeCashflow:        null, // no disponible sin llamada extra (cash-flow-statement) — limitado por cuota gratuita
     operatingCashflow:   null,
     capitalExpenditures: null,
-    divY:          n(r?.dividendYieldTTM),
-    dividendRate:  n(p.lastDiv),
+    divY:          n(pick(r, ['dividendYieldTTM'])),
+    dividendRate:  n(pick(p, ['lastDividend', 'lastDiv'])),
 
     // Salud financiera
-    debtToEquity: n(r?.debtEquityRatioTTM),
-    currentRatio: n(r?.currentRatioTTM),
-    quickRatio:   n(r?.quickRatioTTM),
+    debtToEquity: n(pick(r, ['debtToEquityRatioTTM', 'debtEquityRatioTTM'])),
+    currentRatio: n(pick(r, ['currentRatioTTM'])),
+    quickRatio:   n(pick(r, ['quickRatioTTM'])),
     totalDebt:    null,
     totalCash:    null,
 
@@ -137,13 +151,14 @@ async function fetchStock(ticker) {
 }
 
 async function fetchCrypto(raw, yTicker) {
-  const arr = await fmpFetch(`/quote/${encodeURIComponent(raw)}USD`);
+  const arr = await fmpFetch(`/quote?symbol=${encodeURIComponent(raw)}USD`);
   const q = Array.isArray(arr) ? arr[0] : null;
-  if (!q || !q.price) return null;
+  const precio = n(pick(q, ['price']));
+  if (!q || !precio) return null;
   const info = CRYPTO_INFO[yTicker] || {};
   return {
-    tipo: 'crypto', ticker: raw, nombre: info.nombre || raw, precio: n(q.price),
-    cambio: n(q.changesPercentage), mktCap: n(q.marketCap), moneda: 'USD',
+    tipo: 'crypto', ticker: raw, nombre: info.nombre || raw, precio,
+    cambio: n(pick(q, ['changePercentage', 'changesPercentage'])), mktCap: n(pick(q, ['marketCap', 'mktCap'])), moneda: 'USD',
     viabilidad: info.viabilidad || '—', riesgo: info.riesgo || '—',
     rankMcap: info.rankMcap || null, tipoCrypto: info.tipo || '—', descripcion: info.descripcion || ''
   };
