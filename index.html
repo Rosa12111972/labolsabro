@@ -292,24 +292,24 @@ footer { border-top: 1px solid var(--border); }
 <div id="authOverlay" class="auth-overlay" onclick="closeAuthIfBg(event)">
   <div class="auth-box">
     <button class="auth-close" onclick="closeAuthModal()">×</button>
-    <h2 id="authTitle">Iniciar sesión</h2>
-    <p id="authSub">Accede a tu cuenta de laBolsabro</p>
+    <h2 id="authTitle" data-i18n="authTitleLogin">Iniciar sesión</h2>
+    <p id="authSub" data-i18n="authSubLogin">Accede a tu cuenta de laBolsabro</p>
     <div id="authError" class="auth-error"></div>
     <div class="auth-field">
-      <label>Email</label>
+      <label data-i18n="authLblEmail">Email</label>
       <input type="email" id="authEmail" placeholder="tu@email.com" autocomplete="email">
     </div>
     <div class="auth-field">
-      <label>Contraseña</label>
+      <label data-i18n="authLblPass">Contraseña</label>
       <div style="position:relative">
         <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password" style="width:100%;padding-right:40px">
         <button type="button" onclick="togglePassVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text2);font-size:16px;padding:0" id="passEye">👁</button>
       </div>
     </div>
-    <button class="auth-submit" id="authSubmit" onclick="submitAuth()">Entrar</button>
+    <button class="auth-submit" id="authSubmit" onclick="submitAuth()" data-i18n="authBtnLogin">Entrar</button>
     <div class="auth-toggle">
-      <span id="authToggleLink" onclick="toggleAuthMode()">¿No tienes cuenta? Regístrate</span>
-      &nbsp;·&nbsp;<span onclick="resetPassword()">Olvidé mi contraseña</span>
+      <span id="authToggleLink" onclick="toggleAuthMode()" data-i18n="authToggleToRegister">¿No tienes cuenta? Regístrate</span>
+      &nbsp;·&nbsp;<span onclick="resetPassword()" data-i18n="authForgotPass">Olvidé mi contraseña</span>
     </div>
   </div>
 </div>
@@ -1514,6 +1514,30 @@ const I18N = {
     origin1: '🎯 Sin tecnicismos de banco ni sermones de asesor financiero. Si no lo entiende alguien de 15 años, lo reescribimos.',
     origin2: '🔍 Datos reales de Financial Modeling Prep, no opiniones ni "consejos" disfrazados de análisis. Tú decides con información, nosotros no vendemos humo.',
     origin3: '🚀 Estamos empezando y lo decimos claro: preferimos construir algo honesto poco a poco que inflar el producto con humo desde el primer día.',
+    authTitleLogin: 'Iniciar sesión', authTitleRegister: 'Crear cuenta',
+    authSubLogin: 'Accede a tu cuenta de laBolsabro', authSubRegister: 'Únete a laBolsabro gratis',
+    authLblEmail: 'Email', authLblPass: 'Contraseña',
+    authBtnLogin: 'Entrar', authBtnRegister: 'Crear cuenta', authBtnWait: 'Un momento...',
+    authToggleToRegister: '¿No tienes cuenta? Regístrate', authToggleToLogin: '¿Ya tienes cuenta? Entra aquí',
+    authForgotPass: 'Olvidé mi contraseña',
+    authAlertEmailFirst: 'Escribe tu email primero', authAlertErrorPrefix: 'Error: ',
+    authAlertResetSent: 'Te hemos enviado un enlace para restablecer la contraseña. Revisa tu email.',
+    authAlertAccountCreated: '¡Cuenta creada! Revisa tu email para confirmarla.',
+    authErrFillFields: 'Rellena email y contraseña', authErrUnknown: 'Error desconocido',
+    limitTitle: 'Has usado tus 3 pruebas gratis',
+    limitDesc: 'El plan gratuito incluye 3 pruebas de por vida (análisis de empresas o calculadora, como prefieras).<br>Pasa a Premium para seguir usando laBolsabro sin límite.',
+    limitCta: 'Ver planes Premium →', limitFrom: 'Desde', limitCancel: 'Cancela cuando quieras',
+    loginReqTitle: 'Regístrate gratis para usar esta herramienta',
+    loginReqDesc: 'Tienes 3 pruebas gratis esperándote: analiza empresas o usa la calculadora, lo que prefieras.',
+    loginReqCta: 'Crear cuenta gratis →',
+    loadMsg1: '🪰 Un momento, que la mosca está mirando los números...',
+    loadMsg2: '🪰 Dame un segundo, que esto tiene más letra que un contrato...',
+    loadMsg3: '🪰 Preguntando a la bolsa, que no es tan rápida...',
+    loadMsg4: '🪰 Buscando', loadMsg4b: '... casi casi...',
+    trialsLeft1: '⚡ Te queda 1 prueba gratis', trialsLeftN: 'Te quedan {n} pruebas gratis',
+    notFoundPrefix: 'Uy,', notFoundSuffix: 'no me suena de nada',
+    notFoundHint: 'Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰',
+    notFoundUS: 'EE.UU.', notFoundES: 'España', notFoundEU: 'Europa',
   },
   en: {
     navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language', navPrimerosPasos: '🚀 First steps',
@@ -1567,6 +1591,30 @@ const I18N = {
     origin1: '🎯 No bank jargon, no lectures from a financial advisor. If a 15-year-old wouldn\'t understand it, we rewrite it.',
     origin2: '🔍 Real data from Financial Modeling Prep, not opinions or "tips" dressed up as analysis. You decide with information — we don\'t sell hype.',
     origin3: '🚀 We\'re just getting started and we say it plainly: we\'d rather build something honest step by step than inflate the product with hype from day one.',
+    authTitleLogin: 'Log in', authTitleRegister: 'Create account',
+    authSubLogin: 'Access your laBolsabro account', authSubRegister: 'Join laBolsabro for free',
+    authLblEmail: 'Email', authLblPass: 'Password',
+    authBtnLogin: 'Log in', authBtnRegister: 'Create account', authBtnWait: 'One moment...',
+    authToggleToRegister: 'No account? Sign up', authToggleToLogin: 'Already have an account? Log in',
+    authForgotPass: 'Forgot my password',
+    authAlertEmailFirst: 'Enter your email first', authAlertErrorPrefix: 'Error: ',
+    authAlertResetSent: 'We\'ve sent you a link to reset your password. Check your email.',
+    authAlertAccountCreated: 'Account created! Check your email to confirm it.',
+    authErrFillFields: 'Fill in email and password', authErrUnknown: 'Unknown error',
+    limitTitle: 'You\'ve used your 3 free trials',
+    limitDesc: 'The free plan includes 3 lifetime trials (company analysis or calculator, whichever you prefer).<br>Upgrade to Premium to keep using laBolsabro with no limit.',
+    limitCta: 'See Premium plans →', limitFrom: 'From', limitCancel: 'Cancel anytime',
+    loginReqTitle: 'Sign up for free to use this tool',
+    loginReqDesc: 'You have 3 free trials waiting: analyze companies or use the calculator, whichever you prefer.',
+    loginReqCta: 'Create free account →',
+    loadMsg1: '🪰 One moment, the fly is checking the numbers...',
+    loadMsg2: '🪰 Give me a sec, this has more fine print than a contract...',
+    loadMsg3: '🪰 Asking the market, it\'s not that fast...',
+    loadMsg4: '🪰 Looking up', loadMsg4b: '... almost there...',
+    trialsLeft1: '⚡ You have 1 free trial left', trialsLeftN: 'You have {n} free trials left',
+    notFoundPrefix: 'Oops,', notFoundSuffix: 'doesn\'t ring a bell',
+    notFoundHint: 'Try the exact stock ticker — the fly doesn\'t guess 🪰',
+    notFoundUS: 'US', notFoundES: 'Spain', notFoundEU: 'Europe',
   }
 };
 let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
@@ -1756,10 +1804,10 @@ function closeAuthIfBg(e) {
 function toggleAuthMode() {
   _authMode = _authMode === 'login' ? 'register' : 'login';
   const isReg = _authMode === 'register';
-  document.getElementById('authTitle').textContent = isReg ? 'Crear cuenta' : 'Iniciar sesión';
-  document.getElementById('authSub').textContent = isReg ? 'Únete a laBolsabro gratis' : 'Accede a tu cuenta de laBolsabro';
-  document.getElementById('authSubmit').textContent = isReg ? 'Crear cuenta' : 'Entrar';
-  document.getElementById('authToggleLink').textContent = isReg ? '¿Ya tienes cuenta? Entra aquí' : '¿No tienes cuenta? Regístrate';
+  document.getElementById('authTitle').textContent = isReg ? t('authTitleRegister') : t('authTitleLogin');
+  document.getElementById('authSub').textContent = isReg ? t('authSubRegister') : t('authSubLogin');
+  document.getElementById('authSubmit').textContent = isReg ? t('authBtnRegister') : t('authBtnLogin');
+  document.getElementById('authToggleLink').textContent = isReg ? t('authToggleToLogin') : t('authToggleToRegister');
   document.getElementById('authError').style.display = 'none';
 }
 async function guardarHistorialPremium(ticker, nombre, precio, score) {
@@ -2288,30 +2336,30 @@ function togglePassVis() {
 }
 async function resetPassword() {
   const email = document.getElementById('authEmail').value.trim();
-  if (!email) { alert('Escribe tu email primero'); return; }
+  if (!email) { alert(t('authAlertEmailFirst')); return; }
   const { error } = await _sb.auth.resetPasswordForEmail(email, {
     redirectTo: 'https://labolsabro.com/reset.html'
   });
-  if (error) alert('Error: ' + error.message);
-  else { closeAuthModal(); alert('Te hemos enviado un enlace para restablecer la contraseña. Revisa tu email.'); }
+  if (error) alert(t('authAlertErrorPrefix') + error.message);
+  else { closeAuthModal(); alert(t('authAlertResetSent')); }
 }
 async function submitAuth() {
   const email = document.getElementById('authEmail').value.trim();
   const pass = document.getElementById('authPass').value;
   const errEl = document.getElementById('authError');
   const btn = document.getElementById('authSubmit');
-  if (!email || !pass) { errEl.textContent = 'Rellena email y contraseña'; errEl.style.display = 'block'; return; }
-  btn.textContent = 'Un momento...'; btn.disabled = true;
+  if (!email || !pass) { errEl.textContent = t('authErrFillFields'); errEl.style.display = 'block'; return; }
+  btn.textContent = t('authBtnWait'); btn.disabled = true;
   let result;
   if (_authMode === 'register') {
     result = await _sb.auth.signUp({ email, password: pass });
-    if (!result.error) { closeAuthModal(); alert('¡Cuenta creada! Revisa tu email para confirmarla.'); }
+    if (!result.error) { closeAuthModal(); alert(t('authAlertAccountCreated')); }
   } else {
     result = await _sb.auth.signInWithPassword({ email, password: pass });
     if (!result.error) closeAuthModal();
   }
-  if (result.error) { errEl.textContent = result.error.message || JSON.stringify(result.error) || 'Error desconocido'; errEl.style.display = 'block'; }
-  btn.textContent = _authMode === 'register' ? 'Crear cuenta' : 'Entrar'; btn.disabled = false;
+  if (result.error) { errEl.textContent = result.error.message || JSON.stringify(result.error) || t('authErrUnknown'); errEl.style.display = 'block'; }
+  btn.textContent = _authMode === 'register' ? t('authBtnRegister') : t('authBtnLogin'); btn.disabled = false;
 }
 
 function checkHashGate() {
@@ -2340,19 +2388,19 @@ async function consumirPrueba() {
 function mostrarLimiteAlcanzado(el) {
   el.innerHTML = `<div style="text-align:center;padding:32px 16px">
     <div style="font-size:40px;margin-bottom:16px">🔒</div>
-    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Has usado tus 3 pruebas gratis</div>
-    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">El plan gratuito incluye 3 pruebas de por vida (análisis de empresas o calculadora, como prefieras).<br>Pasa a Premium para seguir usando laBolsabro sin límite.</div>
-    <a href="/premium.html" style="display:inline-block;background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;text-decoration:none;margin-bottom:12px">Ver planes Premium →</a>
-    <div style="font-size:12px;color:var(--text3);margin-top:8px">Desde ${fmtEUR(5.99)}/mes · Cancela cuando quieras</div>
+    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">${t('limitTitle')}</div>
+    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">${t('limitDesc')}</div>
+    <a href="/premium.html" style="display:inline-block;background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;text-decoration:none;margin-bottom:12px">${t('limitCta')}</a>
+    <div style="font-size:12px;color:var(--text3);margin-top:8px">${t('limitFrom')} ${fmtEUR(5.99)}${t('mes')} · ${t('limitCancel')}</div>
   </div>`;
 }
 
 function mostrarLoginRequerido(el) {
   el.innerHTML = `<div style="text-align:center;padding:32px 16px">
     <div style="font-size:40px;margin-bottom:16px">🔐</div>
-    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Regístrate gratis para usar esta herramienta</div>
-    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">Tienes 3 pruebas gratis esperándote: analiza empresas o usa la calculadora, lo que prefieras.</div>
-    <button onclick="openAuthModal()" style="background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;border:none;cursor:pointer;font-family:inherit">Crear cuenta gratis →</button>
+    <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">${t('loginReqTitle')}</div>
+    <div style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.7">${t('loginReqDesc')}</div>
+    <button onclick="openAuthModal()" style="background:var(--green);color:#000;font-weight:700;font-size:15px;padding:14px 28px;border-radius:100px;border:none;cursor:pointer;font-family:inherit">${t('loginReqCta')}</button>
   </div>`;
 }
 
@@ -2365,7 +2413,7 @@ async function doSearch() {
   if (cached) { if (cached.tipo === 'crypto') renderCrypto(el, cached); else renderStock(el, cached, ticker); return; }
   // Comprobar pruebas gratis restantes (solo para búsquedas nuevas, no cacheadas)
   if (pruebasRestantes() <= 0) { mostrarLimiteAlcanzado(el); return; }
-  const loadMsgs = ['🪰 Un momento, que la mosca está mirando los números...','🪰 Dame un segundo, que esto tiene más letra que un contrato...','🪰 Preguntando a la bolsa, que no es tan rápida...','🪰 Buscando ' + ticker + '... casi casi...'];
+  const loadMsgs = [t('loadMsg1'), t('loadMsg2'), t('loadMsg3'), t('loadMsg4') + ' ' + ticker + t('loadMsg4b')];
   el.innerHTML = '<p style="font-size:14px;color:var(--text3);">' + loadMsgs[Math.floor(Math.random()*loadMsgs.length)] + '</p>';
   let apiErrorMsg = null;
   try {
@@ -2397,14 +2445,14 @@ async function doSearch() {
     if (_userPlan === 'free' && restantes > 0) {
       const aviso = document.createElement('div');
       aviso.style.cssText = 'font-size:12px;color:var(--text3);text-align:right;padding:4px 0;';
-      aviso.textContent = restantes === 1 ? `⚡ Te queda 1 prueba gratis` : `⚡ Te quedan ${restantes} pruebas gratis`;
+      aviso.textContent = restantes === 1 ? t('trialsLeft1') : `⚡ ${t('trialsLeftN').replace('{n}', restantes)}`;
       el.appendChild(aviso);
     }
   } catch(e) {
-    const t = document.getElementById('stockInput').value.trim().toUpperCase();
+    const inputVal = document.getElementById('stockInput').value.trim().toUpperCase();
     const esErrorReal = e.message && e.message !== 'no data';
     const avisoReal = esErrorReal ? `<p style="font-size:13px;color:var(--yellow);margin-bottom:14px;">⚠️ ${e.message}</p>` : '';
-    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🤷</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">Uy, "${t}" no me suena de nada</p>${avisoReal}<p style="font-size:13px;color:var(--text3);line-height:1.8">Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
+    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🤷</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">${t('notFoundPrefix')} "${inputVal}" ${t('notFoundSuffix')}</p>${avisoReal}<p style="font-size:13px;color:var(--text3);line-height:1.8">${t('notFoundHint')}<br><strong style="color:var(--text2)">${t('notFoundUS')}:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">${t('notFoundES')}:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">${t('notFoundEU')}:</strong> ASML · SAP · LVMH</p></div>`;
   }
 }
 
