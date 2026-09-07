@@ -1611,6 +1611,8 @@ async function setUser(user) {
   }
   if (typeof renderXPBadge === 'function') renderXPBadge();
   if (typeof renderRachaBadge === 'function') renderRachaBadge();
+  const biblioteca = document.getElementById('biblioteca');
+  if (biblioteca) biblioteca.style.display = '';
   await cargarPanelData();
   const navAuth = document.getElementById('navAuth');
   const isPremium = _userPlan !== 'free';
@@ -1665,6 +1667,8 @@ function clearUser() {
   _jars = [];
   _invertidoSimulado = 0;
   _pruebasGratisUsadas = 0;
+  const biblioteca = document.getElementById('biblioteca');
+  if (biblioteca) biblioteca.style.display = 'none';
   document.getElementById('navAuth').innerHTML = `<button class="nav-btn" onclick="openAuthModal()" data-i18n="navEntrar">${(I18N[_idioma]||I18N.es).navEntrar}</button>`;
   if (typeof cargarXPTotal === 'function') cargarXPTotal();
   if (typeof renderHeroMockup === 'function') renderHeroMockup();
@@ -3281,7 +3285,7 @@ function renderStock(el, d, ticker) {
   </section>
 </div>
 
-<section id="biblioteca">
+<section id="biblioteca" style="display:none">
   <div class="pill">Biblioteca</div>
   <h2>Términos financieros<br>en cristiano.</h2>
   <p class="sub">¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier término y te lo explicamos como si tuvieras 15 años.</p>
