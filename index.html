@@ -2308,20 +2308,25 @@ async function doSearch() {
   if (pruebasRestantes() <= 0) { mostrarLimiteAlcanzado(el); return; }
   const loadMsgs = ['🪰 Un momento, que la mosca está mirando los números...','🪰 Dame un segundo, que esto tiene más letra que un contrato...','🪰 Preguntando a la bolsa, que no es tan rápida...','🪰 Buscando ' + ticker + '... casi casi...'];
   el.innerHTML = '<p style="font-size:14px;color:var(--text3);">' + loadMsgs[Math.floor(Math.random()*loadMsgs.length)] + '</p>';
+  let apiErrorMsg = null;
   try {
     const base = apiBase();
     let res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`, { headers: authHeaders() });
     if (res.status === 429) { mostrarLimiteAlcanzado(el); return; }
-    let d = res.ok ? await res.json() : null;
-    if (!d || !d.precio) {
+    let body = await res.json().catch(() => null);
+    let d = (res.ok && body && body.precio) ? body : null;
+    if (!d) apiErrorMsg = body?.error || null;
+    if (!d) {
       const resolved = await resolveTicker(ticker);
       if (resolved && resolved.toUpperCase() !== ticker.toUpperCase()) {
         res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(resolved)}`, { headers: authHeaders() });
         if (res.status === 429) { mostrarLimiteAlcanzado(el); return; }
-        d = res.ok ? await res.json() : null;
+        body = await res.json().catch(() => null);
+        d = (res.ok && body && body.precio) ? body : null;
+        if (!d) apiErrorMsg = body?.error || apiErrorMsg;
       }
     }
-    if (!d || !d.precio) throw new Error('no data');
+    if (!d) throw new Error(apiErrorMsg || 'no data');
     cacheSet(ticker, d);
     addHistorial(ticker, d.nombre || ticker);
     await consumirPrueba();
@@ -2338,7 +2343,9 @@ async function doSearch() {
     }
   } catch(e) {
     const t = document.getElementById('stockInput').value.trim().toUpperCase();
-    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🤷</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">Uy, "${t}" no me suena de nada</p><p style="font-size:13px;color:var(--text3);line-height:1.8">Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
+    const esErrorReal = e.message && e.message !== 'no data';
+    const avisoReal = esErrorReal ? `<p style="font-size:13px;color:var(--yellow);margin-bottom:14px;">⚠️ ${e.message}</p>` : '';
+    el.innerHTML = `<div style="text-align:center;padding:16px"><div style="font-size:32px;margin-bottom:12px">🤷</div><p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;">Uy, "${t}" no me suena de nada</p>${avisoReal}<p style="font-size:13px;color:var(--text3);line-height:1.8">Prueba con el ticker exacto de bolsa, que la mosca no adivina 🪰<br><strong style="color:var(--text2)">EE.UU.:</strong> AAPL · MSFT · GOOGL · TSLA · NVDA · META<br><strong style="color:var(--text2)">España:</strong> ITX.MC · REP.MC · SAN.MC · IBE.MC · TEF.MC<br><strong style="color:var(--text2)">Europa:</strong> ASML · SAP · LVMH</p></div>`;
   }
 }
 
