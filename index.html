@@ -1413,10 +1413,14 @@ function actualizarPreciosSuscripcion() {
   setTxt('precioJuniorFaq', pJunior);
   setTxt('precioSeniorFaq', pSenior);
   const mesTxt = (I18N[_idioma] || I18N.es).mes;
+  // En la tarjeta grande solo cabe el símbolo (ej. "R$35,63"), no el código
+  // de 3 letras que añade fmtEUR para desambiguar (ej. "BRL") — a ese tamaño
+  // de fuente el texto se corta a dos líneas y queda roto.
+  const sinCodigo = s => s.replace(/ [A-Z]{3}$/, '');
   const cardJ = document.getElementById('precioJuniorCard');
-  if (cardJ) cardJ.innerHTML = `${pJunior} <span data-i18n="mes">${mesTxt}</span>`;
+  if (cardJ) cardJ.innerHTML = `${sinCodigo(pJunior)} <span data-i18n="mes">${mesTxt}</span>`;
   const cardS = document.getElementById('precioSeniorCard');
-  if (cardS) cardS.innerHTML = `${pSenior} <span data-i18n="mes">${mesTxt}</span>`;
+  if (cardS) cardS.innerHTML = `${sinCodigo(pSenior)} <span data-i18n="mes">${mesTxt}</span>`;
   setTxt('statDineroArriesgado', fmtEUR(0, 0));
 }
 function cambiarMoneda(code) {
