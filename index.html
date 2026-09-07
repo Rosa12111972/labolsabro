@@ -367,10 +367,10 @@ footer { border-top: 1px solid var(--border); }
 <div id="ageGate" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px);">
   <div style="background:#141414;border:1px solid #333;border-radius:24px;padding:40px 32px;max-width:400px;width:100%;text-align:center;">
     <div style="font-size:52px;margin-bottom:16px">🔞</div>
-    <h2 style="font-size:22px;font-weight:700;margin-bottom:12px;letter-spacing:-0.02em">Confirma tu edad</h2>
-    <p style="font-size:14px;color:#a3a3a3;line-height:1.7;margin-bottom:28px">laBolsabro es una herramienta de <strong style="color:#f5f5f5">educación financiera exclusiva para mayores de 18 años</strong>. Al continuar confirmas que tienes 18 años o más y aceptas nuestros <a href="/terminos.html" style="color:#22c55e">términos de uso</a>.</p>
-    <button onclick="acceptAge()" style="width:100%;padding:14px;background:#22c55e;color:#000;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:12px">Tengo 18 años o más — Entrar</button>
-    <p style="font-size:12px;color:#525252;line-height:1.6">Si eres menor de 18 años, cierra esta página. Esta herramienta no está diseñada para ti.</p>
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:12px;letter-spacing:-0.02em" data-i18n="ageGateTitle">Confirma tu edad</h2>
+    <p style="font-size:14px;color:#a3a3a3;line-height:1.7;margin-bottom:28px" data-i18n-html="ageGateText">laBolsabro es una herramienta de <strong style="color:#f5f5f5">educación financiera exclusiva para mayores de 18 años</strong>. Al continuar confirmas que tienes 18 años o más y aceptas nuestros <a href="/terminos.html" style="color:#22c55e">términos de uso</a>.</p>
+    <button onclick="acceptAge()" style="width:100%;padding:14px;background:#22c55e;color:#000;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:12px" data-i18n="ageGateBtn">Tengo 18 años o más — Entrar</button>
+    <p style="font-size:12px;color:#525252;line-height:1.6" data-i18n="ageGateWarn">Si eres menor de 18 años, cierra esta página. Esta herramienta no está diseñada para ti.</p>
   </div>
 </div>
 <script>
@@ -1563,6 +1563,18 @@ const I18N = {
     secTodos: 'Todos', secTech: '💻 Tecnología', secLujo: '👜 Lujo y consumo', secAuto: '🚗 Automóvil', secEnergia: '⚡ Energía', secMetales: '⛏️ Metales y minería', secBanca: '🏦 Banca y telecom', secCripto: '₿ Cripto',
     stocksEmptyState: 'Escribe Apple, Tesla, Inditex... lo que sea. Te digo yo si renta o no. 🪰',
     stocksDisclaimer: '⚠️ <strong style="color:var(--text2)">Datos de Financial Modeling Prep · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br><strong style="color:#f87171">👨‍👩‍👧 Aviso para menores de edad:</strong> <span style="color:var(--text2)">Si eres menor de 18 años o estás bajo tutela, curatela o patria potestad, no puedes tomar decisiones de inversión por tu cuenta. Esta herramienta es exclusivamente educativa. Cualquier decisión real de inversión debe contar con la autorización expresa de tus padres o tutor legal, conforme a la legislación española vigente.</span>',
+    ageGateTitle: 'Confirma tu edad',
+    ageGateText: 'laBolsabro es una herramienta de <strong style="color:#f5f5f5">educación financiera exclusiva para mayores de 18 años</strong>. Al continuar confirmas que tienes 18 años o más y aceptas nuestros <a href="/terminos.html" style="color:#22c55e">términos de uso</a>.',
+    ageGateBtn: 'Tengo 18 años o más — Entrar',
+    ageGateWarn: 'Si eres menor de 18 años, cierra esta página. Esta herramienta no está diseñada para ti.',
+    exitTitle: '¡Espera un segundo!', exitText: 'Antes de irte, déjanos tu email y te avisamos en cuanto saquemos novedades — alertas de precio, IA con acento y más.', exitBtn: 'Avísame',
+    exitInvalidEmail: 'Pon un email válido',
+    signupModalTitle: '¡Apuntado!', signupModalText: 'Te avisaremos de todas las novedades antes que nadie. Mientras tanto, ya puedes usar laBolsabro gratis.',
+    signupModalCta: 'Ver primeros pasos →', signupModalLater: 'Ahora no',
+    idleMsg1: 'Illo, ¿te has quedado dormido o qué? Mira cuánto podrías tener ahorrado en 10 años, que flipas.', idleCta1: 'Flipar ahora',
+    idleMsg2: 'Ey crack, ¿vas a analizar algo o solo estás mirando? Prueba con AAPL, TSLA... lo que te suene.', idleCta2: 'Venga, va',
+    idleMsg3: '¿Te crees que sabes de bolsa? Demuéstralo, valiente. 2 minutos y salimos de dudas.', idleCta3: 'Reto aceptado',
+    idleMsg4: '¿Sigues ahí? Trae a un colega y os lleváis 3 días de Premium gratis los dos.', idleCta4: 'Invitar',
   },
   en: {
     navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language', navPrimerosPasos: '🚀 First steps',
@@ -1665,6 +1677,18 @@ const I18N = {
     secTodos: 'All', secTech: '💻 Technology', secLujo: '👜 Luxury & consumer', secAuto: '🚗 Automotive', secEnergia: '⚡ Energy', secMetales: '⛏️ Metals & mining', secBanca: '🏦 Banking & telecom', secCripto: '₿ Crypto',
     stocksEmptyState: 'Type Apple, Tesla, Inditex... anything. I\'ll tell you if it\'s worth it. 🪰',
     stocksDisclaimer: '⚠️ <strong style="color:var(--text2)">Data from Financial Modeling Prep · Educational only, not financial advice.</strong> The traffic light is a guide — each sector has different ranges. Investing carries the risk of loss.<br><br><strong style="color:#f87171">👨‍👩‍👧 Notice for minors:</strong> <span style="color:var(--text2)">If you are under 18, or under guardianship or parental authority, you may not make investment decisions on your own. This tool is exclusively educational. Any real investment decision must have the express authorization of your parents or legal guardian, in accordance with applicable Spanish law.</span>',
+    ageGateTitle: 'Confirm your age',
+    ageGateText: 'laBolsabro is a <strong style="color:#f5f5f5">financial education tool exclusively for people 18 and over</strong>. By continuing you confirm you are 18 or older and accept our <a href="/terminos.html" style="color:#22c55e">terms of use</a>.',
+    ageGateBtn: "I'm 18 or older — Enter",
+    ageGateWarn: 'If you are under 18, please close this page. This tool is not designed for you.',
+    exitTitle: 'Wait a second!', exitText: "Before you go, leave us your email and we'll let you know as soon as we launch new features — price alerts, an AI with attitude, and more.", exitBtn: 'Notify me',
+    exitInvalidEmail: 'Enter a valid email',
+    signupModalTitle: 'You\'re on the list!', signupModalText: "We'll let you know about updates before anyone else. Meanwhile, you can already use laBolsabro for free.",
+    signupModalCta: 'See first steps →', signupModalLater: 'Not now',
+    idleMsg1: 'Hey, did you fall asleep or what? Look how much you could have saved in 10 years — it\'s wild.', idleCta1: 'Show me',
+    idleMsg2: 'Hey there, are you going to analyze something or just browsing? Try AAPL, TSLA... whatever sounds familiar.', idleCta2: 'Let\'s go',
+    idleMsg3: 'Think you know your way around investing? Prove it, brave one. 2 minutes and we\'ll find out.', idleCta3: 'Challenge accepted',
+    idleMsg4: 'Still there? Bring a friend and you both get 3 days of Premium free.', idleCta4: 'Invite',
   }
 };
 let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
@@ -3660,22 +3684,22 @@ function renderStock(el, d, ticker) {
   <div class="auth-box" style="text-align:center">
     <button class="auth-close" onclick="closeExitModal()">×</button>
     <div style="font-size:40px;margin-bottom:12px">🪰</div>
-    <h2>¡Espera un segundo!</h2>
-    <p>Antes de irte, déjanos tu email y te avisamos en cuanto saquemos novedades — alertas de precio, IA con acento y más.</p>
+    <h2 data-i18n="exitTitle">¡Espera un segundo!</h2>
+    <p data-i18n="exitText">Antes de irte, déjanos tu email y te avisamos en cuanto saquemos novedades — alertas de precio, IA con acento y más.</p>
     <div class="auth-field">
       <input type="email" id="exitEmail" placeholder="tu@email.com">
     </div>
-    <button class="auth-submit" onclick="submitExitEmail()">Avísame</button>
+    <button class="auth-submit" onclick="submitExitEmail()" data-i18n="exitBtn">Avísame</button>
   </div>
 </div>
 
 <div class="overlay" id="modal" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-emoji">🪰</div>
-    <h3>¡Apuntado!</h3>
-    <p>Te avisaremos de todas las novedades antes que nadie. Mientras tanto, ya puedes usar laBolsabro gratis.</p>
-    <a href="/primeros-pasos.html" class="modal-btn" style="display:block;text-decoration:none;margin-bottom:10px;">Ver primeros pasos →</a>
-    <button class="modal-btn" style="background:transparent;border:1px solid var(--border2);color:var(--text2)" onclick="document.getElementById('modal').classList.remove('open')">Ahora no</button>
+    <h3 data-i18n="signupModalTitle">¡Apuntado!</h3>
+    <p data-i18n="signupModalText">Te avisaremos de todas las novedades antes que nadie. Mientras tanto, ya puedes usar laBolsabro gratis.</p>
+    <a href="/primeros-pasos.html" class="modal-btn" style="display:block;text-decoration:none;margin-bottom:10px;" data-i18n="signupModalCta">Ver primeros pasos →</a>
+    <button class="modal-btn" style="background:transparent;border:1px solid var(--border2);color:var(--text2)" onclick="document.getElementById('modal').classList.remove('open')" data-i18n="signupModalLater">Ahora no</button>
   </div>
 </div>
 
@@ -3710,19 +3734,19 @@ function closeExitModal() { document.getElementById('exitOverlay').classList.rem
 function closeExitIfBg(e) { if (e.target.id === 'exitOverlay') closeExitModal(); }
 async function submitExitEmail() {
   const email = document.getElementById('exitEmail').value.trim();
-  if (!email || !email.includes('@')) { alert('Pon un email válido'); return; }
+  if (!email || !email.includes('@')) { alert(t('exitInvalidEmail')); return; }
   try { await fetch('/api/subscribe', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }) }); } catch(err) {}
   closeExitModal();
   openModal();
 }
 initExitIntent();
 
-const IDLE_MESSAGES = [
-  { text: 'Illo, ¿te has quedado dormido o qué? Mira cuánto podrías tener ahorrado en 10 años, que flipas.', cta: 'Flipar ahora', action: () => scrollToId('simMonthly') },
-  { text: 'Ey crack, ¿vas a analizar algo o solo estás mirando? Prueba con AAPL, TSLA... lo que te suene.', cta: 'Venga, va', action: () => scrollToId('stockInput') },
-  { text: '¿Te crees que sabes de bolsa? Demuéstralo, valiente. 2 minutos y salimos de dudas.', cta: 'Reto aceptado', action: () => scrollToId('quizCard') },
-  { text: '¿Sigues ahí? Trae a un colega y os lleváis 3 días de Premium gratis los dos.', cta: 'Invitar', action: () => { if (_currentUser) abrirInvitar(); else openAuthModal(); } },
-];
+function IDLE_MESSAGES() { return [
+  { text: t('idleMsg1'), cta: t('idleCta1'), action: () => scrollToId('simMonthly') },
+  { text: t('idleMsg2'), cta: t('idleCta2'), action: () => scrollToId('stockInput') },
+  { text: t('idleMsg3'), cta: t('idleCta3'), action: () => scrollToId('quizCard') },
+  { text: t('idleMsg4'), cta: t('idleCta4'), action: () => { if (_currentUser) abrirInvitar(); else openAuthModal(); } },
+]; }
 let _idleTimer = null;
 let _idleShown = false;
 function resetIdleTimer() {
@@ -3734,11 +3758,13 @@ function showIdleBubble() {
   if (_idleShown || document.getElementById('idleBubble').classList.contains('open')) return;
   _idleShown = true;
   sessionStorage.setItem('idle_shown', '1');
-  const msg = IDLE_MESSAGES[Math.floor(Math.random() * IDLE_MESSAGES.length)];
+  const msgs = IDLE_MESSAGES();
+  const idx = Math.floor(Math.random() * msgs.length);
+  const msg = msgs[idx];
   document.getElementById('idleBubbleText').textContent = msg.text;
   const cta = document.getElementById('idleBubbleCta');
   cta.textContent = msg.cta;
-  cta.dataset.action = IDLE_MESSAGES.indexOf(msg);
+  cta.dataset.action = idx;
   document.getElementById('idleBubble').classList.add('open');
 }
 function closeIdleBubble() {
@@ -3747,7 +3773,8 @@ function closeIdleBubble() {
 function idleBubbleClick() {
   const idx = parseInt(document.getElementById('idleBubbleCta').dataset.action);
   closeIdleBubble();
-  if (IDLE_MESSAGES[idx]) IDLE_MESSAGES[idx].action();
+  const msgs = IDLE_MESSAGES();
+  if (msgs[idx]) msgs[idx].action();
 }
 function scrollToId(id) {
   const el = document.getElementById(id) || document.getElementById('stockInput');
