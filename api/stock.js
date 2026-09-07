@@ -152,6 +152,86 @@ async function fetchStock(ticker) {
   };
 }
 
+// Financial Modeling Prep en su plan gratuito solo cubre empresas de EEUU
+// (rechaza con HTTP 402 cualquier símbolo "premium", incluidas las europeas
+// aunque coticen también como ADR en EEUU, como SAP o ASML). Alpha Vantage sí
+// cubre bolsas europeas en su plan gratuito, pero con solo 25 peticiones/día
+// en total — por eso se reserva únicamente para estos tickers europeos, no
+// para todo el tráfico. Lista explícita porque el sufijo por sí solo no basta
+// (SAP y ASML cotizan sin sufijo, vía su ADR en EEUU, pero FMP igual los bloquea).
+const EU_TICKERS = new Set(['ASML', 'SAP', 'MC.PA', 'OR.PA', 'NESN.SW', 'ITX.MC', 'VOW3.DE', 'REP.MC', 'IBE.MC', 'SAN.MC', 'TEF.MC', 'BBVA.MC']);
+const EU_SUFFIXES = ['.MC', '.PA', '.DE', '.AS', '.SW', '.MI', '.L', '.BR', '.LS'];
+function esTickerEuropeo(ticker) {
+  if (EU_TICKERS.has(ticker)) return true;
+  return EU_SUFFIXES.some(s => ticker.endsWith(s));
+}
+
+async function avFetch(params) {
+  if (!process.env.ALPHA_VANTAGE_KEY) throw new Error('Fuente de datos europea no configurada (falta ALPHA_VANTAGE_KEY)');
+  const qs = new URLSearchParams({ ...params, apikey: process.env.ALPHA_VANTAGE_KEY });
+  const r = await fetch(`https://www.alphavantage.co/query?${qs}`);
+  const json = await r.json().catch(() => null);
+  if (json && (json.Note || json.Information)) throw new Error(json.Note || json.Information);
+  if (json && json['Error Message']) throw new Error(json['Error Message']);
+  if (!r.ok) throw new Error('Alpha Vantage no disponible');
+  return json;
+}
+
+async function fetchStockEU(ticker) {
+  const [overview, quoteRes] = await Promise.all([
+    avFetch({ function: 'OVERVIEW', symbol: ticker }),
+    avFetch({ function: 'GLOBAL_QUOTE', symbol: ticker }),
+  ]);
+  const o = overview && overview.Symbol ? overview : null;
+  const q = quoteRes ? quoteRes['Global Quote'] : null;
+  const precio = n(q && q['05. price']);
+  if (!precio) return null;
+
+  return {
+    tipo: 'stock', ticker, nombre: (o && o.Name) || ticker,
+    precio,
+    cambio: q && q['10. change percent'] ? n(String(q['10. change percent']).replace('%', '')) : null,
+    mktCap: n(o && o.MarketCapitalization),
+    moneda: (o && o.Currency) || 'EUR',
+
+    pe:        n(o && o.PERatio),
+    fpe:       n(o && o.ForwardPE),
+    peg:       n(o && o.PEGRatio),
+    pb:        n(o && o.PriceToBookRatio),
+    evEbitda:  n(o && o.EVToEBITDA),
+    evRevenue: n(o && o.EVToRevenue),
+
+    eps:            n(o && o.EPS),
+    margen:         n(o && o.ProfitMargin),
+    roe:            n(o && o.ReturnOnEquityTTM),
+    roa:            n(o && o.ReturnOnAssetsTTM),
+    crecimientoEps: n(o && o.QuarterlyEarningsGrowthYOY),
+    crecimientoIng: n(o && o.QuarterlyRevenueGrowthYOY),
+    totalRevenue:   n(o && o.RevenueTTM),
+
+    payoutRatio:         null,
+    freeCashflow:        null,
+    operatingCashflow:   null,
+    capitalExpenditures: null,
+    divY:         n(o && o.DividendYield),
+    dividendRate: n(o && o.DividendPerShare),
+
+    debtToEquity: null,
+    currentRatio: null,
+    quickRatio:   null,
+    totalDebt:    null,
+    totalCash:    null,
+
+    beta:  n(o && o.Beta),
+    min52: n(o && o['52WeekLow']),
+    max52: n(o && o['52WeekHigh']),
+
+    sector:    (o && o.Sector) || '',
+    industry:  (o && o.Industry) || '',
+    employees: null,
+  };
+}
+
 async function fetchCrypto(raw, yTicker) {
   const arr = await fmpFetch(`/quote?symbol=${encodeURIComponent(raw)}USD`);
   const q = Array.isArray(arr) ? arr[0] : null;
@@ -170,10 +250,6 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
-  if (!process.env.FMP_API_KEY) {
-    return res.status(500).json({ error: 'Fuente de datos no configurada (falta FMP_API_KEY)' });
-  }
-
   if (!(await esPremium(req))) {
     const ip = getIp(req);
     if (!checkIpLimit(ip)) {
@@ -185,10 +261,15 @@ export default async function handler(req, res) {
   if (!raw) return res.status(400).json({ error: 'Ticker requerido' });
 
   const isCrypto = CRYPTO_TICKERS.includes(raw);
+  const isEU = !isCrypto && esTickerEuropeo(raw);
   const yTicker = isCrypto ? raw + '-USD' : raw;
 
+  if (!isEU && !isCrypto && !process.env.FMP_API_KEY) {
+    return res.status(500).json({ error: 'Fuente de datos no configurada (falta FMP_API_KEY)' });
+  }
+
   try {
-    const data = isCrypto ? await fetchCrypto(raw, yTicker) : await fetchStock(raw);
+    const data = isCrypto ? await fetchCrypto(raw, yTicker) : isEU ? await fetchStockEU(raw) : await fetchStock(raw);
     if (!data) return res.status(404).json({ error: `No encontramos '${raw}'` });
     return res.json(data);
   } catch (e) {
