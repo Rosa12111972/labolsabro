@@ -317,7 +317,7 @@ footer { border-top: 1px solid var(--border); }
 <div id="histOverlay" class="hist-overlay" onclick="closeHistIfBg(event)">
   <div class="hist-box">
     <button class="auth-close" onclick="cerrarHistorialPremium()">×</button>
-    <h2>📊 Mi historial de análisis</h2>
+    <h2 data-i18n="histTitle">📊 Mi historial de análisis</h2>
     <div id="histBody"></div>
   </div>
 </div>
@@ -325,17 +325,17 @@ footer { border-top: 1px solid var(--border); }
 <div id="alertsOverlay" class="hist-overlay" onclick="closeAlertsIfBg(event)">
   <div class="hist-box">
     <button class="auth-close" onclick="cerrarAlertas()">×</button>
-    <h2>🔔 Mis alertas de precio</h2>
+    <h2 data-i18n="alertsTitle">🔔 Mis alertas de precio</h2>
     <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-      <input id="alertTicker" placeholder="Ticker (ej. AAPL)" style="flex:1;min-width:100px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+      <input id="alertTicker" placeholder="Ticker (ej. AAPL)" data-i18n-placeholder="alertTickerPh" style="flex:1;min-width:100px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
       <select id="alertDirection" style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
-        <option value="above">Sube por encima de</option>
-        <option value="below">Baja por debajo de</option>
+        <option value="above" data-i18n="optAlertAbove">Sube por encima de</option>
+        <option value="below" data-i18n="optAlertBelow">Baja por debajo de</option>
       </select>
-      <input id="alertPrice" type="number" step="0.01" placeholder="Precio €" style="width:100px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
-      <button onclick="crearAlerta()" style="background:var(--green);color:#000;font-weight:700;border:none;border-radius:10px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;">Crear</button>
+      <input id="alertPrice" type="number" step="0.01" placeholder="Precio €" data-i18n-placeholder="alertPricePh" style="width:100px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+      <button onclick="crearAlerta()" data-i18n="btnCrear" style="background:var(--green);color:#000;font-weight:700;border:none;border-radius:10px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;">Crear</button>
     </div>
-    <button onclick="calcularPrecioSugerido()" style="background:none;border:1px solid var(--border2);color:var(--yellow);padding:7px 14px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;margin-bottom:12px;">🧮 Calcular precio sugerido para este ticker</button>
+    <button onclick="calcularPrecioSugerido()" data-i18n="alertSugerirBtn" style="background:none;border:1px solid var(--border2);color:var(--yellow);padding:7px 14px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;margin-bottom:12px;">🧮 Calcular precio sugerido para este ticker</button>
     <div id="precioSugeridoBox" style="display:none;background:var(--card2);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--text2);margin-bottom:16px;line-height:1.6;"></div>
     <div id="alertsBody"></div>
   </div>
@@ -344,16 +344,16 @@ footer { border-top: 1px solid var(--border); }
 <div id="novOverlay" class="hist-overlay" onclick="closeNovIfBg(event)">
   <div class="hist-box">
     <button class="auth-close" onclick="cerrarNovedades()">×</button>
-    <h2>🎁 Novedades — acceso anticipado</h2>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Como premium, ves lo que estamos construyendo antes de que salga para todos.</p>
+    <h2 data-i18n="novTitle">🎁 Novedades — acceso anticipado</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px" data-i18n="novSub">Como premium, ves lo que estamos construyendo antes de que salga para todos.</p>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div style="padding:14px;background:var(--card2);border-radius:12px;border:1px solid var(--border2)">
-        <div style="font-weight:700;font-size:14px;margin-bottom:4px">🏦 Conexión con tu banco</div>
-        <div style="font-size:12px;color:var(--text2)">Ver tus ahorros reales junto al análisis, sin salir de la app. En diseño.</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px" data-i18n="novBanco">🏦 Conexión con tu banco</div>
+        <div style="font-size:12px;color:var(--text2)" data-i18n="novBancoDesc">Ver tus ahorros reales junto al análisis, sin salir de la app. En diseño.</div>
       </div>
       <div style="padding:14px;background:var(--card2);border-radius:12px;border:1px solid var(--border2)">
-        <div style="font-weight:700;font-size:14px;margin-bottom:4px">📲 Alertas por WhatsApp</div>
-        <div style="font-size:12px;color:var(--text2)">Recibe el aviso de precio directo al móvil, no solo por email. Próximamente.</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px" data-i18n="novWhatsapp">📲 Alertas por WhatsApp</div>
+        <div style="font-size:12px;color:var(--text2)" data-i18n="novWhatsappDesc">Recibe el aviso de precio directo al móvil, no solo por email. Próximamente.</div>
       </div>
     </div>
   </div>
@@ -857,14 +857,14 @@ async function fetchStock(ticker) {
 async function doCompare() {
   const t1 = document.getElementById('stockInput').value.trim().toUpperCase();
   const t2 = document.getElementById('stockInput2').value.trim().toUpperCase();
-  if (!t1 || !t2) { alert('Introduce las dos empresas para comparar'); return; }
+  if (!t1 || !t2) { alert(t('cmpIntroduceDos')); return; }
   const el = document.getElementById('stockResult');
-  el.innerHTML = '<p style="font-size:14px;color:var(--text3);">🪰 Venga, a ver quién la tiene mejor entre ' + t1 + ' y ' + t2 + '... (en plan financiero, ¿eh?)</p>';
+  el.innerHTML = `<p style="font-size:14px;color:var(--text3);">${tf('cmpCargandoTpl', { t1, t2 })}</p>`;
   try {
     const [d1, d2] = await Promise.all([fetchStock(t1), fetchStock(t2)]);
     renderCompare(el, d1, d1.ticker || t1, d2, d2.ticker || t2);
   } catch(e) {
-    el.innerHTML = `<p style="color:var(--red);padding:16px">Error al obtener datos. Comprueba los tickers.</p>`;
+    el.innerHTML = `<p style="color:var(--red);padding:16px">${t('cmpErrorDatos')}</p>`;
   }
 }
 
@@ -924,46 +924,46 @@ function renderCompare(el, d1, t1, d2, t2) {
         <div style="font-size:15px;font-weight:700;color:var(--text)">${d1.nombre||t1}</div>
         <div style="font-size:11px;color:var(--text3)">${t1}</div>
         <div style="font-size:22px;font-weight:700;margin-top:6px;color:${scoreColor(s1)}">${s1!==null?s1.toFixed(1)+'/10':'—'}</div>
-        <div style="font-size:11px;color:var(--text3)">Puntuación</div>
-        <div style="margin-top:8px;font-size:13px">${sem1.ico} ${sem1.cls==='sem-green'?'Zona de valor':sem1.cls==='sem-yellow'?'Precio justo':'Zona cara'}</div>
+        <div style="font-size:11px;color:var(--text3)">${t('cmpPuntuacion')}</div>
+        <div style="margin-top:8px;font-size:13px">${sem1.ico} ${sem1.cls==='sem-green'?t('cmpZonaValor'):sem1.cls==='sem-yellow'?t('cmpPrecioJusto'):t('cmpZonaCara')}</div>
       </div>
       <div style="padding:14px;background:var(--card2);text-align:center">
         <div style="font-size:15px;font-weight:700;color:var(--text)">${d2.nombre||t2}</div>
         <div style="font-size:11px;color:var(--text3)">${t2}</div>
         <div style="font-size:22px;font-weight:700;margin-top:6px;color:${scoreColor(s2)}">${s2!==null?s2.toFixed(1)+'/10':'—'}</div>
-        <div style="font-size:11px;color:var(--text3)">Puntuación</div>
-        <div style="margin-top:8px;font-size:13px">${sem2.ico} ${sem2.cls==='sem-green'?'Zona de valor':sem2.cls==='sem-yellow'?'Precio justo':'Zona cara'}</div>
+        <div style="font-size:11px;color:var(--text3)">${t('cmpPuntuacion')}</div>
+        <div style="margin-top:8px;font-size:13px">${sem2.ico} ${sem2.cls==='sem-green'?t('cmpZonaValor'):sem2.cls==='sem-yellow'?t('cmpPrecioJusto'):t('cmpZonaCara')}</div>
       </div>
-      ${row('Precio',
+      ${row(t('pdfLblPrecio'),
         d1.precio.toFixed(2)+' '+(d1.moneda||'USD'), d2.precio.toFixed(2)+' '+(d2.moneda||'USD'))}
-      ${row('PER actual',
+      ${row(termLabel('PER actual'),
         pe1?pe1.toFixed(1)+'x':'—', pe2?pe2.toFixed(1)+'x':'—', pec[0], pec[1])}
-      ${row('PEG ratio',
+      ${row(termLabel('PEG ratio'),
         peg1?peg1.toFixed(2)+'x':'—', peg2?peg2.toFixed(2)+'x':'—', pegc[0], pegc[1])}
-      ${row('Margen neto',
+      ${row(termLabel('Margen neto'),
         m1?(m1*100).toFixed(1)+'%':'—', m2?(m2*100).toFixed(1)+'%':'—', mc[0], mc[1])}
-      ${row('ROE',
+      ${row(termLabel('ROE'),
         r1?(r1*100).toFixed(1)+'%':'—', r2?(r2*100).toFixed(1)+'%':'—', rc[0], rc[1])}
-      ${row('Crec. BPA',
+      ${row(t('pdfLblCrecBPACorto'),
         ce1?(ce1*100).toFixed(1)+'%':'—', ce2?(ce2*100).toFixed(1)+'%':'—', cec[0], cec[1])}
-      ${row('Crec. Ingresos',
+      ${row(t('cmpCrecIngresos'),
         ci1?(ci1*100).toFixed(1)+'%':'—', ci2?(ci2*100).toFixed(1)+'%':'—', cic[0], cic[1])}
-      ${row('Free Cash Flow',
+      ${row(termLabel('Free Cash Flow'),
         f1?fmtMiles(Math.abs(f1)):'—', f2?fmtMiles(Math.abs(f2)):'—', fc[0], fc[1])}
-      ${row('Dividendo',
+      ${row(termLabel('Dividendo'),
         dy1?(dy1*100).toFixed(2)+'%':'—', dy2?(dy2*100).toFixed(2)+'%':'—', dyc[0], dyc[1])}
-      ${row('Beta',
+      ${row(termLabel('Beta'),
         b1?b1.toFixed(2):'—', b2?b2.toFixed(2):'—', bc[0], bc[1])}
-      ${row('Cap. mercado',
+      ${row(termLabel('Cap. mercado'),
         fmtMiles(d1.mktCap), fmtMiles(d2.mktCap))}
     </div>
     ${_userPlan !== 'free' ? renderSectorCompare(d1, d2) : `<div style="border:1px dashed var(--border2);border-radius:14px;padding:16px;text-align:center;margin-bottom:16px">
-      <span style="font-size:13px;color:var(--text2)">🔒 El comparador avanzado por sector es de <strong style="color:var(--yellow)">Premium</strong></span>
-      <a href="/premium.html" style="display:block;margin-top:8px;font-size:12px;color:var(--green);font-weight:700;text-decoration:none;">Ver planes →</a>
+      <span style="font-size:13px;color:var(--text2)">${t('cmpUpsellHtml')}</span>
+      <a href="/premium.html" style="display:block;margin-top:8px;font-size:12px;color:var(--green);font-weight:700;text-decoration:none;">${t('carteraVerPlanes')}</a>
     </div>`}
     <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;flex-wrap:wrap;gap:8px;">
-      <span style="font-size:11px;color:var(--text3)">Verde = mejor valor · Rojo = peor valor · Datos de mercado con licencia · Solo educativo.</span>
-      <button onclick="descargarPDF()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--yellow);border:1px solid rgba(250,204,21,0.3);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">📄 PDF</button>
+      <span style="font-size:11px;color:var(--text3)">${t('cmpLeyenda')}</span>
+      <button onclick="descargarPDF()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--yellow);border:1px solid rgba(250,204,21,0.3);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">${t('btnPdf')}</button>
     </div>
   </div>`;
 }
@@ -974,21 +974,21 @@ function renderSectorCompare(d1, d2) {
   const pe1 = d1.pe ?? null, pe2 = d2.pe ?? null;
   const posTxt = (pe, ref) => {
     if (pe === null) return '—';
-    if (pe < ref.bajo) return `<span style="color:var(--green)">Por debajo de la media (barata)</span>`;
-    if (pe <= ref.alto) return `<span style="color:var(--yellow)">En la media del sector</span>`;
-    return `<span style="color:var(--red)">Por encima de la media (cara)</span>`;
+    if (pe < ref.bajo) return `<span style="color:var(--green)">${t('pdfPerBarata')}</span>`;
+    if (pe <= ref.alto) return `<span style="color:var(--yellow)">${t('pdfPerMedia')}</span>`;
+    return `<span style="color:var(--red)">${t('pdfPerCara')}</span>`;
   };
   return `<div style="border:1px solid var(--border2);border-radius:14px;padding:16px;margin-bottom:16px;background:var(--card2)">
-    <div style="font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:12px;display:flex;align-items:center;gap:6px">⭐ Comparador avanzado por sector</div>
+    <div style="font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:12px;display:flex;align-items:center;gap:6px">${t('cmpSectorTitulo')}</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
       <div>
-        <div style="font-weight:700;margin-bottom:4px">${d1.nombre || ''} · ${sec1.nombre}</div>
-        <div style="color:var(--text2);margin-bottom:2px">Media sector: ${sec1.bajo}x–${sec1.alto}x</div>
+        <div style="font-weight:700;margin-bottom:4px">${d1.nombre || ''} · ${sectorNombre(d1.sector||'default')}</div>
+        <div style="color:var(--text2);margin-bottom:2px">${tf('cmpMediaSector', { bajo: sec1.bajo, alto: sec1.alto })}</div>
         <div>${posTxt(pe1, sec1)}</div>
       </div>
       <div>
-        <div style="font-weight:700;margin-bottom:4px">${d2.nombre || ''} · ${sec2.nombre}</div>
-        <div style="color:var(--text2);margin-bottom:2px">Media sector: ${sec2.bajo}x–${sec2.alto}x</div>
+        <div style="font-weight:700;margin-bottom:4px">${d2.nombre || ''} · ${sectorNombre(d2.sector||'default')}</div>
+        <div style="color:var(--text2);margin-bottom:2px">${tf('cmpMediaSector', { bajo: sec2.bajo, alto: sec2.alto })}</div>
         <div>${posTxt(pe2, sec2)}</div>
       </div>
     </div>
@@ -1244,11 +1244,245 @@ const GLOSARIO_CATEGORIAS = {
   'Oro y tipos reales': 'Metales preciosos', 'Fiscalidad del oro físico': 'Metales preciosos',
 };
 
+const TERM_NAMES_EN = {
+  'PER actual': 'Current P/E',
+  'PEG ratio': 'PEG ratio',
+  'PER estimado': 'Forward P/E',
+  'Crecimiento BPA': 'EPS growth',
+  'Crecimiento ingresos': 'Revenue growth',
+  'ROE': 'ROE',
+  'Cap. mercado': 'Market cap',
+  'Dividendo': 'Dividend',
+  'EPS': 'EPS',
+  'Margen neto': 'Net margin',
+  'Reinversión del negocio': 'Business reinvestment',
+  'Flujo caja operativo': 'Operating cash flow',
+  'Free Cash Flow': 'Free Cash Flow',
+  'Beta': 'Beta',
+  'Rango 52 semanas': '52-week range',
+  'Empleados': 'Employees',
+  'Interés compuesto': 'Compound interest',
+  'EBITDA': 'EBITDA',
+  'ETF': 'ETF',
+  'Fondo indexado': 'Index fund',
+  'Deuda/Patrimonio': 'Debt/Equity',
+  'Payout ratio': 'Payout ratio',
+  'Volatilidad': 'Volatility',
+  'Liquidez': 'Liquidity',
+  'Fondo de emergencia': 'Emergency fund',
+  'Regla 50/30/20': '50/30/20 rule',
+  'Inflación': 'Inflation',
+  'Acción': 'Stock',
+  'Diversificación': 'Diversification',
+  'Largo plazo': 'Long term',
+  'DCA': 'DCA (dollar-cost averaging)',
+  'Riesgo de concentración': 'Concentration risk',
+  'ROIC': 'ROIC',
+  'WACC': 'WACC',
+  'DCF': 'DCF',
+  'EV/EBITDA': 'EV/EBITDA',
+  'Quick ratio': 'Quick ratio',
+  'Apalancamiento operativo': 'Operating leverage',
+  'Short interest': 'Short interest',
+  'Duración de un bono': 'Bond duration',
+  'Spread de crédito': 'Credit spread',
+  'FCF yield': 'FCF yield',
+  'Recompra de acciones': 'Share buybacks',
+  'Valor contable': 'Book value',
+  'Insider buying': 'Insider buying',
+  'Sector cíclico': 'Cyclical sector',
+  'Moat': 'Moat',
+  'Análisis técnico': 'Technical analysis',
+  'Dilución': 'Dilution',
+  'Free float': 'Free float',
+  'Guidance': 'Guidance',
+  'Correlación entre activos': 'Correlation between assets',
+  'Backtesting': 'Backtesting',
+  'Rentabilidad por dividendo': 'Dividend yield',
+  'TAE': 'APR',
+  'Coste de oportunidad': 'Opportunity cost',
+  'Deuda buena y mala': 'Good debt vs. bad debt',
+  'Depósito a plazo fijo': 'Fixed-term deposit',
+  'Gastos fijos y variables': 'Fixed and variable expenses',
+  'Págate a ti mismo primero': 'Pay yourself first',
+  'Historial crediticio': 'Credit history',
+  'Amortización anticipada': 'Early loan repayment',
+  'Regla del 72': 'Rule of 72',
+  'Rebalanceo de cartera': 'Portfolio rebalancing',
+  'Asset allocation': 'Asset allocation',
+  'TER': 'TER',
+  'Value investing': 'Value investing',
+  'REIT': 'REIT',
+  'Drawdown': 'Drawdown',
+  'Ratio de Sharpe': 'Sharpe ratio',
+  'Bono del Estado': 'Government bond',
+  'Cupón': 'Coupon',
+  'Valor nominal': 'Face value',
+  'Vencimiento': 'Maturity',
+  'Riesgo país': 'Country risk',
+  'Precio de un bono y tipos de interés': 'Bond price and interest rates',
+  'Letra del Tesoro': 'Treasury bill',
+  'Rating crediticio': 'Credit rating',
+  'Renta fija': 'Fixed income',
+  'TIR': 'Yield to maturity',
+  'Prima de riesgo': 'Risk premium',
+  'Curva de tipos': 'Yield curve',
+  'Mercado primario y secundario': 'Primary and secondary market',
+  'Bono indexado a la inflación': 'Inflation-linked bond',
+  'Fiscalidad de los bonos': 'Bond taxation',
+  'Riesgo de reinversión': 'Reinvestment risk',
+  'Base del ahorro': 'Savings tax base',
+  'Plusvalía': 'Capital gain',
+  'Minusvalía': 'Capital loss',
+  'Tramos del ahorro': 'Savings tax brackets',
+  'Retención': 'Withholding tax',
+  'Traspaso entre fondos': 'Fund transfer',
+  'Fiscalidad de los ETF': 'ETF taxation',
+  'Declaración de la renta e inversión': 'Tax return and investing',
+  'FIFO': 'FIFO',
+  'Compensación de pérdidas y ganancias': 'Offsetting gains and losses',
+  'Regla de los dos meses': 'Two-month rule',
+  'Doble imposición internacional': 'International double taxation',
+  'Residencia fiscal': 'Tax residency',
+  'Impuesto sobre el Patrimonio': 'Wealth tax',
+  'Plan de pensiones': 'Pension plan',
+  'Aportación a plan de pensiones': 'Pension plan contribution',
+  'Rescate del plan de pensiones': 'Pension plan withdrawal',
+  'Pensión pública': 'Public pension',
+  'Deducción por aportaciones': 'Contribution tax deduction',
+  'Diferimiento fiscal': 'Tax deferral',
+  'Formas de cobro del plan de pensiones': 'Pension payout options',
+  'Plan de pensiones de ciclo de vida': 'Lifecycle pension plan',
+  'Límite de aportación': 'Contribution limit',
+  'Tributación del rescate': 'Withdrawal taxation',
+  'Plan de pensiones de empleo': 'Employer pension plan',
+  'Sistema de reparto': 'Pay-as-you-go system',
+  'Tasa de sustitución': 'Replacement rate',
+  'PIAS': 'PIAS (systematic savings plan)',
+  'Regla del 4%': 'The 4% rule',
+  'Círculo de competencia': 'Circle of competence',
+  'Berkshire Hathaway': 'Berkshire Hathaway',
+  'Investigar antes de invertir': 'Research before investing',
+  'Margen de seguridad': 'Margin of safety',
+  'Inversión inmobiliaria': 'Real estate investing',
+  'Rentabilidad por alquiler': 'Rental yield',
+  'Gastos de compra de vivienda': 'Home purchase costs',
+  'Apalancamiento inmobiliario': 'Real estate leverage',
+  'Ubicación inmobiliaria': 'Location (real estate)',
+  'Riesgo de impago del inquilino': 'Tenant default risk',
+  'Rentabilidad neta vs bruta': 'Net vs. gross yield',
+  'Fiscalidad del alquiler': 'Rental income taxation',
+  'Crowdfunding inmobiliario': 'Real estate crowdfunding',
+  'Ciclo inmobiliario': 'Real estate cycle',
+  'Tasación': 'Appraisal',
+  'Euríbor': 'Euribor',
+  'Riesgo de las criptomonedas': 'Cryptocurrency risk',
+  'Volatilidad de las criptomonedas': 'Cryptocurrency volatility',
+  'Custodia de criptomonedas': 'Cryptocurrency custody',
+  'Estafas con criptomonedas': 'Cryptocurrency scams',
+  'Riesgo regulatorio de las criptomonedas': 'Cryptocurrency regulatory risk',
+  'Riesgo técnico de las criptomonedas': 'Cryptocurrency technical risk',
+  'Stablecoins': 'Stablecoins',
+  'Fiscalidad de las criptomonedas': 'Cryptocurrency taxation',
+  'Oro como reserva de valor': 'Gold as a store of value',
+  'Formas de invertir en oro': 'Ways to invest in gold',
+  'Prima sobre el spot': 'Premium over spot',
+  'Ratio oro/plata': 'Gold/silver ratio',
+  'ETF de oro físico vs sintético': 'Physical vs. synthetic gold ETF',
+  'Mineras de oro': 'Gold miners',
+  'Oro y tipos reales': 'Gold and real interest rates',
+  'Fiscalidad del oro físico': 'Physical gold taxation',
+};
+const METRIC_INFO_EN = {
+  'PER actual': '💡 Think of the company as a rental flat. The P/E tells you how many years it would take to earn back what you paid, from its profits. P/E 20 = 20 years. The lower, the cheaper. Simple, right?',
+  'PEG ratio': '💡 It\'s the P/E but smarter. It accounts for the fact that if a company grows fast, it might deserve a higher price. Below 1 = bargain. Between 1 and 2 = fair price. Above 2 = ouch, you\'re overpaying.',
+  'PER estimado': '💡 Like the regular P/E but looking ahead. It uses next year\'s expected profits instead of last year\'s. If it\'s low, the market expects the company to grow fast.',
+  'Crecimiento BPA': '💡 EPS = how much the company earns per share. If it rises every year, the company is earning more and more. Like your salary going up every year — a good sign.',
+  'Crecimiento ingresos': '💡 How much more it\'s selling compared to last year. Selling more = growing well. Selling less = something\'s off, watch out.',
+  'ROE': '💡 If you put in €100 and ROE is 20%, the business generates €20 a year on it. Above 15% is a good sign. Above 30% is excellent.',
+  'Cap. mercado': '💡 What the whole company is worth on the stock market. Giants like Apple are worth trillions. Small ones, millions. Bigger usually means more stable and less wild price swings.',
+  'Dividendo': '💡 Cash the company pays you every year just for holding its shares. If the dividend is 3%, for every €1,000 you get €30 a year without selling anything. Like collecting rent without being a landlord 😌',
+  'EPS': '💡 The company\'s total profit divided by all its shares. If it\'s positive, the company makes money. If it\'s negative, it\'s losing money. As simple as that.',
+  'Margen neto': '💡 Out of every €100 it sells, how much is left after paying everything. A 20% margin = it keeps €20 out of every €100. The higher, the better it manages the business.',
+  'Reinversión del negocio': '💡 The money it earns — does it reinvest it to grow or hand it back to shareholders? High = betting on the future. Low = prefers paying dividends. Neither is bad, but it says a lot about the company.',
+  'Flujo caja operativo': '💡 The real cash coming in from day-to-day operations. It\'s more reliable than profit because it\'s harder to manipulate. If it\'s high and positive, the business genuinely works — it\'s not smoke and mirrors.',
+  'Free Cash Flow': '💡 The money truly left over after paying for everything necessary. If positive, the company has cash to grow, pay dividends or cut debt. If negative, it\'s a warning sign worth checking.',
+  'Beta': '💡 Measures how jumpy the stock is. Beta 1 = moves like the market. Beta 2 = swings twice as much. Beta 0.5 = calmer. If you have a weak heart, look for low beta 😅',
+  'Rango 52 semanas': '💡 The lowest and highest price over the last year. If it\'s now near the low, it might be an opportunity. If it\'s near the high, it\'s expensive-expensive. Useful for not buying at the worst possible moment.',
+  'Empleados': '💡 How many people work there. A company with 100,000 employees is a giant. With 500, it\'s small. Bigger doesn\'t mean better, but it gives context on the real size of the business.',
+};
+
+const CATEGORY_NAMES_EN = {
+  'Valoración': 'Valuation', 'Crecimiento': 'Growth', 'Rentabilidad': 'Profitability', 'Dividendos': 'Dividends',
+  'Salud financiera': 'Financial health', 'Riesgo': 'Risk', 'General': 'General', 'Finanzas personales': 'Personal finance',
+  'Avanzado': 'Advanced', 'Renta fija': 'Fixed income', 'Fiscalidad': 'Taxes', 'Jubilación': 'Retirement',
+  'Inmuebles': 'Real estate', 'Criptomonedas': 'Cryptocurrency', 'Metales preciosos': 'Precious metals',
+};
+
+const SECTOR_NOMBRE_EN = {
+  'Technology': 'Technology', 'Consumer Cyclical': 'Cyclical consumer', 'Consumer Defensive': 'Defensive consumer',
+  'Financial Services': 'Financial', 'Energy': 'Energy', 'Healthcare': 'Healthcare', 'Industrials': 'Industrial',
+  'Basic Materials': 'Materials', 'Communication Services': 'Communications', 'Utilities': 'Utilities',
+  'Real Estate': 'Real estate', 'default': 'General',
+};
+
+const SECTOR_EXPLICACION_EN = {
+  'Technology': 'Sells technology: software, hardware or digital services. Tends to grow fast but is also more volatile.',
+  'Consumer Cyclical': 'Sells things you buy when you have money to spare: cars, clothes, leisure. Does well when the economy is doing well.',
+  'Consumer Defensive': 'Sells things you buy regardless of a crisis: food, hygiene, cleaning products. Tends to be more stable.',
+  'Financial Services': 'A bank, insurer or asset manager. Makes money from interest, fees or premiums.',
+  'Energy': 'Extracts, produces or distributes energy (oil, gas, renewables). Closely tied to commodity prices.',
+  'Healthcare': 'Health, pharma or biotech. Tends to be more resilient in crises because people keep needing medicine.',
+  'Industrials': 'Makes machinery, does construction or logistics. Tied to the broader economic cycle.',
+  'Basic Materials': 'Produces raw materials: metals, chemicals, timber. Heavily dependent on global material prices.',
+  'Communication Services': 'Telecoms, media or social networks. Connects people or sells advertising and content.',
+  'Utilities': 'Supplies electricity, water or gas. Very stable, regulated business, usually with high dividends.',
+  'Real Estate': 'Real estate: buys, rents or manages properties. Sensitive to interest rates.',
+  'default': 'We don\'t have a specific description for this sector, but you can check its numbers below.',
+};
+
+const CLIENTES_POR_SECTOR_EN = {
+  'Technology': 'Mainly businesses and consumers who use its software, hardware or digital services.',
+  'Consumer Cyclical': 'Individual consumers spending on non-essential products or services (fashion, leisure, automotive...).',
+  'Consumer Defensive': 'Individual consumers buying everyday-use products, with fairly stable demand.',
+  'Financial Services': 'Individuals and businesses using its financial products: accounts, loans, insurance or investment management.',
+  'Energy': 'Other companies, industries and end consumers that depend on the energy it produces or distributes.',
+  'Healthcare': 'Patients, hospitals, insurers and health systems that use its treatments, services or medical technology.',
+  'Industrials': 'Mainly other companies: factories, builders or firms that use its machinery, services or logistics.',
+  'Basic Materials': 'Other industries that use its raw materials as inputs to make their own products.',
+  'Communication Services': 'Consumers and advertisers who use its networks, content or communication services.',
+  'Utilities': 'Households and businesses in its coverage area, dependent on the supply it provides (electricity, water, gas).',
+  'Real Estate': 'Tenants, buyers or companies that rent or buy the properties it manages.',
+  'default': 'We don\'t have specific data on its customers — worth checking directly in its annual reports.',
+};
+
+function termLabel(key) {
+  return (_idioma === 'en' && TERM_NAMES_EN[key]) ? TERM_NAMES_EN[key] : key;
+}
+function catLabel(cat) {
+  if (!cat) cat = 'General';
+  return (_idioma === 'en' && CATEGORY_NAMES_EN[cat]) ? CATEGORY_NAMES_EN[cat] : cat;
+}
+function termExplanation(key) {
+  if (_idioma === 'en' && METRIC_INFO_EN[key]) return METRIC_INFO_EN[key];
+  return METRIC_INFO[key];
+}
+function sectorNombre(sector) {
+  if (_idioma === 'en') return SECTOR_NOMBRE_EN[sector] || SECTOR_NOMBRE_EN['default'];
+  return (PER_SECTORES[sector] || PER_SECTORES['default']).nombre;
+}
+function sectorExplicacion(sector) {
+  if (_idioma === 'en') return SECTOR_EXPLICACION_EN[sector] || SECTOR_EXPLICACION_EN['default'];
+  return SECTOR_EXPLICACION[sector] || SECTOR_EXPLICACION['default'];
+}
+function clientesPorSector(sector) {
+  if (_idioma === 'en') return CLIENTES_POR_SECTOR_EN[sector] || CLIENTES_POR_SECTOR_EN['default'];
+  return CLIENTES_POR_SECTOR[sector] || CLIENTES_POR_SECTOR['default'];
+}
+
 let _glosarioAbierto = null;
 function initGlosario() {
-  const cats = [...new Set(Object.values(GLOSARIO_CATEGORIAS))];
-  const sel = document.getElementById('glosarioCat');
-  if (sel) cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
+  renderGlosarioCats();
 
   const termino = new URLSearchParams(location.search).get('termino');
   if (termino) {
@@ -1265,25 +1499,38 @@ function initGlosario() {
     if (sec) setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
   }
 }
+function renderGlosarioCats() {
+  const sel = document.getElementById('glosarioCat');
+  if (!sel) return;
+  const cats = [...new Set(Object.values(GLOSARIO_CATEGORIAS))];
+  const prevVal = sel.value;
+  sel.innerHTML = '';
+  const allOpt = document.createElement('option'); allOpt.value = ''; allOpt.textContent = t('glosarioAllCats');
+  sel.appendChild(allOpt);
+  cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = catLabel(c); sel.appendChild(o); });
+  sel.value = prevVal;
+}
 function renderGlosario() {
   const grid = document.getElementById('glosarioGrid');
   if (!grid) return;
   const q = (document.getElementById('glosarioSearch').value || '').toLowerCase().trim();
   const cat = document.getElementById('glosarioCat').value;
   const terms = Object.keys(METRIC_INFO).filter(t => {
-    const matchesQ = !q || t.toLowerCase().includes(q) || METRIC_INFO[t].toLowerCase().includes(q);
+    const label = termLabel(t).toLowerCase();
+    const explanation = termExplanation(t).toLowerCase();
+    const matchesQ = !q || t.toLowerCase().includes(q) || label.includes(q) || explanation.includes(q);
     const matchesCat = !cat || GLOSARIO_CATEGORIAS[t] === cat;
     return matchesQ && matchesCat;
-  }).sort();
-  if (!terms.length) { grid.innerHTML = '<p style="color:var(--text3);font-size:14px;grid-column:1/-1;padding:20px 0;text-align:center">No hay ningún término que encaje con eso.</p>'; return; }
-  grid.innerHTML = terms.map(t => {
-    const abierto = _glosarioAbierto === t;
-    return `<div style="background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:16px 18px;cursor:pointer;" onclick="toggleGlosarioTerm('${t.replace(/'/g,"\\'")}')">
+  }).sort((a, b) => termLabel(a).localeCompare(termLabel(b)));
+  if (!terms.length) { grid.innerHTML = `<p style="color:var(--text3);font-size:14px;grid-column:1/-1;padding:20px 0;text-align:center">${t('glosarioNoResults')}</p>`; return; }
+  grid.innerHTML = terms.map(term => {
+    const abierto = _glosarioAbierto === term;
+    return `<div style="background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:16px 18px;cursor:pointer;" onclick="toggleGlosarioTerm('${term.replace(/'/g,"\\'")}')">
       <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div style="font-weight:700;font-size:14px;color:var(--green)">${t}</div>
-        <span style="font-size:11px;color:var(--text3);background:var(--card2);padding:2px 8px;border-radius:100px">${GLOSARIO_CATEGORIAS[t] || 'General'}</span>
+        <div style="font-weight:700;font-size:14px;color:var(--green)">${termLabel(term)}</div>
+        <span style="font-size:11px;color:var(--text3);background:var(--card2);padding:2px 8px;border-radius:100px">${catLabel(GLOSARIO_CATEGORIAS[term])}</span>
       </div>
-      ${abierto ? `<div style="margin-top:10px;font-size:13px;color:var(--text2);line-height:1.6">${METRIC_INFO[t]}</div>` : ''}
+      ${abierto ? `<div style="margin-top:10px;font-size:13px;color:var(--text2);line-height:1.6">${termExplanation(term)}</div>` : ''}
     </div>`;
   }).join('');
 }
@@ -1318,16 +1565,17 @@ const PER_SECTORES = {
 };
 
 function semaforo(pe, sector, peg) {
-  if (pe === null || pe <= 0) return { cls: 'sem-gray', ico: '❓', titulo: 'Sin datos de PER', desc: 'La empresa no tiene PER disponible — puede estar en pérdidas o ser de reciente cotización.' };
+  if (pe === null || pe <= 0) return { cls: 'sem-gray', ico: '❓', titulo: t('semNoDataTitle'), desc: t('semNoDataDesc') };
   const ref = PER_SECTORES[sector] || PER_SECTORES['default'];
+  const nombreSector = sectorNombre(sector);
   if (peg && peg > 0) {
-    if (peg < 1)   return { cls: 'sem-green',  ico: '🟢', titulo: `¡Esto está muy barato! (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x pero crece un montón — con PEG ${peg.toFixed(2)}x el mercado todavía no lo ha notado. Igual renta echarle un ojo 👀` };
-    if (peg <= 2)  return { cls: 'sem-yellow', ico: '🟡', titulo: `Bien pero sin volverse loco (PEG ${peg.toFixed(2)}x)`, desc: `PER de ${pe.toFixed(1)}x. El PEG de ${peg.toFixed(2)}x dice que el precio está más o menos acorde con lo que crece. Ni ganga ni robo.` };
-    return           { cls: 'sem-red',    ico: '🔴', titulo: `Uff, esto está carete (PEG ${peg.toFixed(2)}x)`,   desc: `PER de ${pe.toFixed(1)}x y PEG de ${peg.toFixed(2)}x. Macho, pagas mucho incluso pa lo que crece. No sé yo si renta...` };
+    if (peg < 1)   return { cls: 'sem-green',  ico: '🟢', titulo: tf('semGreenPegTitle', { peg: peg.toFixed(2) }),   desc: tf('semGreenPegDesc', { pe: pe.toFixed(1), peg: peg.toFixed(2) }) };
+    if (peg <= 2)  return { cls: 'sem-yellow', ico: '🟡', titulo: tf('semYellowPegTitle', { peg: peg.toFixed(2) }), desc: tf('semYellowPegDesc', { pe: pe.toFixed(1), peg: peg.toFixed(2) }) };
+    return           { cls: 'sem-red',    ico: '🔴', titulo: tf('semRedPegTitle', { peg: peg.toFixed(2) }),   desc: tf('semRedPegDesc', { pe: pe.toFixed(1), peg: peg.toFixed(2) }) };
   }
-  if (pe < ref.bajo) return { cls: 'sem-green',  ico: '🟢', titulo: `Precio bajo para su sector — puede rentar`,  desc: `PER de ${pe.toFixed(1)}x está por debajo de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Ostres, igual es una oportunidad 👀` };
-  if (pe <= ref.alto) return { cls: 'sem-yellow', ico: '🟡', titulo: `Precio justo — ni cara ni barata`, desc: `PER de ${pe.toFixed(1)}x está en la media del sector ${ref.nombre} (${ref.bajo}x–${ref.alto}x). No está mal, pero tampoco es un chollo.` };
-  return               { cls: 'sem-red',    ico: '🔴', titulo: `Va de sobrada — precio alto para su sector`,   desc: `PER de ${pe.toFixed(1)}x está por encima de lo normal en ${ref.nombre} (${ref.bajo}x–${ref.alto}x). Pagas de más. Ten cuidado.` };
+  if (pe < ref.bajo) return { cls: 'sem-green',  ico: '🟢', titulo: t('semGreenTitle'),  desc: tf('semGreenDesc', { pe: pe.toFixed(1), sector: nombreSector, bajo: ref.bajo, alto: ref.alto }) };
+  if (pe <= ref.alto) return { cls: 'sem-yellow', ico: '🟡', titulo: t('semYellowTitle'), desc: tf('semYellowDesc', { pe: pe.toFixed(1), sector: nombreSector, bajo: ref.bajo, alto: ref.alto }) };
+  return               { cls: 'sem-red',    ico: '🔴', titulo: t('semRedTitle'),   desc: tf('semRedDesc', { pe: pe.toFixed(1), sector: nombreSector, bajo: ref.bajo, alto: ref.alto }) };
 }
 
 function fmtMiles(n) {
@@ -1575,6 +1823,133 @@ const I18N = {
     idleMsg2: 'Ey crack, ¿vas a analizar algo o solo estás mirando? Prueba con AAPL, TSLA... lo que te suene.', idleCta2: 'Venga, va',
     idleMsg3: '¿Te crees que sabes de bolsa? Demuéstralo, valiente. 2 minutos y salimos de dudas.', idleCta3: 'Reto aceptado',
     idleMsg4: '¿Sigues ahí? Trae a un colega y os lleváis 3 días de Premium gratis los dos.', idleCta4: 'Invitar',
+    biblioPill: 'Biblioteca', biblioTitle: 'Términos financieros<br>en cristiano.',
+    biblioSub: '¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier término y te lo explicamos como si tuvieras 15 años.',
+    glosarioSearchPh: 'Busca un término... PER, ROE, dividendo...', glosarioAllCats: 'Todas las categorías',
+    glosarioNoResults: 'No hay ningún término que encaje con eso.',
+    semNoDataTitle: 'Sin datos de PER', semNoDataDesc: 'La empresa no tiene PER disponible — puede estar en pérdidas o ser de reciente cotización.',
+    semGreenPegTitle: '¡Esto está muy barato! (PEG {peg}x)', semGreenPegDesc: 'PER de {pe}x pero crece un montón — con PEG {peg}x el mercado todavía no lo ha notado. Igual renta echarle un ojo 👀',
+    semYellowPegTitle: 'Bien pero sin volverse loco (PEG {peg}x)', semYellowPegDesc: 'PER de {pe}x. El PEG de {peg}x dice que el precio está más o menos acorde con lo que crece. Ni ganga ni robo.',
+    semRedPegTitle: 'Uff, esto está carete (PEG {peg}x)', semRedPegDesc: 'PER de {pe}x y PEG de {peg}x. Macho, pagas mucho incluso pa lo que crece. No sé yo si renta...',
+    semGreenTitle: 'Precio bajo para su sector — puede rentar', semGreenDesc: 'PER de {pe}x está por debajo de lo normal en {sector} ({bajo}x–{alto}x). Ostres, igual es una oportunidad 👀',
+    semYellowTitle: 'Precio justo — ni cara ni barata', semYellowDesc: 'PER de {pe}x está en la media del sector {sector} ({bajo}x–{alto}x). No está mal, pero tampoco es un chollo.',
+    semRedTitle: 'Va de sobrada — precio alto para su sector', semRedDesc: 'PER de {pe}x está por encima de lo normal en {sector} ({bajo}x–{alto}x). Pagas de más. Ten cuidado.',
+    pcBaratoSector: 'Cotiza barata para su sector (PER bajo)', pcCaroSector: 'Está cara para su sector, pagas una prima alta',
+    pcBuenMargen: 'Buenos márgenes: gestiona bien los costes', pcMargenAjustado: 'Márgenes ajustados, gana poco por cada euro de venta',
+    pcRoeAlto: 'Rentabiliza muy bien el capital de los accionistas (ROE alto)', pcRoeBajo: 'Rentabiliza poco el capital invertido',
+    pcIngresosCrecen: 'Los ingresos crecen con fuerza', pcIngresosCaen: 'Los ingresos están cayendo',
+    pcCajaReal: 'Genera caja de verdad, no solo beneficio en papel', pcQuemaCaja: 'Quema caja: gasta más de lo que ingresa',
+    pcPocaDeuda: 'Poca deuda, balance sólido', pcMuchaDeuda: 'Mucha deuda respecto a su capital',
+    pcDividendoDecente: 'Reparte un dividendo decente',
+    pcPegBajo: 'El precio está justificado por su crecimiento (PEG bajo)', pcPegAlto: 'Paga muy caro incluso teniendo en cuenta su crecimiento (PEG alto)',
+    pcEpsCrece: 'El beneficio por acción crece con fuerza', pcEpsCae: 'El beneficio por acción está cayendo',
+    pcLiquidezBuena: 'Buena liquidez: puede pagar sus deudas a corto plazo sin apuros', pcLiquidezAjustada: 'Liquidez ajustada: podría tener problemas para pagar deudas a corto plazo',
+    pcSinPros: 'No destaca especialmente en los indicadores que analizamos', pcSinContras: 'No detectamos señales de alarma claras en los datos',
+    reinvNoDatos: 'No tenemos datos suficientes para saber cuánto reinvierte esta empresa en crecer.',
+    reinvTexto: 'De cada 100€ que gana, reparte {reparte}€ en dividendos a los accionistas y reinvierte {reinvierte}€ en el propio negocio: nuevos productos, expansión, tecnología o pagar deuda.',
+    chkQEmpresa: '¿Qué hace la empresa?', chkQSector: '¿En qué sector opera?', chkQIngresos: '¿Cómo genera sus ingresos?', chkQClientes: '¿Quiénes son sus clientes?',
+    chkQDinero: '¿Qué hace con el dinero que genera?', chkQReinvierte: '¿Cuánto reinvierte en el negocio?', chkQEvolucion: '¿Cómo ha evolucionado financieramente?',
+    chkQRiesgos: '¿Qué riesgos tiene su actividad?', chkQPerspectivas: '¿Qué perspectivas puede tener a largo plazo?', chkQEstrategia: '¿Por qué considero que es una inversión adecuada para mi estrategia?',
+    chkAEmpresaTpl: '{nombre} opera en el sector {sector}{industria}.{empleados}.', chkIndustriaSuffix: ', dentro de la industria de {industry}', chkEmpleadosSuffix: ' Tiene alrededor de {n} empleados',
+    chkASectorTpl: '{sector}{industria}.', chkSectorNoDisponible: 'Sector no disponible', chkSectorGenerico: 'no disponible',
+    chkAReinvierteTpl: 'Reinvierte aproximadamente el {pct}% de su beneficio en el propio negocio, en vez de repartirlo en dividendos.', chkANoPayout: 'No tenemos datos suficientes de payout para calcularlo.',
+    chkIngresoCrecidoTpl: 'Sus ingresos han crecido un {pct}% en el último periodo reportado.', chkIngresoCaidoTpl: 'Sus ingresos han caído un {pct}% en el último periodo reportado.', chkNoIngresoData: 'No tenemos datos de la evolución reciente de sus ingresos.',
+    chkEpsCrecidoTpl: ' El beneficio por acción ha crecido un {pct}%.', chkEpsCaidoTpl: ' El beneficio por acción ha caído un {pct}%.',
+    chkRespuestaPersonalPDF: 'Esto solo lo puedes responder tú: depende de tus objetivos, tu horizonte temporal y cuánto riesgo estás dispuesto a asumir.',
+    veredictoSinDatosTitulo: 'Sin datos suficientes', veredictoSinDatosTexto: 'No tenemos suficientes datos financieros de {ticker} para dar un veredicto fiable.',
+    veredictoBuenoTitulo: 'Buena opción a día de hoy', veredictoBuenoTexto: 'Con {score}/10, {ticker} destaca sobre todo porque {pro}. Eso no significa que no pueda bajar mañana — invertir siempre lleva riesgo.', veredictoBuenoDefaultPro: 'tiene buenos números en conjunto',
+    veredictoCorrectoTitulo: 'Opción correcta, sin ser un chollo', veredictoCorrectoTexto: 'Con {score}/10, {ticker} no destaca especialmente ni tampoco preocupa. {contra} antes de decidir.', veredictoCorrectoDefaultContra: 'Vigila de cerca sus próximos resultados',
+    veredictoMaloTitulo: 'Mejor esperar o mirar otra', veredictoMaloTexto: 'Con {score}/10, {ticker} tiene señales que invitan a la cautela: {contra}. No es una recomendación de venta, solo un aviso a tener en cuenta.', veredictoMaloDefaultContra: 'varios indicadores están por debajo de lo ideal',
+    subPerActual: 'Precio / Beneficio', subPegRatio: '<1 barata, 1-2 justa, >2 cara', subCrecBPA: 'Beneficio por acción YoY', subCrecIngresos: 'Ventas año sobre año', subROE: 'Rentabilidad sobre capital',
+    subPerEstimado: 'Proyección anual', subCapMercado: 'Valor total', subDividendo: 'Rentabilidad anual', subEPS: 'Beneficio por acción', subMargenNeto: 'Beneficio sobre ventas',
+    subFlujoCaja: 'Caja que genera el negocio', subFCF: 'Caja libre tras invertir', subBeta: '<1 menos volátil', subRango52: 'Min / Max', subEmpleados: 'En plantilla', subPatrimonioFondo: 'Patrimonio del fondo',
+    reinvSubNoDatos: 'datos no disponibles', reinvSubFuerteCrece: 'reinvierte fuerte y crece — expansión sana', reinvCtxFuerteCrece: '✅ Invierte mucho en crecer y los resultados lo confirman. Señal muy positiva.',
+    reinvSubGastaNoCrece: 'gasta mucho pero no crece — señal de alerta', reinvCtxGastaNoCrece: '⚠️ Reinvierte mucho pero el crecimiento no lo refleja. Puede indicar ineficiencia o problemas estructurales.',
+    reinvSubEficiente: 'negocio eficiente — crece sin necesitar mucho capital', reinvCtxEficiente: '✅ Reinvierte poco pero sigue creciendo. Negocio muy eficiente (como Apple o Microsoft). El exceso va al accionista vía recompras o dividendo.',
+    reinvSubMadura: 'empresa madura — distribuye beneficios', reinvCtxMadura: '🟡 Reinvierte poco y el crecimiento es limitado. Empresa madura y estable, más orientada a distribuir beneficios que a crecer.',
+    reinvSubModerado: 'crecimiento moderado',
+    scoreGlobalNote: 'Puntuación global sobre 10 · basada en valoración, crecimiento y rentabilidad',
+    scoreSinDatos: 'Sin datos suficientes', scoreExcelente: 'Empresa excelente', scoreBuena: 'Buena empresa', scoreCorrecta: 'Empresa correcta', scoreDudas: 'Con algunas dudas', scoreMejorOtra: 'Mejor buscar otra',
+    stockFooterDatos: 'Datos: proveedores con licencia · {time} · Solo educativo.', etfFooterDatos: 'Datos: proveedores con licencia · {time} · Solo educativo, no recomendación de compra.', cryptoFooterDatos: 'Precio: proveedores con licencia · {time} · Solo educativo.',
+    cryptoViabRiesgoTpl: 'Viabilidad: {viabilidad} · Riesgo: {riesgo}', cryptoRiesgoAlerta: 'Las criptomonedas son activos de muy alto riesgo.', cryptoRiesgoAlerta2: 'Puedes perder todo tu dinero. Nunca inviertas más de lo que puedas permitirte perder.',
+    btnWhatsapp: '📱 WhatsApp', btnCopiarLink: '🔗 Copiar link', btnPdf: '📄 PDF', errorMostrarDatos: 'Error al mostrar datos', hoySuffix: 'hoy',
+    etfTituloSemaforo: 'ETF — fondo cotizado', etfDescSemaforo: 'Los ETFs no tienen PER ni métricas de empresa. Replican el precio del activo subyacente.',
+    pdfInformeAnalisis: 'Informe de análisis · Solo educativo, no asesoramiento financiero', pdfSectorDesconocido: 'Sector desconocido', pdfPrecioActual: 'Precio actual', pdfPuntuacionGlobal: 'Puntuación global', pdfMetricasClave: 'Métricas clave',
+    pdfLblPER: 'PER', pdfLblPEG: 'PEG', pdfLblCajaTotal: 'Caja total', pdfLblPrecio: 'Precio', pdfLblCrecBPACorto: 'Crec. BPA', pdfLblMetrica: 'Métrica',
+    pdfFooterLine1: 'laBolsabro · labolsabro.com · Datos: proveedores con licencia · Herramienta educativa, no asesoramiento financiero.', pdfFooterLine1Compare: 'laBolsabro · labolsabro.com · Datos: proveedores con licencia · Solo educativo, no asesoramiento financiero.',
+    pdfFooterLine2: 'Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.',
+    pdfDescargadoPor: 'Descargado por {quien} · {fecha} · Uso personal, no redistribuir', pdfInvitado: 'invitado',
+    pdfAnalisisProfundidad: 'Análisis en profundidad · {nombre}', pdfVeredictoPrefix: 'Veredicto:', pdfQueHace: '¿A qué se dedica esta empresa?', pdfPuntosFavor: 'Puntos a favor', pdfPuntosContra: 'Puntos en contra', pdfProsContrasCombinado: 'Puntos a favor y en contra',
+    pdfComoReinvierte: '¿Cómo reinvierte sus beneficios?', pdfNoInviertasTitulo: 'No inviertas por intuición: investiga antes de decidir',
+    pdfIntroChecklist: 'Que el precio suba o baje no es, por sí solo, una razón para invertir. Estas son las preguntas clave sobre esta empresa, respondidas con los datos de este análisis:',
+    pdfAvisoFinal: 'Esto es un análisis educativo basado en datos públicos, no una recomendación de compra o venta. La decisión de invertir es siempre tuya.',
+    pdfDescargadoOk: 'PDF descargado ✅', pdfTeQuedanTpl: 'Te quedan {n} PDF{s} gratuito{s} hoy.', pdfLimiteAlert: 'Has usado tus 3 PDFs gratuitos de hoy. ¿Quieres ver los planes Premium para descargas ilimitadas?',
+    pdfComparativaTitulo: 'Comparativa de empresas · Solo educativo, no asesoramiento financiero', pdfVeredictoGanaTpl: '🏆 Veredicto: gana {ganador}', pdfVeredictoEmpate: '⚖️ Veredicto: empate técnico',
+    pdfSectorPerLineTpl: 'Sector: {sector} · PER medio del sector: {bajo}x–{alto}x', pdfPerDeTpl: 'PER de {ticker}: {value}',
+    pdfPerBarata: 'Por debajo de la media (barata)', pdfPerMedia: 'En la media del sector', pdfPerCara: 'Por encima de la media (cara)', pdfPerSinDatos: 'Sin datos de PER',
+    veredictoCompNoDatos: 'No tenemos datos suficientes de ninguna de las dos para declarar una ganadora clara.', veredictoCompGanaDescarteTpl: '{ganador} gana por descarte: no hay datos suficientes de {perdedor} para comparar en profundidad.',
+    veredictoCompEmpateTpl: 'Empate técnico: {t1} ({s1}/10) y {t2} ({s2}/10) están prácticamente igualadas. La decisión depende de tu perfil de riesgo y qué sector prefieras.',
+    veredictoCompGanaTpl: '{win} sale mejor parada con {sWin}/10 frente a {sLose}/10 de {lose}. Principalmente porque {razon}.', veredictoCompDefaultRazon: 'tiene mejores números en conjunto',
+    razonPerBajo: 'cotiza más barata (PER más bajo)', razonRoeAlto: 'rentabiliza mejor el capital (ROE más alto)', razonCreceMasIngresos: 'crece más rápido en ingresos', razonMejorMargen: 'tiene mejores márgenes', conjY: 'y',
+    cmpPuntuacion: 'Puntuación', cmpZonaValor: 'Zona de valor', cmpPrecioJusto: 'Precio justo', cmpZonaCara: 'Zona cara', cmpCrecIngresos: 'Crec. Ingresos',
+    cmpUpsellHtml: '🔒 El comparador avanzado por sector es de <strong style="color:var(--yellow)">Premium</strong>',
+    cmpLeyenda: 'Verde = mejor valor · Rojo = peor valor · Datos de mercado con licencia · Solo educativo.',
+    cmpSectorTitulo: '⭐ Comparador avanzado por sector', cmpMediaSector: 'Media sector: {bajo}x–{alto}x',
+    cmpIntroduceDos: 'Introduce las dos empresas para comparar', cmpCargandoTpl: '🪰 Venga, a ver quién la tiene mejor entre {t1} y {t2}... (en plan financiero, ¿eh?)', cmpErrorDatos: 'Error al obtener datos. Comprueba los tickers.',
+    quizPill: 'Retos de conocimiento', quizTitle: '¿Cuánto sabes<br>de dinero?', quizSub: '5 preguntas. Sin trampa. Descubre que nivel tienes y gana XP. Como Duolingo pero para tu cartera.',
+    quizNivelLbl: 'Nivel', quizXpAcumulados: 'XP acumulados', quizDiasSeguidos: 'días seguidos',
+    quizBasico: 'Básico', quizAvanzado: '🔒 Avanzado', quizAvanzadoSinLock: 'Avanzado', quizRachaLbl: 'Racha',
+    quizSiguiente: 'Siguiente pregunta →', quizPreguntaNumTpl: 'Pregunta {n} de {total}',
+    quizCorrectoTpl: '✓ Correcto — +{xp} XP', quizIncorrecto: '✗ Incorrecto',
+    quizRespuestasCorrectas: 'Respuestas correctas', quizXpGanados: 'XP ganados', quizRepetir: 'Repetir quiz', quizQuieroApp: 'Quiero la app',
+    quizAvanzadoPremiumConfirm: 'Las preguntas avanzadas (ROIC, WACC, DCF...) son de Premium. ¿Quieres ver los planes?',
+    quizNivel0Titulo: 'Semilla financiera', quizNivel0Desc: 'Tranqui, todos empezamos desde cero. Mosca está aquí para llevarte de semilla a árbol.',
+    quizNivel40Titulo: 'Inversor en ciernes', quizNivel40Desc: 'Buen comienzo. Tienes base pero aún hay conceptos que pulir.',
+    quizNivel60Titulo: 'Cerebro financiero', quizNivel60Desc: 'Sabes lo que te traes entre manos. Ahora toca pasar del conocimiento a la acción.',
+    quizNivel80Titulo: 'Crack total', quizNivel80Desc: '¡Máquina! Tienes un nivel financiero por encima de la media.',
+    loadingGeneric: 'Cargando...', histEmpty: 'Aún no has hecho ningún análisis.',
+    alertsEmpty: 'No tienes alertas activas.', alertDirAbove: 'suba por encima de', alertDirBelow: 'baje por debajo de',
+    alertTriggered: 'Activada', alertWatching: 'Vigilando…', btnBorrar: 'Borrar',
+    alertEscribeTicker: 'Escribe primero el ticker', alertCalculando: 'Calculando...', alertCryptoSinPer: 'Las cripto no tienen PER, así que no podemos calcular un precio "justo" con este método.',
+    alertSinBeneficios: '{ticker} no tiene beneficios positivos (EPS), así que no podemos calcular un precio de referencia con este método.',
+    alertPerMedioTpl: 'Según el PER medio de <strong>{sector}</strong> ({bajo}x–{alto}x) y el beneficio por acción actual ({eps}€):',
+    alertPrecioCompra: 'Precio de compra (zona barata)', alertPrecioVenta: 'Precio de venta (zona cara)', alertUsar: 'Usar',
+    alertPrecioActualTpl: 'Precio actual: {precio}€. Esto es orientativo, no una recomendación de inversión.',
+    alertNoEncontrado: 'No encontramos "{ticker}". Comprueba el ticker.', alertCrearError: 'Error al crear la alerta',
+    remindersEmpty: 'No tienes recordatorios activos.', remFrecDiario: 'Todos los días', remFrecLaborables: 'Solo laborables', remFrecFindes: 'Solo fines de semana',
+    remMensajeVacio: 'Escribe el mensaje del recordatorio', remCrearError: 'Error al crear el recordatorio',
+    botesEmpty: 'Aún no tienes botes. Crea el primero.', btnAportar: '+ Aportar',
+    retoCompletadoTxt: '✓ Ya lo has completado hoy. Vuelve mañana a por otro.',
+    carteraEmpty: 'Aún no tienes ninguna posición. Añade la primera, crack.', cargandoPrecios: 'Cargando precios...', precioNoDisponible: 'Precio no disponible', precioAhoraTpl: '{precio} ahora · {pct}%',
+    hintZonaValor: '🟢 Zona de valor — podría ser momento de comprar más', hintPrecioJusto: '🟡 Precio justo — ni prisa por comprar ni por vender', hintZonaCara: '🔴 Zona cara — podría ser momento de recoger beneficios',
+    anadirPosicionPromptTicker: '¿Qué empresa quieres simular? (ticker, ej: AAPL, TSLA)', anadirPosicionPromptShares: '¿Cuántas acciones simuladas quieres comprar?',
+    limiteBusquedasAlert: 'Has alcanzado el límite de búsquedas. Espera un momento e inténtalo de nuevo.', noEncontramosTicker: 'No encontramos ese ticker.', errorAnadirPosicion: 'Error al añadir la posición',
+    crearBotePrompt: '¿Cómo quieres llamar a tu bote? (ej: vacaciones, coche, emergencias)', crearBoteError: 'Error al crear el bote',
+    borrarBoteConfirmTpl: '¿Seguro que quieres borrar el bote "{nombre}"? Perderás el saldo guardado.',
+    aportarBotePrompt: '¿Cuánto quieres aportar a este bote? (€)', aportarInversionPrompt: '¿Cuánto quieres añadir a tu inversión simulada? (€, no es dinero real)',
+    saludoPanelTpl: '👋 Hola, {nombre}', nivelXpTpl: 'Nv.{nivel} · {xp} XP',
+    retoDelDiaCrearBote: 'Crea tu primer bote de ahorro para empezar. Tarda 10 segundos.', retoDelDiaAportarTpl: 'Aporta {monto} € al bote "{jar}". Solo eso. Si lo hicieras cada día, en un año serían {anual} € sin apenas notarlo.',
+    inviteBonusActivoTpl: '⏳ Tienes Premium de prueba activo hasta el <strong style="color:var(--yellow)">{fecha}</strong>. Invita a más gente para alargarlo.',
+    inviteBonusDefault: 'Invita a alguien y desbloqueáis Premium los dos, gratis.', inviteLinkCopiado: 'Link copiado. Ahora a mandarlo 🚀',
+    inviteWhatsappTexto: '🪰 Mira esta app de bolsa y ahorro: {link}\nSi te apuntas con mi link, los dos conseguimos búsquedas gratis 🔥',
+    chatSaludoInicial: '¡Ey! Soy Mosca 🪰. Pregúntame lo que quieras de ahorro, bolsa o dinero en general. Voy al grano, sin rollos.',
+    chatEscribiendo: '🪰 escribiendo...', chatErrorRespuesta: 'Uy, se me ha ido la cabeza un momento. Prueba otra vez.', chatErrorConexion: 'No puedo conectar ahora mismo. Prueba en un momento.',
+    histTitle: '📊 Mi historial de análisis', alertsTitle: '🔔 Mis alertas de precio', alertTickerPh: 'Ticker (ej. AAPL)',
+    optAlertAbove: 'Sube por encima de', optAlertBelow: 'Baja por debajo de', alertPricePh: 'Precio €', btnCrear: 'Crear',
+    alertSugerirBtn: '🧮 Calcular precio sugerido para este ticker',
+    novTitle: '🎁 Novedades — acceso anticipado', novSub: 'Como premium, ves lo que estamos construyendo antes de que salga para todos.',
+    novBanco: '🏦 Conexión con tu banco', novBancoDesc: 'Ver tus ahorros reales junto al análisis, sin salir de la app. En diseño.',
+    novWhatsapp: '📲 Alertas por WhatsApp', novWhatsappDesc: 'Recibe el aviso de precio directo al móvil, no solo por email. Próximamente.',
+    inviteTitle: 'Trae a un colega', inviteText: 'Cada crack que se apunte con tu link os lleváis <strong style="color:var(--yellow)">3 días de Premium GRATIS</strong>, tú y él. Búsquedas ilimitadas, cartera simulada, alertas... todo desbloqueado. Sin trampa ni cartón.',
+    inviteCopyBtn: '📋 Copiar link', inviteWhatsappBtn: 'Mandarlo por WhatsApp',
+    panelSaldoTotalLbl: 'Saldo total', panelEsteMesLbl: 'Este mes', panelRetoLbl: '⚡ Reto de hoy', panelRetoBtnTxt: 'Completar reto',
+    panelBotesLbl: '🏺 Mis botes de ahorro', panelNuevoBoteBtn: '+ Nuevo bote',
+    panelBotesDesc: 'Un bote es una meta de ahorro separada: vacaciones, coche, fondo de emergencia... Cada uno guarda su propio saldo, así no se te mezcla todo en un montón.',
+    panelCarteraLbl: '📈 Cartera simulada', panelAddPosicionBtn: '+ Añadir posición', panelSimuladoLbl: 'Simulado, no es dinero real',
+    carteraInvertidoLbl: 'Invertido', carteraActualLbl: 'Valor actual', carteraGananciaLbl: 'Ganancia',
+    carteraUpsellTxt: '🔒 La cartera simulada con precios en vivo es de <strong style="color:var(--yellow)">Premium</strong>', carteraVerPlanes: 'Ver planes →',
+    remTitle: '⏰ Mis recordatorios', remSub: 'Te lo mandamos por email cada mañana, según los días que elijas.', remMensajePh: 'Ej: Aporta 5€ al bote de ahorro',
+    chatInputPh: 'Pregúntame lo que sea de dinero...',
   },
   en: {
     navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language', navPrimerosPasos: '🚀 First steps',
@@ -1689,6 +2064,133 @@ const I18N = {
     idleMsg2: 'Hey there, are you going to analyze something or just browsing? Try AAPL, TSLA... whatever sounds familiar.', idleCta2: 'Let\'s go',
     idleMsg3: 'Think you know your way around investing? Prove it, brave one. 2 minutes and we\'ll find out.', idleCta3: 'Challenge accepted',
     idleMsg4: 'Still there? Bring a friend and you both get 3 days of Premium free.', idleCta4: 'Invite',
+    biblioPill: 'Library', biblioTitle: 'Financial terms,<br>plain and simple.',
+    biblioSub: 'What\'s the P/E ratio? What does ROE mean? Tap any term and we\'ll explain it like you\'re 15.',
+    glosarioSearchPh: 'Search a term... P/E, ROE, dividend...', glosarioAllCats: 'All categories',
+    glosarioNoResults: 'No term matches that.',
+    semNoDataTitle: 'No P/E data', semNoDataDesc: 'The company has no P/E ratio available — it may be unprofitable or recently listed.',
+    semGreenPegTitle: 'This is really cheap! (PEG {peg}x)', semGreenPegDesc: 'P/E of {pe}x but it\'s growing a lot — with a PEG of {peg}x the market hasn\'t noticed yet. Might be worth a look 👀',
+    semYellowPegTitle: 'Fine, but nothing to get excited about (PEG {peg}x)', semYellowPegDesc: 'P/E of {pe}x. A PEG of {peg}x says the price is roughly in line with its growth. Neither a bargain nor a rip-off.',
+    semRedPegTitle: 'Ouch, this is pricey (PEG {peg}x)', semRedPegDesc: 'P/E of {pe}x and PEG of {peg}x. You\'re paying a lot even accounting for its growth. Not sure this one\'s worth it...',
+    semGreenTitle: 'Low price for its sector — could be worth it', semGreenDesc: 'P/E of {pe}x is below what\'s normal in {sector} ({bajo}x–{alto}x). Might be an opportunity 👀',
+    semYellowTitle: 'Fair price — neither cheap nor expensive', semYellowDesc: 'P/E of {pe}x is around the sector average for {sector} ({bajo}x–{alto}x). Not bad, but not a bargain either.',
+    semRedTitle: 'Overpriced — high for its sector', semRedDesc: 'P/E of {pe}x is above what\'s normal in {sector} ({bajo}x–{alto}x). You\'re overpaying. Be careful.',
+    pcBaratoSector: 'Trades cheap for its sector (low P/E)', pcCaroSector: 'Expensive for its sector — you\'re paying a high premium',
+    pcBuenMargen: 'Good margins: manages costs well', pcMargenAjustado: 'Tight margins — earns little on every euro of sales',
+    pcRoeAlto: 'Puts shareholders\' capital to very good use (high ROE)', pcRoeBajo: 'Gets little return on invested capital',
+    pcIngresosCrecen: 'Revenue is growing strongly', pcIngresosCaen: 'Revenue is falling',
+    pcCajaReal: 'Generates real cash, not just paper profit', pcQuemaCaja: 'Burns cash: spends more than it brings in',
+    pcPocaDeuda: 'Low debt, solid balance sheet', pcMuchaDeuda: 'A lot of debt relative to its equity',
+    pcDividendoDecente: 'Pays a decent dividend',
+    pcPegBajo: 'The price is justified by its growth (low PEG)', pcPegAlto: 'You\'re paying a steep price even accounting for its growth (high PEG)',
+    pcEpsCrece: 'Earnings per share are growing strongly', pcEpsCae: 'Earnings per share are falling',
+    pcLiquidezBuena: 'Good liquidity: it can cover short-term debts comfortably', pcLiquidezAjustada: 'Tight liquidity: it could struggle to pay short-term debts',
+    pcSinPros: 'Doesn\'t particularly stand out in the indicators we analyze', pcSinContras: 'We don\'t detect any clear warning signs in the data',
+    reinvNoDatos: 'We don\'t have enough data to know how much this company reinvests in growth.',
+    reinvTexto: 'Out of every €100 it earns, it pays out {reparte}€ in dividends to shareholders and reinvests {reinvierte}€ back into the business: new products, expansion, technology or paying down debt.',
+    chkQEmpresa: 'What does the company do?', chkQSector: 'What sector does it operate in?', chkQIngresos: 'How does it generate its revenue?', chkQClientes: 'Who are its customers?',
+    chkQDinero: 'What does it do with the money it generates?', chkQReinvierte: 'How much does it reinvest in the business?', chkQEvolucion: 'How has it evolved financially?',
+    chkQRiesgos: 'What risks does its business carry?', chkQPerspectivas: 'What long-term prospects might it have?', chkQEstrategia: 'Why do I consider this a good fit for my investment strategy?',
+    chkAEmpresaTpl: '{nombre} operates in the {sector} sector{industria}.{empleados}.', chkIndustriaSuffix: ', within the {industry} industry', chkEmpleadosSuffix: ' It has around {n} employees',
+    chkASectorTpl: '{sector}{industria}.', chkSectorNoDisponible: 'Sector not available', chkSectorGenerico: 'not available',
+    chkAReinvierteTpl: 'It reinvests approximately {pct}% of its profit back into the business, instead of paying it out as dividends.', chkANoPayout: 'We don\'t have enough payout data to calculate this.',
+    chkIngresoCrecidoTpl: 'Its revenue has grown {pct}% in the last reported period.', chkIngresoCaidoTpl: 'Its revenue has fallen {pct}% in the last reported period.', chkNoIngresoData: 'We don\'t have data on its recent revenue trend.',
+    chkEpsCrecidoTpl: ' Earnings per share have grown {pct}%.', chkEpsCaidoTpl: ' Earnings per share have fallen {pct}%.',
+    chkRespuestaPersonalPDF: 'Only you can answer this: it depends on your goals, your time horizon and how much risk you\'re willing to take on.',
+    veredictoSinDatosTitulo: 'Not enough data', veredictoSinDatosTexto: 'We don\'t have enough financial data on {ticker} to give a reliable verdict.',
+    veredictoBuenoTitulo: 'A good pick today', veredictoBuenoTexto: 'At {score}/10, {ticker} stands out mainly because {pro}. That doesn\'t mean it can\'t drop tomorrow — investing always carries risk.', veredictoBuenoDefaultPro: 'has solid numbers overall',
+    veredictoCorrectoTitulo: 'A fair pick, though not a bargain', veredictoCorrectoTexto: 'At {score}/10, {ticker} doesn\'t particularly stand out, but doesn\'t raise concerns either. {contra} before deciding.', veredictoCorrectoDefaultContra: 'Keep a close eye on its next results',
+    veredictoMaloTitulo: 'Better to wait or look elsewhere', veredictoMaloTexto: 'At {score}/10, {ticker} shows signs that call for caution: {contra}. This isn\'t a sell recommendation, just something to keep in mind.', veredictoMaloDefaultContra: 'several indicators are below ideal levels',
+    subPerActual: 'Price / Earnings', subPegRatio: '<1 cheap, 1-2 fair, >2 expensive', subCrecBPA: 'Earnings per share YoY', subCrecIngresos: 'Sales year over year', subROE: 'Return on equity',
+    subPerEstimado: 'Annual projection', subCapMercado: 'Total value', subDividendo: 'Annual yield', subEPS: 'Earnings per share', subMargenNeto: 'Profit over sales',
+    subFlujoCaja: 'Cash generated by the business', subFCF: 'Cash left after investing', subBeta: '<1 less volatile', subRango52: 'Min / Max', subEmpleados: 'On payroll', subPatrimonioFondo: 'Fund assets',
+    reinvSubNoDatos: 'data not available', reinvSubFuerteCrece: 'reinvests heavily and grows — healthy expansion', reinvCtxFuerteCrece: '✅ Invests heavily in growth and the results confirm it. A very positive sign.',
+    reinvSubGastaNoCrece: 'spends heavily but isn\'t growing — a warning sign', reinvCtxGastaNoCrece: '⚠️ Reinvests heavily but growth doesn\'t reflect it. May indicate inefficiency or structural problems.',
+    reinvSubEficiente: 'efficient business — grows without needing much capital', reinvCtxEficiente: '✅ Reinvests little but keeps growing. A very efficient business (like Apple or Microsoft). The surplus goes to shareholders via buybacks or dividends.',
+    reinvSubMadura: 'mature company — distributes profits', reinvCtxMadura: '🟡 Reinvests little and growth is limited. A mature, stable company more focused on distributing profits than growing.',
+    reinvSubModerado: 'moderate growth',
+    scoreGlobalNote: 'Overall score out of 10 · based on valuation, growth and profitability',
+    scoreSinDatos: 'Not enough data', scoreExcelente: 'Excellent company', scoreBuena: 'Good company', scoreCorrecta: 'Decent company', scoreDudas: 'Some concerns', scoreMejorOtra: 'Better to look elsewhere',
+    stockFooterDatos: 'Data: licensed providers · {time} · Educational only.', etfFooterDatos: 'Data: licensed providers · {time} · Educational only, not a buy recommendation.', cryptoFooterDatos: 'Price: licensed providers · {time} · Educational only.',
+    cryptoViabRiesgoTpl: 'Viability: {viabilidad} · Risk: {riesgo}', cryptoRiesgoAlerta: 'Cryptocurrencies are very high-risk assets.', cryptoRiesgoAlerta2: 'You could lose all your money. Never invest more than you can afford to lose.',
+    btnWhatsapp: '📱 WhatsApp', btnCopiarLink: '🔗 Copy link', btnPdf: '📄 PDF', errorMostrarDatos: 'Error displaying data', hoySuffix: 'today',
+    etfTituloSemaforo: 'ETF — exchange-traded fund', etfDescSemaforo: 'ETFs don\'t have a P/E ratio or company metrics. They track the price of the underlying asset.',
+    pdfInformeAnalisis: 'Analysis report · Educational only, not financial advice', pdfSectorDesconocido: 'Unknown sector', pdfPrecioActual: 'Current price', pdfPuntuacionGlobal: 'Overall score', pdfMetricasClave: 'Key metrics',
+    pdfLblPER: 'P/E', pdfLblPEG: 'PEG', pdfLblCajaTotal: 'Total cash', pdfLblPrecio: 'Price', pdfLblCrecBPACorto: 'EPS growth', pdfLblMetrica: 'Metric',
+    pdfFooterLine1: 'laBolsabro · labolsabro.com · Data: licensed providers · Educational tool, not financial advice.', pdfFooterLine1Compare: 'laBolsabro · labolsabro.com · Data: licensed providers · Educational only, not financial advice.',
+    pdfFooterLine2: 'Past performance does not guarantee future returns. Investing carries risk of loss.',
+    pdfDescargadoPor: 'Downloaded by {quien} · {fecha} · Personal use, do not redistribute', pdfInvitado: 'guest',
+    pdfAnalisisProfundidad: 'In-depth analysis · {nombre}', pdfVeredictoPrefix: 'Verdict:', pdfQueHace: 'What does this company do?', pdfPuntosFavor: 'Points in favor', pdfPuntosContra: 'Points against', pdfProsContrasCombinado: 'Points in favor and against',
+    pdfComoReinvierte: 'How does it reinvest its profits?', pdfNoInviertasTitulo: 'Don\'t invest on a hunch: research before deciding',
+    pdfIntroChecklist: 'A rising or falling price is not, on its own, a reason to invest. Here are the key questions about this company, answered using the data from this analysis:',
+    pdfAvisoFinal: 'This is an educational analysis based on public data, not a buy or sell recommendation. The investment decision is always yours.',
+    pdfDescargadoOk: 'PDF downloaded ✅', pdfTeQuedanTpl: 'You have {n} free PDF{s} left today.', pdfLimiteAlert: 'You\'ve used your 3 free PDFs today. Want to see the Premium plans for unlimited downloads?',
+    pdfComparativaTitulo: 'Company comparison · Educational only, not financial advice', pdfVeredictoGanaTpl: '🏆 Verdict: {ganador} wins', pdfVeredictoEmpate: '⚖️ Verdict: technical tie',
+    pdfSectorPerLineTpl: 'Sector: {sector} · Sector average P/E: {bajo}x–{alto}x', pdfPerDeTpl: 'P/E of {ticker}: {value}',
+    pdfPerBarata: 'Below average (cheap)', pdfPerMedia: 'At the sector average', pdfPerCara: 'Above average (expensive)', pdfPerSinDatos: 'No P/E data',
+    veredictoCompNoDatos: 'We don\'t have enough data on either one to declare a clear winner.', veredictoCompGanaDescarteTpl: '{ganador} wins by default: there isn\'t enough data on {perdedor} to compare in depth.',
+    veredictoCompEmpateTpl: 'Technical tie: {t1} ({s1}/10) and {t2} ({s2}/10) are practically even. The decision depends on your risk profile and which sector you prefer.',
+    veredictoCompGanaTpl: '{win} comes out ahead with {sWin}/10 versus {sLose}/10 for {lose}. Mainly because {razon}.', veredictoCompDefaultRazon: 'has better numbers overall',
+    razonPerBajo: 'trades cheaper (lower P/E)', razonRoeAlto: 'puts capital to better use (higher ROE)', razonCreceMasIngresos: 'grows revenue faster', razonMejorMargen: 'has better margins', conjY: 'and',
+    cmpPuntuacion: 'Score', cmpZonaValor: 'Value zone', cmpPrecioJusto: 'Fair price', cmpZonaCara: 'Expensive zone', cmpCrecIngresos: 'Revenue growth',
+    cmpUpsellHtml: '🔒 The advanced sector comparator is a <strong style="color:var(--yellow)">Premium</strong> feature',
+    cmpLeyenda: 'Green = better value · Red = worse value · Licensed market data · Educational only.',
+    cmpSectorTitulo: '⭐ Advanced sector comparator', cmpMediaSector: 'Sector average: {bajo}x–{alto}x',
+    cmpIntroduceDos: 'Enter both companies to compare', cmpCargandoTpl: '🪰 Alright, let\'s see who does better between {t1} and {t2}... (financially speaking)', cmpErrorDatos: 'Error fetching data. Check the tickers.',
+    quizPill: 'Knowledge challenges', quizTitle: 'How much do you know<br>about money?', quizSub: '5 questions. No catch. Find out your level and earn XP. Like Duolingo, but for your wallet.',
+    quizNivelLbl: 'Level', quizXpAcumulados: 'XP earned', quizDiasSeguidos: 'day streak',
+    quizBasico: 'Basic', quizAvanzado: '🔒 Advanced', quizAvanzadoSinLock: 'Advanced', quizRachaLbl: 'Streak',
+    quizSiguiente: 'Next question →', quizPreguntaNumTpl: 'Question {n} of {total}',
+    quizCorrectoTpl: '✓ Correct — +{xp} XP', quizIncorrecto: '✗ Incorrect',
+    quizRespuestasCorrectas: 'Correct answers', quizXpGanados: 'XP earned', quizRepetir: 'Retake quiz', quizQuieroApp: 'I want the app',
+    quizAvanzadoPremiumConfirm: 'Advanced questions (ROIC, WACC, DCF...) are Premium. Want to see the plans?',
+    quizNivel0Titulo: 'Financial seed', quizNivel0Desc: 'No worries, we all start from zero. Mosca is here to help you grow from seed to tree.',
+    quizNivel40Titulo: 'Investor in the making', quizNivel40Desc: 'Good start. You have the basics but there are still concepts to polish.',
+    quizNivel60Titulo: 'Financial brain', quizNivel60Desc: 'You know what you\'re doing. Now it\'s time to turn knowledge into action.',
+    quizNivel80Titulo: 'Total pro', quizNivel80Desc: 'Amazing! Your financial level is above average.',
+    loadingGeneric: 'Loading...', histEmpty: 'You haven\'t run any analysis yet.',
+    alertsEmpty: 'You have no active alerts.', alertDirAbove: 'rises above', alertDirBelow: 'falls below',
+    alertTriggered: 'Triggered', alertWatching: 'Watching…', btnBorrar: 'Delete',
+    alertEscribeTicker: 'Enter the ticker first', alertCalculando: 'Calculating...', alertCryptoSinPer: 'Crypto has no P/E ratio, so we can\'t calculate a "fair" price with this method.',
+    alertSinBeneficios: '{ticker} doesn\'t have positive earnings (EPS), so we can\'t calculate a reference price with this method.',
+    alertPerMedioTpl: 'Based on the average P/E for <strong>{sector}</strong> ({bajo}x–{alto}x) and current earnings per share ({eps}€):',
+    alertPrecioCompra: 'Buy price (cheap zone)', alertPrecioVenta: 'Sell price (expensive zone)', alertUsar: 'Use',
+    alertPrecioActualTpl: 'Current price: {precio}€. This is a guide, not an investment recommendation.',
+    alertNoEncontrado: 'We couldn\'t find "{ticker}". Check the ticker.', alertCrearError: 'Error creating the alert',
+    remindersEmpty: 'You have no active reminders.', remFrecDiario: 'Every day', remFrecLaborables: 'Weekdays only', remFrecFindes: 'Weekends only',
+    remMensajeVacio: 'Write the reminder message', remCrearError: 'Error creating the reminder',
+    botesEmpty: 'You don\'t have any jars yet. Create your first one.', btnAportar: '+ Add funds',
+    retoCompletadoTxt: '✓ Already completed today. Come back tomorrow for another one.',
+    carteraEmpty: 'You don\'t have any positions yet. Add the first one.', cargandoPrecios: 'Loading prices...', precioNoDisponible: 'Price not available', precioAhoraTpl: '{precio} now · {pct}%',
+    hintZonaValor: '🟢 Value zone — might be a good time to buy more', hintPrecioJusto: '🟡 Fair price — no rush to buy or sell', hintZonaCara: '🔴 Expensive zone — might be a good time to take profits',
+    anadirPosicionPromptTicker: 'Which company do you want to simulate? (ticker, e.g. AAPL, TSLA)', anadirPosicionPromptShares: 'How many simulated shares do you want to buy?',
+    limiteBusquedasAlert: 'You\'ve reached the search limit. Wait a moment and try again.', noEncontramosTicker: 'We couldn\'t find that ticker.', errorAnadirPosicion: 'Error adding the position',
+    crearBotePrompt: 'What do you want to name your jar? (e.g. vacation, car, emergencies)', crearBoteError: 'Error creating the jar',
+    borrarBoteConfirmTpl: 'Are you sure you want to delete the "{nombre}" jar? You\'ll lose the saved balance.',
+    aportarBotePrompt: 'How much do you want to add to this jar? (€)', aportarInversionPrompt: 'How much do you want to add to your simulated investment? (€, not real money)',
+    saludoPanelTpl: '👋 Hi, {nombre}', nivelXpTpl: 'Lvl {nivel} · {xp} XP',
+    retoDelDiaCrearBote: 'Create your first savings jar to get started. Takes 10 seconds.', retoDelDiaAportarTpl: 'Add {monto} € to the "{jar}" jar. That\'s it. Do it every day and in a year that\'s {anual} € without even noticing.',
+    inviteBonusActivoTpl: '⏳ You have trial Premium active until <strong style="color:var(--yellow)">{fecha}</strong>. Invite more people to extend it.',
+    inviteBonusDefault: 'Invite someone and you both unlock Premium, free.', inviteLinkCopiado: 'Link copied. Now go send it 🚀',
+    inviteWhatsappTexto: '🪰 Check out this savings and investing app: {link}\nIf you join with my link, we both get free searches 🔥',
+    chatSaludoInicial: 'Hey! I\'m Mosca 🪰. Ask me anything about saving, investing or money in general. Straight to the point, no fluff.',
+    chatEscribiendo: '🪰 typing...', chatErrorRespuesta: 'Oops, I lost my train of thought for a second. Try again.', chatErrorConexion: 'I can\'t connect right now. Try again in a moment.',
+    histTitle: '📊 My analysis history', alertsTitle: '🔔 My price alerts', alertTickerPh: 'Ticker (e.g. AAPL)',
+    optAlertAbove: 'Rises above', optAlertBelow: 'Falls below', alertPricePh: 'Price €', btnCrear: 'Create',
+    alertSugerirBtn: '🧮 Calculate a suggested price for this ticker',
+    novTitle: '🎁 What\'s next — early access', novSub: 'As a Premium member, you see what we\'re building before anyone else.',
+    novBanco: '🏦 Bank connection', novBancoDesc: 'See your real savings alongside your analysis, without leaving the app. In design.',
+    novWhatsapp: '📲 WhatsApp alerts', novWhatsappDesc: 'Get price alerts straight to your phone, not just by email. Coming soon.',
+    inviteTitle: 'Bring a friend', inviteText: 'Everyone who joins with your link gets <strong style="color:var(--yellow)">3 days of Premium FREE</strong> — both of you. Unlimited searches, simulated portfolio, alerts... everything unlocked. No catch.',
+    inviteCopyBtn: '📋 Copy link', inviteWhatsappBtn: 'Send it on WhatsApp',
+    panelSaldoTotalLbl: 'Total balance', panelEsteMesLbl: 'This month', panelRetoLbl: '⚡ Today\'s challenge', panelRetoBtnTxt: 'Complete challenge',
+    panelBotesLbl: '🏺 My savings jars', panelNuevoBoteBtn: '+ New jar',
+    panelBotesDesc: 'A jar is a separate savings goal: vacation, car, emergency fund... Each one keeps its own balance, so it doesn\'t all get mixed together.',
+    panelCarteraLbl: '📈 Simulated portfolio', panelAddPosicionBtn: '+ Add position', panelSimuladoLbl: 'Simulated, not real money',
+    carteraInvertidoLbl: 'Invested', carteraActualLbl: 'Current value', carteraGananciaLbl: 'Gain',
+    carteraUpsellTxt: '🔒 The simulated portfolio with live prices is a <strong style="color:var(--yellow)">Premium</strong> feature', carteraVerPlanes: 'See plans →',
+    remTitle: '⏰ My reminders', remSub: 'We\'ll email it to you every morning, on the days you choose.', remMensajePh: 'E.g.: Add €5 to the savings jar',
+    chatInputPh: 'Ask me anything about money...',
   }
 };
 let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
@@ -1700,6 +2202,11 @@ function detectarIdiomaNavegador() {
 function t(key) {
   const dict = I18N[_idioma] || I18N.es;
   return dict[key] !== undefined ? dict[key] : (I18N.es[key] !== undefined ? I18N.es[key] : key);
+}
+function tf(key, vars) {
+  let s = t(key);
+  for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+  return s;
 }
 function aplicarIdioma() {
   const dict = I18N[_idioma] || I18N.es;
@@ -1736,6 +2243,12 @@ function cambiarIdioma(lang) {
   localStorage.setItem('mosca_lang', lang);
   aplicarIdioma();
   actualizarPreciosSuscripcion();
+  if (document.getElementById('glosarioGrid')) { renderGlosarioCats(); renderGlosario(); }
+  if (_lastTicker) {
+    const cached = cacheGet(_lastTicker);
+    const el = document.getElementById('stockResult');
+    if (cached && el) { if (cached.tipo === 'crypto') renderCrypto(el, cached); else renderStock(el, cached, _lastTicker); }
+  }
 }
 cargarFx();
 
@@ -1901,12 +2414,12 @@ async function abrirHistorialPremium() {
   const overlay = document.getElementById('histOverlay');
   overlay.classList.add('open');
   const body = document.getElementById('histBody');
-  body.innerHTML = '<p style="color:var(--text2);font-size:14px;padding:20px 0;text-align:center">Cargando...</p>';
+  body.innerHTML = `<p style="color:var(--text2);font-size:14px;padding:20px 0;text-align:center">${t('loadingGeneric')}</p>`;
   const { data, error } = await _sb.from('search_history')
     .select('*').eq('user_id', _currentUser.id)
     .order('created_at', { ascending: false }).limit(50);
   if (error || !data || !data.length) {
-    body.innerHTML = '<p style="color:var(--text2);font-size:14px;padding:20px 0;text-align:center">Aún no has hecho ningún análisis.</p>';
+    body.innerHTML = `<p style="color:var(--text2);font-size:14px;padding:20px 0;text-align:center">${t('histEmpty')}</p>`;
     return;
   }
   body.innerHTML = data.map(r => {
@@ -1945,46 +2458,46 @@ function closeAlertsIfBg(e) {
 }
 async function cargarAlertas() {
   const body = document.getElementById('alertsBody');
-  body.innerHTML = '<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">Cargando...</p>';
+  body.innerHTML = `<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">${t('loadingGeneric')}</p>`;
   const { data, error } = await _sb.from('price_alerts')
     .select('*').eq('user_id', _currentUser.id)
     .order('created_at', { ascending: false });
   if (error || !data || !data.length) {
-    body.innerHTML = '<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">No tienes alertas activas.</p>';
+    body.innerHTML = `<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">${t('alertsEmpty')}</p>`;
     return;
   }
   body.innerHTML = data.map(a => {
-    const dirTxt = a.direction === 'above' ? 'suba por encima de' : 'baje por debajo de';
-    const estado = a.triggered ? '<span style="color:var(--green);font-size:12px;font-weight:700">✓ Activada</span>' : '<span style="color:var(--text3);font-size:12px">Vigilando…</span>';
+    const dirTxt = a.direction === 'above' ? t('alertDirAbove') : t('alertDirBelow');
+    const estado = a.triggered ? `<span style="color:var(--green);font-size:12px;font-weight:700">✓ ${t('alertTriggered')}</span>` : `<span style="color:var(--text3);font-size:12px">${t('alertWatching')}</span>`;
     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);">
       <div>
         <div style="font-weight:700;font-size:14px">${a.ticker} ${dirTxt} ${a.target_price}€</div>
         <div style="font-size:12px;margin-top:2px">${estado}</div>
       </div>
-      <button onclick="eliminarAlerta(${a.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">Borrar</button>
+      <button onclick="eliminarAlerta(${a.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">${t('btnBorrar')}</button>
     </div>`;
   }).join('');
 }
 async function calcularPrecioSugerido() {
   const ticker = document.getElementById('alertTicker').value.trim().toUpperCase();
   const box = document.getElementById('precioSugeridoBox');
-  if (!ticker) { alert('Escribe primero el ticker'); return; }
+  if (!ticker) { alert(t('alertEscribeTicker')); return; }
   box.style.display = 'block';
-  box.innerHTML = 'Calculando...';
+  box.innerHTML = t('alertCalculando');
   try {
     const d = await fetchStock(ticker);
-    if (d.tipo === 'crypto') { box.innerHTML = 'Las cripto no tienen PER, así que no podemos calcular un precio "justo" con este método.'; return; }
+    if (d.tipo === 'crypto') { box.innerHTML = t('alertCryptoSinPer'); return; }
     const eps = d.eps;
-    if (!eps || eps <= 0) { box.innerHTML = `${ticker} no tiene beneficios positivos (EPS), así que no podemos calcular un precio de referencia con este método.`; return; }
+    if (!eps || eps <= 0) { box.innerHTML = tf('alertSinBeneficios', { ticker }); return; }
     const ref = PER_SECTORES[d.sector] || PER_SECTORES['default'];
     const precioCompra = eps * ref.bajo;
     const precioVenta = eps * ref.alto;
-    box.innerHTML = `Según el PER medio de <strong>${ref.nombre}</strong> (${ref.bajo}x–${ref.alto}x) y el beneficio por acción actual (${eps.toFixed(2)}€):<br>
-      🟢 <strong style="color:var(--green)">Precio de compra (zona barata):</strong> ${precioCompra.toFixed(2)}€ <button onclick="rellenarAlerta('below', ${precioCompra.toFixed(2)})" style="margin-left:6px;background:none;border:1px solid var(--border2);color:var(--green);padding:2px 8px;border-radius:100px;font-size:11px;cursor:pointer;font-family:inherit;">Usar</button><br>
-      🔴 <strong style="color:var(--red)">Precio de venta (zona cara):</strong> ${precioVenta.toFixed(2)}€ <button onclick="rellenarAlerta('above', ${precioVenta.toFixed(2)})" style="margin-left:6px;background:none;border:1px solid var(--border2);color:var(--red);padding:2px 8px;border-radius:100px;font-size:11px;cursor:pointer;font-family:inherit;">Usar</button><br>
-      <span style="color:var(--text3);font-size:11px">Precio actual: ${d.precio.toFixed(2)}€. Esto es orientativo, no una recomendación de inversión.</span>`;
+    box.innerHTML = `${tf('alertPerMedioTpl', { sector: sectorNombre(d.sector), bajo: ref.bajo, alto: ref.alto, eps: eps.toFixed(2) })}<br>
+      🟢 <strong style="color:var(--green)">${t('alertPrecioCompra')}:</strong> ${precioCompra.toFixed(2)}€ <button onclick="rellenarAlerta('below', ${precioCompra.toFixed(2)})" style="margin-left:6px;background:none;border:1px solid var(--border2);color:var(--green);padding:2px 8px;border-radius:100px;font-size:11px;cursor:pointer;font-family:inherit;">${t('alertUsar')}</button><br>
+      🔴 <strong style="color:var(--red)">${t('alertPrecioVenta')}:</strong> ${precioVenta.toFixed(2)}€ <button onclick="rellenarAlerta('above', ${precioVenta.toFixed(2)})" style="margin-left:6px;background:none;border:1px solid var(--border2);color:var(--red);padding:2px 8px;border-radius:100px;font-size:11px;cursor:pointer;font-family:inherit;">${t('alertUsar')}</button><br>
+      <span style="color:var(--text3);font-size:11px">${tf('alertPrecioActualTpl', { precio: d.precio.toFixed(2) })}</span>`;
   } catch (e) {
-    box.innerHTML = `No encontramos "${ticker}". Comprueba el ticker.`;
+    box.innerHTML = tf('alertNoEncontrado', { ticker });
   }
 }
 function rellenarAlerta(direction, precio) {
@@ -1995,20 +2508,20 @@ async function crearAlerta() {
   let ticker = document.getElementById('alertTicker').value.trim().toUpperCase();
   const direction = document.getElementById('alertDirection').value;
   const target = parseFloat(document.getElementById('alertPrice').value);
-  if (!ticker || !target || target <= 0) { alert('Rellena el ticker y un precio válido'); return; }
+  if (!ticker || !target || target <= 0) { alert(t('alertRellenaTicker')); return; }
   let nombre = ticker;
   try {
     const d = await fetchStock(ticker);
     ticker = d.ticker || ticker;
     nombre = d.nombre || ticker;
   } catch (e) {
-    alert(`No encontramos "${ticker}". Prueba con el ticker exacto o el nombre de la empresa.`);
+    alert(tf('alertNoEncontradoNombre', { ticker }));
     return;
   }
   const { error } = await _sb.from('price_alerts').insert({
     user_id: _currentUser.id, ticker, nombre, target_price: target, direction
   });
-  if (error) { alert('Error al crear la alerta'); return; }
+  if (error) { alert(t('alertCrearError')); return; }
   document.getElementById('alertPrice').value = '';
   await cargarAlertas();
 }
@@ -2023,9 +2536,9 @@ function abrirInvitar() {
   const statusEl = document.getElementById('inviteBonusStatus');
   if (_premiumBonusUntil) {
     const fecha = new Date(_premiumBonusUntil).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
-    statusEl.innerHTML = `⏳ Tienes Premium de prueba activo hasta el <strong style="color:var(--yellow)">${fecha}</strong>. Invita a más gente para alargarlo.`;
+    statusEl.innerHTML = tf('inviteBonusActivoTpl', { fecha });
   } else {
-    statusEl.textContent = 'Invita a alguien y desbloqueáis Premium los dos, gratis.';
+    statusEl.textContent = t('inviteBonusDefault');
   }
   document.getElementById('inviteOverlay').classList.add('open');
 }
@@ -2033,11 +2546,11 @@ function cerrarInvitar() { document.getElementById('inviteOverlay').classList.re
 function closeInviteIfBg(e) { if (e.target.id === 'inviteOverlay') cerrarInvitar(); }
 function copiarInviteLink() {
   const link = `https://labolsabro.com?ref=${_referralCode}`;
-  navigator.clipboard.writeText(link).then(() => alert('Link copiado. Ahora a mandarlo 🚀'));
+  navigator.clipboard.writeText(link).then(() => alert(t('inviteLinkCopiado')));
 }
 function compartirInviteWhatsapp() {
   const link = `https://labolsabro.com?ref=${_referralCode}`;
-  const texto = `🪰 Mira esta app de bolsa y ahorro: ${link}\nSi te apuntas con mi link, los dos conseguimos búsquedas gratis 🔥`;
+  const texto = tf('inviteWhatsappTexto', { link });
   window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
 }
 
@@ -2049,29 +2562,29 @@ function cerrarRecordatorios() { document.getElementById('remindersOverlay').cla
 function closeRemindersIfBg(e) { if (e.target.id === 'remindersOverlay') cerrarRecordatorios(); }
 async function cargarRecordatorios() {
   const body = document.getElementById('remindersBody');
-  body.innerHTML = '<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">Cargando...</p>';
+  body.innerHTML = `<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">${t('loadingGeneric')}</p>`;
   const { data, error } = await _sb.from('reminders')
     .select('*').eq('user_id', _currentUser.id)
     .order('created_at', { ascending: false });
   if (error || !data || !data.length) {
-    body.innerHTML = '<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">No tienes recordatorios activos.</p>';
+    body.innerHTML = `<p style="color:var(--text2);font-size:14px;padding:12px 0;text-align:center">${t('remindersEmpty')}</p>`;
     return;
   }
-  const frecTxt = { diario: 'Todos los días', laborables: 'Solo laborables', findes: 'Solo fines de semana' };
+  const frecTxt = { diario: t('remFrecDiario'), laborables: t('remFrecLaborables'), findes: t('remFrecFindes') };
   body.innerHTML = data.map(r => `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);">
       <div>
         <div style="font-weight:700;font-size:14px">${r.mensaje}</div>
         <div style="font-size:12px;color:var(--text3);margin-top:2px">${frecTxt[r.frecuencia] || r.frecuencia}</div>
       </div>
-      <button onclick="eliminarRecordatorio(${r.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">Borrar</button>
+      <button onclick="eliminarRecordatorio(${r.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">${t('btnBorrar')}</button>
     </div>`).join('');
 }
 async function crearRecordatorio() {
   const mensaje = document.getElementById('remMensaje').value.trim();
   const frecuencia = document.getElementById('remFrecuencia').value;
-  if (!mensaje) { alert('Escribe el mensaje del recordatorio'); return; }
+  if (!mensaje) { alert(t('remMensajeVacio')); return; }
   const { error } = await _sb.from('reminders').insert({ user_id: _currentUser.id, mensaje, frecuencia });
-  if (error) { alert('Error al crear el recordatorio'); return; }
+  if (error) { alert(t('remCrearError')); return; }
   document.getElementById('remMensaje').value = '';
   await cargarRecordatorios();
 }
@@ -2088,13 +2601,13 @@ let _retoActual = null;
 function hoyStr() { return new Date().toISOString().slice(0, 10); }
 
 function generarRetoDelDia() {
-  if (!_jars.length) return { texto: 'Crea tu primer bote de ahorro para empezar. Tarda 10 segundos.', tipo: 'crear_bote' };
+  if (!_jars.length) return { texto: t('retoDelDiaCrearBote'), tipo: 'crear_bote' };
   const seed = new Date().getDate() + new Date().getMonth() * 31;
   const jar = _jars[seed % _jars.length];
   const montos = [1, 2, 3, 5];
   const monto = montos[seed % montos.length];
   const anual = monto * 365;
-  return { texto: `Aporta ${monto} € al bote "${jar.nombre}". Solo eso. Si lo hicieras cada día, en un año serían ${anual.toLocaleString('es-ES')} € sin apenas notarlo.`, tipo: 'aportar', jarId: jar.id, jarNombre: jar.nombre, monto };
+  return { texto: tf('retoDelDiaAportarTpl', { monto, jar: jar.nombre, anual: anual.toLocaleString('es-ES') }), tipo: 'aportar', jarId: jar.id, jarNombre: jar.nombre, monto };
 }
 
 let _posiciones = [];
@@ -2126,7 +2639,7 @@ function renderHeroMockup() {
   const totalBotes = _jars.reduce((s, j) => s + parseFloat(j.saldo || 0), 0);
   const saldoTotal = totalBotes + parseFloat(_invertidoSimulado || 0);
   document.getElementById('pHola').textContent = `${t('phoneHolaName')} ${window._panelNombre} 👋`;
-  document.getElementById('pLevel').textContent = `Nv.${nivel} · ${_totalXP || 0} XP`;
+  document.getElementById('pLevel').textContent = tf('nivelXpTpl', { nivel, xp: _totalXP || 0 });
   document.getElementById('pSaldoTotal').textContent = fmtEUR(saldoTotal);
   document.getElementById('pSaldoDelta').textContent = totalBotes === 0 && _invertidoSimulado === 0 ? t('phoneSaldoDelta') : t('phoneControl');
   document.getElementById('pAhorrando').textContent = fmtEUR(totalBotes, 0);
@@ -2139,7 +2652,7 @@ function renderHeroMockup() {
 async function abrirPanel() {
   if (!_currentUser) { openAuthModal(); return; }
   await cargarPanelData();
-  document.getElementById('panelSaludo').textContent = `👋 Hola, ${window._panelNombre}`;
+  document.getElementById('panelSaludo').textContent = tf('saludoPanelTpl', { nombre: window._panelNombre });
   await renderPanel();
   document.getElementById('panelOverlay').classList.add('open');
 }
@@ -2160,12 +2673,12 @@ async function renderPanel() {
   const deltaMes = (jarMovs || []).reduce((s, m) => s + parseFloat(m.monto), 0) + (invMovs || []).reduce((s, m) => s + parseFloat(m.monto), 0);
   document.getElementById('panelDeltaMes').textContent = (deltaMes >= 0 ? '+' : '') + fmtEUR(deltaMes);
 
-  document.getElementById('panelRetoTexto').textContent = _retoCompletadoHoy ? '✓ Ya lo has completado hoy. Vuelve mañana a por otro.' : (_retoActual?.texto || '');
+  document.getElementById('panelRetoTexto').textContent = _retoCompletadoHoy ? t('retoCompletadoTxt') : (_retoActual?.texto || '');
   document.getElementById('panelRetoBtn').style.display = _retoCompletadoHoy ? 'none' : (_retoActual?.tipo === 'crear_bote' ? 'none' : 'block');
 
   const botesEl = document.getElementById('panelBotes');
   if (!_jars.length) {
-    botesEl.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Aún no tienes botes. Crea el primero.</p>';
+    botesEl.innerHTML = `<p style="color:var(--text2);font-size:13px;padding:8px 0">${t('botesEmpty')}</p>`;
   } else {
     botesEl.innerHTML = _jars.map(j => `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
       <div>
@@ -2173,7 +2686,7 @@ async function renderPanel() {
         <div style="font-size:12px;color:var(--text3)">${fmtEUR(parseFloat(j.saldo))}</div>
       </div>
       <div style="display:flex;gap:6px">
-        <button onclick="aportarBote(${j.id})" style="background:none;border:1px solid var(--border2);color:var(--green);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Aportar</button>
+        <button onclick="aportarBote(${j.id})" style="background:none;border:1px solid var(--border2);color:var(--green);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">${t('btnAportar')}</button>
         <button onclick="borrarBote(${j.id}, '${j.nombre.replace(/'/g, "\\'")}')" style="background:none;border:1px solid var(--border2);color:var(--red);padding:6px 10px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">🗑</button>
       </div>
     </div>`).join('');
@@ -2215,13 +2728,13 @@ async function obtenerPrecioActual(ticker) {
 async function renderCartera() {
   const el = document.getElementById('carteraPosiciones');
   if (!_posiciones.length) {
-    el.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Aún no tienes ninguna posición. Añade la primera, crack.</p>';
+    el.innerHTML = `<p style="color:var(--text2);font-size:13px;padding:8px 0">${t('carteraEmpty')}</p>`;
     document.getElementById('carteraInvertido').textContent = '0,00 €';
     document.getElementById('carteraActual').textContent = '0,00 €';
     document.getElementById('carteraGanancia').textContent = '0,00 €';
     return;
   }
-  el.innerHTML = '<p style="color:var(--text2);font-size:13px;padding:8px 0">Cargando precios...</p>';
+  el.innerHTML = `<p style="color:var(--text2);font-size:13px;padding:8px 0">${t('cargandoPrecios')}</p>`;
   let totalInvertidoEUR = 0, totalActualEUR = 0;
   const filas = [];
   for (const p of _posiciones) {
@@ -2238,16 +2751,17 @@ async function renderCartera() {
     let hint = '';
     if (d && d.tipo !== 'crypto' && d.pe) {
       const sem = semaforo(d.pe, d.sector || 'default', d.peg);
-      const hintTxt = sem.cls === 'sem-green' ? '🟢 Zona de valor — podría ser momento de comprar más' : sem.cls === 'sem-yellow' ? '🟡 Precio justo — ni prisa por comprar ni por vender' : sem.cls === 'sem-red' ? '🔴 Zona cara — podría ser momento de recoger beneficios' : '';
+      const hintTxt = sem.cls === 'sem-green' ? t('hintZonaValor') : sem.cls === 'sem-yellow' ? t('hintPrecioJusto') : sem.cls === 'sem-red' ? t('hintZonaCara') : '';
       if (hintTxt) hint = `<div style="font-size:11.5px;color:var(--text3);margin-top:3px">${hintTxt}</div>`;
     }
+    const precioLineTxt = precioActual ? tf('precioAhoraTpl', { precio: precioActual.toFixed(2) + ' ' + moneda + fmtMonedaConvertida(precioActual, moneda), pct: (gananciaPct >= 0 ? '+' : '') + gananciaPct.toFixed(1) }) : t('precioNoDisponible');
     filas.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
       <div>
         <div style="font-weight:700;font-size:13.5px">${p.ticker} <span style="font-weight:400;color:var(--text3);font-size:11.5px">· ${p.shares} uds a ${p.precio_compra.toFixed(2)} ${moneda}</span></div>
-        <div style="font-size:12px;color:${color};margin-top:2px">${precioActual ? precioActual.toFixed(2) + ' ' + moneda + fmtMonedaConvertida(precioActual, moneda) + ' ahora · ' + (gananciaPct >= 0 ? '+' : '') + gananciaPct.toFixed(1) + '%' : 'Precio no disponible'}</div>
+        <div style="font-size:12px;color:${color};margin-top:2px">${precioLineTxt}</div>
         ${hint}
       </div>
-      <button onclick="eliminarPosicion(${p.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:5px 10px;border-radius:100px;font-size:11.5px;cursor:pointer;font-family:inherit;">Borrar</button>
+      <button onclick="eliminarPosicion(${p.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:5px 10px;border-radius:100px;font-size:11.5px;cursor:pointer;font-family:inherit;">${t('btnBorrar')}</button>
     </div>`);
   }
   el.innerHTML = filas.join('');
@@ -2259,25 +2773,25 @@ async function renderCartera() {
   ganEl.style.color = gananciaEUR >= 0 ? 'var(--green)' : 'var(--red)';
 }
 async function anadirPosicion() {
-  const ticker = prompt('¿Qué empresa quieres simular? (ticker, ej: AAPL, TSLA)');
+  const ticker = prompt(t('anadirPosicionPromptTicker'));
   if (!ticker || !ticker.trim()) return;
-  const t = ticker.trim().toUpperCase();
-  const sharesStr = prompt('¿Cuántas acciones simuladas quieres comprar?');
+  const tk = ticker.trim().toUpperCase();
+  const sharesStr = prompt(t('anadirPosicionPromptShares'));
   const shares = parseFloat(sharesStr);
   if (!shares || shares <= 0) return;
   let precio;
   try {
-    const d = await fetchStock(t);
+    const d = await fetchStock(tk);
     precio = d.precio;
   } catch (e) {
-    if (e.message === 'limite') alert('Has alcanzado el límite de búsquedas. Espera un momento e inténtalo de nuevo.');
-    else alert('No encontramos ese ticker.');
+    if (e.message === 'limite') alert(t('limiteBusquedasAlert'));
+    else alert(t('noEncontramosTicker'));
     return;
   }
   const { data, error } = await _sb.from('simulated_positions').insert({
-    user_id: _currentUser.id, ticker: t, nombre: t, shares, precio_compra: precio
+    user_id: _currentUser.id, ticker: tk, nombre: tk, shares, precio_compra: precio
   }).select().single();
-  if (error) { alert('Error al añadir la posición'); return; }
+  if (error) { alert(t('errorAnadirPosicion')); return; }
   _posiciones.unshift(data);
   await renderPanel();
 }
@@ -2288,16 +2802,16 @@ async function eliminarPosicion(id) {
 }
 
 async function crearBote() {
-  const nombre = prompt('¿Cómo quieres llamar a tu bote? (ej: vacaciones, coche, emergencias)');
+  const nombre = prompt(t('crearBotePrompt'));
   if (!nombre || !nombre.trim()) return;
   const { data, error } = await _sb.from('savings_jars').insert({ user_id: _currentUser.id, nombre: nombre.trim(), saldo: 0 }).select().single();
-  if (error) { alert('Error al crear el bote'); return; }
+  if (error) { alert(t('crearBoteError')); return; }
   _jars.push(data);
   _retoActual = generarRetoDelDia();
   await renderPanel();
 }
 async function borrarBote(id, nombre) {
-  if (!confirm(`¿Seguro que quieres borrar el bote "${nombre}"? Perderás el saldo guardado.`)) return;
+  if (!confirm(tf('borrarBoteConfirmTpl', { nombre }))) return;
   await _sb.from('savings_jars').delete().eq('id', id);
   _jars = _jars.filter(j => j.id !== id);
   _retoActual = generarRetoDelDia();
@@ -2305,7 +2819,7 @@ async function borrarBote(id, nombre) {
 }
 
 async function aportarBote(jarId) {
-  const montoStr = prompt('¿Cuánto quieres aportar a este bote? (€)');
+  const montoStr = prompt(t('aportarBotePrompt'));
   const monto = parseFloat(montoStr);
   if (!monto || monto <= 0) return;
   const jar = _jars.find(j => j.id === jarId);
@@ -2318,7 +2832,7 @@ async function aportarBote(jarId) {
 }
 
 async function aportarInversion() {
-  const montoStr = prompt('¿Cuánto quieres añadir a tu inversión simulada? (€, no es dinero real)');
+  const montoStr = prompt(t('aportarInversionPrompt'));
   const monto = parseFloat(montoStr);
   if (!monto || monto <= 0) return;
   const nuevoTotal = parseFloat(_invertidoSimulado || 0) + monto;
@@ -2348,7 +2862,7 @@ function abrirChatIA() {
   document.getElementById('chatRegion').value = _chatRegion;
   document.getElementById('chatOverlay').classList.add('open');
   if (!_chatHistorial.length) {
-    pintarMensajeChat('mosca', '¡Ey! Soy Mosca 🪰. Pregúntame lo que quieras de ahorro, bolsa o dinero en general. Voy al grano, sin rollos.');
+    pintarMensajeChat('mosca', t('chatSaludoInicial'));
   }
   document.getElementById('chatInput').focus();
 }
@@ -2380,7 +2894,7 @@ async function enviarMensajeChat() {
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'chatLoading';
   loadingDiv.style.cssText = 'align-self:flex-start;color:var(--text3);font-size:13px;padding:4px 14px;';
-  loadingDiv.textContent = '🪰 escribiendo...';
+  loadingDiv.textContent = t('chatEscribiendo');
   box.appendChild(loadingDiv);
   box.scrollTop = box.scrollHeight;
   try {
@@ -2395,11 +2909,11 @@ async function enviarMensajeChat() {
       pintarMensajeChat('mosca', data.respuesta);
       _chatHistorial.push({ role: 'mosca', texto: data.respuesta });
     } else {
-      pintarMensajeChat('mosca', 'Uy, se me ha ido la cabeza un momento. Prueba otra vez.');
+      pintarMensajeChat('mosca', t('chatErrorRespuesta'));
     }
   } catch (e) {
     document.getElementById('chatLoading')?.remove();
-    pintarMensajeChat('mosca', 'No puedo conectar ahora mismo. Prueba en un momento.');
+    pintarMensajeChat('mosca', t('chatErrorConexion'));
   }
   btn.disabled = false;
 }
@@ -2541,7 +3055,7 @@ function renderCrypto(el, d) {
   const riesgoIco = { 'Alto':'🟡', 'Muy alto':'🔴', 'Extremo':'🔴' };
   const semCls = viabColor[d.viabilidad] || 'sem-gray';
   const ico = riesgoIco[d.riesgo] || '❓';
-  el.innerHTML = `<div style="width:100%"><div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="width:44px;height:44px;border-radius:10px;background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">₿</div><div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">${d.nombre}</div><div style="font-size:12px;color:var(--text3)">${d.ticker} · ${d.subtipo||d.tipoCrypto||'Crypto'}</div></div><div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text)">${d.precio?d.precio.toLocaleString('es-ES', {maximumFractionDigits:2}):'-'} $${d.precio?fmtMonedaConvertida(d.precio, 'USD'):''}</div><div style="font-size:13px;color:${clr};font-weight:600">${flecha} ${Math.abs(d.cambioPct||d.cambio||0).toFixed(2)}% hoy</div></div></div><div class="semáforo ${semCls}" style="margin-bottom:16px"><div class="semáforo-icon">${ico}</div><div><div class="semáforo-title">Viabilidad: ${d.viabilidad} · Riesgo: ${d.riesgo}</div><div class="semáforo-desc">${d.descripcion||d.descripción||''}</div></div></div><div style="margin-top:12px;padding:12px 16px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:12px;font-size:12px;color:var(--red);line-height:1.7">⚠️ <strong>Las criptomonedas son activos de muy alto riesgo.</strong> Puedes perder todo tu dinero. Nunca inviertas más de lo que puedas permitirte perder.</div><div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border);margin-top:12px">Precio: proveedores con licencia · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo.</div></div>`;
+  el.innerHTML = `<div style="width:100%"><div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;"><div style="width:44px;height:44px;border-radius:10px;background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">₿</div><div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text)">${d.nombre}</div><div style="font-size:12px;color:var(--text3)">${d.ticker} · ${d.subtipo||d.tipoCrypto||'Crypto'}</div></div><div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text)">${d.precio?d.precio.toLocaleString('es-ES', {maximumFractionDigits:2}):'-'} $${d.precio?fmtMonedaConvertida(d.precio, 'USD'):''}</div><div style="font-size:13px;color:${clr};font-weight:600">${flecha} ${Math.abs(d.cambioPct||d.cambio||0).toFixed(2)}% ${t('hoySuffix')}</div></div></div><div class="semáforo ${semCls}" style="margin-bottom:16px"><div class="semáforo-icon">${ico}</div><div><div class="semáforo-title">${tf('cryptoViabRiesgoTpl', { viabilidad: d.viabilidad, riesgo: d.riesgo })}</div><div class="semáforo-desc">${d.descripcion||d.descripción||''}</div></div></div><div style="margin-top:12px;padding:12px 16px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:12px;font-size:12px;color:var(--red);line-height:1.7">⚠️ <strong>${t('cryptoRiesgoAlerta')}</strong> ${t('cryptoRiesgoAlerta2')}</div><div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border);margin-top:12px">${tf('cryptoFooterDatos', { time: new Date().toLocaleTimeString('es-ES') })}</div></div>`;
 }
 
 let _pdfData = null;
@@ -2577,55 +3091,55 @@ function generarProsContras(d, sector) {
   const pros = [], contras = [];
   const ref = PER_SECTORES[sector] || PER_SECTORES['default'];
   if (d.pe && d.pe > 0) {
-    if (d.pe < ref.bajo) pros.push('Cotiza barata para su sector (PER bajo)');
-    else if (d.pe > ref.alto) contras.push('Está cara para su sector, pagas una prima alta');
+    if (d.pe < ref.bajo) pros.push(t('pcBaratoSector'));
+    else if (d.pe > ref.alto) contras.push(t('pcCaroSector'));
   }
   if (d.margen !== null && d.margen !== undefined) {
-    if (d.margen > 0.15) pros.push('Buenos márgenes: gestiona bien los costes');
-    else if (d.margen < 0.05) contras.push('Márgenes ajustados, gana poco por cada euro de venta');
+    if (d.margen > 0.15) pros.push(t('pcBuenMargen'));
+    else if (d.margen < 0.05) contras.push(t('pcMargenAjustado'));
   }
   if (d.roe !== null && d.roe !== undefined) {
-    if (d.roe > 0.15) pros.push('Rentabiliza muy bien el capital de los accionistas (ROE alto)');
-    else if (d.roe < 0.05) contras.push('Rentabiliza poco el capital invertido');
+    if (d.roe > 0.15) pros.push(t('pcRoeAlto'));
+    else if (d.roe < 0.05) contras.push(t('pcRoeBajo'));
   }
   if (d.crecimientoIng !== null && d.crecimientoIng !== undefined) {
-    if (d.crecimientoIng > 0.10) pros.push('Los ingresos crecen con fuerza');
-    else if (d.crecimientoIng < 0) contras.push('Los ingresos están cayendo');
+    if (d.crecimientoIng > 0.10) pros.push(t('pcIngresosCrecen'));
+    else if (d.crecimientoIng < 0) contras.push(t('pcIngresosCaen'));
   }
   if (d.freeCashflow !== null && d.freeCashflow !== undefined) {
-    if (d.freeCashflow > 0) pros.push('Genera caja de verdad, no solo beneficio en papel');
-    else contras.push('Quema caja: gasta más de lo que ingresa');
+    if (d.freeCashflow > 0) pros.push(t('pcCajaReal'));
+    else contras.push(t('pcQuemaCaja'));
   }
   if (d.debtToEquity !== null && d.debtToEquity !== undefined) {
-    if (d.debtToEquity < 50) pros.push('Poca deuda, balance sólido');
-    else if (d.debtToEquity > 150) contras.push('Mucha deuda respecto a su capital');
+    if (d.debtToEquity < 50) pros.push(t('pcPocaDeuda'));
+    else if (d.debtToEquity > 150) contras.push(t('pcMuchaDeuda'));
   }
-  if (d.divY && d.divY > 0.02) pros.push('Reparte un dividendo decente');
+  if (d.divY && d.divY > 0.02) pros.push(t('pcDividendoDecente'));
   if (d.peg && d.peg > 0) {
-    if (d.peg < 1) pros.push('El precio está justificado por su crecimiento (PEG bajo)');
-    else if (d.peg > 2) contras.push('Paga muy caro incluso teniendo en cuenta su crecimiento (PEG alto)');
+    if (d.peg < 1) pros.push(t('pcPegBajo'));
+    else if (d.peg > 2) contras.push(t('pcPegAlto'));
   }
   if (d.crecimientoEps !== null && d.crecimientoEps !== undefined) {
-    if (d.crecimientoEps > 0.15) pros.push('El beneficio por acción crece con fuerza');
-    else if (d.crecimientoEps < 0) contras.push('El beneficio por acción está cayendo');
+    if (d.crecimientoEps > 0.15) pros.push(t('pcEpsCrece'));
+    else if (d.crecimientoEps < 0) contras.push(t('pcEpsCae'));
   }
   if (d.currentRatio !== null && d.currentRatio !== undefined) {
-    if (d.currentRatio > 1.5) pros.push('Buena liquidez: puede pagar sus deudas a corto plazo sin apuros');
-    else if (d.currentRatio < 1) contras.push('Liquidez ajustada: podría tener problemas para pagar deudas a corto plazo');
+    if (d.currentRatio > 1.5) pros.push(t('pcLiquidezBuena'));
+    else if (d.currentRatio < 1) contras.push(t('pcLiquidezAjustada'));
   }
-  if (!pros.length) pros.push('No destaca especialmente en los indicadores que analizamos');
-  if (!contras.length) contras.push('No detectamos señales de alarma claras en los datos');
+  if (!pros.length) pros.push(t('pcSinPros'));
+  if (!contras.length) contras.push(t('pcSinContras'));
   return { pros, contras };
 }
 
 function generarReinversion(d) {
   if (d.payoutRatio === null || d.payoutRatio === undefined) {
-    return 'No tenemos datos suficientes para saber cuánto reinvierte esta empresa en crecer.';
+    return t('reinvNoDatos');
   }
   const payout = Math.min(1, Math.max(0, d.payoutRatio));
   const reinvierte = (1 - payout) * 100;
   const reparte = payout * 100;
-  return `De cada 100€ que gana, reparte ${reparte.toFixed(0)}€ en dividendos a los accionistas y reinvierte ${reinvierte.toFixed(0)}€ en el propio negocio: nuevos productos, expansión, tecnología o pagar deuda.`;
+  return tf('reinvTexto', { reparte: reparte.toFixed(0), reinvierte: reinvierte.toFixed(0) });
 }
 
 const CLIENTES_POR_SECTOR = {
@@ -2645,35 +3159,35 @@ const CLIENTES_POR_SECTOR = {
 
 function generarRespuestasChecklist(d, ticker, sector, score) {
   const { contras } = generarProsContras(d, sector);
-  const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados` : '';
-  const industriaTxt = d.industry ? `, dentro de la industria de ${d.industry}` : '';
+  const empleadosTxt = d.employees ? tf('chkEmpleadosSuffix', { n: d.employees.toLocaleString('es-ES') }) : '';
+  const industriaTxt = d.industry ? tf('chkIndustriaSuffix', { industry: d.industry }) : '';
   const ingresoTxt = d.crecimientoIng !== null && d.crecimientoIng !== undefined
-    ? `Sus ingresos ${d.crecimientoIng >= 0 ? 'han crecido' : 'han caído'} un ${Math.abs(d.crecimientoIng * 100).toFixed(1)}% en el último periodo reportado.`
-    : 'No tenemos datos de la evolución reciente de sus ingresos.';
+    ? tf(d.crecimientoIng >= 0 ? 'chkIngresoCrecidoTpl' : 'chkIngresoCaidoTpl', { pct: Math.abs(d.crecimientoIng * 100).toFixed(1) })
+    : t('chkNoIngresoData');
   const epsTxt = d.crecimientoEps !== null && d.crecimientoEps !== undefined
-    ? ` El beneficio por acción ${d.crecimientoEps >= 0 ? 'ha crecido' : 'ha caído'} un ${Math.abs(d.crecimientoEps * 100).toFixed(1)}%.`
+    ? tf(d.crecimientoEps >= 0 ? 'chkEpsCrecidoTpl' : 'chkEpsCaidoTpl', { pct: Math.abs(d.crecimientoEps * 100).toFixed(1) })
     : '';
   const payout = d.payoutRatio !== null && d.payoutRatio !== undefined ? Math.min(1, Math.max(0, d.payoutRatio)) : null;
   return [
-    { q: '¿Qué hace la empresa?', a: `${d.nombre || ticker} opera en el sector ${d.sector || 'no disponible'}${industriaTxt}.${empleadosTxt}.` },
-    { q: '¿En qué sector opera?', a: `${d.sector || 'Sector no disponible'}${industriaTxt}.` },
-    { q: '¿Cómo genera sus ingresos?', a: SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'] },
-    { q: '¿Quiénes son sus clientes?', a: CLIENTES_POR_SECTOR[d.sector] || CLIENTES_POR_SECTOR['default'] },
-    { q: '¿Qué hace con el dinero que genera?', a: generarReinversion(d) },
-    { q: '¿Cuánto reinvierte en el negocio?', a: payout !== null ? `Reinvierte aproximadamente el ${((1 - payout) * 100).toFixed(0)}% de su beneficio en el propio negocio, en vez de repartirlo en dividendos.` : 'No tenemos datos suficientes de payout para calcularlo.' },
-    { q: '¿Cómo ha evolucionado financieramente?', a: ingresoTxt + epsTxt },
-    { q: '¿Qué riesgos tiene su actividad?', a: contras.join('. ') + '.' },
-    { q: '¿Qué perspectivas puede tener a largo plazo?', a: generarVeredictoIndividual(d, score, ticker).texto },
-    { q: '¿Por qué considero que es una inversión adecuada para mi estrategia?', a: null },
+    { q: t('chkQEmpresa'), a: tf('chkAEmpresaTpl', { nombre: d.nombre || ticker, sector: d.sector || t('chkSectorGenerico'), industria: industriaTxt, empleados: empleadosTxt }) },
+    { q: t('chkQSector'), a: tf('chkASectorTpl', { sector: d.sector || t('chkSectorNoDisponible'), industria: industriaTxt }) },
+    { q: t('chkQIngresos'), a: sectorExplicacion(d.sector) },
+    { q: t('chkQClientes'), a: clientesPorSector(d.sector) },
+    { q: t('chkQDinero'), a: generarReinversion(d) },
+    { q: t('chkQReinvierte'), a: payout !== null ? tf('chkAReinvierteTpl', { pct: ((1 - payout) * 100).toFixed(0) }) : t('chkANoPayout') },
+    { q: t('chkQEvolucion'), a: ingresoTxt + epsTxt },
+    { q: t('chkQRiesgos'), a: contras.join('. ') + '.' },
+    { q: t('chkQPerspectivas'), a: generarVeredictoIndividual(d, score, ticker).texto },
+    { q: t('chkQEstrategia'), a: null },
   ];
 }
 
 function generarVeredictoIndividual(d, score, ticker) {
-  if (score === null) return { emoji: '❓', titulo: 'Sin datos suficientes', texto: `No tenemos suficientes datos financieros de ${ticker} para dar un veredicto fiable.` };
+  if (score === null) return { emoji: '❓', titulo: t('veredictoSinDatosTitulo'), texto: tf('veredictoSinDatosTexto', { ticker }) };
   const { pros, contras } = generarProsContras(d, d.sector);
-  if (score >= 7) return { emoji: '✅', titulo: 'Buena opción a día de hoy', texto: `Con ${score.toFixed(1)}/10, ${ticker} destaca sobre todo porque ${pros[0]?.toLowerCase() || 'tiene buenos números en conjunto'}. Eso no significa que no pueda bajar mañana — invertir siempre lleva riesgo.` };
-  if (score >= 4) return { emoji: '🟡', titulo: 'Opción correcta, sin ser un chollo', texto: `Con ${score.toFixed(1)}/10, ${ticker} no destaca especialmente ni tampoco preocupa. ${contras[0] || 'Vigila de cerca sus próximos resultados'} antes de decidir.` };
-  return { emoji: '🔴', titulo: 'Mejor esperar o mirar otra', texto: `Con ${score.toFixed(1)}/10, ${ticker} tiene señales que invitan a la cautela: ${contras[0]?.toLowerCase() || 'varios indicadores están por debajo de lo ideal'}. No es una recomendación de venta, solo un aviso a tener en cuenta.` };
+  if (score >= 7) return { emoji: '✅', titulo: t('veredictoBuenoTitulo'), texto: tf('veredictoBuenoTexto', { score: score.toFixed(1), ticker, pro: pros[0]?.toLowerCase() || t('veredictoBuenoDefaultPro') }) };
+  if (score >= 4) return { emoji: '🟡', titulo: t('veredictoCorrectoTitulo'), texto: tf('veredictoCorrectoTexto', { score: score.toFixed(1), ticker, contra: contras[0] || t('veredictoCorrectoDefaultContra') }) };
+  return { emoji: '🔴', titulo: t('veredictoMaloTitulo'), texto: tf('veredictoMaloTexto', { score: score.toFixed(1), ticker, contra: contras[0]?.toLowerCase() || t('veredictoMaloDefaultContra') }) };
 }
 
 function descargarPDF() {
@@ -2681,7 +3195,7 @@ function descargarPDF() {
   const gratis = 3;
   const usados = _userPlan !== 'free' ? 0 : getPDFsDescargados();
   if (_userPlan === 'free' && usados >= gratis) {
-    const ir = confirm('Has usado tus 3 PDFs gratuitos de hoy. ¿Quieres ver los planes Premium para descargas ilimitadas?');
+    const ir = confirm(t('pdfLimiteAlert'));
     if (ir) window.location.href = '/premium.html';
     return;
   }
@@ -2701,7 +3215,7 @@ function descargarPDF() {
   doc.text('laBolsabro', pad, 18);
   doc.setFontSize(10);
   doc.setTextColor(163, 163, 163);
-  doc.text('Informe de análisis · Solo educativo, no asesoramiento financiero', pad, 27);
+  doc.text(t('pdfInformeAnalisis'), pad, 27);
   doc.setTextColor(250, 204, 21);
   doc.text(new Date().toLocaleDateString('es-ES'), W - pad, 27, { align: 'right' });
 
@@ -2712,7 +3226,7 @@ function descargarPDF() {
   doc.text(d.nombre || ticker, pad, 55);
   doc.setFontSize(12);
   doc.setTextColor(90, 90, 90);
-  doc.text(`${ticker} · ${d.sector || 'Sector desconocido'}`, pad, 63);
+  doc.text(`${ticker} · ${d.sector || t('pdfSectorDesconocido')}`, pad, 63);
 
   // Precio y puntuación
   doc.setFillColor(20, 20, 20);
@@ -2720,12 +3234,12 @@ function descargarPDF() {
   doc.roundedRect(115, 70, 75, 28, 4, 4, 'F');
 
   doc.setFontSize(10); doc.setTextColor(163, 163, 163);
-  doc.text('Precio actual', pad + 6, 79);
+  doc.text(t('pdfPrecioActual'), pad + 6, 79);
   doc.setFontSize(16); doc.setTextColor(245, 245, 245); doc.setFont('helvetica', 'bold');
   doc.text(`${d.precio?.toLocaleString('es-ES', {maximumFractionDigits:2}) || '—'} ${d.moneda || 'USD'}`, pad + 6, 91);
 
   doc.setFontSize(10); doc.setTextColor(163, 163, 163); doc.setFont('helvetica', 'normal');
-  doc.text('Puntuación global', 121, 79);
+  doc.text(t('pdfPuntuacionGlobal'), 121, 79);
   const scoreColor = score >= 7 ? [34,197,94] : score >= 4 ? [250,204,21] : [248,113,113];
   doc.setFontSize(16); doc.setTextColor(...scoreColor); doc.setFont('helvetica', 'bold');
   doc.text(score !== null ? `${score.toFixed(1)} / 10` : '—', 121, 91);
@@ -2733,23 +3247,23 @@ function descargarPDF() {
   // Métricas
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12); doc.setTextColor(17, 17, 17);
-  doc.text('Métricas clave', pad, 112);
+  doc.text(t('pdfMetricasClave'), pad, 112);
 
   const metricas = [
-    ['PER', d.pe ? d.pe.toFixed(1) + 'x' : '—'],
-    ['PEG', d.peg ? d.peg.toFixed(2) + 'x' : '—'],
-    ['EV/EBITDA', d.evEbitda ? d.evEbitda.toFixed(1) + 'x' : '—'],
-    ['Margen neto', d.margen ? (d.margen * 100).toFixed(1) + '%' : '—'],
-    ['ROE', d.roe ? (d.roe * 100).toFixed(1) + '%' : '—'],
-    ['Crecimiento BPA', d.crecimientoEps ? (d.crecimientoEps * 100).toFixed(1) + '%' : '—'],
-    ['Crecimiento ingresos', d.crecimientoIng ? (d.crecimientoIng * 100).toFixed(1) + '%' : '—'],
-    ['Dividendo', d.divY ? (d.divY * 100).toFixed(2) + '%' : '—'],
-    ['Deuda/Patrimonio', d.debtToEquity ? d.debtToEquity.toFixed(0) + '%' : '—'],
-    ['Free Cash Flow', d.freeCashflow ? fmtMiles(Math.abs(d.freeCashflow)) : '—'],
-    ['Caja total', d.totalCash ? fmtMiles(d.totalCash) : '—'],
-    ['Rango 52 semanas', d.min52 && d.max52 ? `${d.min52.toFixed(1)}–${d.max52.toFixed(1)}` : '—'],
-    ['Beta', d.beta ? d.beta.toFixed(2) : '—'],
-    ['Empleados', d.employees ? d.employees.toLocaleString('es-ES') : '—'],
+    [t('pdfLblPER'), d.pe ? d.pe.toFixed(1) + 'x' : '—'],
+    [t('pdfLblPEG'), d.peg ? d.peg.toFixed(2) + 'x' : '—'],
+    [termLabel('EV/EBITDA'), d.evEbitda ? d.evEbitda.toFixed(1) + 'x' : '—'],
+    [termLabel('Margen neto'), d.margen ? (d.margen * 100).toFixed(1) + '%' : '—'],
+    [termLabel('ROE'), d.roe ? (d.roe * 100).toFixed(1) + '%' : '—'],
+    [termLabel('Crecimiento BPA'), d.crecimientoEps ? (d.crecimientoEps * 100).toFixed(1) + '%' : '—'],
+    [termLabel('Crecimiento ingresos'), d.crecimientoIng ? (d.crecimientoIng * 100).toFixed(1) + '%' : '—'],
+    [termLabel('Dividendo'), d.divY ? (d.divY * 100).toFixed(2) + '%' : '—'],
+    [termLabel('Deuda/Patrimonio'), d.debtToEquity ? d.debtToEquity.toFixed(0) + '%' : '—'],
+    [termLabel('Free Cash Flow'), d.freeCashflow ? fmtMiles(Math.abs(d.freeCashflow)) : '—'],
+    [t('pdfLblCajaTotal'), d.totalCash ? fmtMiles(d.totalCash) : '—'],
+    [termLabel('Rango 52 semanas'), d.min52 && d.max52 ? `${d.min52.toFixed(1)}–${d.max52.toFixed(1)}` : '—'],
+    [termLabel('Beta'), d.beta ? d.beta.toFixed(2) : '—'],
+    [termLabel('Empleados'), d.employees ? d.employees.toLocaleString('es-ES') : '—'],
   ];
 
   let y = 120;
@@ -2767,13 +3281,13 @@ function descargarPDF() {
   doc.setFillColor(10, 10, 10);
   doc.rect(0, 272, W, 25, 'F');
   doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
-  doc.text('laBolsabro · labolsabro.com · Datos: proveedores con licencia · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
-  doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+  doc.text(t('pdfFooterLine1'), W / 2, 282, { align: 'center' });
+  doc.text(t('pdfFooterLine2'), W / 2, 288, { align: 'center' });
   doc.setFontSize(7); doc.setTextColor(60, 60, 60);
   doc.text(pdfMarcaAgua(), W / 2, 293, { align: 'center' });
 
   // Páginas siguientes: veredicto, negocio, pros/contras, reinversión — tantas como haga falta
-  const subtituloPDF = `Análisis en profundidad · ${d.nombre || ticker}`;
+  const subtituloPDF = tf('pdfAnalisisProfundidad', { nombre: d.nombre || ticker });
   function nuevaPagina() {
     pdfFooter(doc, W);
     doc.addPage();
@@ -2794,18 +3308,18 @@ function descargarPDF() {
   y2 = checkBreak(y2, vAltura + 14);
   doc.roundedRect(pad, y2, W - pad * 2, vAltura, 5, 5, 'FD');
   doc.setFont('helvetica', 'bold'); doc.setFontSize(11.5); doc.setTextColor(161, 98, 7);
-  doc.text(`${veredictoInd.emoji} Veredicto: ${veredictoInd.titulo}`, pad + 6, y2 + 10);
+  doc.text(`${veredictoInd.emoji} ${t('pdfVeredictoPrefix')} ${veredictoInd.titulo}`, pad + 6, y2 + 10);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(90, 60, 10);
   doc.text(vTexto, pad + 6, y2 + 17);
   y2 += vAltura + 16;
 
-  const sectorTxt = SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'];
-  const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados` : '';
-  const industriaTxt = d.industry ? `, dentro de la industria de ${d.industry}` : '';
+  const sectorTxt = sectorExplicacion(d.sector);
+  const empleadosTxt = d.employees ? tf('chkEmpleadosSuffix', { n: d.employees.toLocaleString('es-ES') }) : '';
+  const industriaTxt = d.industry ? tf('chkIndustriaSuffix', { industry: d.industry }) : '';
   const descLines = doc.splitTextToSize(`${sectorTxt}${empleadosTxt}${industriaTxt}.`, W - pad * 2);
   y2 = checkBreak(y2, 8 + descLines.length * 5.5 + 12);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
-  doc.text('¿A qué se dedica esta empresa?', pad, y2);
+  doc.text(t('pdfQueHace'), pad, y2);
   y2 += 8;
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
   doc.text(descLines, pad, y2);
@@ -2814,7 +3328,7 @@ function descargarPDF() {
   const { pros, contras } = generarProsContras(d, d.sector);
   y2 = checkBreak(y2, 20);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
-  doc.text('Puntos a favor', pad, y2);
+  doc.text(t('pdfPuntosFavor'), pad, y2);
   y2 += 9;
   doc.setFontSize(10.5);
   pros.forEach(p => {
@@ -2830,7 +3344,7 @@ function descargarPDF() {
 
   y2 = checkBreak(y2, 20);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
-  doc.text('Puntos en contra', pad, y2);
+  doc.text(t('pdfPuntosContra'), pad, y2);
   y2 += 9;
   doc.setFontSize(10.5);
   contras.forEach(c => {
@@ -2847,7 +3361,7 @@ function descargarPDF() {
   const reinvLines = doc.splitTextToSize(generarReinversion(d), W - pad * 2);
   y2 = checkBreak(y2, 8 + reinvLines.length * 5.5 + 14);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
-  doc.text('¿Cómo reinvierte sus beneficios?', pad, y2);
+  doc.text(t('pdfComoReinvierte'), pad, y2);
   y2 += 8;
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
   doc.text(reinvLines, pad, y2);
@@ -2855,10 +3369,10 @@ function descargarPDF() {
 
   y2 = checkBreak(y2, 24);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
-  doc.text('No inviertas por intuición: investiga antes de decidir', pad, y2);
+  doc.text(t('pdfNoInviertasTitulo'), pad, y2);
   y2 += 8;
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(60, 60, 60);
-  const introChecklist = doc.splitTextToSize('Que el precio suba o baje no es, por sí solo, una razón para invertir. Estas son las preguntas clave sobre esta empresa, respondidas con los datos de este análisis:', W - pad * 2);
+  const introChecklist = doc.splitTextToSize(t('pdfIntroChecklist'), W - pad * 2);
   y2 = checkBreak(y2, introChecklist.length * 5.2 + 4);
   doc.text(introChecklist, pad, y2);
   y2 += introChecklist.length * 5.2 + 6;
@@ -2878,7 +3392,7 @@ function descargarPDF() {
       doc.text(aLines, pad + 6, y2);
       y2 += aLines.length * 5 + 7;
     } else {
-      const aLines = doc.splitTextToSize('Esto solo lo puedes responder tú: depende de tus objetivos, tu horizonte temporal y cuánto riesgo estás dispuesto a asumir.', W - pad * 2 - 10);
+      const aLines = doc.splitTextToSize(t('chkRespuestaPersonalPDF'), W - pad * 2 - 10);
       y2 = checkBreak(y2, aLines.length * 5 + 6);
       doc.setTextColor(120, 120, 120); doc.setFont('helvetica', 'italic'); doc.setFontSize(9.5);
       doc.text(aLines, pad + 6, y2);
@@ -2891,7 +3405,7 @@ function descargarPDF() {
   doc.setFillColor(20, 20, 20);
   doc.roundedRect(pad, y2, W - pad * 2, 22, 4, 4, 'F');
   doc.setFont('helvetica', 'italic'); doc.setFontSize(9.5); doc.setTextColor(163, 163, 163);
-  const avisoLines = doc.splitTextToSize('Esto es un análisis educativo basado en datos públicos, no una recomendación de compra o venta. La decisión de invertir es siempre tuya.', W - pad * 2 - 10);
+  const avisoLines = doc.splitTextToSize(t('pdfAvisoFinal'), W - pad * 2 - 10);
   doc.text(avisoLines, pad + 5, y2 + 8);
 
   pdfFooter(doc, W);
@@ -2900,7 +3414,7 @@ function descargarPDF() {
   registrarPDF();
 
   const restantes = gratis - getPDFsDescargados();
-  if (restantes > 0) alert(`PDF descargado ✅\nTe quedan ${restantes} PDF${restantes > 1 ? 's' : ''} gratuito${restantes > 1 ? 's' : ''} hoy.`);
+  if (restantes > 0) alert(`${t('pdfDescargadoOk')}\n${tf('pdfTeQuedanTpl', { n: restantes, s: restantes > 1 ? 's' : '' })}`);
 }
 
 function pdfMarcaAgua() {
@@ -2922,27 +3436,27 @@ function pdfFooter(doc, W) {
   doc.setFillColor(10, 10, 10);
   doc.rect(0, 272, W, 25, 'F');
   doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
-  doc.text('laBolsabro · labolsabro.com · Datos: proveedores con licencia · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
-  doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+  doc.text(t('pdfFooterLine1'), W / 2, 282, { align: 'center' });
+  doc.text(t('pdfFooterLine2'), W / 2, 288, { align: 'center' });
   doc.setFontSize(7); doc.setTextColor(60, 60, 60);
   doc.text(pdfMarcaAgua(), W / 2, 293, { align: 'center' });
 }
 
 function generarVeredicto(d1, t1, s1, d2, t2, s2) {
-  if (s1 === null && s2 === null) return { ganador: null, texto: 'No tenemos datos suficientes de ninguna de las dos para declarar una ganadora clara.' };
-  if (s1 === null) return { ganador: t2, texto: `${t2} gana por descarte: no hay datos suficientes de ${t1} para comparar en profundidad.` };
-  if (s2 === null) return { ganador: t1, texto: `${t1} gana por descarte: no hay datos suficientes de ${t2} para comparar en profundidad.` };
-  if (Math.abs(s1 - s2) < 0.3) return { ganador: null, texto: `Empate técnico: ${t1} (${s1.toFixed(1)}/10) y ${t2} (${s2.toFixed(1)}/10) están prácticamente igualadas. La decisión depende de tu perfil de riesgo y qué sector prefieras.` };
+  if (s1 === null && s2 === null) return { ganador: null, texto: t('veredictoCompNoDatos') };
+  if (s1 === null) return { ganador: t2, texto: tf('veredictoCompGanaDescarteTpl', { ganador: t2, perdedor: t1 }) };
+  if (s2 === null) return { ganador: t1, texto: tf('veredictoCompGanaDescarteTpl', { ganador: t1, perdedor: t2 }) };
+  if (Math.abs(s1 - s2) < 0.3) return { ganador: null, texto: tf('veredictoCompEmpateTpl', { t1, s1: s1.toFixed(1), t2, s2: s2.toFixed(1) }) };
   const win = s1 > s2 ? t1 : t2, lose = s1 > s2 ? t2 : t1;
   const sWin = Math.max(s1, s2), sLose = Math.min(s1, s2);
   const dWin = s1 > s2 ? d1 : d2, dLose = s1 > s2 ? d2 : d1;
   const razones = [];
-  if (dWin.pe && dLose.pe && dWin.pe < dLose.pe) razones.push('cotiza más barata (PER más bajo)');
-  if (dWin.roe && dLose.roe && dWin.roe > dLose.roe) razones.push('rentabiliza mejor el capital (ROE más alto)');
-  if (dWin.crecimientoIng && dLose.crecimientoIng && dWin.crecimientoIng > dLose.crecimientoIng) razones.push('crece más rápido en ingresos');
-  if (dWin.margen && dLose.margen && dWin.margen > dLose.margen) razones.push('tiene mejores márgenes');
-  const razonTxt = razones.length ? razones.slice(0, 2).join(' y ') : 'tiene mejores números en conjunto';
-  return { ganador: win, texto: `${win} sale mejor parada con ${sWin.toFixed(1)}/10 frente a ${sLose.toFixed(1)}/10 de ${lose}. Principalmente porque ${razonTxt}.` };
+  if (dWin.pe && dLose.pe && dWin.pe < dLose.pe) razones.push(t('razonPerBajo'));
+  if (dWin.roe && dLose.roe && dWin.roe > dLose.roe) razones.push(t('razonRoeAlto'));
+  if (dWin.crecimientoIng && dLose.crecimientoIng && dWin.crecimientoIng > dLose.crecimientoIng) razones.push(t('razonCreceMasIngresos'));
+  if (dWin.margen && dLose.margen && dWin.margen > dLose.margen) razones.push(t('razonMejorMargen'));
+  const razonTxt = razones.length ? razones.slice(0, 2).join(` ${t('conjY')} `) : t('veredictoCompDefaultRazon');
+  return { ganador: win, texto: tf('veredictoCompGanaTpl', { win, sWin: sWin.toFixed(1), sLose: sLose.toFixed(1), lose, razon: razonTxt }) };
 }
 
 function descargarPDFCompare() {
@@ -2955,7 +3469,7 @@ function descargarPDFCompare() {
   doc.setTextColor(250,204,21); doc.setFontSize(22); doc.setFont('helvetica','bold');
   doc.text('laBolsabro', pad, 18);
   doc.setFontSize(10); doc.setTextColor(163,163,163); doc.setFont('helvetica','normal');
-  doc.text('Comparativa de empresas · Solo educativo, no asesoramiento financiero', pad, 27);
+  doc.text(t('pdfComparativaTitulo'), pad, 27);
   doc.text(new Date().toLocaleDateString('es-ES'), W-pad, 27, { align:'right' });
 
   const col1 = pad, col2 = W/2+4, colW = W/2-pad-4;
@@ -2971,17 +3485,17 @@ function descargarPDFCompare() {
   });
 
   const metricas = [
-    ['Precio', `${d1.precio?.toFixed(2)||'—'} ${d1.moneda||'USD'}`, `${d2.precio?.toFixed(2)||'—'} ${d2.moneda||'USD'}`],
-    ['PER', d1.pe?d1.pe.toFixed(1)+'x':'—', d2.pe?d2.pe.toFixed(1)+'x':'—'],
-    ['Margen neto', d1.margen?(d1.margen*100).toFixed(1)+'%':'—', d2.margen?(d2.margen*100).toFixed(1)+'%':'—'],
-    ['ROE', d1.roe?(d1.roe*100).toFixed(1)+'%':'—', d2.roe?(d2.roe*100).toFixed(1)+'%':'—'],
-    ['Crec. BPA', d1.crecimientoEps?(d1.crecimientoEps*100).toFixed(1)+'%':'—', d2.crecimientoEps?(d2.crecimientoEps*100).toFixed(1)+'%':'—'],
-    ['Dividendo', d1.divY?(d1.divY*100).toFixed(2)+'%':'—', d2.divY?(d2.divY*100).toFixed(2)+'%':'—'],
-    ['Beta', d1.beta?d1.beta.toFixed(2):'—', d2.beta?d2.beta.toFixed(2):'—'],
+    [t('pdfLblPrecio'), `${d1.precio?.toFixed(2)||'—'} ${d1.moneda||'USD'}`, `${d2.precio?.toFixed(2)||'—'} ${d2.moneda||'USD'}`],
+    [t('pdfLblPER'), d1.pe?d1.pe.toFixed(1)+'x':'—', d2.pe?d2.pe.toFixed(1)+'x':'—'],
+    [termLabel('Margen neto'), d1.margen?(d1.margen*100).toFixed(1)+'%':'—', d2.margen?(d2.margen*100).toFixed(1)+'%':'—'],
+    [termLabel('ROE'), d1.roe?(d1.roe*100).toFixed(1)+'%':'—', d2.roe?(d2.roe*100).toFixed(1)+'%':'—'],
+    [t('pdfLblCrecBPACorto'), d1.crecimientoEps?(d1.crecimientoEps*100).toFixed(1)+'%':'—', d2.crecimientoEps?(d2.crecimientoEps*100).toFixed(1)+'%':'—'],
+    [termLabel('Dividendo'), d1.divY?(d1.divY*100).toFixed(2)+'%':'—', d2.divY?(d2.divY*100).toFixed(2)+'%':'—'],
+    [termLabel('Beta'), d1.beta?d1.beta.toFixed(2):'—', d2.beta?d2.beta.toFixed(2):'—'],
   ];
 
   doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(17,17,17);
-  doc.text('Métrica', pad, 94); doc.text(d1.nombre||t1, W/2-10, 94); doc.text(d2.nombre||t2, W-pad, 94, {align:'right'});
+  doc.text(t('pdfLblMetrica'), pad, 94); doc.text(d1.nombre||t1, W/2-10, 94); doc.text(d2.nombre||t2, W-pad, 94, {align:'right'});
   doc.setDrawColor(42,42,42); doc.line(pad, 96, W-pad, 96);
 
   let y = 104;
@@ -3002,32 +3516,32 @@ function descargarPDFCompare() {
   doc.setFillColor(255, 251, 235);
   doc.roundedRect(pad, yV, W - pad * 2, 42, 5, 5, 'FD');
   doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(161, 98, 7);
-  doc.text(veredicto.ganador ? `🏆 Veredicto: gana ${veredicto.ganador}` : '⚖️ Veredicto: empate técnico', pad + 6, yV + 12);
+  doc.text(veredicto.ganador ? tf('pdfVeredictoGanaTpl', { ganador: veredicto.ganador }) : t('pdfVeredictoEmpate'), pad + 6, yV + 12);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(60, 60, 60);
   const vLines = doc.splitTextToSize(veredicto.texto, W - pad * 2 - 12);
   doc.text(vLines, pad + 6, yV + 21);
 
   doc.setFillColor(10,10,10); doc.rect(0,272,W,25,'F');
   doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(82,82,82);
-  doc.text('laBolsabro · labolsabro.com · Datos: proveedores con licencia · Solo educativo, no asesoramiento financiero.', W/2, 282, {align:'center'});
+  doc.text(t('pdfFooterLine1Compare'), W/2, 282, {align:'center'});
   doc.setFontSize(7); doc.setTextColor(60, 60, 60);
   doc.text(pdfMarcaAgua(), W / 2, 289, { align: 'center' });
 
   // Páginas adicionales: análisis en profundidad de cada empresa
-  [[d1, t1], [d2, t2]].forEach(([d, t]) => {
+  [[d1, t1], [d2, t2]].forEach(([d, tk]) => {
     doc.addPage();
     doc.setFillColor(10, 10, 10); doc.rect(0, 0, W, 24, 'F');
     doc.setTextColor(250, 204, 21); doc.setFontSize(14); doc.setFont('helvetica', 'bold');
     doc.text('laBolsabro', pad, 16);
     doc.setFontSize(9); doc.setTextColor(163, 163, 163); doc.setFont('helvetica', 'normal');
-    doc.text(`Análisis en profundidad · ${d.nombre || t}`, W - pad, 16, { align: 'right' });
+    doc.text(tf('pdfAnalisisProfundidad', { nombre: d.nombre || tk }), W - pad, 16, { align: 'right' });
 
     let y2 = 36;
     doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
-    doc.text('¿A qué se dedica esta empresa?', pad, y2);
+    doc.text(t('pdfQueHace'), pad, y2);
     y2 += 8;
-    const sectorTxt = SECTOR_EXPLICACION[d.sector] || SECTOR_EXPLICACION['default'];
-    const empleadosTxt = d.employees ? ` Tiene alrededor de ${d.employees.toLocaleString('es-ES')} empleados.` : '';
+    const sectorTxt = sectorExplicacion(d.sector);
+    const empleadosTxt = d.employees ? ` ${tf('chkEmpleadosSuffix', { n: d.employees.toLocaleString('es-ES') }).trim()}.` : '';
     const descLines = doc.splitTextToSize(`${sectorTxt}${empleadosTxt}`, W - pad * 2);
     doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
     doc.text(descLines, pad, y2);
@@ -3035,7 +3549,7 @@ function descargarPDFCompare() {
 
     const { pros, contras } = generarProsContras(d, d.sector);
     doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
-    doc.text('Puntos a favor y en contra', pad, y2);
+    doc.text(t('pdfProsContrasCombinado'), pad, y2);
     y2 += 9;
     doc.setFontSize(10.5);
     pros.forEach(p => {
@@ -3056,7 +3570,7 @@ function descargarPDFCompare() {
     y2 += 10;
 
     doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(17, 17, 17);
-    doc.text('¿Cómo reinvierte sus beneficios?', pad, y2);
+    doc.text(t('pdfComoReinvierte'), pad, y2);
     y2 += 8;
     const reinvLines = doc.splitTextToSize(generarReinversion(d), W - pad * 2);
     doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
@@ -3067,16 +3581,16 @@ function descargarPDFCompare() {
     doc.setFillColor(20, 20, 20);
     doc.roundedRect(pad, y2, W - pad * 2, 24, 4, 4, 'F');
     doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(163, 163, 163);
-    doc.text(`Sector: ${ref.nombre} · PER medio del sector: ${ref.bajo}x–${ref.alto}x`, pad + 5, y2 + 9);
-    const peTxt = d.pe ? (d.pe < ref.bajo ? 'Por debajo de la media (barata)' : d.pe <= ref.alto ? 'En la media del sector' : 'Por encima de la media (cara)') : 'Sin datos de PER';
+    doc.text(tf('pdfSectorPerLineTpl', { sector: sectorNombre(d.sector), bajo: ref.bajo, alto: ref.alto }), pad + 5, y2 + 9);
+    const peTxt = d.pe ? (d.pe < ref.bajo ? t('pdfPerBarata') : d.pe <= ref.alto ? t('pdfPerMedia') : t('pdfPerCara')) : t('pdfPerSinDatos');
     doc.setFont('helvetica', 'bold'); doc.setTextColor(245, 245, 245);
-    doc.text(`PER de ${t}: ${d.pe ? d.pe.toFixed(1) + 'x — ' + peTxt : '—'}`, pad + 5, y2 + 17);
+    doc.text(tf('pdfPerDeTpl', { ticker: tk, value: d.pe ? d.pe.toFixed(1) + 'x — ' + peTxt : '—' }), pad + 5, y2 + 17);
 
     doc.setFillColor(10, 10, 10);
     doc.rect(0, 272, W, 25, 'F');
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(82, 82, 82);
-    doc.text('laBolsabro · labolsabro.com · Datos: proveedores con licencia · Herramienta educativa, no asesoramiento financiero.', W / 2, 282, { align: 'center' });
-    doc.text('Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.', W / 2, 288, { align: 'center' });
+    doc.text(t('pdfFooterLine1'), W / 2, 282, { align: 'center' });
+    doc.text(t('pdfFooterLine2'), W / 2, 288, { align: 'center' });
     doc.setFontSize(7); doc.setTextColor(60, 60, 60);
     doc.text(pdfMarcaAgua(), W / 2, 293, { align: 'center' });
   });
@@ -3102,9 +3616,9 @@ function copiarLink(ticker) {
 }
 
 function metric(label, val, sub, extraStyle='') {
-  const info = METRIC_INFO[label] ? `<div class="metric-info-box" id="info_${label.replace(/\s/g,'_')}">${METRIC_INFO[label]}</div>` : '';
+  const info = METRIC_INFO[label] ? `<div class="metric-info-box" id="info_${label.replace(/\s/g,'_')}">${termExplanation(label)}</div>` : '';
   const hint = METRIC_INFO[label] ? ' <span style="font-size:10px;color:var(--text3)">ⓘ</span>' : '';
-  return `<div class="result-metric" onclick="toggleMetricInfo('${label}')"><div class="result-metric-label">${label}${hint}</div><div class="result-metric-val"${extraStyle ? ` style="${extraStyle}"` : ''}>${val}</div><div class="result-metric-sub">${sub}</div>${info}</div>`;
+  return `<div class="result-metric" onclick="toggleMetricInfo('${label}')"><div class="result-metric-label">${termLabel(label)}${hint}</div><div class="result-metric-val"${extraStyle ? ` style="${extraStyle}"` : ''}>${val}</div><div class="result-metric-sub">${sub}</div>${info}</div>`;
 }
 
 function renderETF(el, d, ticker) {
@@ -3117,16 +3631,16 @@ function renderETF(el, d, ticker) {
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
       <div style="width:44px;height:44px;border-radius:10px;background:var(--card2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text);flex-shrink:0;">${iniciales}</div>
       <div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text);">${nombre}</div><div style="font-size:12px;color:var(--text3);">${ticker} · ETF</div></div>
-      <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text);">${precio.toFixed(2)} ${moneda}${fmtMonedaConvertida(precio, moneda)}</div><div style="font-size:13px;color:${clrCambio};font-weight:600;">${flechaCambio} ${Math.abs(cambioPct).toFixed(2)}% hoy</div></div>
+      <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text);">${precio.toFixed(2)} ${moneda}${fmtMonedaConvertida(precio, moneda)}</div><div style="font-size:13px;color:${clrCambio};font-weight:600;">${flechaCambio} ${Math.abs(cambioPct).toFixed(2)}% ${t('hoySuffix')}</div></div>
     </div>
-    <div class="semáforo sem-gray" style="margin-bottom:16px"><div class="semáforo-icon">📦</div><div><div class="semáforo-title">ETF — fondo cotizado</div><div class="semáforo-desc">Los ETFs no tienen PER ni métricas de empresa. Replican el precio del activo subyacente.</div></div></div>
+    <div class="semáforo sem-gray" style="margin-bottom:16px"><div class="semáforo-icon">📦</div><div><div class="semáforo-title">${t('etfTituloSemaforo')}</div><div class="semáforo-desc">${t('etfDescSemaforo')}</div></div></div>
     <div class="result-grid">
-      <div class="result-metric"><div class="result-metric-label">Cap. mercado</div><div class="result-metric-val" style="font-size:15px">${fmtMiles(mktCap)}</div><div class="result-metric-sub">Patrimonio del fondo</div></div>
-      <div class="result-metric"><div class="result-metric-label">Dividendo</div><div class="result-metric-val">${divY ? (divY*100).toFixed(2)+'%' : '—'}</div><div class="result-metric-sub">Rentabilidad anual</div></div>
-      <div class="result-metric"><div class="result-metric-label">Beta</div><div class="result-metric-val">${betaV ? betaV.toFixed(2) : '—'}</div><div class="result-metric-sub">&lt;1 menos volátil</div></div>
-      <div class="result-metric"><div class="result-metric-label">Rango 52 semanas</div><div class="result-metric-val" style="font-size:13px;margin-top:4px">${min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—'}</div><div class="result-metric-sub">Min / Max</div></div>
+      <div class="result-metric"><div class="result-metric-label">${termLabel('Cap. mercado')}</div><div class="result-metric-val" style="font-size:15px">${fmtMiles(mktCap)}</div><div class="result-metric-sub">${t('subPatrimonioFondo')}</div></div>
+      <div class="result-metric"><div class="result-metric-label">${termLabel('Dividendo')}</div><div class="result-metric-val">${divY ? (divY*100).toFixed(2)+'%' : '—'}</div><div class="result-metric-sub">${t('subDividendo')}</div></div>
+      <div class="result-metric"><div class="result-metric-label">${termLabel('Beta')}</div><div class="result-metric-val">${betaV ? betaV.toFixed(2) : '—'}</div><div class="result-metric-sub">${t('subBeta')}</div></div>
+      <div class="result-metric"><div class="result-metric-label">${termLabel('Rango 52 semanas')}</div><div class="result-metric-val" style="font-size:13px;margin-top:4px">${min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—'}</div><div class="result-metric-sub">${t('subRango52')}</div></div>
     </div>
-    <div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border)">Datos: proveedores con licencia · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo, no recomendación de compra.</div>
+    <div style="font-size:12px;color:var(--text3);padding:10px 0;border-top:1px solid var(--border)">${tf('etfFooterDatos', { time: new Date().toLocaleTimeString('es-ES') })}</div>
   </div>`;
 }
 
@@ -3150,21 +3664,21 @@ function renderStock(el, d, ticker) {
     const estaCrediendo = (crecIng !== null && crecIng > 0.05) || (crecEps !== null && crecEps > 0.05);
     let reinvColor, reinvSub, reinvContexto;
     if (reinvPct === null) {
-      reinvColor = 'var(--text)'; reinvSub = 'datos no disponibles'; reinvContexto = null;
+      reinvColor = 'var(--text)'; reinvSub = t('reinvSubNoDatos'); reinvContexto = null;
     } else if (reinvPct >= 40 && estaCrediendo) {
-      reinvColor = 'var(--green)'; reinvSub = 'reinvierte fuerte y crece — expansión sana';
-      reinvContexto = '✅ Invierte mucho en crecer y los resultados lo confirman. Señal muy positiva.';
+      reinvColor = 'var(--green)'; reinvSub = t('reinvSubFuerteCrece');
+      reinvContexto = t('reinvCtxFuerteCrece');
     } else if (reinvPct >= 40 && !estaCrediendo) {
-      reinvColor = 'var(--red)'; reinvSub = 'gasta mucho pero no crece — señal de alerta';
-      reinvContexto = '⚠️ Reinvierte mucho pero el crecimiento no lo refleja. Puede indicar ineficiencia o problemas estructurales.';
+      reinvColor = 'var(--red)'; reinvSub = t('reinvSubGastaNoCrece');
+      reinvContexto = t('reinvCtxGastaNoCrece');
     } else if (reinvPct < 20 && estaCrediendo) {
-      reinvColor = 'var(--green)'; reinvSub = 'negocio eficiente — crece sin necesitar mucho capital';
-      reinvContexto = '✅ Reinvierte poco pero sigue creciendo. Negocio muy eficiente (como Apple o Microsoft). El exceso va al accionista vía recompras o dividendo.';
+      reinvColor = 'var(--green)'; reinvSub = t('reinvSubEficiente');
+      reinvContexto = t('reinvCtxEficiente');
     } else if (reinvPct < 20 && !estaCrediendo) {
-      reinvColor = 'var(--yellow)'; reinvSub = 'empresa madura — distribuye beneficios';
-      reinvContexto = '🟡 Reinvierte poco y el crecimiento es limitado. Empresa madura y estable, más orientada a distribuir beneficios que a crecer.';
+      reinvColor = 'var(--yellow)'; reinvSub = t('reinvSubMadura');
+      reinvContexto = t('reinvCtxMadura');
     } else {
-      reinvColor = 'var(--yellow)'; reinvSub = 'crecimiento moderado';
+      reinvColor = 'var(--yellow)'; reinvSub = t('reinvSubModerado');
       reinvContexto = null;
     }
 
@@ -3203,14 +3717,14 @@ function renderStock(el, d, ticker) {
     if (_pdfData) _pdfData.score = scoreFinal;
     const scoreColor = scoreFinal === null ? 'var(--text2)' : scoreFinal >= 7 ? 'var(--green)' : scoreFinal >= 4 ? 'var(--yellow)' : 'var(--red)';
     const scoreBg = scoreFinal === null ? 'var(--card2)' : scoreFinal >= 7 ? 'rgba(34,197,94,0.1)' : scoreFinal >= 4 ? 'rgba(250,204,21,0.1)' : 'rgba(248,113,113,0.1)';
-    const scoreLabel = scoreFinal === null ? 'Sin datos suficientes' : scoreFinal >= 8 ? 'Empresa excelente' : scoreFinal >= 6.5 ? 'Buena empresa' : scoreFinal >= 5 ? 'Empresa correcta' : scoreFinal >= 3 ? 'Con algunas dudas' : 'Mejor buscar otra';
+    const scoreLabel = scoreFinal === null ? t('scoreSinDatos') : scoreFinal >= 8 ? t('scoreExcelente') : scoreFinal >= 6.5 ? t('scoreBuena') : scoreFinal >= 5 ? t('scoreCorrecta') : scoreFinal >= 3 ? t('scoreDudas') : t('scoreMejorOtra');
     const scoreEmoji = scoreFinal === null ? '—' : scoreFinal >= 7 ? '💚' : scoreFinal >= 4 ? '🟡' : '🔴';
 
     el.innerHTML = `<div style="width:100%">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
         <div style="width:44px;height:44px;border-radius:10px;background:var(--card2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text);flex-shrink:0;">${iniciales}</div>
-        <div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text);">${nombre}</div><div style="font-size:12px;color:var(--text3);">${ticker} · ${sectorRef.nombre}</div></div>
-        <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text);">${precio.toFixed(2)} ${moneda}${fmtMonedaConvertida(precio, moneda)}</div><div style="font-size:13px;color:${clrCambio};font-weight:600;">${flechaCambio} ${Math.abs(cambioPct).toFixed(2)}% hoy</div></div>
+        <div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--text);">${nombre}</div><div style="font-size:12px;color:var(--text3);">${ticker} · ${sectorNombre(sector)}</div></div>
+        <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:var(--text);">${precio.toFixed(2)} ${moneda}${fmtMonedaConvertida(precio, moneda)}</div><div style="font-size:13px;color:${clrCambio};font-weight:600;">${flechaCambio} ${Math.abs(cambioPct).toFixed(2)}% ${t('hoySuffix')}</div></div>
       </div>
       <div style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:${scoreBg};border:1px solid ${scoreColor}33;border-radius:16px;margin-bottom:12px;">
         <div style="width:64px;height:64px;border-radius:50%;background:${scoreColor}22;border:3px solid ${scoreColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -3218,40 +3732,40 @@ function renderStock(el, d, ticker) {
         </div>
         <div>
           <div style="font-size:18px;font-weight:700;color:${scoreColor}">${scoreEmoji} ${scoreLabel}</div>
-          <div style="font-size:12px;color:var(--text3);margin-top:3px">Puntuación global sobre 10 · basada en valoración, crecimiento y rentabilidad</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px">${t('scoreGlobalNote')}</div>
         </div>
       </div>
       <div class="semáforo ${sem.cls}"><div class="semáforo-icon">${sem.ico}</div><div><div class="semáforo-title">${sem.titulo}</div><div class="semáforo-desc">${sem.desc}</div></div></div>
       <div class="result-grid">
-        ${metric('PER actual', pe ? pe.toFixed(1)+'x' : '—', 'Precio / Beneficio')}
-        ${peg ? metric('PEG ratio', peg.toFixed(2)+'x', '<1 barata, 1-2 justa, >2 cara', `color:${peg<1?'var(--green)':peg<=2?'var(--yellow)':'var(--red)'}`) : ''}
-        ${crecEps !== null ? metric('Crecimiento BPA', (crecEps*100).toFixed(1)+'%', 'Beneficio por acción YoY', `color:${crecEps>0?'var(--green)':'var(--red)'}`) : ''}
-        ${crecIng !== null ? metric('Crecimiento ingresos', (crecIng*100).toFixed(1)+'%', 'Ventas año sobre año', `color:${crecIng>0?'var(--green)':'var(--red)'}`) : ''}
-        ${roe !== null ? metric('ROE', (roe*100).toFixed(1)+'%', 'Rentabilidad sobre capital', `color:${roe>0.15?'var(--green)':roe<0?'var(--red)':'var(--text)'}`) : ''}
-        ${metric('PER estimado', fpe ? fpe.toFixed(1)+'x' : '—', 'Proyección anual')}
-        ${metric('Cap. mercado', fmtMiles(mktCap), 'Valor total', 'font-size:15px')}
-        ${metric('Dividendo', divY ? (divY*100).toFixed(2)+'%' : '—', 'Rentabilidad anual')}
-        ${metric('EPS', eps ? eps.toFixed(2) : '—', 'Beneficio por acción', `color:${eps>0?'var(--green)':'var(--red)'}`)}
-        ${metric('Margen neto', margen ? (margen*100).toFixed(1)+'%' : '—', 'Beneficio sobre ventas', `color:${margen>0.1?'var(--green)':margen<0?'var(--red)':'var(--text)'}`)}
+        ${metric('PER actual', pe ? pe.toFixed(1)+'x' : '—', t('subPerActual'))}
+        ${peg ? metric('PEG ratio', peg.toFixed(2)+'x', t('subPegRatio'), `color:${peg<1?'var(--green)':peg<=2?'var(--yellow)':'var(--red)'}`) : ''}
+        ${crecEps !== null ? metric('Crecimiento BPA', (crecEps*100).toFixed(1)+'%', t('subCrecBPA'), `color:${crecEps>0?'var(--green)':'var(--red)'}`) : ''}
+        ${crecIng !== null ? metric('Crecimiento ingresos', (crecIng*100).toFixed(1)+'%', t('subCrecIngresos'), `color:${crecIng>0?'var(--green)':'var(--red)'}`) : ''}
+        ${roe !== null ? metric('ROE', (roe*100).toFixed(1)+'%', t('subROE'), `color:${roe>0.15?'var(--green)':roe<0?'var(--red)':'var(--text)'}`) : ''}
+        ${metric('PER estimado', fpe ? fpe.toFixed(1)+'x' : '—', t('subPerEstimado'))}
+        ${metric('Cap. mercado', fmtMiles(mktCap), t('subCapMercado'), 'font-size:15px')}
+        ${metric('Dividendo', divY ? (divY*100).toFixed(2)+'%' : '—', t('subDividendo'))}
+        ${metric('EPS', eps ? eps.toFixed(2) : '—', t('subEPS'), `color:${eps>0?'var(--green)':'var(--red)'}`)}
+        ${metric('Margen neto', margen ? (margen*100).toFixed(1)+'%' : '—', t('subMargenNeto'), `color:${margen>0.1?'var(--green)':margen<0?'var(--red)':'var(--text)'}`)}
         ${metric('Reinversión del negocio', reinvPct !== null ? reinvPct.toFixed(0)+'%' : '—', reinvSub, `color:${reinvColor}`)}
         ${reinvContexto ? `<div style="grid-column:1/-1;padding:10px 14px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--text2);line-height:1.6">${reinvContexto}</div>` : ''}
-        ${ocf ? metric('Flujo caja operativo', fmtMiles(Math.abs(ocf)), 'Caja que genera el negocio', `font-size:15px;color:${ocf>0?'var(--green)':'var(--red)'}`) : ''}
-        ${fcf ? metric('Free Cash Flow', fmtMiles(Math.abs(fcf)), 'Caja libre tras invertir', `font-size:15px;color:${fcf>0?'var(--green)':'var(--red)'}`) : ''}
-        ${metric('Beta', betaV ? betaV.toFixed(2) : '—', '<1 menos volátil')}
-        ${metric('Rango 52 semanas', min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—', 'Min / Max', 'font-size:13px;margin-top:4px')}
-        ${employees ? metric('Empleados', employees.toLocaleString('es-ES'), 'En plantilla', 'font-size:15px') : ''}
+        ${ocf ? metric('Flujo caja operativo', fmtMiles(Math.abs(ocf)), t('subFlujoCaja'), `font-size:15px;color:${ocf>0?'var(--green)':'var(--red)'}`) : ''}
+        ${fcf ? metric('Free Cash Flow', fmtMiles(Math.abs(fcf)), t('subFCF'), `font-size:15px;color:${fcf>0?'var(--green)':'var(--red)'}`) : ''}
+        ${metric('Beta', betaV ? betaV.toFixed(2) : '—', t('subBeta'))}
+        ${metric('Rango 52 semanas', min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—', t('subRango52'), 'font-size:13px;margin-top:4px')}
+        ${employees ? metric('Empleados', employees.toLocaleString('es-ES'), t('subEmpleados'), 'font-size:15px') : ''}
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px;">
-        <span style="font-size:12px;color:var(--text3)">Datos: proveedores con licencia · ${new Date().toLocaleTimeString('es-ES')} · Solo educativo.</span>
+        <span style="font-size:12px;color:var(--text3)">${tf('stockFooterDatos', { time: new Date().toLocaleTimeString('es-ES') })}</span>
         <div style="display:flex;gap:8px;">
-          <button onclick="compartirWhatsApp('${ticker}','${nombre.replace(/'/g,"\\'")}',${scoreFinal??0})" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:#25D366;color:#000;border:none;border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">📱 WhatsApp</button>
-          <button onclick="copiarLink('${ticker}')" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔗 Copiar link</button>
-          <button onclick="descargarPDF()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--yellow);border:1px solid rgba(250,204,21,0.3);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">📄 PDF</button>
+          <button onclick="compartirWhatsApp('${ticker}','${nombre.replace(/'/g,"\\'")}',${scoreFinal??0})" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:#25D366;color:#000;border:none;border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">${t('btnWhatsapp')}</button>
+          <button onclick="copiarLink('${ticker}')" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">${t('btnCopiarLink')}</button>
+          <button onclick="descargarPDF()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card2);color:var(--yellow);border:1px solid rgba(250,204,21,0.3);border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">${t('btnPdf')}</button>
         </div>
       </div>
     </div>`;
   } catch(e) {
-    el.innerHTML = `<div style="text-align:center;padding:16px"><p style="font-size:15px;font-weight:700;color:var(--text)">Error al mostrar datos</p></div>`;
+    el.innerHTML = `<div style="text-align:center;padding:16px"><p style="font-size:15px;font-weight:700;color:var(--text)">${t('errorMostrarDatos')}</p></div>`;
   }
 }
 </script>
@@ -3430,27 +3944,27 @@ function renderStock(el, d, ticker) {
 
 <div class="bg-card" id="quiz">
   <section>
-    <div class="pill">Retos de conocimiento</div>
-    <h2>¿Cuánto sabes<br>de dinero?</h2>
-    <p class="sub">5 preguntas. Sin trampa. Descubre que nivel tienes y gana XP. Como Duolingo pero para tu cartera.</p>
+    <div class="pill" data-i18n="quizPill">Retos de conocimiento</div>
+    <h2 data-i18n-html="quizTitle">¿Cuánto sabes<br>de dinero?</h2>
+    <p class="sub" data-i18n="quizSub">5 preguntas. Sin trampa. Descubre que nivel tienes y gana XP. Como Duolingo pero para tu cartera.</p>
     <div id="totalXPBadge" style="display:inline-flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:8px 18px;margin-bottom:20px;font-size:13px;">
-      <span style="color:var(--text2)">Nivel <strong id="nivelXPLabel" style="color:var(--green)">1</strong></span>
+      <span style="color:var(--text2)"><span data-i18n="quizNivelLbl">Nivel</span> <strong id="nivelXPLabel" style="color:var(--green)">1</strong></span>
       <span style="color:var(--border2)">·</span>
-      <span style="color:var(--text2)"><strong id="totalXPLabel" style="color:var(--yellow)">0</strong> XP acumulados</span>
+      <span style="color:var(--text2)"><strong id="totalXPLabel" style="color:var(--yellow)">0</strong> <span data-i18n="quizXpAcumulados">XP acumulados</span></span>
       <span id="rachaDiasWrap" style="display:none;align-items:center;gap:10px">
         <span style="color:var(--border2)">·</span>
-        <span style="color:var(--text2)">🔥 <strong id="rachaDiasLabel" style="color:var(--yellow)">0</strong> días seguidos</span>
+        <span style="color:var(--text2)">🔥 <strong id="rachaDiasLabel" style="color:var(--yellow)">0</strong> <span data-i18n="quizDiasSeguidos">días seguidos</span></span>
       </span>
     </div>
     <div style="max-width:680px;">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-        <button id="btnNivelBasico" onclick="cambiarNivelQuiz('basico')" style="background:var(--green);color:#000;border:none;border-radius:100px;padding:7px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;">Básico</button>
-        <button id="btnNivelAvanzado" onclick="cambiarNivelQuiz('avanzado')" style="background:var(--card2);color:var(--text2);border:1px solid var(--border2);border-radius:100px;padding:7px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;">🔒 Avanzado</button>
+        <button id="btnNivelBasico" onclick="cambiarNivelQuiz('basico')" data-i18n="quizBasico" style="background:var(--green);color:#000;border:none;border-radius:100px;padding:7px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;">Básico</button>
+        <button id="btnNivelAvanzado" onclick="cambiarNivelQuiz('avanzado')" data-i18n="quizAvanzado" style="background:var(--card2);color:var(--text2);border:1px solid var(--border2);border-radius:100px;padding:7px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;">🔒 Avanzado</button>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
         <div style="display:flex;gap:6px;" id="quizDots"></div>
         <div style="display:flex;align-items:center;gap:16px;">
-          <div style="font-size:13px;color:var(--text2);">Racha <span id="quizStreak" style="color:var(--yellow);font-weight:700;">🔥 0</span></div>
+          <div style="font-size:13px;color:var(--text2);"><span data-i18n="quizRachaLbl">Racha</span> <span id="quizStreak" style="color:var(--yellow);font-weight:700;">🔥 0</span></div>
           <div style="font-size:13px;color:var(--text2);">XP <span id="quizXP" style="color:var(--green);font-weight:700;">0</span></div>
         </div>
       </div>
@@ -3468,7 +3982,7 @@ function renderStock(el, d, ticker) {
           </div>
         </div>
         <div style="padding:0 24px 24px;">
-          <button id="quizNextBtn" onclick="nextQuestion()" style="display:none;width:100%;padding:14px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">Siguiente pregunta →</button>
+          <button id="quizNextBtn" onclick="nextQuestion()" data-i18n="quizSiguiente" style="display:none;width:100%;padding:14px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">Siguiente pregunta →</button>
         </div>
       </div>
       <div id="quizResult" style="display:none;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:40px 32px;text-align:center;">
@@ -3476,23 +3990,23 @@ function renderStock(el, d, ticker) {
         <h3 id="quizResultTitle" style="font-size:24px;font-weight:700;letter-spacing:-0.03em;margin-bottom:8px;"></h3>
         <p id="quizResultDesc" style="font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;"></p>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;">
-          <div style="background:var(--card2);border-radius:12px;padding:16px 24px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Respuestas correctas</div><div style="font-size:28px;font-weight:700;color:var(--green)" id="quizFinalScore"></div></div>
-          <div style="background:var(--yellow-dim);border-radius:12px;padding:16px 24px;border:1px solid rgba(250,204,21,0.2);text-align:center;"><div style="font-size:11px;color:var(--yellow);margin-bottom:4px;">XP ganados</div><div style="font-size:28px;font-weight:700;color:var(--yellow)" id="quizFinalXP"></div></div>
+          <div style="background:var(--card2);border-radius:12px;padding:16px 24px;border:1px solid var(--border);text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;" data-i18n="quizRespuestasCorrectas">Respuestas correctas</div><div style="font-size:28px;font-weight:700;color:var(--green)" id="quizFinalScore"></div></div>
+          <div style="background:var(--yellow-dim);border-radius:12px;padding:16px 24px;border:1px solid rgba(250,204,21,0.2);text-align:center;"><div style="font-size:11px;color:var(--yellow);margin-bottom:4px;" data-i18n="quizXpGanados">XP ganados</div><div style="font-size:28px;font-weight:700;color:var(--yellow)" id="quizFinalXP"></div></div>
         </div>
-        <button onclick="resetQuiz()" style="padding:13px 28px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:10px;">Repetir quiz</button>
-        <button onclick="openModal()" style="padding:13px 28px;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">Quiero la app</button>
+        <button onclick="resetQuiz()" data-i18n="quizRepetir" style="padding:13px 28px;background:var(--green);color:#000;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:10px;">Repetir quiz</button>
+        <button onclick="openModal()" data-i18n="quizQuieroApp" style="padding:13px 28px;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">Quiero la app</button>
       </div>
     </div>
   </section>
 </div>
 
 <section id="biblioteca" style="display:none">
-  <div class="pill">Biblioteca</div>
-  <h2>Términos financieros<br>en cristiano.</h2>
-  <p class="sub">¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier término y te lo explicamos como si tuvieras 15 años.</p>
+  <div class="pill" data-i18n="biblioPill">Biblioteca</div>
+  <h2 data-i18n-html="biblioTitle">Términos financieros<br>en cristiano.</h2>
+  <p class="sub" data-i18n="biblioSub">¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier término y te lo explicamos como si tuvieras 15 años.</p>
   <div style="max-width:900px;">
     <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
-      <input id="glosarioSearch" type="text" placeholder="Busca un término... PER, ROE, dividendo..." oninput="renderGlosario()" style="flex:1;min-width:200px;padding:12px 18px;border-radius:100px;border:1px solid var(--border2);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;">
+      <input id="glosarioSearch" type="text" placeholder="Busca un término... PER, ROE, dividendo..." data-i18n-placeholder="glosarioSearchPh" oninput="renderGlosario()" style="flex:1;min-width:200px;padding:12px 18px;border-radius:100px;border:1px solid var(--border2);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none;">
       <select id="glosarioCat" onchange="renderGlosario()" style="padding:12px 16px;border-radius:100px;border:1px solid var(--border2);background:var(--card);color:var(--text);font-size:13px;font-family:inherit;outline:none;">
         <option value="">Todas las categorías</option>
       </select>
@@ -3561,12 +4075,12 @@ function renderStock(el, d, ticker) {
   <div class="auth-box" style="text-align:center">
     <button class="auth-close" onclick="cerrarInvitar()">×</button>
     <div style="font-size:40px;margin-bottom:8px">🪰🔥</div>
-    <h2>Trae a un colega</h2>
-    <p>Cada crack que se apunte con tu link os lleváis <strong style="color:var(--yellow)">3 días de Premium GRATIS</strong>, tú y él. Búsquedas ilimitadas, cartera simulada, alertas... todo desbloqueado. Sin trampa ni cartón.</p>
+    <h2 data-i18n="inviteTitle">Trae a un colega</h2>
+    <p data-i18n-html="inviteText">Cada crack que se apunte con tu link os lleváis <strong style="color:var(--yellow)">3 días de Premium GRATIS</strong>, tú y él. Búsquedas ilimitadas, cartera simulada, alertas... todo desbloqueado. Sin trampa ni cartón.</p>
     <div style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text);word-break:break-all;margin-bottom:14px;" id="inviteLinkBox"></div>
-    <button class="auth-submit" onclick="copiarInviteLink()" style="margin-bottom:10px">📋 Copiar link</button>
-    <button class="auth-submit" onclick="compartirInviteWhatsapp()" style="background:#25D366;color:#fff">Mandarlo por WhatsApp</button>
-    <p style="font-size:12px;margin-top:14px;color:var(--text3)" id="inviteBonusStatus">Invita a alguien y desbloqueáis Premium los dos, gratis.</p>
+    <button class="auth-submit" onclick="copiarInviteLink()" style="margin-bottom:10px" data-i18n="inviteCopyBtn">📋 Copiar link</button>
+    <button class="auth-submit" onclick="compartirInviteWhatsapp()" style="background:#25D366;color:#fff" data-i18n="inviteWhatsappBtn">Mandarlo por WhatsApp</button>
+    <p style="font-size:12px;margin-top:14px;color:var(--text3)" id="inviteBonusStatus" data-i18n="inviteBonusDefault">Invita a alguien y desbloqueáis Premium los dos, gratis.</p>
   </div>
 </div>
 
@@ -3576,59 +4090,59 @@ function renderStock(el, d, ticker) {
     <h2 id="panelSaludo">👋 Tu panel</h2>
     <div style="display:flex;gap:10px;margin-bottom:18px;">
       <div style="flex:1;background:var(--card2);border-radius:12px;padding:14px;text-align:center">
-        <div style="font-size:11px;color:var(--text3)">Saldo total</div>
+        <div style="font-size:11px;color:var(--text3)" data-i18n="panelSaldoTotalLbl">Saldo total</div>
         <div style="font-size:20px;font-weight:700;color:var(--green)" id="panelSaldoTotal">0,00 €</div>
       </div>
       <div style="flex:1;background:var(--card2);border-radius:12px;padding:14px;text-align:center">
-        <div style="font-size:11px;color:var(--text3)">Este mes</div>
+        <div style="font-size:11px;color:var(--text3)" data-i18n="panelEsteMesLbl">Este mes</div>
         <div style="font-size:20px;font-weight:700;color:var(--yellow)" id="panelDeltaMes">+0,00 €</div>
       </div>
     </div>
 
     <div id="panelRetoBox" style="background:var(--yellow-dim);border:1px solid rgba(250,204,21,0.25);border-radius:12px;padding:14px 16px;margin-bottom:20px;">
-      <div style="font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:4px">⚡ Reto de hoy</div>
+      <div style="font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:4px" data-i18n="panelRetoLbl">⚡ Reto de hoy</div>
       <div id="panelRetoTexto" style="font-size:13px;color:var(--text);margin-bottom:10px"></div>
-      <button id="panelRetoBtn" onclick="completarReto()" style="background:var(--yellow);color:#000;font-weight:700;font-size:12.5px;padding:8px 16px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;">Completar reto</button>
+      <button id="panelRetoBtn" onclick="completarReto()" style="background:var(--yellow);color:#000;font-weight:700;font-size:12.5px;padding:8px 16px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;" data-i18n="panelRetoBtnTxt">Completar reto</button>
     </div>
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-      <div style="font-weight:700;font-size:14px">🏺 Mis botes de ahorro</div>
-      <button onclick="crearBote()" style="background:none;border:1px solid var(--border2);color:var(--green);padding:5px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Nuevo bote</button>
+      <div style="font-weight:700;font-size:14px" data-i18n="panelBotesLbl">🏺 Mis botes de ahorro</div>
+      <button onclick="crearBote()" style="background:none;border:1px solid var(--border2);color:var(--green);padding:5px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;" data-i18n="panelNuevoBoteBtn">+ Nuevo bote</button>
     </div>
-    <p style="font-size:11.5px;color:var(--text3);margin-bottom:10px">Un bote es una meta de ahorro separada: vacaciones, coche, fondo de emergencia... Cada uno guarda su propio saldo, así no se te mezcla todo en un montón.</p>
+    <p style="font-size:11.5px;color:var(--text3);margin-bottom:10px" data-i18n="panelBotesDesc">Un bote es una meta de ahorro separada: vacaciones, coche, fondo de emergencia... Cada uno guarda su propio saldo, así no se te mezcla todo en un montón.</p>
     <div id="panelBotes" style="margin-bottom:20px"></div>
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-      <div style="font-weight:700;font-size:14px">📈 Cartera simulada</div>
-      <button id="btnAddPosicion" onclick="anadirPosicion()" style="display:none;background:none;border:1px solid var(--border2);color:var(--purple);padding:5px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">+ Añadir posición</button>
+      <div style="font-weight:700;font-size:14px" data-i18n="panelCarteraLbl">📈 Cartera simulada</div>
+      <button id="btnAddPosicion" onclick="anadirPosicion()" style="display:none;background:none;border:1px solid var(--border2);color:var(--purple);padding:5px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;" data-i18n="panelAddPosicionBtn">+ Añadir posición</button>
     </div>
     <div id="carteraFree" style="display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:12px;padding:12px 16px;">
       <div>
         <div style="font-size:18px;font-weight:700" id="panelInvertido">0,00 €</div>
-        <div style="font-size:11px;color:var(--text3)">Simulado, no es dinero real</div>
+        <div style="font-size:11px;color:var(--text3)" data-i18n="panelSimuladoLbl">Simulado, no es dinero real</div>
       </div>
-      <button onclick="aportarInversion()" style="background:var(--purple);color:#000;font-weight:700;font-size:12.5px;padding:8px 14px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;">+ Aportar</button>
+      <button onclick="aportarInversion()" style="background:var(--purple);color:#000;font-weight:700;font-size:12.5px;padding:8px 14px;border:none;border-radius:100px;cursor:pointer;font-family:inherit;" data-i18n="btnAportar">+ Aportar</button>
     </div>
     <div id="carteraPremium" style="display:none">
       <div id="carteraResumen" style="display:flex;gap:10px;margin-bottom:12px;">
         <div style="flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center">
-          <div style="font-size:10.5px;color:var(--text3)">Invertido</div>
+          <div style="font-size:10.5px;color:var(--text3)" data-i18n="carteraInvertidoLbl">Invertido</div>
           <div style="font-size:16px;font-weight:700" id="carteraInvertido">0,00 €</div>
         </div>
         <div style="flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center">
-          <div style="font-size:10.5px;color:var(--text3)">Valor actual</div>
+          <div style="font-size:10.5px;color:var(--text3)" data-i18n="carteraActualLbl">Valor actual</div>
           <div style="font-size:16px;font-weight:700" id="carteraActual">0,00 €</div>
         </div>
         <div style="flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center">
-          <div style="font-size:10.5px;color:var(--text3)">Ganancia</div>
+          <div style="font-size:10.5px;color:var(--text3)" data-i18n="carteraGananciaLbl">Ganancia</div>
           <div style="font-size:16px;font-weight:700" id="carteraGanancia">0,00 €</div>
         </div>
       </div>
       <div id="carteraPosiciones"></div>
     </div>
     <div id="carteraUpsell" style="display:none;border:1px dashed var(--border2);border-radius:12px;padding:14px 16px;text-align:center;margin-top:10px">
-      <span style="font-size:13px;color:var(--text2)">🔒 La cartera simulada con precios en vivo es de <strong style="color:var(--yellow)">Premium</strong></span>
-      <a href="/premium.html" style="display:block;margin-top:6px;font-size:12px;color:var(--green);font-weight:700;text-decoration:none;">Ver planes →</a>
+      <span style="font-size:13px;color:var(--text2)" data-i18n-html="carteraUpsellTxt">🔒 La cartera simulada con precios en vivo es de <strong style="color:var(--yellow)">Premium</strong></span>
+      <a href="/premium.html" style="display:block;margin-top:6px;font-size:12px;color:var(--green);font-weight:700;text-decoration:none;" data-i18n="carteraVerPlanes">Ver planes →</a>
     </div>
   </div>
 </div>
@@ -3636,16 +4150,16 @@ function renderStock(el, d, ticker) {
 <div id="remindersOverlay" class="hist-overlay" onclick="closeRemindersIfBg(event)">
   <div class="hist-box">
     <button class="auth-close" onclick="cerrarRecordatorios()">×</button>
-    <h2>⏰ Mis recordatorios</h2>
-    <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Te lo mandamos por email cada mañana, según los días que elijas.</p>
+    <h2 data-i18n="remTitle">⏰ Mis recordatorios</h2>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:16px" data-i18n="remSub">Te lo mandamos por email cada mañana, según los días que elijas.</p>
     <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-      <input id="remMensaje" placeholder="Ej: Aporta 5€ al bote de ahorro" style="flex:1;min-width:180px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+      <input id="remMensaje" placeholder="Ej: Aporta 5€ al bote de ahorro" data-i18n-placeholder="remMensajePh" style="flex:1;min-width:180px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
       <select id="remFrecuencia" style="background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
-        <option value="diario">Todos los días</option>
-        <option value="laborables">Solo laborables</option>
-        <option value="findes">Solo fines de semana</option>
+        <option value="diario" data-i18n="remFrecDiario">Todos los días</option>
+        <option value="laborables" data-i18n="remFrecLaborables">Solo laborables</option>
+        <option value="findes" data-i18n="remFrecFindes">Solo fines de semana</option>
       </select>
-      <button onclick="crearRecordatorio()" style="background:var(--green);color:#000;font-weight:700;border:none;border-radius:10px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;">Crear</button>
+      <button onclick="crearRecordatorio()" data-i18n="btnCrear" style="background:var(--green);color:#000;font-weight:700;border:none;border-radius:10px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;">Crear</button>
     </div>
     <div id="remindersBody"></div>
   </div>
@@ -3665,7 +4179,7 @@ function renderStock(el, d, ticker) {
     </div>
     <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;"></div>
     <div style="display:flex;gap:8px;padding:14px 16px;border-top:1px solid var(--border);">
-      <input id="chatInput" placeholder="Pregúntame lo que sea de dinero..." onkeydown="if(event.key==='Enter')enviarMensajeChat()" style="flex:1;background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:11px 16px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+      <input id="chatInput" placeholder="Pregúntame lo que sea de dinero..." data-i18n-placeholder="chatInputPh" onkeydown="if(event.key==='Enter')enviarMensajeChat()" style="flex:1;background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:11px 16px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
       <button onclick="enviarMensajeChat()" id="chatSendBtn" style="background:var(--green);color:#000;font-weight:700;border:none;border-radius:100px;padding:0 18px;font-size:13px;cursor:pointer;font-family:inherit;">➤</button>
     </div>
   </div>
@@ -3904,7 +4418,7 @@ function shuffleArr(a) { return [...a].sort(() => Math.random() - 0.5); }
 let _nivelQuiz = 'basico';
 function cambiarNivelQuiz(nivel) {
   if (nivel === 'avanzado' && (!_currentUser || _userPlan === 'free')) {
-    const ir = confirm('Las preguntas avanzadas (ROIC, WACC, DCF...) son de Premium. ¿Quieres ver los planes?');
+    const ir = confirm(t('quizAvanzadoPremiumConfirm'));
     if (ir) window.location.href = '/premium.html';
     return;
   }
@@ -3913,9 +4427,9 @@ function cambiarNivelQuiz(nivel) {
   const btnA = document.getElementById('btnNivelAvanzado');
   if (nivel === 'basico') {
     btnB.style.background = 'var(--green)'; btnB.style.color = '#000'; btnB.style.border = 'none';
-    btnA.style.background = 'var(--card2)'; btnA.style.color = 'var(--text2)'; btnA.style.border = '1px solid var(--border2)'; btnA.textContent = '🔒 Avanzado';
+    btnA.style.background = 'var(--card2)'; btnA.style.color = 'var(--text2)'; btnA.style.border = '1px solid var(--border2)'; btnA.textContent = t('quizAvanzado');
   } else {
-    btnA.style.background = 'var(--purple)'; btnA.style.color = '#000'; btnA.style.border = 'none'; btnA.textContent = 'Avanzado';
+    btnA.style.background = 'var(--purple)'; btnA.style.color = '#000'; btnA.style.border = 'none'; btnA.textContent = t('quizAvanzadoSinLock');
     btnB.style.background = 'var(--card2)'; btnB.style.color = 'var(--text2)'; btnB.style.border = '1px solid var(--border2)';
   }
   initQuiz();
@@ -3936,7 +4450,7 @@ function renderDots() {
 function renderQuestion() {
   const p = selPreguntas[qIdx];
   document.getElementById('quizCategory').textContent = p.cat;
-  document.getElementById('quizNum').textContent = `Pregunta ${qIdx + 1} de ${selPreguntas.length}`;
+  document.getElementById('quizNum').textContent = tf('quizPreguntaNumTpl', { n: qIdx + 1, total: selPreguntas.length });
   document.getElementById('quizQuestion').textContent = p.q;
   document.getElementById('quizFeedback').style.display = 'none';
   document.getElementById('quizNextBtn').style.display = 'none';
@@ -3960,7 +4474,7 @@ function answer(i) {
   fb.style.background = correct ? 'var(--green-glow)' : 'var(--red-dim)';
   fb.style.borderColor = correct ? 'rgba(34,197,94,0.3)' : 'rgba(248,113,113,0.3)';
   document.getElementById('quizFeedbackTitle').style.color = correct ? 'var(--green)' : 'var(--red)';
-  document.getElementById('quizFeedbackTitle').textContent = correct ? '✓ Correcto — +' + ganado + ' XP' : '✗ Incorrecto';
+  document.getElementById('quizFeedbackTitle').textContent = correct ? tf('quizCorrectoTpl', { xp: ganado }) : t('quizIncorrecto');
   document.getElementById('quizFeedbackText').style.color = correct ? 'var(--green)' : 'var(--red)';
   document.getElementById('quizFeedbackText').textContent = p.exp;
   document.getElementById('quizNextBtn').style.display = 'block';
@@ -3976,10 +4490,10 @@ function showResult() {
   r.style.display = 'block';
   const pct = Math.round((score / selPreguntas.length) * 100);
   const niveles = [
-    { min: 0,  emoji: '🌱', title: 'Semilla financiera', desc: 'Tranqui, todos empezamos desde cero. Mosca está aquí para llevarte de semilla a árbol.' },
-    { min: 40, emoji: '📈', title: 'Inversor en ciernes', desc: 'Buen comienzo. Tienes base pero aún hay conceptos que pulir.' },
-    { min: 60, emoji: '💡', title: 'Cerebro financiero', desc: 'Sabes lo que te traes entre maños. Ahora toca pasar del conocimiento a la acción.' },
-    { min: 80, emoji: '🏆', title: 'Crack total', desc: '¡Máquina! Tienes un nivel financiero por encima de la media.' },
+    { min: 0,  emoji: '🌱', title: t('quizNivel0Titulo'), desc: t('quizNivel0Desc') },
+    { min: 40, emoji: '📈', title: t('quizNivel40Titulo'), desc: t('quizNivel40Desc') },
+    { min: 60, emoji: '💡', title: t('quizNivel60Titulo'), desc: t('quizNivel60Desc') },
+    { min: 80, emoji: '🏆', title: t('quizNivel80Titulo'), desc: t('quizNivel80Desc') },
   ];
   const nv = [...niveles].reverse().find(n => pct >= n.min);
   document.getElementById('quizResultEmoji').textContent = nv.emoji;
