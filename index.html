@@ -596,7 +596,7 @@ function acceptAge() {
   </div>
 </section>
 
-<div class="stocks-bg" id="stocks">
+<div class="stocks-bg" id="stocks" style="display:none">
   <section>
     <div class="pill">Mosca Inversor · En vivo</div>
     <h2>laBolsabro.<br>Datos reales ahora.</h2>
@@ -1611,8 +1611,10 @@ async function setUser(user) {
   }
   if (typeof renderXPBadge === 'function') renderXPBadge();
   if (typeof renderRachaBadge === 'function') renderRachaBadge();
-  const biblioteca = document.getElementById('biblioteca');
-  if (biblioteca) biblioteca.style.display = '';
+  ['biblioteca', 'stocks', 'calculadora', 'simulador'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = '';
+  });
   await cargarPanelData();
   const navAuth = document.getElementById('navAuth');
   const isPremium = _userPlan !== 'free';
@@ -1667,8 +1669,10 @@ function clearUser() {
   _jars = [];
   _invertidoSimulado = 0;
   _pruebasGratisUsadas = 0;
-  const biblioteca = document.getElementById('biblioteca');
-  if (biblioteca) biblioteca.style.display = 'none';
+  ['biblioteca', 'stocks', 'calculadora', 'simulador'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
   document.getElementById('navAuth').innerHTML = `<button class="nav-btn" onclick="openAuthModal()" data-i18n="navEntrar">${(I18N[_idioma]||I18N.es).navEntrar}</button>`;
   if (typeof cargarXPTotal === 'function') cargarXPTotal();
   if (typeof renderHeroMockup === 'function') renderHeroMockup();
@@ -2251,7 +2255,12 @@ async function submitAuth() {
   btn.textContent = _authMode === 'register' ? 'Crear cuenta' : 'Entrar'; btn.disabled = false;
 }
 
-initAuth();
+function checkHashGate() {
+  const gated = ['#stocks', '#calculadora', '#simulador'];
+  if (gated.includes(location.hash) && !_currentUser) openAuthModal();
+}
+window.addEventListener('hashchange', checkHashGate);
+initAuth().then(checkHashGate);
 
 // Pruebas gratis de por vida (analizador + calculadora, contador compartido)
 const PRUEBAS_GRATIS = 3;
@@ -3055,7 +3064,7 @@ function renderStock(el, d, ticker) {
 }
 </script>
 
-<section id="calculadora">
+<section id="calculadora" style="display:none">
   <div class="pill">Calculadora de inversión</div>
   <h2>¿Cuánto ganarías<br>en 20 años?</h2>
   <p class="sub">El interés compuesto es la fuerza más poderosa de las finanzas. Ponle números a tu futuro.</p>
@@ -3208,7 +3217,7 @@ function renderStock(el, d, ticker) {
   </section>
 </div>
 
-<section>
+<section id="simulador" style="display:none">
   <div class="pill">Simulador</div>
   <h2>¿Cuánto tendrás<br>si empiezas hoy?</h2>
   <p class="sub">Mueve los sliders y ve cómo crece tu dinero con el interés compuesto. La magia del tiempo y la constancia.</p>
