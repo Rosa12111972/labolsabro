@@ -1707,7 +1707,10 @@ function cambiarMoneda(code) {
   actualizarPreciosSuscripcion();
 }
 function convertirMoneda(amount, from, to) {
-  if (!_fxRates || !amount || from === to) return null;
+  // OJO: "amount == null" en vez de "!amount" — con !amount, un importe de
+  // 0 (el plan Gratis, saldos vacíos...) se trataba como "sin dato" y nunca
+  // se convertía, así que se quedaba fijo en el símbolo € del valor por defecto.
+  if (!_fxRates || amount == null || from === to) return null;
   const rFrom = _fxRates[from], rTo = _fxRates[to];
   if (!rFrom || !rTo) return null;
   const enUSD = amount / rFrom;
