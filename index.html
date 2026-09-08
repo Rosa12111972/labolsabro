@@ -949,13 +949,13 @@ function renderCompare(el, d1, t1, d2, t2) {
       ${row(t('cmpCrecIngresos'),
         ci1?(ci1*100).toFixed(1)+'%':'—', ci2?(ci2*100).toFixed(1)+'%':'—', cic[0], cic[1])}
       ${row(termLabel('Free Cash Flow'),
-        f1?fmtMiles(Math.abs(f1)):'—', f2?fmtMiles(Math.abs(f2)):'—', fc[0], fc[1])}
+        f1?fmtMiles(Math.abs(f1), d1.moneda):'—', f2?fmtMiles(Math.abs(f2), d2.moneda):'—', fc[0], fc[1])}
       ${row(termLabel('Dividendo'),
         dy1?(dy1*100).toFixed(2)+'%':'—', dy2?(dy2*100).toFixed(2)+'%':'—', dyc[0], dyc[1])}
       ${row(termLabel('Beta'),
         b1?b1.toFixed(2):'—', b2?b2.toFixed(2):'—', bc[0], bc[1])}
       ${row(termLabel('Cap. mercado'),
-        fmtMiles(d1.mktCap), fmtMiles(d2.mktCap))}
+        fmtMiles(d1.mktCap, d1.moneda), fmtMiles(d2.mktCap, d2.moneda))}
     </div>
     ${_userPlan !== 'free' ? renderSectorCompare(d1, d2) : `<div style="border:1px dashed var(--border2);border-radius:14px;padding:16px;text-align:center;margin-bottom:16px">
       <span style="font-size:13px;color:var(--text2)">${t('cmpUpsellHtml')}</span>
@@ -1578,12 +1578,24 @@ function semaforo(pe, sector, peg) {
   return               { cls: 'sem-red',    ico: '🔴', titulo: t('semRedTitle'),   desc: tf('semRedDesc', { pe: pe.toFixed(1), sector: nombreSector, bajo: ref.bajo, alto: ref.alto }) };
 }
 
-function fmtMiles(n) {
+// `from` es la moneda en la que viene el dato (la del valor bursátil, ej.
+// USD para acciones de EEUU) — se convierte a la moneda elegida por el
+// usuario igual que el resto de importes de la web.
+function fmtMiles(n, from, sinConversion) {
   if (!n) return '—';
-  if (n >= 1e12) return (n/1e12).toFixed(2) + 'B €';
-  if (n >= 1e9) return (n/1e9).toFixed(2) + 'M M€';
-  if (n >= 1e6) return (n/1e6).toFixed(0) + 'M €';
-  return n.toLocaleString();
+  from = from || 'USD';
+  let val = n, cur = from;
+  if (!sinConversion && _userCurrency !== from && _fxRates) {
+    const conv = convertirMoneda(n, from, _userCurrency);
+    if (conv !== null) { val = conv; cur = _userCurrency; }
+  }
+  const sym = SIMBOLOS_MONEDA[cur] || '';
+  const abs = Math.abs(val);
+  const wrap = suf => cur === 'EUR' ? `${suf} ${sym}` : `${sym}${suf}`;
+  if (abs >= 1e12) return wrap((val/1e12).toFixed(2) + 'B');
+  if (abs >= 1e9) return wrap((val/1e9).toFixed(2) + 'M M');
+  if (abs >= 1e6) return wrap((val/1e6).toFixed(0) + 'M');
+  return val.toLocaleString();
 }
 
 function doTicker(ticker) {
@@ -2438,7 +2450,7 @@ async function abrirHistorialPremium() {
         <div style="font-size:12px;color:var(--text3)">${r.nombre || ''} · ${fecha}</div>
       </div>
       <div style="display:flex;align-items:center;gap:12px;">
-        <span style="font-size:13px;color:var(--text2)">${r.precio ? r.precio.toFixed(2) + '€' : '—'}</span>
+        <span style="font-size:13px;color:var(--text2)">${r.precio ? r.precio.toFixed(2) : '—'}</span>
         <span style="font-weight:700;color:${scoreColor};font-size:14px">${scoreTxt}</span>
       </div>
     </div>`;
@@ -3273,8 +3285,8 @@ function descargarPDF() {
     [termLabel('Crecimiento ingresos'), d.crecimientoIng ? (d.crecimientoIng * 100).toFixed(1) + '%' : '—'],
     [termLabel('Dividendo'), d.divY ? (d.divY * 100).toFixed(2) + '%' : '—'],
     [termLabel('Deuda/Patrimonio'), d.debtToEquity ? d.debtToEquity.toFixed(0) + '%' : '—'],
-    [termLabel('Free Cash Flow'), d.freeCashflow ? fmtMiles(Math.abs(d.freeCashflow)) : '—'],
-    [t('pdfLblCajaTotal'), d.totalCash ? fmtMiles(d.totalCash) : '—'],
+    [termLabel('Free Cash Flow'), d.freeCashflow ? fmtMiles(Math.abs(d.freeCashflow), d.moneda, true) : '—'],
+    [t('pdfLblCajaTotal'), d.totalCash ? fmtMiles(d.totalCash, d.moneda, true) : '—'],
     [termLabel('Rango 52 semanas'), d.min52 && d.max52 ? `${d.min52.toFixed(1)}–${d.max52.toFixed(1)}` : '—'],
     [termLabel('Beta'), d.beta ? d.beta.toFixed(2) : '—'],
     [termLabel('Empleados'), d.employees ? d.employees.toLocaleString('es-ES') : '—'],
@@ -3649,7 +3661,7 @@ function renderETF(el, d, ticker) {
     </div>
     <div class="semáforo sem-gray" style="margin-bottom:16px"><div class="semáforo-icon">📦</div><div><div class="semáforo-title">${t('etfTituloSemaforo')}</div><div class="semáforo-desc">${t('etfDescSemaforo')}</div></div></div>
     <div class="result-grid">
-      <div class="result-metric"><div class="result-metric-label">${termLabel('Cap. mercado')}</div><div class="result-metric-val" style="font-size:15px">${fmtMiles(mktCap)}</div><div class="result-metric-sub">${t('subPatrimonioFondo')}</div></div>
+      <div class="result-metric"><div class="result-metric-label">${termLabel('Cap. mercado')}</div><div class="result-metric-val" style="font-size:15px">${fmtMiles(mktCap, moneda)}</div><div class="result-metric-sub">${t('subPatrimonioFondo')}</div></div>
       <div class="result-metric"><div class="result-metric-label">${termLabel('Dividendo')}</div><div class="result-metric-val">${divY ? (divY*100).toFixed(2)+'%' : '—'}</div><div class="result-metric-sub">${t('subDividendo')}</div></div>
       <div class="result-metric"><div class="result-metric-label">${termLabel('Beta')}</div><div class="result-metric-val">${betaV ? betaV.toFixed(2) : '—'}</div><div class="result-metric-sub">${t('subBeta')}</div></div>
       <div class="result-metric"><div class="result-metric-label">${termLabel('Rango 52 semanas')}</div><div class="result-metric-val" style="font-size:13px;margin-top:4px">${min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—'}</div><div class="result-metric-sub">${t('subRango52')}</div></div>
@@ -3757,14 +3769,14 @@ function renderStock(el, d, ticker) {
         ${crecIng !== null ? metric('Crecimiento ingresos', (crecIng*100).toFixed(1)+'%', t('subCrecIngresos'), `color:${crecIng>0?'var(--green)':'var(--red)'}`) : ''}
         ${roe !== null ? metric('ROE', (roe*100).toFixed(1)+'%', t('subROE'), `color:${roe>0.15?'var(--green)':roe<0?'var(--red)':'var(--text)'}`) : ''}
         ${metric('PER estimado', fpe ? fpe.toFixed(1)+'x' : '—', t('subPerEstimado'))}
-        ${metric('Cap. mercado', fmtMiles(mktCap), t('subCapMercado'), 'font-size:15px')}
+        ${metric('Cap. mercado', fmtMiles(mktCap, moneda), t('subCapMercado'), 'font-size:15px')}
         ${metric('Dividendo', divY ? (divY*100).toFixed(2)+'%' : '—', t('subDividendo'))}
         ${metric('EPS', eps ? eps.toFixed(2) : '—', t('subEPS'), `color:${eps>0?'var(--green)':'var(--red)'}`)}
         ${metric('Margen neto', margen ? (margen*100).toFixed(1)+'%' : '—', t('subMargenNeto'), `color:${margen>0.1?'var(--green)':margen<0?'var(--red)':'var(--text)'}`)}
         ${metric('Reinversión del negocio', reinvPct !== null ? reinvPct.toFixed(0)+'%' : '—', reinvSub, `color:${reinvColor}`)}
         ${reinvContexto ? `<div style="grid-column:1/-1;padding:10px 14px;background:var(--card2);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--text2);line-height:1.6">${reinvContexto}</div>` : ''}
-        ${ocf ? metric('Flujo caja operativo', fmtMiles(Math.abs(ocf)), t('subFlujoCaja'), `font-size:15px;color:${ocf>0?'var(--green)':'var(--red)'}`) : ''}
-        ${fcf ? metric('Free Cash Flow', fmtMiles(Math.abs(fcf)), t('subFCF'), `font-size:15px;color:${fcf>0?'var(--green)':'var(--red)'}`) : ''}
+        ${ocf ? metric('Flujo caja operativo', fmtMiles(Math.abs(ocf), moneda), t('subFlujoCaja'), `font-size:15px;color:${ocf>0?'var(--green)':'var(--red)'}`) : ''}
+        ${fcf ? metric('Free Cash Flow', fmtMiles(Math.abs(fcf), moneda), t('subFCF'), `font-size:15px;color:${fcf>0?'var(--green)':'var(--red)'}`) : ''}
         ${metric('Beta', betaV ? betaV.toFixed(2) : '—', t('subBeta'))}
         ${metric('Rango 52 semanas', min52 && max52 ? min52.toFixed(2)+' — '+max52.toFixed(2) : '—', t('subRango52'), 'font-size:13px;margin-top:4px')}
         ${employees ? metric('Empleados', employees.toLocaleString('es-ES'), t('subEmpleados'), 'font-size:15px') : ''}
