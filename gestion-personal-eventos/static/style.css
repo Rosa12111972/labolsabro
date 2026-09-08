@@ -136,6 +136,28 @@ h3 { font-size: 1.2rem; }
   margin: 4rem auto;
 }
 
+.login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted, #888);
+  margin: 1.25rem 0;
+  font-size: 0.85rem;
+}
+.login-divider::before, .login-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+.login-divider span { padding: 0 0.75rem; }
+
+.google-login {
+  display: block;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 form label {
   display: block;
   margin-top: 0.75rem;

@@ -33,20 +33,25 @@ def init_db(app):
 
 def create_default_admin():
     db = get_db()
-    password = secrets.token_urlsafe(9)
+    email = os.environ.get("ADMIN_EMAIL", "admin@local")
+    password = os.environ.get("ADMIN_PASSWORD") or secrets.token_urlsafe(9)
     from werkzeug.security import generate_password_hash
 
     db.execute(
-        "INSERT INTO users (username, password_hash) VALUES (?, ?)",
-        ("admin", generate_password_hash(password)),
+        "INSERT INTO users (email, password_hash) VALUES (?, ?)",
+        (email, generate_password_hash(password)),
     )
     db.commit()
     click.echo("=" * 60)
     click.echo("Base de datos inicializada por primera vez.")
-    click.echo("Usuario: admin")
-    click.echo(f"Contraseña: {password}")
-    click.echo("Guárdala ahora, no se volverá a mostrar. Para crear más")
-    click.echo('usuarios: flask --app app add-user <usuario> <contraseña>')
+    click.echo(f"Email: {email}")
+    if os.environ.get("ADMIN_PASSWORD"):
+        click.echo("Contraseña: la definida en la variable de entorno ADMIN_PASSWORD.")
+    else:
+        click.echo(f"Contraseña: {password}")
+        click.echo("Guárdala ahora, no se volverá a mostrar (o define ADMIN_EMAIL/")
+        click.echo("ADMIN_PASSWORD para tener credenciales fijas). Para crear más")
+        click.echo('usuarios: flask --app app add-user <email> <contraseña>')
     click.echo("=" * 60)
 
 
@@ -58,19 +63,19 @@ def register_cli(app):
         create_default_admin()
 
     @app.cli.command("add-user")
-    @click.argument("username")
+    @click.argument("email")
     @click.argument("password")
-    def add_user_command(username, password):
+    def add_user_command(email, password):
         """Crea un nuevo usuario para acceder a la herramienta."""
         from werkzeug.security import generate_password_hash
 
         db = get_db()
         try:
             db.execute(
-                "INSERT INTO users (username, password_hash) VALUES (?, ?)",
-                (username, generate_password_hash(password)),
+                "INSERT INTO users (email, password_hash) VALUES (?, ?)",
+                (email, generate_password_hash(password)),
             )
             db.commit()
-            click.echo(f'Usuario "{username}" creado.')
+            click.echo(f'Usuario "{email}" creado.')
         except sqlite3.IntegrityError:
-            click.echo(f'Ya existe un usuario con nombre "{username}".')
+            click.echo(f'Ya existe un usuario con email "{email}".')

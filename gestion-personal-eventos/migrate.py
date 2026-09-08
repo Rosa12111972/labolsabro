@@ -40,6 +40,20 @@ def migrate():
     else:
         print("'evento_asignaciones' table already exists.")
 
+    user_cols = [row[1] for row in db.execute("PRAGMA table_info(users)").fetchall()]
+    if "email" not in user_cols:
+        db.execute("ALTER TABLE users ADD COLUMN email TEXT")
+        if "username" in user_cols:
+            db.execute("UPDATE users SET email = username WHERE email IS NULL")
+        print("Added 'email' column to users.")
+    else:
+        print("'email' column already exists in users.")
+    if "google_sub" not in user_cols:
+        db.execute("ALTER TABLE users ADD COLUMN google_sub TEXT")
+        print("Added 'google_sub' column to users.")
+    else:
+        print("'google_sub' column already exists in users.")
+
     db.commit()
     db.close()
     print("Migration complete.")

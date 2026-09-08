@@ -1,11 +1,17 @@
+import secrets
 from functools import wraps
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+import requests
+from flask import Blueprint, current_app, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash
 
 from extensions import get_db
 
 bp = Blueprint("auth", __name__)
+
+GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/v2/auth"
+GOOGLE_TOKEN_URI = "https://oauth2.googleapis.com/token"
+GOOGLE_USERINFO_URI = "https://www.googleapis.com/oauth2/v3/userinfo"
 
 
 def login_required(view):
@@ -18,20 +24,110 @@ def login_required(view):
     return wrapped
 
 
+def _google_configured():
+    return bool(current_app.config.get("GOOGLE_CLIENT_ID") and current_app.config.get("GOOGLE_CLIENT_SECRET"))
+
+
+def _log_in_user(user):
+    session.clear()
+    session["user_id"] = user["id"]
+    session["email"] = user["email"]
+
+
 @bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get("username", "").strip()
+        email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         db = get_db()
-        user = db.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
-        if user and check_password_hash(user["password_hash"], password):
-            session.clear()
-            session["user_id"] = user["id"]
-            session["username"] = user["username"]
+        user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        if user and user["password_hash"] and check_password_hash(user["password_hash"], password):
+            _log_in_user(user)
             return redirect(request.args.get("next") or url_for("index"))
-        flash("Usuario o contraseña incorrectos.")
-    return render_template("login.html")
+        flash("Email o contraseña incorrectos.")
+    return render_template("login.html", google_enabled=_google_configured())
+
+
+@bp.route("/login/google")
+def login_google():
+    if not _google_configured():
+        flash("El inicio de sesión con Google no está configurado.")
+        return redirect(url_for("auth.login"))
+
+    state = secrets.token_urlsafe(16)
+    session["oauth_state"] = state
+    redirect_uri = url_for("auth.login_google_callback", _external=True)
+    params = {
+        "client_id": current_app.config["GOOGLE_CLIENT_ID"],
+        "redirect_uri": redirect_uri,
+        "response_type": "code",
+        "scope": "openid email profile",
+        "state": state,
+        "prompt": "select_account",
+    }
+    query = "&".join(f"{k}={requests.utils.quote(str(v))}" for k, v in params.items())
+    return redirect(f"{GOOGLE_AUTH_URI}?{query}")
+
+
+@bp.route("/login/google/callback")
+def login_google_callback():
+    if not _google_configured():
+        return redirect(url_for("auth.login"))
+
+    state = request.args.get("state")
+    if not state or state != session.pop("oauth_state", None):
+        flash("La sesión de Google ha caducado, inténtalo de nuevo.")
+        return redirect(url_for("auth.login"))
+
+    code = request.args.get("code")
+    if not code:
+        flash("No se pudo iniciar sesión con Google.")
+        return redirect(url_for("auth.login"))
+
+    redirect_uri = url_for("auth.login_google_callback", _external=True)
+    token_resp = requests.post(
+        GOOGLE_TOKEN_URI,
+        data={
+            "client_id": current_app.config["GOOGLE_CLIENT_ID"],
+            "client_secret": current_app.config["GOOGLE_CLIENT_SECRET"],
+            "code": code,
+            "redirect_uri": redirect_uri,
+            "grant_type": "authorization_code",
+        },
+        timeout=10,
+    )
+    if not token_resp.ok:
+        flash("No se pudo validar el inicio de sesión con Google.")
+        return redirect(url_for("auth.login"))
+
+    access_token = token_resp.json().get("access_token")
+    userinfo_resp = requests.get(
+        GOOGLE_USERINFO_URI,
+        headers={"Authorization": f"Bearer {access_token}"},
+        timeout=10,
+    )
+    if not userinfo_resp.ok:
+        flash("No se pudo obtener tu cuenta de Google.")
+        return redirect(url_for("auth.login"))
+
+    info = userinfo_resp.json()
+    google_sub = info.get("sub")
+    email = (info.get("email") or "").strip().lower()
+
+    db = get_db()
+    user = db.execute("SELECT * FROM users WHERE google_sub = ?", (google_sub,)).fetchone()
+    if not user and email:
+        user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+        if user:
+            db.execute("UPDATE users SET google_sub = ? WHERE id = ?", (google_sub, user["id"]))
+            db.commit()
+
+    if not user:
+        flash(f"La cuenta {email} no tiene acceso a este panel. Pide que te den de alta.")
+        return redirect(url_for("auth.login"))
+
+    _log_in_user(user)
+    return redirect(url_for("index"))
 
 
 @bp.route("/logout")

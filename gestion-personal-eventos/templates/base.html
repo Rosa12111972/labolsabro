@@ -13,7 +13,7 @@
   <nav class="topnav">
     <span class="brand">Panel de gestión</span>
     <span class="spacer"></span>
-    <span class="user">{{ session.get('username') }}</span>
+    <span class="user">{{ session.get('email') }}</span>
     <a class="logout" href="{{ url_for('auth.logout') }}">Salir</a>
   </nav>
   <nav class="sections-nav">

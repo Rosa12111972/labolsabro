@@ -14,6 +14,8 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-key-cambia-esto-en-produccion")
     app.config["BASE_URL"] = os.environ.get("BASE_URL", "http://127.0.0.1:5000")
+    app.config["GOOGLE_CLIENT_ID"] = os.environ.get("GOOGLE_CLIENT_ID", "")
+    app.config["GOOGLE_CLIENT_SECRET"] = os.environ.get("GOOGLE_CLIENT_SECRET", "")
 
     app.teardown_appcontext(close_db)
     register_cli(app)
@@ -43,4 +45,5 @@ if __name__ == "__main__":
     from scheduler import init_scheduler
     init_scheduler(app)
 
-    app.run(debug=True, port=5000, use_reloader=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False, use_reloader=False)
