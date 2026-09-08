@@ -68,82 +68,209 @@
       <div class="logo-mark">🪰</div>
       <div><div class="logo-text">Mosca</div><div class="logo-sub">laBolsabro</div></div>
     </a>
-    <a href="/" style="font-size:14px;color:var(--text2);text-decoration:none;">← Volver</a>
+    <a href="/" style="font-size:14px;color:var(--text2);text-decoration:none;" data-i18n="navVolver">← Volver</a>
   </div>
 </nav>
 
 <div class="main">
   <div id="msgBox" style="display:none"></div>
 
-  <div style="display:inline-block;background:rgba(250,204,21,0.1);border:1px solid rgba(250,204,21,0.25);color:var(--yellow);padding:6px 18px;border-radius:100px;font-size:13px;font-weight:700;margin-bottom:24px;">✨ Planes de laBolsabro</div>
-  <h1>Invierte mejor.<br>Por menos de un <em>café</em>.</h1>
-  <p class="sub">Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.</p>
+  <div style="display:inline-block;background:rgba(250,204,21,0.1);border:1px solid rgba(250,204,21,0.25);color:var(--yellow);padding:6px 18px;border-radius:100px;font-size:13px;font-weight:700;margin-bottom:24px;" data-i18n="premiumTag">✨ Planes de laBolsabro</div>
+  <h1 data-i18n-html="premiumH1">Invierte mejor.<br>Por menos de un <em>café</em>.</h1>
+  <p class="sub" data-i18n="premiumSub">Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.</p>
 
   <div class="toggle-wrap">
-    <button class="toggle-btn active" id="btnMensual" onclick="cambiarCiclo('mensual')">Mensual</button>
-    <button class="toggle-btn" id="btnAnual" onclick="cambiarCiclo('anual')">Anual <span class="toggle-save">-17%</span></button>
+    <button class="toggle-btn active" id="btnMensual" onclick="cambiarCiclo('mensual')" data-i18n="toggleMensual">Mensual</button>
+    <button class="toggle-btn" id="btnAnual" onclick="cambiarCiclo('anual')" data-i18n-html="toggleAnual">Anual <span class="toggle-save">-17%</span></button>
   </div>
 
   <div class="plans">
     <!-- GRATIS -->
     <div class="plan">
-      <div class="plan-name">Gratis</div>
-      <div class="plan-price">0€ <span>/mes</span></div>
-      <div class="plan-desc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div>
+      <div class="plan-name" data-i18n="planGratisName">Gratis</div>
+      <div class="plan-price"><span data-i18n="planGratisPrice">0€</span> <span data-i18n="perMes">/mes</span></div>
+      <div class="plan-desc" data-i18n="planGratisDesc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div>
       <ul class="plan-list">
-        <li><span class="c-g">✓</span> Analizador de acciones y calculadora</li>
-        <li><span class="c-g">✓</span> 3 pruebas gratis (de por vida)</li>
-        <li><span class="c-d">✗</span> Comparador de empresas</li>
-        <li><span class="c-d">✗</span> Pruebas ilimitadas</li>
-        <li><span class="c-d">✗</span> Alertas de valor</li>
-        <li><span class="c-d">✗</span> Historial de análisis</li>
+        <li><span class="c-g">✓</span> <span data-i18n="gratisLi1">Analizador de acciones y calculadora</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="gratisLi2">3 pruebas gratis (de por vida)</span></li>
+        <li><span class="c-d">✗</span> <span data-i18n="gratisLi3">Comparador de empresas</span></li>
+        <li><span class="c-d">✗</span> <span data-i18n="gratisLi4">Pruebas ilimitadas</span></li>
+        <li><span class="c-d">✗</span> <span data-i18n="gratisLi5">Alertas de valor</span></li>
+        <li><span class="c-d">✗</span> <span data-i18n="gratisLi6">Historial de análisis</span></li>
       </ul>
-      <a href="/" class="btn btn-outline">Usar gratis</a>
+      <a href="/" class="btn btn-outline" data-i18n="planGratisBtn">Usar gratis</a>
     </div>
 
     <!-- INVERSOR JUNIOR -->
     <div class="plan">
-      <div class="plan-name">Inversor Junior</div>
-      <div class="plan-price"><span id="precioJunior">5,99€</span> <span id="cicloJunior">/mes</span></div>
-      <div class="plan-desc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div>
+      <div class="plan-name" data-i18n="planJuniorName">Inversor Junior</div>
+      <div class="plan-price"><span id="precioJunior">5,99€</span> <span id="cicloJunior" data-i18n="perMes">/mes</span></div>
+      <div class="plan-desc" data-i18n="planJuniorDesc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div>
       <ul class="plan-list">
-        <li><span class="c-g">✓</span> Análisis completo de empresas</li>
-        <li><span class="c-g">✓</span> Simulador de ahorro e inversión</li>
-        <li><span class="c-g">✓</span> Búsquedas ilimitadas</li>
-        <li><span class="c-g">✓</span> Comparador de empresas</li>
-        <li><span class="c-g">✓</span> Recordatorios personalizables</li>
-        <li><span class="c-d">✗</span> Alertas de valor personalizadas</li>
-        <li><span class="c-d">✗</span> Historial de análisis personal</li>
+        <li><span class="c-g">✓</span> <span data-i18n="juniorLi1">Análisis completo de empresas</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="juniorLi2">Simulador de ahorro e inversión</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="juniorLi3">Búsquedas ilimitadas</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="juniorLi4">Comparador de empresas</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="juniorLi5">Recordatorios personalizables</span></li>
+        <li><span class="c-d">✗</span> <span data-i18n="juniorLi6">Alertas de valor personalizadas</span></li>
+        <li><span class="c-d">✗</span> <span data-i18n="juniorLi7">Historial de análisis personal</span></li>
       </ul>
-      <button class="btn btn-purple" onclick="checkout('junior')">Empezar Junior →</button>
+      <button class="btn btn-purple" onclick="checkout('junior')" data-i18n="planJuniorBtn">Empezar Junior →</button>
     </div>
 
     <!-- INVERSOR SENIOR -->
     <div class="plan plan-senior">
-      <div class="plan-badge">⭐ Más completo</div>
-      <div class="plan-name">Inversor Senior</div>
-      <div class="plan-price"><span id="precioSenior">9,99€</span> <span id="cicloSenior">/mes</span></div>
-      <div class="plan-desc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div>
+      <div class="plan-badge" data-i18n="planSeniorBadge">⭐ Más completo</div>
+      <div class="plan-name" data-i18n="planSeniorName">Inversor Senior</div>
+      <div class="plan-price"><span id="precioSenior">9,99€</span> <span id="cicloSenior" data-i18n="perMes">/mes</span></div>
+      <div class="plan-desc" data-i18n="planSeniorDesc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div>
       <ul class="plan-list">
-        <li><span class="c-g">✓</span> Todo del plan Junior</li>
-        <li><span class="c-g">✓</span> Calculadora de interés compuesto</li>
-        <li><span class="c-g">✓</span> Comparador avanzado por sector</li>
-        <li><span class="c-g">✓</span> Alertas de valor personalizadas</li>
-        <li><span class="c-g">✓</span> Historial de análisis personal</li>
-        <li><span class="c-g">✓</span> Soporte prioritario</li>
-        <li><span class="c-g">✓</span> Exportar análisis a PDF</li>
+        <li><span class="c-g">✓</span> <span data-i18n="seniorLi1">Todo del plan Junior</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="seniorLi2">Calculadora de interés compuesto</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="seniorLi3">Comparador avanzado por sector</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="seniorLi4">Alertas de valor personalizadas</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="seniorLi5">Historial de análisis personal</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="seniorLi6">Soporte prioritario</span></li>
+        <li><span class="c-g">✓</span> <span data-i18n="seniorLi7">Exportar análisis a PDF</span></li>
       </ul>
-      <button class="btn btn-green" onclick="checkout('senior')">Empezar Senior →</button>
+      <button class="btn btn-green" onclick="checkout('senior')" data-i18n="planSeniorBtn">Empezar Senior →</button>
     </div>
   </div>
 
-  <p class="guarantee">🔒 Pago seguro con Stripe · Cancela cuando quieras · Sin permanencia</p>
+  <p class="guarantee" data-i18n="guarantee">🔒 Pago seguro con Stripe · Cancela cuando quieras · Sin permanencia</p>
 </div>
 
-<footer>© 2025 Mosca · <a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a> · <a href="mailto:hola@labolsabro.com">Contacto</a></footer>
+<footer>© 2025 Mosca · <a href="/privacidad.html" data-i18n="footerPrivacidad">Privacidad</a> · <a href="/terminos.html" data-i18n="footerTerminos">Términos</a> · <a href="mailto:hola@labolsabro.com" data-i18n="footerContacto">Contacto</a></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
+  // ---- i18n ----
+  const I18N = {
+    es: {
+      navVolver: '← Volver',
+      premiumTag: '✨ Planes de laBolsabro',
+      premiumH1: 'Invierte mejor.<br>Por menos de un <em>café</em>.',
+      premiumSub: 'Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.',
+      toggleMensual: 'Mensual',
+      toggleAnual: 'Anual <span class="toggle-save">-17%</span>',
+      planGratisName: 'Gratis', planGratisPrice: '0€', perMes: '/mes',
+      planGratisDesc: 'Para empezar y ver si laBolsabro te va. Sin límite de tiempo.',
+      gratisLi1: 'Analizador de acciones y calculadora',
+      gratisLi2: '3 pruebas gratis (de por vida)',
+      gratisLi3: 'Comparador de empresas',
+      gratisLi4: 'Pruebas ilimitadas',
+      gratisLi5: 'Alertas de valor',
+      gratisLi6: 'Historial de análisis',
+      planGratisBtn: 'Usar gratis',
+      planJuniorName: 'Inversor Junior',
+      planJuniorDesc: 'Para el que empieza a invertir y quiere entender el mercado sin complicaciones.',
+      juniorLi1: 'Análisis completo de empresas',
+      juniorLi2: 'Simulador de ahorro e inversión',
+      juniorLi3: 'Búsquedas ilimitadas',
+      juniorLi4: 'Comparador de empresas',
+      juniorLi5: 'Recordatorios personalizables',
+      juniorLi6: 'Alertas de valor personalizadas',
+      juniorLi7: 'Historial de análisis personal',
+      planJuniorBtn: 'Empezar Junior →',
+      planSeniorBadge: '⭐ Más completo',
+      planSeniorName: 'Inversor Senior',
+      planSeniorDesc: 'Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.',
+      seniorLi1: 'Todo del plan Junior',
+      seniorLi2: 'Calculadora de interés compuesto',
+      seniorLi3: 'Comparador avanzado por sector',
+      seniorLi4: 'Alertas de valor personalizadas',
+      seniorLi5: 'Historial de análisis personal',
+      seniorLi6: 'Soporte prioritario',
+      seniorLi7: 'Exportar análisis a PDF',
+      planSeniorBtn: 'Empezar Senior →',
+      guarantee: '🔒 Pago seguro con Stripe · Cancela cuando quieras · Sin permanencia',
+      footerPrivacidad: 'Privacidad', footerTerminos: 'Términos', footerContacto: 'Contacto',
+      msgSuccess: '🎉 ¡Bienvenido a laBolsabro! Ya tienes acceso a tu plan.',
+      msgCancelled: 'Pago cancelado. Puedes intentarlo de nuevo cuando quieras.',
+      loading: 'Cargando...',
+      checkoutErr: 'Error al conectar con el sistema de pago. Inténtalo de nuevo.',
+      precioJuniorMensual: '5,99€', precioJuniorAnual: '59,90€',
+      precioSeniorMensual: '9,99€', precioSeniorAnual: '99,90€',
+      cicloMensual: '/mes', cicloAnual: '/año',
+    },
+    en: {
+      navVolver: '← Back',
+      premiumTag: '✨ laBolsabro plans',
+      premiumH1: 'Invest better.<br>For less than a <em>coffee</em>.',
+      premiumSub: 'Start for free. Level up whenever you want. No lock-in.',
+      toggleMensual: 'Monthly',
+      toggleAnual: 'Yearly <span class="toggle-save">-17%</span>',
+      planGratisName: 'Free', planGratisPrice: '€0', perMes: '/mo',
+      planGratisDesc: 'To get started and see if laBolsabro is for you. No time limit.',
+      gratisLi1: 'Stock analyzer and calculator',
+      gratisLi2: '3 free trials (for life)',
+      gratisLi3: 'Company comparison tool',
+      gratisLi4: 'Unlimited trials',
+      gratisLi5: 'Price alerts',
+      gratisLi6: 'Analysis history',
+      planGratisBtn: 'Use for free',
+      planJuniorName: 'Junior Investor',
+      planJuniorDesc: 'For someone starting to invest who wants to understand the market without the hassle.',
+      juniorLi1: 'Full company analysis',
+      juniorLi2: 'Savings and investment simulator',
+      juniorLi3: 'Unlimited searches',
+      juniorLi4: 'Company comparison tool',
+      juniorLi5: 'Customizable reminders',
+      juniorLi6: 'Custom price alerts',
+      juniorLi7: 'Personal analysis history',
+      planJuniorBtn: 'Start Junior →',
+      planSeniorBadge: '⭐ Most complete',
+      planSeniorName: 'Senior Investor',
+      planSeniorDesc: 'For the discerning investor who wants advanced analysis and custom alerts.',
+      seniorLi1: 'Everything in Junior',
+      seniorLi2: 'Compound interest calculator',
+      seniorLi3: 'Advanced sector comparison',
+      seniorLi4: 'Custom price alerts',
+      seniorLi5: 'Personal analysis history',
+      seniorLi6: 'Priority support',
+      seniorLi7: 'Export analysis to PDF',
+      planSeniorBtn: 'Start Senior →',
+      guarantee: '🔒 Secure payment with Stripe · Cancel anytime · No lock-in',
+      footerPrivacidad: 'Privacy', footerTerminos: 'Terms', footerContacto: 'Contact',
+      msgSuccess: '🎉 Welcome to laBolsabro! You now have access to your plan.',
+      msgCancelled: 'Payment cancelled. You can try again whenever you want.',
+      loading: 'Loading...',
+      checkoutErr: 'Error connecting to the payment system. Please try again.',
+      precioJuniorMensual: '€5.99', precioJuniorAnual: '€59.90',
+      precioSeniorMensual: '€9.99', precioSeniorAnual: '€99.90',
+      cicloMensual: '/mo', cicloAnual: '/yr',
+    },
+  };
+  function detectarIdiomaNavegador() {
+    const langs = navigator.languages || [navigator.language || 'es'];
+    for (const l of langs) { if (l.toLowerCase().startsWith('es')) return 'es'; }
+    return 'en';
+  }
+  let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
+  function t(key) {
+    const dict = I18N[_idioma] || I18N.es;
+    return dict[key] !== undefined ? dict[key] : (I18N.es[key] !== undefined ? I18N.es[key] : key);
+  }
+  function tf(key, vars) {
+    let s = t(key);
+    for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+    return s;
+  }
+  function aplicarIdioma() {
+    const dict = I18N[_idioma] || I18N.es;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.documentElement.lang = _idioma;
+  }
+  aplicarIdioma();
+  // ---- /i18n ----
+
   let _sb = null;
   try {
     _sb = supabase.createClient(
@@ -158,13 +285,13 @@
   if (params.get('success') === '1') {
     const box = document.getElementById('msgBox');
     box.className = 'msg msg-ok';
-    box.textContent = '🎉 ¡Bienvenido a laBolsabro! Ya tienes acceso a tu plan.';
+    box.textContent = t('msgSuccess');
     box.style.display = 'block';
   }
   if (params.get('cancelled') === '1') {
     const box = document.getElementById('msgBox');
     box.className = 'msg msg-err';
-    box.textContent = 'Pago cancelado. Puedes intentarlo de nuevo cuando quieras.';
+    box.textContent = t('msgCancelled');
     box.style.display = 'block';
   }
 
@@ -174,22 +301,22 @@
     document.getElementById('btnMensual').classList.toggle('active', ciclo === 'mensual');
     document.getElementById('btnAnual').classList.toggle('active', ciclo === 'anual');
     if (ciclo === 'anual') {
-      document.getElementById('precioJunior').textContent = '59,90€';
-      document.getElementById('cicloJunior').textContent = '/año';
-      document.getElementById('precioSenior').textContent = '99,90€';
-      document.getElementById('cicloSenior').textContent = '/año';
+      document.getElementById('precioJunior').textContent = t('precioJuniorAnual');
+      document.getElementById('cicloJunior').textContent = t('cicloAnual');
+      document.getElementById('precioSenior').textContent = t('precioSeniorAnual');
+      document.getElementById('cicloSenior').textContent = t('cicloAnual');
     } else {
-      document.getElementById('precioJunior').textContent = '5,99€';
-      document.getElementById('cicloJunior').textContent = '/mes';
-      document.getElementById('precioSenior').textContent = '9,99€';
-      document.getElementById('cicloSenior').textContent = '/mes';
+      document.getElementById('precioJunior').textContent = t('precioJuniorMensual');
+      document.getElementById('cicloJunior').textContent = t('cicloMensual');
+      document.getElementById('precioSenior').textContent = t('precioSeniorMensual');
+      document.getElementById('cicloSenior').textContent = t('cicloMensual');
     }
   }
 
   async function checkout(plan) {
     const btn = event.target;
     const original = btn.textContent;
-    btn.textContent = 'Cargando...';
+    btn.textContent = t('loading');
     btn.disabled = true;
     try {
       const { data: { session } } = await _sb.auth.getSession();
@@ -206,7 +333,7 @@
     } catch(e) {
       btn.textContent = original;
       btn.disabled = false;
-      alert('Error al conectar con el sistema de pago. Inténtalo de nuevo.');
+      alert(t('checkoutErr'));
     }
   }
 </script>
