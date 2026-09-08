@@ -1,9 +1,10 @@
 import secrets
+import sqlite3
 from functools import wraps
 
 import requests
 from flask import Blueprint, current_app, flash, redirect, render_template, request, session, url_for
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from extensions import get_db
 
@@ -128,6 +129,47 @@ def login_google_callback():
 
     _log_in_user(user)
     return redirect(url_for("index"))
+
+
+@bp.route("/registro", methods=["GET", "POST"])
+def registro():
+    db = get_db()
+    hay_usuarios = db.execute("SELECT COUNT(*) AS n FROM users").fetchone()["n"] > 0
+    autorizado = "user_id" in session or not hay_usuarios
+
+    if not autorizado:
+        flash("Ya existe un administrador. Pide que te den de alta desde el panel.")
+        return redirect(url_for("auth.login"))
+
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+        if not email or not password:
+            flash("Rellena email y contraseña.")
+            return render_template("registro.html")
+        if len(password) < 6:
+            flash("La contraseña debe tener al menos 6 caracteres.")
+            return render_template("registro.html")
+
+        try:
+            db.execute(
+                "INSERT INTO users (email, password_hash) VALUES (?, ?)",
+                (email, generate_password_hash(password)),
+            )
+            db.commit()
+        except sqlite3.IntegrityError:
+            flash(f"Ya existe una cuenta con el email {email}.")
+            return render_template("registro.html")
+
+        if not hay_usuarios:
+            user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+            _log_in_user(user)
+            return redirect(url_for("index"))
+
+        flash(f"Cuenta creada para {email}.")
+        return redirect(url_for("index"))
+
+    return render_template("registro.html")
 
 
 @bp.route("/logout")
