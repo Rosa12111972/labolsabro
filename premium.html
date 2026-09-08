@@ -144,6 +144,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
+  const PLAN_PRECIOS_EUR = { junior: 5.99, junior_anual: 59.90, senior: 9.99, senior_anual: 99.90 };
   // ---- i18n ----
   const I18N = {
     es: {
@@ -287,6 +288,15 @@
     box.className = 'msg msg-ok';
     box.textContent = t('msgSuccess');
     box.style.display = 'block';
+    const planKeyOk = params.get('plan') || '';
+    if (typeof gtag === 'function') {
+      gtag('event', 'purchase', {
+        currency: 'EUR',
+        value: PLAN_PRECIOS_EUR[planKeyOk] || 0,
+        transaction_id: `${planKeyOk}_${Date.now()}`,
+        items: [{ item_id: planKeyOk, item_name: planKeyOk.replace('_anual', '') }]
+      });
+    }
   }
   if (params.get('cancelled') === '1') {
     const box = document.getElementById('msgBox');
@@ -328,7 +338,13 @@
         body: JSON.stringify({ plan, userId, email, anual: _ciclo === 'anual' })
       });
       const data = await r.json();
-      if (data.url) window.location.href = data.url;
+      if (data.url) {
+        const planKey = _ciclo === 'anual' ? `${plan}_anual` : plan;
+        if (typeof gtag === 'function') {
+          gtag('event', 'begin_checkout', { currency: 'EUR', value: PLAN_PRECIOS_EUR[planKey] || 0, items: [{ item_id: planKey, item_name: plan }] });
+        }
+        window.location.href = data.url;
+      }
       else throw new Error('no url');
     } catch(e) {
       btn.textContent = original;

@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       mode: 'subscription',
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: 'https://labolsabro.com/premium.html?success=1',
+      success_url: `https://labolsabro.com/premium.html?success=1&plan=${planKey}`,
       cancel_url: 'https://labolsabro.com/premium.html?cancelled=1',
       locale: 'es',
     };

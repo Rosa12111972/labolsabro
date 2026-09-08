@@ -2978,7 +2978,10 @@ async function submitAuth() {
   let result;
   if (_authMode === 'register') {
     result = await _sb.auth.signUp({ email, password: pass });
-    if (!result.error) { closeAuthModal(); alert(t('authAlertAccountCreated')); }
+    if (!result.error) {
+      if (typeof gtag === 'function') gtag('event', 'sign_up', { method: 'email' });
+      closeAuthModal(); alert(t('authAlertAccountCreated'));
+    }
   } else {
     result = await _sb.auth.signInWithPassword({ email, password: pass });
     if (!result.error) closeAuthModal();
@@ -3011,6 +3014,7 @@ async function consumirPrueba() {
 }
 
 function mostrarLimiteAlcanzado(el) {
+  if (typeof gtag === 'function') gtag('event', 'trial_limit_reached');
   el.innerHTML = `<div style="text-align:center;padding:32px 16px">
     <div style="font-size:40px;margin-bottom:16px">🔒</div>
     <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">${t('limitTitle')}</div>
