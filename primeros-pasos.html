@@ -61,14 +61,14 @@
       <div class="logo-mark">🪰</div>
       <div><div class="logo-text">Mosca</div><div class="logo-sub">laBolsabro</div></div>
     </a>
-    <a class="back" href="/">← Volver</a>
+    <a class="back" href="/" data-i18n="navVolver">← Volver</a>
   </div>
 </nav>
 
 <div class="hero">
-  <div class="tag">🚀 Primeros pasos</div>
-  <h1>Acabas de llegar. Esto es lo que tienes que hacer.</h1>
-  <p class="lede">8 pasos, en orden, para sacarle todo el partido a laBolsabro. Márcalos según los vayas completando.</p>
+  <div class="tag" data-i18n="pasosTag">🚀 Primeros pasos</div>
+  <h1 data-i18n="pasosH1">Acabas de llegar. Esto es lo que tienes que hacer.</h1>
+  <p class="lede" data-i18n="pasosLede">8 pasos, en orden, para sacarle todo el partido a laBolsabro. Márcalos según los vayas completando.</p>
 </div>
 
 <div class="progress-wrap">
@@ -81,25 +81,100 @@
 <div class="celebrate" id="celebrate">
   <div class="celebrate-box">
     <div style="font-size:44px">🎉</div>
-    <h2>¡Ya conoces laBolsabro entera!</h2>
-    <p>Ahora solo te queda seguir usándola. Vuelve cada día para no perder la racha.</p>
-    <a class="btn" href="/ruta.html">Ir a DuoInvest →</a>
+    <h2 data-i18n="celebrateH2">¡Ya conoces laBolsabro entera!</h2>
+    <p data-i18n="celebrateP">Ahora solo te queda seguir usándola. Vuelve cada día para no perder la racha.</p>
+    <a class="btn" href="/ruta.html" data-i18n="celebrateBtn">Ir a DuoInvest →</a>
   </div>
 </div>
 
-<footer>© 2025 Mosca · <a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a> · <a href="mailto:hola@labolsabro.com">Contacto</a></footer>
+<footer>© 2025 Mosca · <a href="/privacidad.html" data-i18n="footerPrivacidad">Privacidad</a> · <a href="/terminos.html" data-i18n="footerTerminos">Términos</a> · <a href="mailto:hola@labolsabro.com" data-i18n="footerContacto">Contacto</a></footer>
 
 <script>
-const PASOS = [
-  { id: 'registro', badge: '1 min', title: 'Regístrate gratis', desc: 'Crea tu cuenta con email y contraseña. Sin tarjeta, sin permanencia.', href: '/', link: 'Ir a Entrar →' },
-  { id: 'buscar', badge: '30 seg', title: 'Analiza tu primera empresa', desc: 'Escribe el nombre o ticker de una empresa que conozcas (ej: Apple, Inditex) en el buscador principal.', href: '/#stocks', link: 'Ir al buscador →' },
-  { id: 'semaforo', badge: '1 min', title: 'Entiende el semáforo y la puntuación', desc: 'Verde/amarillo/rojo te dice si está barata o cara. El número 0-10 resume todo. Pulsa cualquier métrica para que te la expliquen.', href: '/#stocks', link: 'Volver al análisis →' },
-  { id: 'calculadora', badge: '1 min', title: 'Prueba la calculadora de interés compuesto', desc: 'Mueve los sliders y mira cuánto tendrías ahorrando cada mes durante años.', href: '/#calculadora', link: 'Ir a la calculadora →' },
-  { id: 'quiz', badge: '2 min', title: 'Haz el quiz y gana tu primer XP', desc: '5 preguntas rápidas sobre dinero. Acertar te da XP y sube tu nivel.', href: '/#quiz', link: 'Hacer el quiz →' },
-  { id: 'duoinvest', badge: '3 min', title: 'Empieza tu racha en DuoInvest', desc: 'Completa el primer nivel (Ahorro y fondos) y empieza tu racha diaria.', href: '/ruta.html', link: 'Abrir DuoInvest →' },
-  { id: 'bote', badge: '1 min', title: 'Crea tu primer bote de ahorro', desc: 'En "Mi panel", crea una meta de ahorro (vacaciones, coche, lo que sea) y aporta algo, aunque sea 1€.', href: '/', link: 'Abrir Mi panel →' },
-  { id: 'premium', badge: 'opcional', title: 'Mira qué desbloquea Premium', desc: 'Búsquedas ilimitadas, alertas de precio, cartera simulada y más. No hace falta ahora, pero échale un ojo.', href: '/premium.html', link: 'Ver planes →' },
-];
+// ---- i18n ----
+const I18N = {
+  es: {
+    navVolver: '← Volver',
+    pasosTag: '🚀 Primeros pasos',
+    pasosH1: 'Acabas de llegar. Esto es lo que tienes que hacer.',
+    pasosLede: '8 pasos, en orden, para sacarle todo el partido a laBolsabro. Márcalos según los vayas completando.',
+    progressTxt: '{n} de {total} completados',
+    celebrateH2: '¡Ya conoces laBolsabro entera!',
+    celebrateP: 'Ahora solo te queda seguir usándola. Vuelve cada día para no perder la racha.',
+    celebrateBtn: 'Ir a DuoInvest →',
+    footerPrivacidad: 'Privacidad', footerTerminos: 'Términos', footerContacto: 'Contacto',
+    badgeMin1: '1 min', badgeSeg30: '30 seg', badgeMin2: '2 min', badgeMin3: '3 min', badgeOpcional: 'opcional',
+    p1title: 'Regístrate gratis', p1desc: 'Crea tu cuenta con email y contraseña. Sin tarjeta, sin permanencia.', p1link: 'Ir a Entrar →',
+    p2title: 'Analiza tu primera empresa', p2desc: 'Escribe el nombre o ticker de una empresa que conozcas (ej: Apple, Inditex) en el buscador principal.', p2link: 'Ir al buscador →',
+    p3title: 'Entiende el semáforo y la puntuación', p3desc: 'Verde/amarillo/rojo te dice si está barata o cara. El número 0-10 resume todo. Pulsa cualquier métrica para que te la expliquen.', p3link: 'Volver al análisis →',
+    p4title: 'Prueba la calculadora de interés compuesto', p4desc: 'Mueve los sliders y mira cuánto tendrías ahorrando cada mes durante años.', p4link: 'Ir a la calculadora →',
+    p5title: 'Haz el quiz y gana tu primer XP', p5desc: '5 preguntas rápidas sobre dinero. Acertar te da XP y sube tu nivel.', p5link: 'Hacer el quiz →',
+    p6title: 'Empieza tu racha en DuoInvest', p6desc: 'Completa el primer nivel (Ahorro y fondos) y empieza tu racha diaria.', p6link: 'Abrir DuoInvest →',
+    p7title: 'Crea tu primer bote de ahorro', p7desc: 'En "Mi panel", crea una meta de ahorro (vacaciones, coche, lo que sea) y aporta algo, aunque sea 1€.', p7link: 'Abrir Mi panel →',
+    p8title: 'Mira qué desbloquea Premium', p8desc: 'Búsquedas ilimitadas, alertas de precio, cartera simulada y más. No hace falta ahora, pero échale un ojo.', p8link: 'Ver planes →',
+  },
+  en: {
+    navVolver: '← Back',
+    pasosTag: '🚀 First steps',
+    pasosH1: 'You just got here. This is what to do.',
+    pasosLede: '8 steps, in order, to get the most out of laBolsabro. Check them off as you complete them.',
+    progressTxt: '{n} of {total} completed',
+    celebrateH2: 'You now know all of laBolsabro!',
+    celebrateP: 'Now all that\'s left is to keep using it. Come back every day to keep your streak going.',
+    celebrateBtn: 'Go to DuoInvest →',
+    footerPrivacidad: 'Privacy', footerTerminos: 'Terms', footerContacto: 'Contact',
+    badgeMin1: '1 min', badgeSeg30: '30 sec', badgeMin2: '2 min', badgeMin3: '3 min', badgeOpcional: 'optional',
+    p1title: 'Sign up for free', p1desc: 'Create your account with email and password. No card, no lock-in.', p1link: 'Go to Log in →',
+    p2title: 'Analyze your first company', p2desc: 'Type the name or ticker of a company you know (e.g. Apple, Inditex) into the main search box.', p2link: 'Go to search →',
+    p3title: 'Understand the traffic light and the score', p3desc: 'Green/yellow/red tells you if it\'s cheap or expensive. The 0-10 number sums it all up. Tap any metric to get it explained.', p3link: 'Back to the analysis →',
+    p4title: 'Try the compound interest calculator', p4desc: 'Move the sliders and see how much you\'d have by saving each month over the years.', p4link: 'Go to the calculator →',
+    p5title: 'Take the quiz and earn your first XP', p5desc: '5 quick questions about money. Getting them right gives you XP and levels you up.', p5link: 'Take the quiz →',
+    p6title: 'Start your streak on DuoInvest', p6desc: 'Complete the first level (Savings and funds) and start your daily streak.', p6link: 'Open DuoInvest →',
+    p7title: 'Create your first savings jar', p7desc: 'In "My panel", create a savings goal (vacation, car, whatever) and add something, even just €1.', p7link: 'Open My panel →',
+    p8title: 'See what Premium unlocks', p8desc: 'Unlimited searches, price alerts, simulated portfolio and more. You don\'t need it now, but take a look.', p8link: 'See plans →',
+  },
+};
+function detectarIdiomaNavegador() {
+  const langs = navigator.languages || [navigator.language || 'es'];
+  for (const l of langs) { if (l.toLowerCase().startsWith('es')) return 'es'; }
+  return 'en';
+}
+let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
+function t(key) {
+  const dict = I18N[_idioma] || I18N.es;
+  return dict[key] !== undefined ? dict[key] : (I18N.es[key] !== undefined ? I18N.es[key] : key);
+}
+function tf(key, vars) {
+  let s = t(key);
+  for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+  return s;
+}
+function aplicarIdioma() {
+  const dict = I18N[_idioma] || I18N.es;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  document.documentElement.lang = _idioma;
+}
+aplicarIdioma();
+// ---- /i18n ----
+
+function getPasos() {
+  return [
+    { id: 'registro', badge: t('badgeMin1'), title: t('p1title'), desc: t('p1desc'), href: '/', link: t('p1link') },
+    { id: 'buscar', badge: t('badgeSeg30'), title: t('p2title'), desc: t('p2desc'), href: '/#stocks', link: t('p2link') },
+    { id: 'semaforo', badge: t('badgeMin1'), title: t('p3title'), desc: t('p3desc'), href: '/#stocks', link: t('p3link') },
+    { id: 'calculadora', badge: t('badgeMin1'), title: t('p4title'), desc: t('p4desc'), href: '/#calculadora', link: t('p4link') },
+    { id: 'quiz', badge: t('badgeMin2'), title: t('p5title'), desc: t('p5desc'), href: '/#quiz', link: t('p5link') },
+    { id: 'duoinvest', badge: t('badgeMin3'), title: t('p6title'), desc: t('p6desc'), href: '/ruta.html', link: t('p6link') },
+    { id: 'bote', badge: t('badgeMin1'), title: t('p7title'), desc: t('p7desc'), href: '/', link: t('p7link') },
+    { id: 'premium', badge: t('badgeOpcional'), title: t('p8title'), desc: t('p8desc'), href: '/premium.html', link: t('p8link') },
+  ];
+}
 
 function cargarProgreso() {
   try { return JSON.parse(localStorage.getItem('mosca_primeros_pasos') || '{}'); } catch(e) { return {}; }
@@ -116,6 +191,7 @@ function toggle(id) {
 }
 
 function render() {
+  const PASOS = getPasos();
   const wrap = document.getElementById('stepsWrap');
   wrap.innerHTML = PASOS.map(p => {
     const done = !!_progreso[p.id];
@@ -132,7 +208,7 @@ function render() {
 
   const completados = PASOS.filter(p => _progreso[p.id]).length;
   document.getElementById('progressFill').style.width = (completados / PASOS.length * 100) + '%';
-  document.getElementById('progressTxt').textContent = `${completados} de ${PASOS.length} completados`;
+  document.getElementById('progressTxt').textContent = tf('progressTxt', { n: completados, total: PASOS.length });
   document.getElementById('celebrate').classList.toggle('show', completados === PASOS.length);
 }
 
