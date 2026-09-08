@@ -662,7 +662,7 @@ function acceptAge() {
         <p style="font-size:14px;color:var(--text3);text-align:center;" data-i18n="stocksEmptyState">Escribe Apple, Tesla, Inditex... lo que sea. Te digo yo si renta o no. 🪰</p>
       </div>
       <div style="padding:12px 24px;font-size:11px;color:var(--text2);background:var(--card2);border-top:1px solid var(--border);line-height:1.6;" data-i18n-html="stocksDisclaimer">
-        ⚠️ <strong style="color:var(--text2)">Datos de proveedores con licencia · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br>
+        ⚠️ <strong style="color:var(--text2)">Datos de proveedores de datos de mercado · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br>
         <strong style="color:#f87171">👨‍👩‍👧 Aviso para menores de edad:</strong> <span style="color:var(--text2)">Si eres menor de 18 años o estás bajo tutela, curatela o patria potestad, no puedes tomar decisiones de inversión por tu cuenta. Esta herramienta es exclusivamente educativa. Cualquier decisión real de inversión debe contar con la autorización expresa de tus padres o tutor legal, conforme a la legislación española vigente.</span>
       </div>
     </div>
@@ -1661,10 +1661,16 @@ function actualizarPreciosSuscripcion() {
   setTxt('precioJuniorFaq', pJunior);
   setTxt('precioSeniorFaq', pSenior);
   const mesTxt = (I18N[_idioma] || I18N.es).mes;
+  // En la tarjeta grande solo cabe el símbolo (ej. "R$35,63"), no el código
+  // de 3 letras que añade fmtEUR para desambiguar (ej. "BRL") — a ese tamaño
+  // de fuente el texto se corta a dos líneas y queda roto.
+  const sinCodigo = s => s.replace(/ [A-Z]{3}$/, '');
   const cardJ = document.getElementById('precioJuniorCard');
-  if (cardJ) cardJ.innerHTML = `${pJunior} <span data-i18n="mes">${mesTxt}</span>`;
+  if (cardJ) cardJ.innerHTML = `${sinCodigo(pJunior)} <span data-i18n="mes">${mesTxt}</span>`;
   const cardS = document.getElementById('precioSeniorCard');
-  if (cardS) cardS.innerHTML = `${pSenior} <span data-i18n="mes">${mesTxt}</span>`;
+  if (cardS) cardS.innerHTML = `${sinCodigo(pSenior)} <span data-i18n="mes">${mesTxt}</span>`;
+  const cardFree = document.getElementById('precioFreeCard');
+  if (cardFree) cardFree.innerHTML = `${sinCodigo(fmtEUR(0))} <span data-i18n="mes">${mesTxt}</span>`;
   setTxt('statDineroArriesgado', fmtEUR(0, 0));
 }
 function cambiarMoneda(code) {
@@ -1681,7 +1687,7 @@ function cambiarMoneda(code) {
   if (typeof calcular === 'function') try { calcular(); } catch(e) {}
   if (typeof calcSim === 'function') try { calcSim(); } catch(e) {}
   if (_currentUser && document.getElementById('panelOverlay')?.classList.contains('open')) renderPanel();
-  if (_currentUser) renderHeroMockup();
+  renderHeroMockup();
   actualizarPreciosSuscripcion();
 }
 function convertirMoneda(amount, from, to) {
@@ -1728,10 +1734,10 @@ const I18N = {
     faqPill: 'Preguntas frecuentes', faqTitle: 'Lo que nos preguntan.',
     faqQ1: '¿Está disponible ahora mismo?', faqA1: 'Sí, ya puedes usarla ahora. El analizador de acciones, el comparador y la calculadora de interés compuesto funcionan en labolsabro.com sin necesidad de registrarte. El plan gratuito no caduca.',
     faqQ2: '¿Conecta con mi banco?', faqA2: 'No, y no está previsto que lo haga. laBolsabro es una herramienta de educación financiera — no gestionamos tu dinero ni necesitamos acceso a tu cuenta bancaria para nada.',
-    faqQ3: '¿Me dice qué acciones comprar?', faqA3: 'No. laBolsabro no da recomendaciones de inversión. Mostramos análisis educativo basado en datos públicos de proveedores con licencia. La decisión de invertir es siempre tuya y bajo tu responsabilidad.',
+    faqQ3: '¿Me dice qué acciones comprar?', faqA3: 'No. laBolsabro no da recomendaciones de inversión. Mostramos análisis educativo basado en datos públicos de proveedores de datos de mercado. La decisión de invertir es siempre tuya y bajo tu responsabilidad.',
     faqQ4: '¿Necesito saber de bolsa para usarla?', faqA4: 'Para nada. laBolsabro está diseñada para que cualquier persona sin conocimientos financieros entienda si una empresa está cara o barata en un vistazo. El semáforo y las explicaciones en lenguaje normal hacen el trabajo por ti.',
     faqQ5: '¿Cuánto cuesta?', faqA5a: 'El plan gratuito es para siempre. Los planes de pago (Inversor Junior a', faqA5b: 'e Inversor Senior a', faqA5c: ') añaden búsquedas ilimitadas, comparador avanzado y alertas. Puedes cancelar cuando quieras.',
-    faqQ6: '¿Los datos son fiables?', faqA6: 'Los datos vienen de proveedores de datos bursátiles con licencia (varían según el mercado). Pueden tener un pequeño retraso respecto al mercado en tiempo real. Son orientativos y educativos, no para tomar decisiones de inversión.',
+    faqQ6: '¿Los datos son fiables?', faqA6: 'Los datos vienen de proveedores de datos bursátiles (varían según el mercado). Pueden tener un pequeño retraso respecto al mercado en tiempo real. Son orientativos y educativos, no para tomar decisiones de inversión.',
     ctaTitle: 'Tu dinero puede hacer algo.', ctaSubtag: 'laBolsabro. Y el ahorro también.', ctaText: 'Déjanos tu email y te contamos las novedades antes que nadie.', ctaBtn: 'Avisadme de novedades',
     footerPriv: 'Privacidad', footerTerms: 'Términos', footerContact: 'Contacto', footerCopy: '© 2025 Mosca · Plataforma educativa · No somos asesores financieros',
     phoneHola: 'Hola 👋', phoneSaldo: 'Saldo total', phoneSaldoDelta: 'Empieza a ahorrar para verlo crecer',
@@ -1760,7 +1766,7 @@ const I18N = {
     legalNotice: '<strong>Aviso legal:</strong> Mosca es una plataforma de educación financiera en desarrollo. No estamos regulados como entidad de asesoramiento financiero bajo MiFID II ni como entidad de crédito. La información que ofrecemos sobre empresas y mercados tiene caracter exclusivamente educativo e informativo, basada en datos públicos disponibles. <strong>Invertir en bolsa conlleva riesgo de pérdida parcial o total del capital invertido.</strong> Las rentabilidades pasadas no garantizan rentabilidades futuras. Antes de tomar cualquier decisión de inversión con dinero real, consulta con un asesor financiero regulado por la CNMV.',
     originPill: 'Por qué existe esto', originTitle: 'Nadie nos enseñó<br>a manejar el dinero.', originSub: 'En el instituto aprendimos ecuaciones de segundo grado, no qué es un PER ni cómo funciona el interés compuesto. laBolsabro es la clase que nos hubiera gustado tener.',
     origin1: '🎯 Sin tecnicismos de banco ni sermones de asesor financiero. Si no lo entiende alguien de 15 años, lo reescribimos.',
-    origin2: '🔍 Datos reales de proveedores con licencia, no opiniones ni "consejos" disfrazados de análisis. Tú decides con información, nosotros no vendemos humo.',
+    origin2: '🔍 Datos reales de proveedores de datos de mercado, no opiniones ni "consejos" disfrazados de análisis. Tú decides con información, nosotros no vendemos humo.',
     origin3: '🚀 Estamos empezando y lo decimos claro: preferimos construir algo honesto poco a poco que inflar el producto con humo desde el primer día.',
     authTitleLogin: 'Iniciar sesión', authTitleRegister: 'Crear cuenta',
     authSubLogin: 'Accede a tu cuenta de laBolsabro', authSubRegister: 'Únete a laBolsabro gratis',
@@ -1810,7 +1816,7 @@ const I18N = {
     stocksRecientes: '🕐 Recientes:',
     secTodos: 'Todos', secTech: '💻 Tecnología', secLujo: '👜 Lujo y consumo', secAuto: '🚗 Automóvil', secEnergia: '⚡ Energía', secMetales: '⛏️ Metales y minería', secBanca: '🏦 Banca y telecom', secCripto: '₿ Cripto',
     stocksEmptyState: 'Escribe Apple, Tesla, Inditex... lo que sea. Te digo yo si renta o no. 🪰',
-    stocksDisclaimer: '⚠️ <strong style="color:var(--text2)">Datos de proveedores con licencia · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br><strong style="color:#f87171">👨‍👩‍👧 Aviso para menores de edad:</strong> <span style="color:var(--text2)">Si eres menor de 18 años o estás bajo tutela, curatela o patria potestad, no puedes tomar decisiones de inversión por tu cuenta. Esta herramienta es exclusivamente educativa. Cualquier decisión real de inversión debe contar con la autorización expresa de tus padres o tutor legal, conforme a la legislación española vigente.</span>',
+    stocksDisclaimer: '⚠️ <strong style="color:var(--text2)">Datos de proveedores de datos de mercado · Solo educativo, no asesoramiento financiero.</strong> El semáforo es orientativo — cada sector tiene rangos distintos. Invertir conlleva riesgo de pérdida.<br><br><strong style="color:#f87171">👨‍👩‍👧 Aviso para menores de edad:</strong> <span style="color:var(--text2)">Si eres menor de 18 años o estás bajo tutela, curatela o patria potestad, no puedes tomar decisiones de inversión por tu cuenta. Esta herramienta es exclusivamente educativa. Cualquier decisión real de inversión debe contar con la autorización expresa de tus padres o tutor legal, conforme a la legislación española vigente.</span>',
     ageGateTitle: 'Confirma tu edad',
     ageGateText: 'laBolsabro es una herramienta de <strong style="color:#f5f5f5">educación financiera exclusiva para mayores de 18 años</strong>. Al continuar confirmas que tienes 18 años o más y aceptas nuestros <a href="/terminos.html" style="color:#22c55e">términos de uso</a>.',
     ageGateBtn: 'Tengo 18 años o más — Entrar',
@@ -1870,13 +1876,13 @@ const I18N = {
     reinvSubModerado: 'crecimiento moderado',
     scoreGlobalNote: 'Puntuación global sobre 10 · basada en valoración, crecimiento y rentabilidad',
     scoreSinDatos: 'Sin datos suficientes', scoreExcelente: 'Empresa excelente', scoreBuena: 'Buena empresa', scoreCorrecta: 'Empresa correcta', scoreDudas: 'Con algunas dudas', scoreMejorOtra: 'Mejor buscar otra',
-    stockFooterDatos: 'Datos: proveedores con licencia · {time} · Solo educativo.', etfFooterDatos: 'Datos: proveedores con licencia · {time} · Solo educativo, no recomendación de compra.', cryptoFooterDatos: 'Precio: proveedores con licencia · {time} · Solo educativo.',
+    stockFooterDatos: 'Datos: proveedores de datos de mercado · {time} · Solo educativo.', etfFooterDatos: 'Datos: proveedores de datos de mercado · {time} · Solo educativo, no recomendación de compra.', cryptoFooterDatos: 'Precio: proveedores de datos de mercado · {time} · Solo educativo.',
     cryptoViabRiesgoTpl: 'Viabilidad: {viabilidad} · Riesgo: {riesgo}', cryptoRiesgoAlerta: 'Las criptomonedas son activos de muy alto riesgo.', cryptoRiesgoAlerta2: 'Puedes perder todo tu dinero. Nunca inviertas más de lo que puedas permitirte perder.',
     btnWhatsapp: '📱 WhatsApp', btnCopiarLink: '🔗 Copiar link', btnPdf: '📄 PDF', errorMostrarDatos: 'Error al mostrar datos', hoySuffix: 'hoy',
     etfTituloSemaforo: 'ETF — fondo cotizado', etfDescSemaforo: 'Los ETFs no tienen PER ni métricas de empresa. Replican el precio del activo subyacente.',
     pdfInformeAnalisis: 'Informe de análisis · Solo educativo, no asesoramiento financiero', pdfSectorDesconocido: 'Sector desconocido', pdfPrecioActual: 'Precio actual', pdfPuntuacionGlobal: 'Puntuación global', pdfMetricasClave: 'Métricas clave',
     pdfLblPER: 'PER', pdfLblPEG: 'PEG', pdfLblCajaTotal: 'Caja total', pdfLblPrecio: 'Precio', pdfLblCrecBPACorto: 'Crec. BPA', pdfLblMetrica: 'Métrica',
-    pdfFooterLine1: 'laBolsabro · labolsabro.com · Datos: proveedores con licencia · Herramienta educativa, no asesoramiento financiero.', pdfFooterLine1Compare: 'laBolsabro · labolsabro.com · Datos: proveedores con licencia · Solo educativo, no asesoramiento financiero.',
+    pdfFooterLine1: 'laBolsabro · labolsabro.com · Datos: proveedores de datos de mercado · Herramienta educativa, no asesoramiento financiero.', pdfFooterLine1Compare: 'laBolsabro · labolsabro.com · Datos: proveedores de datos de mercado · Solo educativo, no asesoramiento financiero.',
     pdfFooterLine2: 'Las rentabilidades pasadas no garantizan rentabilidades futuras. Invertir conlleva riesgo de pérdida.',
     pdfDescargadoPor: 'Descargado por {quien} · {fecha} · Uso personal, no redistribuir', pdfInvitado: 'invitado',
     pdfAnalisisProfundidad: 'Análisis en profundidad · {nombre}', pdfVeredictoPrefix: 'Veredicto:', pdfQueHace: '¿A qué se dedica esta empresa?', pdfPuntosFavor: 'Puntos a favor', pdfPuntosContra: 'Puntos en contra', pdfProsContrasCombinado: 'Puntos a favor y en contra',
@@ -1893,7 +1899,7 @@ const I18N = {
     razonPerBajo: 'cotiza más barata (PER más bajo)', razonRoeAlto: 'rentabiliza mejor el capital (ROE más alto)', razonCreceMasIngresos: 'crece más rápido en ingresos', razonMejorMargen: 'tiene mejores márgenes', conjY: 'y',
     cmpPuntuacion: 'Puntuación', cmpZonaValor: 'Zona de valor', cmpPrecioJusto: 'Precio justo', cmpZonaCara: 'Zona cara', cmpCrecIngresos: 'Crec. Ingresos',
     cmpUpsellHtml: '🔒 El comparador avanzado por sector es de <strong style="color:var(--yellow)">Premium</strong>',
-    cmpLeyenda: 'Verde = mejor valor · Rojo = peor valor · Datos de mercado con licencia · Solo educativo.',
+    cmpLeyenda: 'Verde = mejor valor · Rojo = peor valor · Datos de mercado · Solo educativo.',
     cmpSectorTitulo: '⭐ Comparador avanzado por sector', cmpMediaSector: 'Media sector: {bajo}x–{alto}x',
     cmpIntroduceDos: 'Introduce las dos empresas para comparar', cmpCargandoTpl: '🪰 Venga, a ver quién la tiene mejor entre {t1} y {t2}... (en plan financiero, ¿eh?)', cmpErrorDatos: 'Error al obtener datos. Comprueba los tickers.',
     quizPill: 'Retos de conocimiento', quizTitle: '¿Cuánto sabes<br>de dinero?', quizSub: '5 preguntas. Sin trampa. Descubre que nivel tienes y gana XP. Como Duolingo pero para tu cartera.',
@@ -1969,10 +1975,10 @@ const I18N = {
     faqPill: 'FAQ', faqTitle: "What people ask us.",
     faqQ1: 'Is it available right now?', faqA1: "Yes, you can use it today. The stock analyzer, comparator and compound interest calculator work at labolsabro.com without signing up. The free plan never expires.",
     faqQ2: 'Does it connect to my bank?', faqA2: "No, and it's not planned to. laBolsabro is a financial education tool — we don't manage your money and never need access to your bank account.",
-    faqQ3: 'Does it tell me what to buy?', faqA3: "No. laBolsabro doesn't give investment recommendations. We show educational analysis based on public data from licensed market data providers. The investment decision is always yours and your responsibility.",
+    faqQ3: 'Does it tell me what to buy?', faqA3: "No. laBolsabro doesn't give investment recommendations. We show educational analysis based on public data from market data providers. The investment decision is always yours and your responsibility.",
     faqQ4: 'Do I need to know about investing to use it?', faqA4: "Not at all. laBolsabro is designed so anyone without financial knowledge can tell at a glance if a company is cheap or expensive. The traffic-light system and plain-language explanations do the work for you.",
     faqQ5: 'How much does it cost?', faqA5a: 'The free plan is free forever. Paid plans (Investor Junior at', faqA5b: 'and Investor Senior at', faqA5c: ') add unlimited searches, advanced comparator and alerts. Cancel anytime.',
-    faqQ6: 'Is the data reliable?', faqA6: "Data comes from licensed market data providers (they vary by market). It may lag slightly behind real-time markets. It's informational and educational, not for making investment decisions.",
+    faqQ6: 'Is the data reliable?', faqA6: "Data comes from market data providers (they vary by market). It may lag slightly behind real-time markets. It's informational and educational, not for making investment decisions.",
     ctaTitle: 'Your money can do something.', ctaSubtag: 'laBolsabro. So can your savings.', ctaText: "Leave us your email and we'll tell you about updates before anyone else.", ctaBtn: 'Notify me',
     footerPriv: 'Privacy', footerTerms: 'Terms', footerContact: 'Contact', footerCopy: '© 2025 Mosca · Educational platform · Not financial advisors',
     phoneHola: 'Hi 👋', phoneSaldo: 'Total balance', phoneSaldoDelta: 'Start saving to watch it grow',
@@ -2001,7 +2007,7 @@ const I18N = {
     legalNotice: '<strong>Legal notice:</strong> Mosca is a financial education platform in development. We are not regulated as a financial advisory firm under MiFID II, nor as a credit institution. The information we provide about companies and markets is exclusively educational and informational, based on publicly available data. <strong>Investing in the stock market carries the risk of partial or total loss of the capital invested.</strong> Past performance does not guarantee future returns. Before making any real-money investment decision, consult a financial advisor regulated by the CNMV.',
     originPill: 'Why this exists', originTitle: 'Nobody taught us<br>how to handle money.', originSub: 'At school we learned quadratic equations, not what a P/E ratio is or how compound interest works. laBolsabro is the class we wish we\'d had.',
     origin1: '🎯 No bank jargon, no lectures from a financial advisor. If a 15-year-old wouldn\'t understand it, we rewrite it.',
-    origin2: '🔍 Real data from licensed providers, not opinions or "tips" dressed up as analysis. You decide with information — we don\'t sell hype.',
+    origin2: '🔍 Real data from data providers, not opinions or "tips" dressed up as analysis. You decide with information — we don\'t sell hype.',
     origin3: '🚀 We\'re just getting started and we say it plainly: we\'d rather build something honest step by step than inflate the product with hype from day one.',
     authTitleLogin: 'Log in', authTitleRegister: 'Create account',
     authSubLogin: 'Access your laBolsabro account', authSubRegister: 'Join laBolsabro for free',
@@ -2051,7 +2057,7 @@ const I18N = {
     stocksRecientes: '🕐 Recent:',
     secTodos: 'All', secTech: '💻 Technology', secLujo: '👜 Luxury & consumer', secAuto: '🚗 Automotive', secEnergia: '⚡ Energy', secMetales: '⛏️ Metals & mining', secBanca: '🏦 Banking & telecom', secCripto: '₿ Crypto',
     stocksEmptyState: 'Type Apple, Tesla, Inditex... anything. I\'ll tell you if it\'s worth it. 🪰',
-    stocksDisclaimer: '⚠️ <strong style="color:var(--text2)">Data from licensed market data providers · Educational only, not financial advice.</strong> The traffic light is a guide — each sector has different ranges. Investing carries the risk of loss.<br><br><strong style="color:#f87171">👨‍👩‍👧 Notice for minors:</strong> <span style="color:var(--text2)">If you are under 18, or under guardianship or parental authority, you may not make investment decisions on your own. This tool is exclusively educational. Any real investment decision must have the express authorization of your parents or legal guardian, in accordance with applicable Spanish law.</span>',
+    stocksDisclaimer: '⚠️ <strong style="color:var(--text2)">Data from market data providers · Educational only, not financial advice.</strong> The traffic light is a guide — each sector has different ranges. Investing carries the risk of loss.<br><br><strong style="color:#f87171">👨‍👩‍👧 Notice for minors:</strong> <span style="color:var(--text2)">If you are under 18, or under guardianship or parental authority, you may not make investment decisions on your own. This tool is exclusively educational. Any real investment decision must have the express authorization of your parents or legal guardian, in accordance with applicable Spanish law.</span>',
     ageGateTitle: 'Confirm your age',
     ageGateText: 'laBolsabro is a <strong style="color:#f5f5f5">financial education tool exclusively for people 18 and over</strong>. By continuing you confirm you are 18 or older and accept our <a href="/terminos.html" style="color:#22c55e">terms of use</a>.',
     ageGateBtn: "I'm 18 or older — Enter",
@@ -2111,13 +2117,13 @@ const I18N = {
     reinvSubModerado: 'moderate growth',
     scoreGlobalNote: 'Overall score out of 10 · based on valuation, growth and profitability',
     scoreSinDatos: 'Not enough data', scoreExcelente: 'Excellent company', scoreBuena: 'Good company', scoreCorrecta: 'Decent company', scoreDudas: 'Some concerns', scoreMejorOtra: 'Better to look elsewhere',
-    stockFooterDatos: 'Data: licensed providers · {time} · Educational only.', etfFooterDatos: 'Data: licensed providers · {time} · Educational only, not a buy recommendation.', cryptoFooterDatos: 'Price: licensed providers · {time} · Educational only.',
+    stockFooterDatos: 'Data: market data providers · {time} · Educational only.', etfFooterDatos: 'Data: market data providers · {time} · Educational only, not a buy recommendation.', cryptoFooterDatos: 'Price: market data providers · {time} · Educational only.',
     cryptoViabRiesgoTpl: 'Viability: {viabilidad} · Risk: {riesgo}', cryptoRiesgoAlerta: 'Cryptocurrencies are very high-risk assets.', cryptoRiesgoAlerta2: 'You could lose all your money. Never invest more than you can afford to lose.',
     btnWhatsapp: '📱 WhatsApp', btnCopiarLink: '🔗 Copy link', btnPdf: '📄 PDF', errorMostrarDatos: 'Error displaying data', hoySuffix: 'today',
     etfTituloSemaforo: 'ETF — exchange-traded fund', etfDescSemaforo: 'ETFs don\'t have a P/E ratio or company metrics. They track the price of the underlying asset.',
     pdfInformeAnalisis: 'Analysis report · Educational only, not financial advice', pdfSectorDesconocido: 'Unknown sector', pdfPrecioActual: 'Current price', pdfPuntuacionGlobal: 'Overall score', pdfMetricasClave: 'Key metrics',
     pdfLblPER: 'P/E', pdfLblPEG: 'PEG', pdfLblCajaTotal: 'Total cash', pdfLblPrecio: 'Price', pdfLblCrecBPACorto: 'EPS growth', pdfLblMetrica: 'Metric',
-    pdfFooterLine1: 'laBolsabro · labolsabro.com · Data: licensed providers · Educational tool, not financial advice.', pdfFooterLine1Compare: 'laBolsabro · labolsabro.com · Data: licensed providers · Educational only, not financial advice.',
+    pdfFooterLine1: 'laBolsabro · labolsabro.com · Data: market data providers · Educational tool, not financial advice.', pdfFooterLine1Compare: 'laBolsabro · labolsabro.com · Data: market data providers · Educational only, not financial advice.',
     pdfFooterLine2: 'Past performance does not guarantee future returns. Investing carries risk of loss.',
     pdfDescargadoPor: 'Downloaded by {quien} · {fecha} · Personal use, do not redistribute', pdfInvitado: 'guest',
     pdfAnalisisProfundidad: 'In-depth analysis · {nombre}', pdfVeredictoPrefix: 'Verdict:', pdfQueHace: 'What does this company do?', pdfPuntosFavor: 'Points in favor', pdfPuntosContra: 'Points against', pdfProsContrasCombinado: 'Points in favor and against',
@@ -2633,6 +2639,14 @@ function renderHeroMockup() {
   if (!_currentUser) {
     if (hola) hola.textContent = t('phoneHola');
     if (abrirBtn) abrirBtn.style.display = 'none';
+    // Los saldos de ejemplo son 0, pero el símbolo de moneda debe seguir
+    // reflejando la divisa elegida (antes se quedaban fijos en "€").
+    const saldoEl = document.getElementById('pSaldoTotal');
+    if (saldoEl) saldoEl.textContent = fmtEUR(0);
+    const ahorrandoEl = document.getElementById('pAhorrando');
+    if (ahorrandoEl) ahorrandoEl.textContent = fmtEUR(0, 0);
+    const invertidoEl = document.getElementById('pInvertido');
+    if (invertidoEl) invertidoEl.textContent = fmtEUR(0, 0);
     return;
   }
   const nivel = Math.floor((_totalXP || 0) / 100) + 1;
@@ -3917,7 +3931,7 @@ function renderStock(el, d, ticker) {
     <p class="sub" data-i18n="originSub">En el instituto aprendimos ecuaciones de segundo grado, no qué es un PER ni cómo funciona el interés compuesto. laBolsabro es la clase que nos hubiera gustado tener.</p>
     <div class="testi-grid">
       <div class="testi"><p class="testi-text" data-i18n="origin1">🎯 Sin tecnicismos de banco ni sermones de asesor financiero. Si no lo entiende alguien de 15 años, lo reescribimos.</p></div>
-      <div class="testi"><p class="testi-text" data-i18n="origin2">🔍 Datos reales de proveedores con licencia, no opiniones ni "consejos" disfrazados de análisis. Tú decides con información, nosotros no vendemos humo.</p></div>
+      <div class="testi"><p class="testi-text" data-i18n="origin2">🔍 Datos reales de proveedores de datos de mercado, no opiniones ni "consejos" disfrazados de análisis. Tú decides con información, nosotros no vendemos humo.</p></div>
       <div class="testi"><p class="testi-text" data-i18n="origin3">🚀 Estamos empezando y lo decimos claro: preferimos construir algo honesto poco a poco que inflar el producto con humo desde el primer día.</p></div>
     </div>
   </section>
@@ -4021,7 +4035,7 @@ function renderStock(el, d, ticker) {
     <h2 data-i18n="pricingTitle">Sin letra pequeña.</h2>
     <p class="sub" data-i18n="pricingSub">Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.</p>
     <div class="price-grid">
-      <div class="price-card"><div class="price-tier" data-i18n="tierFree">Gratis</div><div class="price-num">0 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="freeDesc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="freeF1">Analizador de acciones</span></li><li><span>✓</span> <span data-i18n="freeF2">Calculadora de interés compuesto</span></li><li><span>✓</span> <span data-i18n="freeF3">3 pruebas gratis (de por vida)</span></li></ul><a class="price-btn price-btn-out" href="/#stocks" data-i18n="freeBtn">Usar gratis</a></div>
+      <div class="price-card"><div class="price-tier" data-i18n="tierFree">Gratis</div><div class="price-num" id="precioFreeCard">0 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="freeDesc">Para empezar y ver si laBolsabro te va. Sin límite de tiempo.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="freeF1">Analizador de acciones</span></li><li><span>✓</span> <span data-i18n="freeF2">Calculadora de interés compuesto</span></li><li><span>✓</span> <span data-i18n="freeF3">3 pruebas gratis (de por vida)</span></li></ul><a class="price-btn price-btn-out" href="/#stocks" data-i18n="freeBtn">Usar gratis</a></div>
       <div class="price-card hot"><div class="hot-badge" data-i18n="hotBadge">Más popular</div><div class="price-tier" data-i18n="tierJunior">Inversor Junior</div><div class="price-num" id="precioJuniorCard">5,99 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="juniorDesc">Para el que empieza a invertir y quiere entender el mercado sin complicaciones.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="juniorF1">Análisis completo de empresas</span></li><li><span>✓</span> <span data-i18n="juniorF2">Búsquedas ilimitadas</span></li><li><span>✓</span> <span data-i18n="juniorF3">Comparador de empresas</span></li><li><span>✓</span> <span data-i18n="juniorF4">Simulador de ahorro e inversión</span></li><li><span>✓</span> <span data-i18n="juniorF5">Recordatorios personalizables</span></li></ul><a class="price-btn price-btn-solid" href="/premium.html" data-i18n="juniorBtn">Empezar Junior</a></div>
       <div class="price-card"><div class="price-tier" data-i18n="tierSenior">Inversor Senior</div><div class="price-num" id="precioSeniorCard">9,99 € <span data-i18n="mes">/mes</span></div><div class="price-desc" data-i18n="seniorDesc">Para el inversor con criterio que quiere análisis avanzado y alertas personalizadas.</div><ul class="price-list"><li><span>✓</span> <span data-i18n="seniorF1">Todo del plan Junior</span></li><li><span>✓</span> <span data-i18n="seniorF2">Calculadora de interés compuesto</span></li><li><span>✓</span> <span data-i18n="seniorF3">Comparador avanzado por sector</span></li><li><span>✓</span> <span data-i18n="seniorF4">Alertas de valor personalizadas</span></li><li><span>✓</span> <span data-i18n="seniorF5">Historial de análisis personal</span></li></ul><a class="price-btn price-btn-out" href="/premium.html" data-i18n="seniorBtn">Empezar Senior</a></div>
     </div>
@@ -4034,10 +4048,10 @@ function renderStock(el, d, ticker) {
   <div class="faq-wrap">
     <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ1">¿Está disponible ahora mismo?</button><div class="faq-a" data-i18n="faqA1">Sí, ya puedes usarla ahora. El analizador de acciones, el comparador y la calculadora de interés compuesto funcionan en labolsabro.com sin necesidad de registrarte. El plan gratuito no caduca.</div></div>
     <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ2">¿Conecta con mi banco?</button><div class="faq-a" data-i18n="faqA2">No, y no está previsto que lo haga. laBolsabro es una herramienta de educación financiera — no gestionamos tu dinero ni necesitamos acceso a tu cuenta bancaria para nada.</div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ3">¿Me dice qué acciones comprar?</button><div class="faq-a" data-i18n="faqA3">No. laBolsabro no da recomendaciones de inversión. Mostramos análisis educativo basado en datos públicos de proveedores con licencia. La decisión de invertir es siempre tuya y bajo tu responsabilidad.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ3">¿Me dice qué acciones comprar?</button><div class="faq-a" data-i18n="faqA3">No. laBolsabro no da recomendaciones de inversión. Mostramos análisis educativo basado en datos públicos de proveedores de datos de mercado. La decisión de invertir es siempre tuya y bajo tu responsabilidad.</div></div>
     <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ4">¿Necesito saber de bolsa para usarla?</button><div class="faq-a" data-i18n="faqA4">Para nada. laBolsabro está diseñada para que cualquier persona sin conocimientos financieros entienda si una empresa está cara o barata en un vistazo. El semáforo y las explicaciones en lenguaje normal hacen el trabajo por ti.</div></div>
     <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ5">¿Cuánto cuesta?</button><div class="faq-a"><span data-i18n="faqA5a">El plan gratuito es para siempre. Los planes de pago (Inversor Junior a</span> <span id="precioJuniorFaq">5,99€</span>/<span data-i18n="mes">mes</span> <span data-i18n="faqA5b">e Inversor Senior a</span> <span id="precioSeniorFaq">9,99€</span>/<span data-i18n="mes">mes</span><span data-i18n="faqA5c">) añaden búsquedas ilimitadas, comparador avanzado y alertas. Puedes cancelar cuando quieras.</span></div></div>
-    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ6">¿Los datos son fiables?</button><div class="faq-a" data-i18n="faqA6">Los datos vienen de proveedores de datos bursátiles con licencia (varían según el mercado). Pueden tener un pequeño retraso respecto al mercado en tiempo real. Son orientativos y educativos, no para tomar decisiones de inversión.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)" data-i18n="faqQ6">¿Los datos son fiables?</button><div class="faq-a" data-i18n="faqA6">Los datos vienen de proveedores de datos bursátiles (varían según el mercado). Pueden tener un pequeño retraso respecto al mercado en tiempo real. Son orientativos y educativos, no para tomar decisiones de inversión.</div></div>
   </div>
 </section>
 
@@ -4357,6 +4371,33 @@ const preguntas = [
   { cat: 'Avanzado · Rentabilidad', nivel: 'avanzado', q: '¿Qué es el "free cash flow yield"?', ops: ['El free cash flow de la empresa dividido entre su valor en bolsa', 'El porcentaje de caja que se reparte como dividendo', 'La diferencia entre ingresos y gastos operativos', 'El crecimiento anual del flujo de caja'], ok: 0, exp: 'El FCF yield compara el dinero real que genera la empresa (free cash flow) con lo que cuesta comprarla en bolsa. Un yield alto puede indicar que la empresa está barata generando mucha caja respecto a su precio — o que el mercado desconfía de algo.' },
 ];
 
+// Traducción del banco de preguntas — mismo orden, mismo índice "ok" que
+// `preguntas`, para que initQuiz() pueda elegir el array según el idioma.
+const preguntasEN = [
+  { cat: 'Savings', nivel: 'basico', q: 'What is compound interest?', ops: ['Paying interest on a debt', 'Earning interest on your previous interest', 'A type of bank account', 'A tax on savings'], ok: 1, exp: 'Compound interest means earning interest not just on your initial money, but also on the interest it has already earned. Over time, this makes your money grow exponentially.' },
+  { cat: 'Stocks', nivel: 'basico', q: 'What does it mean when a stock has a P/E of 10x?', ops: ['The company earns 10 times more than its competitors', 'The share price is 10 times the annual earnings per share', 'The company is up 10% this year', 'There are 10 majority shareholders'], ok: 1, exp: "The P/E ratio (Price/Earnings) shows how many times you're paying the company's annual earnings. A P/E of 10x means that, at the current price, it would take 10 years to recoup your investment from earnings alone." },
+  { cat: 'Stocks', nivel: 'basico', q: 'What is EBITDA?', ops: ['Net profit after taxes', 'Earnings before interest, taxes, depreciation and amortization', "The company's total sales", "The company's total debt"], ok: 1, exp: 'EBITDA measures a business\'s operating profit before subtracting interest, taxes, depreciation and amortization. It\'s used to compare the "pure" profitability of companies without accounting or financing factors skewing the picture.' },
+  { cat: 'Investing', nivel: 'basico', q: 'What is an index fund?', ops: ['A fund managed by an expert who picks the best stocks', 'A fund that automatically tracks an index like the S&P 500', 'A savings account with high returns', 'A type of stable cryptocurrency'], ok: 1, exp: 'An index fund automatically buys every company in an index in its exact proportions. With no active manager, fees are very low. Historically, these funds beat most active managers over the long run.' },
+  { cat: 'Savings', nivel: 'basico', q: 'What is the 50/30/20 rule?', ops: ['Invest 50% in stocks, 30% in bonds and 20% in crypto', '50% for needs, 30% for wants and 20% for savings', 'A 50% discount on purchases planned 30 days ahead', 'Save €20 for every €50 you earn in 30 days'], ok: 1, exp: 'The 50/30/20 rule is a simple guide for splitting your income: 50% for necessary expenses, 30% for whatever you want, and 20% for saving or investing.' },
+  { cat: 'Stocks', nivel: 'basico', q: 'What is a stock?', ops: ['A loan you give to a company', 'A small piece of ownership in a company', 'A type of life insurance', 'A tax on sales'], ok: 1, exp: 'A stock is a piece of ownership in a company. If you buy shares, you become a part-owner, however small your slice. If the company gains value, so does your share.' },
+  { cat: 'Investing', nivel: 'basico', q: 'What does it mean to diversify your money?', ops: ['Put it all into the company you like the most', 'Spread it across several different investments to reduce risk', 'Convert it into another currency', 'Keep it all in cash'], ok: 1, exp: 'Diversifying means not putting all your eggs in one basket. If you spread your money across several companies, sectors or countries, one doing badly can be offset by the others. Less risk.' },
+  { cat: 'Savings', nivel: 'basico', q: 'What is an emergency fund?', ops: ['Money set aside to invest in stocks when they crash', 'Savings kept separate for the unexpected (job loss, breakdown, health)', 'A loan you ask the bank for in an emergency', 'Money you spend on vacation'], ok: 1, exp: "An emergency fund is cash you keep aside, easy to access, for when life throws you a curveball: you lose your job, the car breaks down, whatever. It's recommended to have 3 to 6 months of expenses saved there." },
+  { cat: 'Stocks', nivel: 'basico', q: 'What is inflation and how does it affect your savings?', ops: ['It\'s when stock prices go up', "It's the general rise in prices, which makes your money worth less over time", "It's a tax paid by the bank", "It's when the central bank lowers interest rates"], ok: 1, exp: "Inflation is the general rise in prices. If your money just sits in an account earning 0%, it can buy fewer things each year. That's why investing (not just saving) helps your money keep its purchasing power." },
+  { cat: 'Investing', nivel: 'basico', q: 'What does investing "for the long term" mean?', ops: ['Buying and selling the same day to make quick gains', 'Holding the investment for years, riding out the ups and downs', 'Only investing in very old companies', 'Putting the money in a fixed-term bank deposit'], ok: 1, exp: 'Investing for the long term means holding for years, not selling the moment the market dips a little. Historically, the longer you hold, the less day-to-day scares matter.' },
+  { cat: 'Stocks', nivel: 'basico', q: 'What is a dividend?', ops: ['A commission the broker charges', 'Part of the profit a company shares with its shareholders', 'The price a stock is sold at', 'A type of stock market tax'], ok: 1, exp: "A dividend is the portion of profit a company chooses to share with whoever holds its stock, instead of reinvesting it all into the business. It's like collecting rent without being a landlord." },
+
+  { cat: 'Advanced · Valuation', nivel: 'avanzado', q: 'What does ROIC (return on invested capital) measure?', ops: ['How much profit the company generates per euro invested in the business, debt and equity included', 'The share price divided by earnings', 'The percentage of debt on the balance sheet', 'Annual sales growth'], ok: 0, exp: 'ROIC measures a company\'s real efficiency at generating profit with ALL the capital it uses (both equity and debt), not just shareholders\' capital. A high, sustained ROIC usually signals a strong competitive advantage.' },
+  { cat: 'Advanced · Valuation', nivel: 'avanzado', q: 'What is WACC (weighted average cost of capital)?', ops: ['The average cost to the company of financing itself, combining debt and equity', 'The average share price over the last year', 'The percentage of profit paid out as dividends', "The sector's average return"], ok: 0, exp: 'WACC is the company\'s "cost of money": it combines what debt costs (interest) and what shareholders demand for their capital. It\'s used as the minimum return a project must clear to create value.' },
+  { cat: 'Advanced · Valuation', nivel: 'avanzado', q: 'What is a discounted cash flow (DCF) valuation model used for?', ops: ["To estimate a company's value based on the money it's expected to generate in the future, brought back to today's value", "To calculate a stock's historical average price", 'To calculate capital gains tax', "To calculate a broker's commission"], ok: 0, exp: "DCF estimates what a company is worth today by adding up all the money (cash flow) it's expected to generate in the future, adjusted because a euro today is worth more than one in 10 years. It's the theoretical basis of nearly every serious valuation." },
+  { cat: 'Advanced · Financial health', nivel: 'avanzado', q: 'What does the EV/EBITDA ratio show compared to the P/E?', ops: ["It's exactly the same as the P/E, just a different name", "It also accounts for the company's debt, not just the share price", 'It only applies to companies with no profits', 'It measures short-term liquidity'], ok: 1, exp: 'P/E only looks at share price vs. earnings. EV/EBITDA uses "Enterprise Value" (the company\'s value including its debt) against EBITDA, so it compares companies with different debt structures more fairly.' },
+  { cat: 'Advanced · Financial health', nivel: 'avanzado', q: 'What is the "quick ratio" or acid test?', ops: ['How fast a stock is rising', 'The ability to pay short-term debts without counting inventory', 'The percentage of long-term debt', 'Return on sales'], ok: 1, exp: 'The quick ratio measures whether a company can pay its short-term debts using only cash and assets that convert easily to cash, without relying on selling inventory (which can take time to sell). Above 1 is usually considered healthy.' },
+  { cat: 'Advanced · Operations', nivel: 'avanzado', q: "What is a company's operating leverage?", ops: ['The amount of bank debt it has', 'How sensitive its profit is to changes in sales, based on its proportion of fixed costs', 'The number of employees per branch', 'The interest rate it pays on its loans'], ok: 1, exp: 'A company with lots of fixed costs (factories, machinery) has high operating leverage: if sales rise a little, profit rises a lot more (and if they fall, profit drops much harder too). It amplifies both the good and the bad.' },
+  { cat: 'Advanced · Market', nivel: 'avanzado', q: 'What does it mean when a stock has high "short interest"?', ops: ["Many investors have bet the price will fall (short positions)", 'It pays a very high dividend', 'It has a lot of market liquidity', 'It has risen a lot in a short time'], ok: 0, exp: 'Short interest measures how many shares are "borrowed" to sell, betting they\'ll drop in price. Very high short interest can signal market pessimism about the company, or set the stage for a "short squeeze" if the price suddenly jumps.' },
+  { cat: 'Advanced · Fixed income', nivel: 'avanzado', q: 'What does a bond\'s "duration" measure?', ops: ['The years remaining until the bond matures', "How much the bond's price rises or falls when interest rates change", "The issuer's credit rating", 'The percentage of interest it pays each year'], ok: 1, exp: 'Duration isn\'t just "how many years are left": it measures how sensitive the bond\'s price is to changes in interest rates. The higher the duration, the more the bond\'s price moves when rates go up or down.' },
+  { cat: 'Advanced · Fixed income', nivel: 'avanzado', q: 'What is the "credit spread" of a corporate bond?', ops: ['The difference in yield between that bond and a government bond considered risk-free', 'The commission the bank charges to buy it', 'The percentage of bonds in a portfolio versus stocks', 'The time remaining until maturity'], ok: 0, exp: 'The credit spread is the "extra" a company pays compared to (safer) government debt, to compensate for the risk it might not pay. The riskier a company is perceived to be, the bigger the spread it has to offer.' },
+  { cat: 'Advanced · Returns', nivel: 'avanzado', q: 'What is "free cash flow yield"?', ops: ["The company's free cash flow divided by its market value", 'The percentage of cash paid out as a dividend', 'The difference between revenue and operating expenses', 'The annual growth in cash flow'], ok: 0, exp: 'FCF yield compares the real cash a company generates (free cash flow) with what it costs to buy it on the stock market. A high yield can mean the company is cheap relative to the cash it generates — or that the market distrusts something.' },
+];
+
 let qIdx = 0, score = 0, xp = 0, streak = 0, selPreguntas = [];
 let _totalXP = 0;
 
@@ -4435,7 +4476,8 @@ function cambiarNivelQuiz(nivel) {
   initQuiz();
 }
 function initQuiz() {
-  const pool = preguntas.filter(p => p.nivel === _nivelQuiz);
+  const bancoPreguntas = _idioma === 'en' ? preguntasEN : preguntas;
+  const pool = bancoPreguntas.filter(p => p.nivel === _nivelQuiz);
   selPreguntas = shuffleArr(pool).slice(0, 5);
   qIdx = 0; score = 0; xp = 0; streak = 0;
   document.getElementById('quizXP').textContent = 0;

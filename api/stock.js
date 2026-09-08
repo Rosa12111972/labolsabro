@@ -10,6 +10,7 @@ const CRYPTO_INFO = {
 };
 
 const CRYPTO_TICKERS = ['BTC','ETH','SOL','BNB','XRP','DOGE','ADA','SHIB'];
+let _crumbCache = null;
 
 const ipLimits = new Map();
 const LIMIT = 3;
@@ -28,6 +29,23 @@ function checkIpLimit(ip) {
   if (rec.count >= LIMIT) return false;
   rec.count++;
   return true;
+}
+
+async function getYahooCrumb() {
+  if (_crumbCache && Date.now() - _crumbCache.ts < 50 * 60 * 1000) return _crumbCache;
+  const hdrs = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.5'
+  };
+  const r1 = await fetch('https://finance.yahoo.com/', { headers: hdrs });
+  const cookies = r1.headers.get('set-cookie') || '';
+  const cookieStr = cookies.split(',').map(c => c.split(';')[0]).join('; ');
+  const hdrs2 = { ...hdrs, 'Cookie': cookieStr };
+  const r2 = await fetch('https://query1.finance.yahoo.com/v1/test/getcrumb', { headers: hdrs2 });
+  const crumb = await r2.text();
+  _crumbCache = { crumb, cookies: cookieStr, ts: Date.now() };
+  return _crumbCache;
 }
 
 async function esPremium(req) {
@@ -52,200 +70,6 @@ async function esPremium(req) {
   } catch (e) { return false; }
 }
 
-// Financial Modeling Prep: fuente con licencia real (sustituye al scraping de
-// Yahoo Finance, y antes de eso a Alpha Vantage). Free tier: ~250 peticiones/día
-// compartidas por toda la web. Cada análisis usa 2 (profile + ratios-ttm), así
-// que el límite real es de unos ~125 análisis nuevos al día en el plan gratuito
-// (los resultados ya cacheados en el navegador del usuario no cuentan). Si el
-// tráfico crece, hay que subir de plan en financialmodelingprep.com — no hace
-// falta cambiar código, solo la clave sigue igual.
-// Usa la API "stable" (query params) — la antigua /api/v3 (path params) dejó
-// de estar disponible para claves nuevas a partir del 31/08/2025.
-const FMP_BASE = 'https://financialmodelingprep.com/stable';
-
-function n(x) {
-  if (x === undefined || x === null || x === '') return null;
-  const v = parseFloat(x);
-  return Number.isNaN(v) ? null : v;
-}
-
-// Distintas versiones de la API de FMP han usado nombres de campo distintos
-// para lo mismo (p.ej. mktCap vs marketCap). pick() prueba varios nombres.
-function pick(obj, keys) {
-  if (!obj) return undefined;
-  for (const k of keys) {
-    if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') return obj[k];
-  }
-  return undefined;
-}
-
-async function fmpFetch(path) {
-  const sep = path.includes('?') ? '&' : '?';
-  const url = `${FMP_BASE}${path}${sep}apikey=${process.env.FMP_API_KEY}`;
-  const r = await fetch(url);
-  const text = await r.text();
-  let json = null;
-  try { json = JSON.parse(text); } catch (e) {}
-  if (json && json['Error Message']) throw new Error(json['Error Message']);
-  if (json && !Array.isArray(json) && json.error) throw new Error(String(json.error));
-  if (!r.ok) throw new Error(`Financial Modeling Prep no disponible (HTTP ${r.status}): ${text.slice(0, 200)}`);
-  return json;
-}
-
-async function fetchStock(ticker) {
-  const [profileArr, ratiosArr] = await Promise.all([
-    fmpFetch(`/profile?symbol=${encodeURIComponent(ticker)}`),
-    fmpFetch(`/ratios-ttm?symbol=${encodeURIComponent(ticker)}`),
-  ]);
-  const p = Array.isArray(profileArr) ? profileArr[0] : null;
-  const r = Array.isArray(ratiosArr) ? ratiosArr[0] : null;
-  const precio = n(pick(p, ['price']));
-  if (!p || !precio) return null;
-
-  const [min52, max52] = (p.range || '').split('-').map(n);
-
-  return {
-    tipo: 'stock', ticker, nombre: p.companyName || ticker,
-    precio, cambio: n(pick(p, ['changePercentage', 'changesPercentage'])), mktCap: n(pick(p, ['marketCap', 'mktCap'])), moneda: p.currency || 'USD',
-
-    // Valoración
-    pe:          n(pick(r, ['peRatioTTM', 'priceToEarningsRatioTTM'])),
-    fpe:         null,
-    peg:         n(pick(r, ['pegRatioTTM', 'priceToEarningsGrowthRatioTTM'])),
-    pb:          n(pick(r, ['priceToBookRatioTTM'])),
-    evEbitda:    n(pick(r, ['enterpriseValueMultipleTTM', 'evToEBITDATTM'])),
-    evRevenue:   n(pick(r, ['evToSalesTTM'])),
-
-    // Rentabilidad
-    eps:         n(pick(p, ['eps'])) ?? n(pick(r, ['netIncomePerShareTTM'])),
-    margen:      n(pick(r, ['netProfitMarginTTM'])),
-    roe:         n(pick(r, ['returnOnEquityTTM'])),
-    roa:         n(pick(r, ['returnOnAssetsTTM'])),
-    crecimientoEps: null,
-    crecimientoIng: null,
-    totalRevenue:   null,
-
-    // Reinversión y dividendo
-    payoutRatio:         n(pick(r, ['payoutRatioTTM'])),
-    freeCashflow:        null, // no disponible sin llamada extra (cash-flow-statement) — limitado por cuota gratuita
-    operatingCashflow:   null,
-    capitalExpenditures: null,
-    divY:          n(pick(r, ['dividendYieldTTM'])),
-    dividendRate:  n(pick(p, ['lastDividend', 'lastDiv'])),
-
-    // Salud financiera
-    debtToEquity: n(pick(r, ['debtToEquityRatioTTM', 'debtEquityRatioTTM'])),
-    currentRatio: n(pick(r, ['currentRatioTTM'])),
-    quickRatio:   n(pick(r, ['quickRatioTTM'])),
-    totalDebt:    null,
-    totalCash:    null,
-
-    // Mercado
-    beta:  n(p.beta),
-    min52: min52 ?? null,
-    max52: max52 ?? null,
-
-    // Empresa
-    sector:    p.sector || '',
-    industry:  p.industry || '',
-    employees: p.fullTimeEmployees ? parseInt(p.fullTimeEmployees) : null,
-  };
-}
-
-// Financial Modeling Prep en su plan gratuito solo cubre empresas de EEUU
-// (rechaza con HTTP 402 cualquier símbolo "premium", incluidas las europeas
-// aunque coticen también como ADR en EEUU, como SAP o ASML). Alpha Vantage sí
-// cubre bolsas europeas en su plan gratuito, pero con solo 25 peticiones/día
-// en total — por eso se reserva únicamente para estos tickers europeos, no
-// para todo el tráfico. Lista explícita porque el sufijo por sí solo no basta
-// (SAP y ASML cotizan sin sufijo, vía su ADR en EEUU, pero FMP igual los bloquea).
-const EU_TICKERS = new Set(['ASML', 'SAP', 'MC.PA', 'OR.PA', 'NESN.SW', 'ITX.MC', 'VOW3.DE', 'REP.MC', 'IBE.MC', 'SAN.MC', 'TEF.MC', 'BBVA.MC']);
-const EU_SUFFIXES = ['.MC', '.PA', '.DE', '.AS', '.SW', '.MI', '.L', '.BR', '.LS'];
-function esTickerEuropeo(ticker) {
-  if (EU_TICKERS.has(ticker)) return true;
-  return EU_SUFFIXES.some(s => ticker.endsWith(s));
-}
-
-async function avFetch(params) {
-  if (!process.env.ALPHA_VANTAGE_KEY) throw new Error('Fuente de datos europea no configurada (falta ALPHA_VANTAGE_KEY)');
-  const qs = new URLSearchParams({ ...params, apikey: process.env.ALPHA_VANTAGE_KEY });
-  const r = await fetch(`https://www.alphavantage.co/query?${qs}`);
-  const json = await r.json().catch(() => null);
-  if (json && (json.Note || json.Information)) throw new Error(json.Note || json.Information);
-  if (json && json['Error Message']) throw new Error(json['Error Message']);
-  if (!r.ok) throw new Error('Alpha Vantage no disponible');
-  return json;
-}
-
-async function fetchStockEU(ticker) {
-  const [overview, quoteRes] = await Promise.all([
-    avFetch({ function: 'OVERVIEW', symbol: ticker }),
-    avFetch({ function: 'GLOBAL_QUOTE', symbol: ticker }),
-  ]);
-  const o = overview && overview.Symbol ? overview : null;
-  const q = quoteRes ? quoteRes['Global Quote'] : null;
-  const precio = n(q && q['05. price']);
-  if (!precio) return null;
-
-  return {
-    tipo: 'stock', ticker, nombre: (o && o.Name) || ticker,
-    precio,
-    cambio: q && q['10. change percent'] ? n(String(q['10. change percent']).replace('%', '')) : null,
-    mktCap: n(o && o.MarketCapitalization),
-    moneda: (o && o.Currency) || 'EUR',
-
-    pe:        n(o && o.PERatio),
-    fpe:       n(o && o.ForwardPE),
-    peg:       n(o && o.PEGRatio),
-    pb:        n(o && o.PriceToBookRatio),
-    evEbitda:  n(o && o.EVToEBITDA),
-    evRevenue: n(o && o.EVToRevenue),
-
-    eps:            n(o && o.EPS),
-    margen:         n(o && o.ProfitMargin),
-    roe:            n(o && o.ReturnOnEquityTTM),
-    roa:            n(o && o.ReturnOnAssetsTTM),
-    crecimientoEps: n(o && o.QuarterlyEarningsGrowthYOY),
-    crecimientoIng: n(o && o.QuarterlyRevenueGrowthYOY),
-    totalRevenue:   n(o && o.RevenueTTM),
-
-    payoutRatio:         null,
-    freeCashflow:        null,
-    operatingCashflow:   null,
-    capitalExpenditures: null,
-    divY:         n(o && o.DividendYield),
-    dividendRate: n(o && o.DividendPerShare),
-
-    debtToEquity: null,
-    currentRatio: null,
-    quickRatio:   null,
-    totalDebt:    null,
-    totalCash:    null,
-
-    beta:  n(o && o.Beta),
-    min52: n(o && o['52WeekLow']),
-    max52: n(o && o['52WeekHigh']),
-
-    sector:    (o && o.Sector) || '',
-    industry:  (o && o.Industry) || '',
-    employees: null,
-  };
-}
-
-async function fetchCrypto(raw, yTicker) {
-  const arr = await fmpFetch(`/quote?symbol=${encodeURIComponent(raw)}USD`);
-  const q = Array.isArray(arr) ? arr[0] : null;
-  const precio = n(pick(q, ['price']));
-  if (!q || !precio) return null;
-  const info = CRYPTO_INFO[yTicker] || {};
-  return {
-    tipo: 'crypto', ticker: raw, nombre: info.nombre || raw, precio,
-    cambio: n(pick(q, ['changePercentage', 'changesPercentage'])), mktCap: n(pick(q, ['marketCap', 'mktCap'])), moneda: 'USD',
-    viabilidad: info.viabilidad || '—', riesgo: info.riesgo || '—',
-    rankMcap: info.rankMcap || null, tipoCrypto: info.tipo || '—', descripcion: info.descripcion || ''
-  };
-}
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
@@ -261,18 +85,88 @@ export default async function handler(req, res) {
   if (!raw) return res.status(400).json({ error: 'Ticker requerido' });
 
   const isCrypto = CRYPTO_TICKERS.includes(raw);
-  const isEU = !isCrypto && esTickerEuropeo(raw);
   const yTicker = isCrypto ? raw + '-USD' : raw;
 
-  if (!isEU && !isCrypto && !process.env.FMP_API_KEY) {
-    return res.status(500).json({ error: 'Fuente de datos no configurada (falta FMP_API_KEY)' });
-  }
-
   try {
-    const data = isCrypto ? await fetchCrypto(raw, yTicker) : isEU ? await fetchStockEU(raw) : await fetchStock(raw);
-    if (!data) return res.status(404).json({ error: `No encontramos '${raw}'` });
-    return res.json(data);
-  } catch (e) {
+    const { crumb, cookies } = await getYahooCrumb();
+    const url = `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(yTicker)}?modules=summaryDetail,price,assetProfile,defaultKeyStatistics,financialData&crumb=${encodeURIComponent(crumb)}`;
+    const r = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Cookie': cookies
+      }
+    });
+
+    if (!r.ok) return res.status(404).json({ error: `No encontramos '${raw}'` });
+
+    const json = await r.json();
+    const qs = json?.quoteSummary?.result?.[0];
+    if (!qs) return res.status(404).json({ error: `No encontramos '${raw}'` });
+
+    const price = qs.price || {};
+    const sd = qs.summaryDetail || {};
+    const ks = qs.defaultKeyStatistics || {};
+    const fd = qs.financialData || {};
+    const ap = qs.assetProfile || {};
+    const v = x => (x && x.raw !== undefined ? x.raw : null);
+
+    const nombre = price.shortName || price.longName || raw;
+    const precio = v(price.regularMarketPrice);
+    const cambio = v(price.regularMarketChangePercent);
+    const mktCap = v(price.marketCap);
+    const moneda = price.currency || 'USD';
+
+    if (isCrypto) {
+      const info = CRYPTO_INFO[yTicker] || {};
+      return res.json({ tipo:'crypto', ticker:raw, nombre, precio, cambio, mktCap, moneda, viabilidad:info.viabilidad||'—', riesgo:info.riesgo||'—', rankMcap:info.rankMcap||null, tipoCrypto:info.tipo||'—', descripcion:info.descripcion||'' });
+    }
+
+    return res.json({
+      tipo: 'stock', ticker: raw, nombre, precio, cambio, mktCap, moneda,
+
+      // Valoración
+      pe:          v(sd.trailingPE),
+      fpe:         v(sd.forwardPE),
+      peg:         v(ks.pegRatio),
+      pb:          v(ks.priceToBook),
+      evEbitda:    v(ks.enterpriseToEbitda),
+      evRevenue:   v(ks.enterpriseToRevenue),
+
+      // Rentabilidad
+      eps:         v(ks.trailingEps),
+      margen:      v(fd.profitMargins),
+      roe:         v(fd.returnOnEquity),
+      roa:         v(fd.returnOnAssets),
+      crecimientoEps: v(ks.earningsQuarterlyGrowth),
+      crecimientoIng: v(fd.revenueGrowth),
+      totalRevenue:   v(fd.totalRevenue),
+
+      // Reinversión y dividendo
+      payoutRatio:        v(sd.payoutRatio),
+      freeCashflow:       v(fd.freeCashflow),
+      operatingCashflow:  v(fd.operatingCashflow),
+      capitalExpenditures: v(fd.capitalExpenditures),
+      divY:          v(sd.dividendYield),
+      dividendRate:  v(sd.dividendRate),
+
+      // Salud financiera
+      debtToEquity: v(fd.debtToEquity),
+      currentRatio: v(fd.currentRatio),
+      quickRatio:   v(fd.quickRatio),
+      totalDebt:    v(fd.totalDebt),
+      totalCash:    v(fd.totalCash),
+
+      // Mercado
+      beta:    v(sd.beta),
+      min52:   v(sd.fiftyTwoWeekLow),
+      max52:   v(sd.fiftyTwoWeekHigh),
+
+      // Empresa
+      sector:    ap.sector || '',
+      industry:  ap.industry || '',
+      employees: ap.fullTimeEmployees || null,
+    });
+  } catch(e) {
     return res.status(500).json({ error: 'Error al obtener datos: ' + e.message });
   }
 }
