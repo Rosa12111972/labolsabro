@@ -69,59 +69,146 @@
       <div class="logo-mark">🪰</div>
       <div><div class="logo-text">Mosca</div><div class="logo-sub">laBolsabro</div></div>
     </a>
-    <a class="back" href="/contabilidad.html">← Contabilidad</a>
+    <a class="back" href="/contabilidad.html" data-i18n="backLink">← Contabilidad</a>
   </div>
 </nav>
 
 <div class="hero">
-  <div class="tag">🎯 Valoración de empresas</div>
-  <h1>Una empresa buena no es lo mismo que una acción barata.</h1>
-  <p class="lede">Valorar es intentar responder a una pregunta simple con herramientas nada simples: ¿cuánto vale de verdad este negocio, y cuánto me están pidiendo por él?</p>
+  <div class="tag" data-i18n="pageTag">🎯 Valoración de empresas</div>
+  <h1 data-i18n="pageH1">Una empresa buena no es lo mismo que una acción barata.</h1>
+  <p class="lede" data-i18n="pageLede">Valorar es intentar responder a una pregunta simple con herramientas nada simples: ¿cuánto vale de verdad este negocio, y cuánto me están pidiendo por él?</p>
 </div>
 
 <div class="content">
   <div class="framework">
-    <h2>Las dos familias de métodos</h2>
-    <p>Casi todo lo que se usa para valorar una empresa cae en una de estas dos categorías:</p>
-    <div class="not-this" style="background:var(--green-glow);border-color:rgba(34,197,94,0.3);color:var(--green)">📐 <span><strong>Múltiplos:</strong> comparar el precio con algo que la empresa genera (beneficio, ventas, caja) — PER, EV/EBITDA, P/B.</span></div>
-    <div class="not-this" style="background:var(--purple-dim);border-color:rgba(167,139,250,0.3);color:var(--purple)">🔮 <span><strong>Descuento de flujos (DCF):</strong> estimar todo el dinero futuro que generará y traerlo a valor de hoy.</span></div>
-    <div class="example"><strong>En la práctica:</strong> los múltiplos son rápidos pero superficiales (comparan con el mercado, que también puede estar equivocado). El DCF es más riguroso pero depende de asunciones sobre el futuro que nadie puede predecir con certeza. Los inversores serios usan ambos como contraste.</div>
+    <h2 data-i18n="fwH2">Las dos familias de métodos</h2>
+    <p data-i18n="fwP">Casi todo lo que se usa para valorar una empresa cae en una de estas dos categorías:</p>
+    <div class="not-this" style="background:var(--green-glow);border-color:rgba(34,197,94,0.3);color:var(--green)" data-i18n-html="method1">📐 <span><strong>Múltiplos:</strong> comparar el precio con algo que la empresa genera (beneficio, ventas, caja) — PER, EV/EBITDA, P/B.</span></div>
+    <div class="not-this" style="background:var(--purple-dim);border-color:rgba(167,139,250,0.3);color:var(--purple)" data-i18n-html="method2">🔮 <span><strong>Descuento de flujos (DCF):</strong> estimar todo el dinero futuro que generará y traerlo a valor de hoy.</span></div>
+    <div class="example" data-i18n-html="fwExample"><strong>En la práctica:</strong> los múltiplos son rápidos pero superficiales (comparan con el mercado, que también puede estar equivocado). El DCF es más riguroso pero depende de asunciones sobre el futuro que nadie puede predecir con certeza. Los inversores serios usan ambos como contraste.</div>
   </div>
 
   <div class="topics">
-    <div class="topic"><h3><span class="topic-n">1</span>PER (Precio/Beneficio)</h3><p>Cuántas veces pagas el beneficio anual. El múltiplo más usado y también el más simplista — no dice nada del crecimiento ni de la deuda.</p></div>
-    <div class="topic"><h3><span class="topic-n">2</span>EV/EBITDA</h3><p>Compara el valor total de la empresa (incluida su deuda) con su beneficio operativo. Más justo que el PER para comparar empresas con estructuras de deuda distintas.</p></div>
-    <div class="topic"><h3><span class="topic-n">3</span>P/B (Precio/Valor contable)</h3><p>Compara el precio con el patrimonio neto de la empresa. Útil en bancos y aseguradoras, menos en empresas de servicios o tecnología con pocos activos físicos.</p></div>
-    <div class="topic"><h3><span class="topic-n">4</span>Descuento de flujos de caja (DCF)</h3><p>Proyecta el dinero que generará la empresa en los próximos años y lo trae a valor presente. Tan bueno como las suposiciones que metas dentro — "basura entra, basura sale".</p></div>
-    <div class="topic"><h3><span class="topic-n">5</span>Comparables</h3><p>Mirar a qué múltiplo cotizan empresas parecidas del mismo sector. Rápido, pero asume que el mercado ya valora bien a esas otras empresas — no siempre es cierto.</p></div>
-    <div class="topic"><h3><span class="topic-n">6</span>Valor intrínseco vs precio de mercado</h3><p>El precio es lo que marca la bolsa hoy. El valor intrínseco es lo que tú (o tu modelo) crees que vale de verdad. Invertir con criterio es buscar diferencias grandes entre ambos.</p></div>
-    <div class="topic"><h3><span class="topic-n">7</span>Margen de seguridad</h3><p>Comprar con un descuento respecto a tu estimación de valor, para que si te equivocas un poco, no pierdas dinero. Cuanta más incertidumbre, mayor margen conviene exigir.</p></div>
-    <div class="topic"><h3><span class="topic-n">8</span>Errores comunes al valorar</h3><p>Extrapolar el crecimiento actual para siempre, ignorar la deuda, comparar empresas de sectores distintos, o enamorarse de la empresa y ajustar el modelo para que "salga bien".</p></div>
+    <div class="topic"><h3><span class="topic-n">1</span><span data-i18n="t1h3">PER (Precio/Beneficio)</span></h3><p data-i18n="t1p">Cuántas veces pagas el beneficio anual. El múltiplo más usado y también el más simplista — no dice nada del crecimiento ni de la deuda.</p></div>
+    <div class="topic"><h3><span class="topic-n">2</span><span data-i18n="t2h3">EV/EBITDA</span></h3><p data-i18n="t2p">Compara el valor total de la empresa (incluida su deuda) con su beneficio operativo. Más justo que el PER para comparar empresas con estructuras de deuda distintas.</p></div>
+    <div class="topic"><h3><span class="topic-n">3</span><span data-i18n="t3h3">P/B (Precio/Valor contable)</span></h3><p data-i18n="t3p">Compara el precio con el patrimonio neto de la empresa. Útil en bancos y aseguradoras, menos en empresas de servicios o tecnología con pocos activos físicos.</p></div>
+    <div class="topic"><h3><span class="topic-n">4</span><span data-i18n="t4h3">Descuento de flujos de caja (DCF)</span></h3><p data-i18n="t4p">Proyecta el dinero que generará la empresa en los próximos años y lo trae a valor presente. Tan bueno como las suposiciones que metas dentro — "basura entra, basura sale".</p></div>
+    <div class="topic"><h3><span class="topic-n">5</span><span data-i18n="t5h3">Comparables</span></h3><p data-i18n="t5p">Mirar a qué múltiplo cotizan empresas parecidas del mismo sector. Rápido, pero asume que el mercado ya valora bien a esas otras empresas — no siempre es cierto.</p></div>
+    <div class="topic"><h3><span class="topic-n">6</span><span data-i18n="t6h3">Valor intrínseco vs precio de mercado</span></h3><p data-i18n="t6p">El precio es lo que marca la bolsa hoy. El valor intrínseco es lo que tú (o tu modelo) crees que vale de verdad. Invertir con criterio es buscar diferencias grandes entre ambos.</p></div>
+    <div class="topic"><h3><span class="topic-n">7</span><span data-i18n="t7h3">Margen de seguridad</span></h3><p data-i18n="t7p">Comprar con un descuento respecto a tu estimación de valor, para que si te equivocas un poco, no pierdas dinero. Cuanta más incertidumbre, mayor margen conviene exigir.</p></div>
+    <div class="topic"><h3><span class="topic-n">8</span><span data-i18n="t8h3">Errores comunes al valorar</span></h3><p data-i18n="t8p">Extrapolar el crecimiento actual para siempre, ignorar la deuda, comparar empresas de sectores distintos, o enamorarse de la empresa y ajustar el modelo para que "salga bien".</p></div>
   </div>
 
   <div class="areas">
-    <h3>Las 6 áreas básicas de un inversor</h3>
+    <h3 data-i18n="areasTitle">Las 6 áreas básicas de un inversor</h3>
     <div class="area-chips">
-      <a class="area-chip" href="/contabilidad.html">Contabilidad</a>
-      <span class="area-chip current">Valoración de empresas</span>
-      <a class="area-chip" href="/macroeconomia.html">Macroeconomía</a>
-      <a class="area-chip" href="/mercados.html">Mercados financieros</a>
-      <a class="area-chip" href="/riesgo.html">Gestión del riesgo</a>
-      <a class="area-chip" href="/geoeconomia.html">Geoeconomía</a>
+      <a class="area-chip" href="/contabilidad.html" data-i18n="areaContabilidad">Contabilidad</a>
+      <span class="area-chip current" data-i18n="areaValoracion">Valoración de empresas</span>
+      <a class="area-chip" href="/macroeconomia.html" data-i18n="areaMacro">Macroeconomía</a>
+      <a class="area-chip" href="/mercados.html" data-i18n="areaMercados">Mercados financieros</a>
+      <a class="area-chip" href="/riesgo.html" data-i18n="areaRiesgo">Gestión del riesgo</a>
+      <a class="area-chip" href="/geoeconomia.html" data-i18n="areaGeo">Geoeconomía</a>
     </div>
   </div>
 </div>
 
 <div class="closing">
   <div class="closing-box">
-    <p>Ningún método de valoración es perfecto — todos dependen de asunciones sobre el futuro. Lo importante no es tener razón siempre, sino tener un criterio consistente y un margen de seguridad cuando te equivocas.</p>
+    <p data-i18n="closingP">Ningún método de valoración es perfecto — todos dependen de asunciones sobre el futuro. Lo importante no es tener razón siempre, sino tener un criterio consistente y un margen de seguridad cuando te equivocas.</p>
     <div class="cta-row">
-      <a class="btn btn-green" href="/#stocks">Practicar con una empresa real →</a>
-      <a class="btn btn-out" href="/macroeconomia.html">Siguiente: Macroeconomía →</a>
+      <a class="btn btn-green" href="/#stocks" data-i18n="ctaAnalizar">Practicar con una empresa real →</a>
+      <a class="btn btn-out" href="/macroeconomia.html" data-i18n="ctaSiguiente">Siguiente: Macroeconomía →</a>
     </div>
   </div>
 </div>
 
-<footer>© 2025 Mosca · <a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a> · <a href="mailto:hola@labolsabro.com">Contacto</a></footer>
+<footer>© 2025 Mosca · <a href="/privacidad.html" data-i18n="footerPrivacidad">Privacidad</a> · <a href="/terminos.html" data-i18n="footerTerminos">Términos</a> · <a href="mailto:hola@labolsabro.com" data-i18n="footerContacto">Contacto</a></footer>
+
+<script>
+// ---- i18n ----
+const I18N = {
+  es: {
+    backLink: '← Contabilidad',
+    pageTag: '🎯 Valoración de empresas',
+    pageH1: 'Una empresa buena no es lo mismo que una acción barata.',
+    pageLede: 'Valorar es intentar responder a una pregunta simple con herramientas nada simples: ¿cuánto vale de verdad este negocio, y cuánto me están pidiendo por él?',
+    fwH2: 'Las dos familias de métodos',
+    fwP: 'Casi todo lo que se usa para valorar una empresa cae en una de estas dos categorías:',
+    method1: '📐 <span><strong>Múltiplos:</strong> comparar el precio con algo que la empresa genera (beneficio, ventas, caja) — PER, EV/EBITDA, P/B.</span>',
+    method2: '🔮 <span><strong>Descuento de flujos (DCF):</strong> estimar todo el dinero futuro que generará y traerlo a valor de hoy.</span>',
+    fwExample: '<strong>En la práctica:</strong> los múltiplos son rápidos pero superficiales (comparan con el mercado, que también puede estar equivocado). El DCF es más riguroso pero depende de asunciones sobre el futuro que nadie puede predecir con certeza. Los inversores serios usan ambos como contraste.',
+    t1h3: 'PER (Precio/Beneficio)', t1p: 'Cuántas veces pagas el beneficio anual. El múltiplo más usado y también el más simplista — no dice nada del crecimiento ni de la deuda.',
+    t2h3: 'EV/EBITDA', t2p: 'Compara el valor total de la empresa (incluida su deuda) con su beneficio operativo. Más justo que el PER para comparar empresas con estructuras de deuda distintas.',
+    t3h3: 'P/B (Precio/Valor contable)', t3p: 'Compara el precio con el patrimonio neto de la empresa. Útil en bancos y aseguradoras, menos en empresas de servicios o tecnología con pocos activos físicos.',
+    t4h3: 'Descuento de flujos de caja (DCF)', t4p: 'Proyecta el dinero que generará la empresa en los próximos años y lo trae a valor presente. Tan bueno como las suposiciones que metas dentro — "basura entra, basura sale".',
+    t5h3: 'Comparables', t5p: 'Mirar a qué múltiplo cotizan empresas parecidas del mismo sector. Rápido, pero asume que el mercado ya valora bien a esas otras empresas — no siempre es cierto.',
+    t6h3: 'Valor intrínseco vs precio de mercado', t6p: 'El precio es lo que marca la bolsa hoy. El valor intrínseco es lo que tú (o tu modelo) crees que vale de verdad. Invertir con criterio es buscar diferencias grandes entre ambos.',
+    t7h3: 'Margen de seguridad', t7p: 'Comprar con un descuento respecto a tu estimación de valor, para que si te equivocas un poco, no pierdas dinero. Cuanta más incertidumbre, mayor margen conviene exigir.',
+    t8h3: 'Errores comunes al valorar', t8p: 'Extrapolar el crecimiento actual para siempre, ignorar la deuda, comparar empresas de sectores distintos, o enamorarse de la empresa y ajustar el modelo para que "salga bien".',
+    areasTitle: 'Las 6 áreas básicas de un inversor',
+    areaContabilidad: 'Contabilidad', areaValoracion: 'Valoración de empresas', areaMacro: 'Macroeconomía',
+    areaMercados: 'Mercados financieros', areaRiesgo: 'Gestión del riesgo', areaGeo: 'Geoeconomía',
+    closingP: 'Ningún método de valoración es perfecto — todos dependen de asunciones sobre el futuro. Lo importante no es tener razón siempre, sino tener un criterio consistente y un margen de seguridad cuando te equivocas.',
+    ctaAnalizar: 'Practicar con una empresa real →',
+    ctaSiguiente: 'Siguiente: Macroeconomía →',
+    footerPrivacidad: 'Privacidad', footerTerminos: 'Términos', footerContacto: 'Contacto',
+  },
+  en: {
+    backLink: '← Accounting',
+    pageTag: '🎯 Company valuation',
+    pageH1: 'A good company isn\'t the same as a cheap stock.',
+    pageLede: 'Valuing is trying to answer a simple question with tools that are anything but simple: how much is this business really worth, and how much am I being asked to pay for it?',
+    fwH2: 'The two families of methods',
+    fwP: 'Almost everything used to value a company falls into one of these two categories:',
+    method1: '📐 <span><strong>Multiples:</strong> comparing the price with something the company generates (profit, sales, cash) — P/E, EV/EBITDA, P/B.</span>',
+    method2: '🔮 <span><strong>Discounted cash flow (DCF):</strong> estimating all the future money it will generate and bringing it back to today\'s value.</span>',
+    fwExample: '<strong>In practice:</strong> multiples are quick but superficial (they compare against the market, which can also be wrong). DCF is more rigorous but depends on assumptions about the future that no one can predict with certainty. Serious investors use both as a cross-check.',
+    t1h3: 'P/E (Price/Earnings)', t1p: 'How many times you pay the annual profit. The most-used multiple, and also the most simplistic — it says nothing about growth or debt.',
+    t2h3: 'EV/EBITDA', t2p: 'Compares the company\'s total value (including its debt) with its operating profit. Fairer than P/E for comparing companies with different debt structures.',
+    t3h3: 'P/B (Price/Book value)', t3p: 'Compares the price with the company\'s net equity. Useful for banks and insurers, less so for services or tech companies with few physical assets.',
+    t4h3: 'Discounted cash flow (DCF)', t4p: 'Projects the money the company will generate in coming years and brings it back to present value. Only as good as the assumptions you feed it — "garbage in, garbage out".',
+    t5h3: 'Comparables', t5p: 'Looking at what multiple similar companies in the same sector trade at. Quick, but assumes the market already values those other companies correctly — not always true.',
+    t6h3: 'Intrinsic value vs. market price', t6p: 'Price is what the market says today. Intrinsic value is what you (or your model) believe it\'s really worth. Investing with judgment means looking for big gaps between the two.',
+    t7h3: 'Margin of safety', t7p: 'Buying at a discount to your value estimate, so that if you\'re a bit wrong, you don\'t lose money. The more uncertainty, the bigger the margin you should demand.',
+    t8h3: 'Common valuation mistakes', t8p: 'Extrapolating current growth forever, ignoring debt, comparing companies from different sectors, or falling in love with the company and tweaking the model to make it "work out".',
+    areasTitle: 'The 6 basic areas of an investor',
+    areaContabilidad: 'Accounting', areaValoracion: 'Company valuation', areaMacro: 'Macroeconomics',
+    areaMercados: 'Financial markets', areaRiesgo: 'Risk management', areaGeo: 'Geoeconomics',
+    closingP: 'No valuation method is perfect — they all depend on assumptions about the future. What matters isn\'t being right every time, but having a consistent approach and a margin of safety for when you\'re wrong.',
+    ctaAnalizar: 'Practice with a real company →',
+    ctaSiguiente: 'Next: Macroeconomics →',
+    footerPrivacidad: 'Privacy', footerTerminos: 'Terms', footerContacto: 'Contact',
+  },
+};
+function detectarIdiomaNavegador() {
+  const langs = navigator.languages || [navigator.language || 'es'];
+  for (const l of langs) { if (l.toLowerCase().startsWith('es')) return 'es'; }
+  return 'en';
+}
+let _idioma = localStorage.getItem('mosca_lang') || detectarIdiomaNavegador();
+function t(key) {
+  const dict = I18N[_idioma] || I18N.es;
+  return dict[key] !== undefined ? dict[key] : (I18N.es[key] !== undefined ? I18N.es[key] : key);
+}
+function tf(key, vars) {
+  let s = t(key);
+  for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+  return s;
+}
+function aplicarIdioma() {
+  const dict = I18N[_idioma] || I18N.es;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  document.documentElement.lang = _idioma;
+}
+aplicarIdioma();
+// ---- /i18n ----
+</script>
 </body>
 </html>
