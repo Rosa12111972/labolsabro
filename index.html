@@ -1664,6 +1664,10 @@ async function cargarFx() {
     _fxRates = data.rates || null;
   } catch (e) { _fxRates = null; }
   actualizarPreciosSuscripcion();
+  // renderHeroMockup() se pinta antes de que lleguen los tipos de cambio
+  // (esta llamada es async), así que si la moneda no es EUR se queda con
+  // el "€" del fallback para siempre a menos que se refresque aquí.
+  if (typeof renderHeroMockup === 'function') renderHeroMockup();
 }
 function actualizarPreciosSuscripcion() {
   const pJunior = fmtEUR(5.99), pSenior = fmtEUR(9.99);
