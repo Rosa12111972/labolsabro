@@ -39,7 +39,7 @@ def _log_in_user(user):
 def login():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
-        password = request.form.get("password", "")
+        password = request.form.get("password", "").strip()
         db = get_db()
         user = db.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         if user and user["password_hash"] and check_password_hash(user["password_hash"], password):
@@ -143,7 +143,7 @@ def registro():
 
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
-        password = request.form.get("password", "")
+        password = request.form.get("password", "").strip()
         if not email or not password:
             flash("Rellena email y contraseña.")
             return render_template("registro.html")

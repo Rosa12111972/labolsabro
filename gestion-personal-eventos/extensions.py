@@ -33,8 +33,8 @@ def init_db(app):
 
 def create_default_admin():
     db = get_db()
-    email = os.environ.get("ADMIN_EMAIL", "admin@local")
-    password = os.environ.get("ADMIN_PASSWORD") or secrets.token_urlsafe(9)
+    email = os.environ.get("ADMIN_EMAIL", "admin@local").strip().lower()
+    password = (os.environ.get("ADMIN_PASSWORD") or "").strip() or secrets.token_urlsafe(9)
     from werkzeug.security import generate_password_hash
 
     db.execute(
