@@ -2,6 +2,7 @@
   "name": "labolsabro",
   "version": "1.0.0",
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "stripe": "^14.0.0"
   }
 }
