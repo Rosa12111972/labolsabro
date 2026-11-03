@@ -2494,9 +2494,12 @@ async function cargarAlertas() {
   body.innerHTML = data.map(a => {
     const dirTxt = a.direction === 'above' ? t('alertDirAbove') : t('alertDirBelow');
     const estado = a.triggered ? `<span style="color:var(--green);font-size:12px;font-weight:700">✓ ${t('alertTriggered')}</span>` : `<span style="color:var(--text3);font-size:12px">${t('alertWatching')}</span>`;
+    const monedaA = a.moneda || 'EUR';
+    const simboloA = SIMBOLOS_MONEDA[monedaA] || '';
+    const precioTxt = monedaA === 'EUR' ? `${a.target_price} ${simboloA}` : `${simboloA}${a.target_price}`;
     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);">
       <div>
-        <div style="font-weight:700;font-size:14px">${a.ticker} ${dirTxt} ${a.target_price}€</div>
+        <div style="font-weight:700;font-size:14px">${a.ticker} ${dirTxt} ${precioTxt}</div>
         <div style="font-size:12px;margin-top:2px">${estado}</div>
       </div>
       <button onclick="eliminarAlerta(${a.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">${t('btnBorrar')}</button>
@@ -2534,17 +2537,18 @@ async function crearAlerta() {
   const direction = document.getElementById('alertDirection').value;
   const target = parseFloat(document.getElementById('alertPrice').value);
   if (!ticker || !target || target <= 0) { alert(t('alertRellenaTicker')); return; }
-  let nombre = ticker;
+  let nombre = ticker, moneda = 'USD';
   try {
     const d = await fetchStock(ticker);
     ticker = d.ticker || ticker;
     nombre = d.nombre || ticker;
+    moneda = d.moneda || 'USD';
   } catch (e) {
     alert(tf('alertNoEncontradoNombre', { ticker }));
     return;
   }
   const { error } = await _sb.from('price_alerts').insert({
-    user_id: _currentUser.id, ticker, nombre, target_price: target, direction
+    user_id: _currentUser.id, ticker, nombre, target_price: target, direction, moneda
   });
   if (error) { alert(t('alertCrearError')); return; }
   document.getElementById('alertPrice').value = '';
@@ -4575,6 +4579,81 @@ initQuiz();
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
 }
+</script>
+
+<div id="surveyCard" style="display:none;position:fixed;bottom:16px;right:16px;left:16px;max-width:340px;margin:0 auto 0 auto;z-index:9999;background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,0.4);">
+  <button onclick="cerrarEncuesta()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;">✕</button>
+  <div id="surveyStep0" style="display:block">
+    <div style="font-size:14px;font-weight:700;margin-bottom:4px;">🪰 ¿Nos ayudas 20 segundos?</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">4 preguntas rápidas para mejorar laBolsabro.</div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="iniciarEncuesta()" style="flex:1;background:var(--green);color:#000;font-weight:700;border:none;border-radius:10px;padding:10px;font-size:13px;cursor:pointer;font-family:inherit;">Vale, allá vamos</button>
+      <button onclick="cerrarEncuesta()" style="background:none;border:1px solid var(--border2);color:var(--text2);border-radius:10px;padding:10px 14px;font-size:13px;cursor:pointer;font-family:inherit;">No, gracias</button>
+    </div>
+  </div>
+  <div id="surveyQuestions" style="display:none"></div>
+  <div id="surveyThanks" style="display:none;text-align:center;padding:10px 0;">
+    <div style="font-size:24px;margin-bottom:6px;">✅</div>
+    <div style="font-size:14px;font-weight:700;">¡Gracias!</div>
+    <div style="font-size:12px;color:var(--text2);">Nos ayuda muchísimo a mejorar.</div>
+  </div>
+</div>
+<script>
+const ENCUESTA_PREGUNTAS = [
+  { campo: 'edad', texto: '¿Cuántos años tienes?', opciones: ['Menos de 18', '18-24', '25-34', '35 o más'] },
+  { campo: 'invierte', texto: '¿Inviertes ya tu dinero en algo?', opciones: ['Sí', 'No, pero me gustaría', 'No me interesa'] },
+  { campo: 'freno', texto: '¿Qué te frena más para invertir?', opciones: ['No sé por dónde empezar', 'Miedo a perder dinero', 'No tengo suficiente dinero', 'No confío en estas apps'] },
+  { campo: 'pagaria', texto: '¿Pagarías por una app así?', opciones: ['No', 'Hasta 3€/mes', 'Hasta 6€/mes', 'Más de 6€/mes'] },
+];
+let _encuestaId = null;
+let _encuestaPaso = 0;
+
+function initEncuestaMercado() {
+  if (!_sb) return;
+  const estado = localStorage.getItem('mosca_survey_state');
+  if (estado) return;
+  setTimeout(() => {
+    document.getElementById('surveyCard').style.display = 'block';
+  }, 8000);
+}
+function cerrarEncuesta() {
+  localStorage.setItem('mosca_survey_state', 'cerrada');
+  document.getElementById('surveyCard').style.display = 'none';
+}
+function iniciarEncuesta() {
+  _encuestaId = crypto.randomUUID();
+  _encuestaPaso = 0;
+  document.getElementById('surveyStep0').style.display = 'none';
+  document.getElementById('surveyQuestions').style.display = 'block';
+  renderPreguntaEncuesta();
+}
+function renderPreguntaEncuesta() {
+  const p = ENCUESTA_PREGUNTAS[_encuestaPaso];
+  const cont = document.getElementById('surveyQuestions');
+  cont.innerHTML = `<div style="font-size:11px;color:var(--text3);margin-bottom:6px;">${_encuestaPaso + 1}/${ENCUESTA_PREGUNTAS.length}</div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px;">${p.texto}</div>
+    ${p.opciones.map(op => `<button onclick="responderEncuesta('${op.replace(/'/g,"\\'")}')" style="display:block;width:100%;text-align:left;background:var(--card2);border:1px solid var(--border2);color:var(--text);border-radius:10px;padding:9px 12px;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:6px;">${op}</button>`).join('')}`;
+}
+async function responderEncuesta(valor) {
+  const campo = ENCUESTA_PREGUNTAS[_encuestaPaso].campo;
+  const esUltima = _encuestaPaso === ENCUESTA_PREGUNTAS.length - 1;
+  try {
+    await _sb.from('market_survey').upsert(
+      { id: _encuestaId, [campo]: valor, completed: esUltima },
+      { onConflict: 'id' }
+    );
+  } catch (e) {}
+  if (esUltima) {
+    localStorage.setItem('mosca_survey_state', 'completada');
+    document.getElementById('surveyQuestions').style.display = 'none';
+    document.getElementById('surveyThanks').style.display = 'block';
+    setTimeout(() => { document.getElementById('surveyCard').style.display = 'none'; }, 2500);
+  } else {
+    _encuestaPaso++;
+    renderPreguntaEncuesta();
+  }
+}
+initEncuestaMercado();
 </script>
 </body>
 </html>

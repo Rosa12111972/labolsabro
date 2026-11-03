@@ -74,7 +74,8 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
-  if (!(await esPremium(req))) {
+  const isCron = process.env.CRON_SECRET && req.headers['x-cron-secret'] === process.env.CRON_SECRET;
+  if (!isCron && !(await esPremium(req))) {
     const ip = getIp(req);
     if (!checkIpLimit(ip)) {
       return res.status(429).json({ error: 'Límite diario alcanzado', limitAlcanzado: true });
