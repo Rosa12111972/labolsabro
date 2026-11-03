@@ -84,5 +84,14 @@ export default async function handler(req, res) {
     await supabasePatch(`profiles?stripe_customer_id=eq.${sub.customer}`, { plan: 'free' });
   }
 
+  if (event.type === 'customer.subscription.updated') {
+    const sub = event.data.object;
+    const priceId = sub.items.data[0]?.price?.id;
+    const plan = PRICES[priceId];
+    if (plan) {
+      await supabasePatch(`profiles?stripe_customer_id=eq.${sub.customer}`, { plan });
+    }
+  }
+
   return res.json({ received: true });
 }

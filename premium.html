@@ -193,6 +193,8 @@
       precioJuniorMensual: '5,99€', precioJuniorAnual: '59,90€',
       precioSeniorMensual: '9,99€', precioSeniorAnual: '99,90€',
       cicloMensual: '/mes', cicloAnual: '/año',
+      planCambiarSenior: 'Cambiar a Senior →', planCambiarJunior: 'Cambiar a Junior →',
+      planActual: 'Tu plan actual', planCambiadoOk: '¡Listo! Tu plan ha cambiado. Se te ha cobrado solo la diferencia prorrateada.',
     },
     en: {
       navVolver: '← Back',
@@ -240,6 +242,8 @@
       precioJuniorMensual: '€5.99', precioJuniorAnual: '€59.90',
       precioSeniorMensual: '€9.99', precioSeniorAnual: '€99.90',
       cicloMensual: '/mo', cicloAnual: '/yr',
+      planCambiarSenior: 'Switch to Senior →', planCambiarJunior: 'Switch to Junior →',
+      planActual: 'Your current plan', planCambiadoOk: 'Done! Your plan has changed. You were only charged the prorated difference.',
     },
   };
   function detectarIdiomaNavegador() {
@@ -281,6 +285,26 @@
   } catch (e) {
     console.warn('Supabase no disponible:', e);
   }
+
+  let _currentPlan = 'free';
+  async function cargarPlanActual() {
+    const { data: { session } } = await _sb.auth.getSession();
+    if (!session) return;
+    const { data: prof } = await _sb.from('profiles').select('plan').eq('id', session.user.id).single();
+    if (prof?.plan) {
+      _currentPlan = prof.plan;
+      actualizarBotonesPlan();
+    }
+  }
+  function actualizarBotonesPlan() {
+    const btnJunior = document.querySelector('[onclick="checkout(\'junior\')"]');
+    const btnSenior = document.querySelector('[onclick="checkout(\'senior\')"]');
+    if (_currentPlan === 'junior' && btnSenior) btnSenior.textContent = t('planCambiarSenior') || 'Cambiar a Senior →';
+    if (_currentPlan === 'senior' && btnJunior) { btnJunior.textContent = t('planCambiarJunior') || 'Cambiar a Junior →'; }
+    if (_currentPlan === 'junior' && btnJunior) { btnJunior.textContent = t('planActual') || 'Tu plan actual'; btnJunior.disabled = true; }
+    if (_currentPlan === 'senior' && btnSenior) { btnSenior.textContent = t('planActual') || 'Tu plan actual'; btnSenior.disabled = true; }
+  }
+  cargarPlanActual();
 
   const params = new URLSearchParams(window.location.search);
   if (params.get('success') === '1') {
@@ -332,6 +356,28 @@
       const { data: { session } } = await _sb.auth.getSession();
       const userId = session?.user?.id || null;
       const email = session?.user?.email || null;
+      const planKey = _ciclo === 'anual' ? `${plan}_anual` : plan;
+
+      // Ya tiene un plan de pago distinto: cambiar la suscripcion existente (cobra solo la diferencia)
+      if (session && _currentPlan !== 'free' && _currentPlan !== plan) {
+        const r = await fetch('/api/upgrade-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+          body: JSON.stringify({ plan, anual: _ciclo === 'anual' })
+        });
+        const data = await r.json();
+        if (!data.ok) throw new Error(data.error || 'upgrade failed');
+        if (typeof gtag === 'function') {
+          gtag('event', 'begin_checkout', { currency: 'EUR', value: PLAN_PRECIOS_EUR[planKey] || 0, items: [{ item_id: planKey, item_name: plan }] });
+        }
+        _currentPlan = plan;
+        alert(t('planCambiadoOk') || '¡Listo! Tu plan ha cambiado. Se te ha cobrado solo la diferencia prorrateada.');
+        btn.textContent = original;
+        btn.disabled = false;
+        actualizarBotonesPlan();
+        return;
+      }
+
       const r = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -339,7 +385,6 @@
       });
       const data = await r.json();
       if (data.url) {
-        const planKey = _ciclo === 'anual' ? `${plan}_anual` : plan;
         if (typeof gtag === 'function') {
           gtag('event', 'begin_checkout', { currency: 'EUR', value: PLAN_PRECIOS_EUR[planKey] || 0, items: [{ item_id: planKey, item_name: plan }] });
         }
