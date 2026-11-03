@@ -135,7 +135,8 @@ const I18N = {
     loginGateText: 'Inicia sesión en <a href="/">la home</a> para guardar tu progreso en la ruta.',
     footerPrivacidad: 'Privacidad', footerTerminos: 'Términos', footerContacto: 'Contacto',
     rutaEmpiezaAqui: 'Empieza aquí',
-    rutaConfirmPremium: 'El análisis avanzado es de Premium. ¿Quieres ver los planes?',
+    rutaConfirmPremium: 'Este nivel es de Premium. ¿Quieres ver los planes?',
+    rutaConfirmSenior: 'Este nivel es exclusivo del plan Senior. ¿Quieres ver los planes?',
     rutaLecturaIntro: 'Este tema se explica en una página aparte, con ejemplos y el marco de razonamiento para pensar como inversor.',
     rutaLecturaAbrir: 'Abrir "{nombre}" →',
     rutaLecturaCompletar: 'Ya lo he leído, marcar como completado',
@@ -188,7 +189,8 @@ const I18N = {
     loginGateText: 'Log in on <a href="/">the home page</a> to save your progress on this path.',
     footerPrivacidad: 'Privacy', footerTerminos: 'Terms', footerContacto: 'Contact',
     rutaEmpiezaAqui: 'Start here',
-    rutaConfirmPremium: 'Advanced analysis is a Premium feature. Want to see the plans?',
+    rutaConfirmPremium: 'This level is a Premium feature. Want to see the plans?',
+    rutaConfirmSenior: 'This level is exclusive to the Senior plan. Want to see the plans?',
     rutaLecturaIntro: 'This topic is explained on a separate page, with examples and the reasoning framework for thinking like an investor.',
     rutaLecturaAbrir: 'Open "{nombre}" →',
     rutaLecturaCompletar: 'I\'ve read it, mark as completed',
@@ -1055,33 +1057,33 @@ const AREAS = [
   { id: 'cripto1', nombre: 'Criptomonedas I', nombre_en: 'Cryptocurrencies I', desc: '⚠️ Riesgo extremo: lo esencial antes de nada', desc_en: '⚠️ Extreme risk: the essentials first', emoji: '⚠️', tipo: 'quiz' },
   { id: 'metales1', nombre: 'Oro y Plata I', nombre_en: 'Gold & Silver I', desc: 'El oro como refugio, formas de invertir', desc_en: 'Gold as a safe haven, ways to invest', emoji: '🥇', tipo: 'quiz' },
   { id: 'pension1', nombre: 'Planes de pensiones I', nombre_en: 'Pension Plans I', desc: 'Qué es, aportaciones, rescate', desc_en: 'What it is, contributions, withdrawal', emoji: '👴', tipo: 'quiz' },
-  // Ronda 2 — Intermedio
-  { id: 'ahorro2', nombre: 'Ahorro y fondos II', nombre_en: 'Savings & Funds II', desc: 'TAE, deuda buena y mala, coste de oportunidad', desc_en: 'APR, good vs. bad debt, opportunity cost', emoji: '🐖', tipo: 'quiz', ronda: 'Ronda 2 · Intermedio', ronda_en: 'Round 2 · Intermediate' },
-  { id: 'bolsa2', nombre: 'Bolsa II: Intermedio', nombre_en: 'Stocks II: Intermediate', desc: 'Márgenes, recompras, moat, ciclicidad', desc_en: 'Margins, buybacks, moat, cyclicality', emoji: '📊', tipo: 'quiz' },
-  { id: 'inversion2', nombre: 'Inversión II: Intermedio', nombre_en: 'Investing II: Intermediate', desc: 'Rebalanceo, TER, value vs growth, REITs', desc_en: 'Rebalancing, TER, value vs. growth, REITs', emoji: '⚖️', tipo: 'quiz' },
-  { id: 'bonos2', nombre: 'Bonos del Estado II', nombre_en: 'Government Bonds II', desc: 'TIR, prima de riesgo, curva de tipos', desc_en: 'Yield, risk premium, yield curve', emoji: '📉', tipo: 'quiz' },
-  { id: 'fiscal2', nombre: 'Fiscalidad II', nombre_en: 'Taxes II', desc: 'Compensación de pérdidas, doble imposición', desc_en: 'Offsetting losses, double taxation', emoji: '📋', tipo: 'quiz' },
-  { id: 'inmuebles2', nombre: 'Inmuebles II', nombre_en: 'Real Estate II', desc: 'Fiscalidad, crowdfunding, ciclo inmobiliario', desc_en: 'Taxes, crowdfunding, real estate cycle', emoji: '🏘️', tipo: 'quiz' },
-  { id: 'cripto2', nombre: 'Criptomonedas II', nombre_en: 'Cryptocurrencies II', desc: '⚠️ Estafas, custodia, ciclos de pánico', desc_en: '⚠️ Scams, custody, panic cycles', emoji: '🚨', tipo: 'quiz' },
-  { id: 'metales2', nombre: 'Oro y Plata II', nombre_en: 'Gold & Silver II', desc: 'ETF físico vs sintético, ratio oro/plata', desc_en: 'Physical vs. synthetic ETF, gold/silver ratio', emoji: '🥈', tipo: 'quiz' },
-  { id: 'pension2', nombre: 'Planes de pensiones II', nombre_en: 'Pension Plans II', desc: 'Tributación del rescate, sistema de reparto', desc_en: 'Withdrawal taxation, pay-as-you-go system', emoji: '🧓', tipo: 'quiz' },
-  // Práctica
-  { id: 'analisis', nombre: 'Analiza una empresa', nombre_en: 'Analyze a company', desc: 'El método paso a paso, con la propia app', desc_en: 'The step-by-step method, using the app itself', emoji: '🔍', tipo: 'metodo', ronda: 'Práctica', ronda_en: 'Practice' },
-  { id: 'geoeconomia', nombre: 'Geoeconomía', nombre_en: 'Geoeconomics', desc: 'Cómo el mundo mueve tu cartera', desc_en: 'How the world moves your portfolio', emoji: '🌍', tipo: 'lectura', href: '/geoeconomia.html' },
-  { id: 'buffett', nombre: 'Warren Buffett', nombre_en: 'Warren Buffett', desc: 'Círculo de competencia, moat, margen de seguridad', desc_en: 'Circle of competence, moat, margin of safety', emoji: '🎩', tipo: 'quiz' },
-  { id: 'dueno', nombre: '¿Qué harías si fueras el dueño?', nombre_en: 'What would you do if you were the owner?', desc: 'Reparte el beneficio de 3 empresas distintas', desc_en: 'Allocate the profit of 3 different companies', emoji: '👑', tipo: 'dueno' },
-  // Ronda 3 — Avanzado, con cálculos
-  { id: 'ahorro3', nombre: 'Ahorro y fondos III', nombre_en: 'Savings & Funds III', desc: 'Regla del 72, TAE real, casos con números', desc_en: 'Rule of 72, real APR, number-based cases', emoji: '🧮', tipo: 'quiz', ronda: 'Ronda 3 · Avanzado', ronda_en: 'Round 3 · Advanced' },
-  { id: 'bolsa3', nombre: 'Bolsa III: Avanzado', nombre_en: 'Stocks III: Advanced', desc: 'Casos prácticos y cálculos reales', desc_en: 'Practical cases and real calculations', emoji: '📐', tipo: 'quiz' },
-  { id: 'inversion3', nombre: 'Inversión III: Avanzado', nombre_en: 'Investing III: Advanced', desc: 'Drawdown, ratio de Sharpe, casos reales', desc_en: 'Drawdown, Sharpe ratio, real cases', emoji: '🎯', tipo: 'quiz' },
-  { id: 'bonos3', nombre: 'Bonos del Estado III', nombre_en: 'Government Bonds III', desc: 'Cálculos de cupón, duración y prima de riesgo', desc_en: 'Coupon, duration and risk premium calculations', emoji: '💹', tipo: 'quiz' },
-  { id: 'fiscal3', nombre: 'Fiscalidad III', nombre_en: 'Taxes III', desc: 'Casos y cálculos de impuestos reales', desc_en: 'Real tax cases and calculations', emoji: '📑', tipo: 'quiz' },
-  { id: 'inmuebles3', nombre: 'Inmuebles III', nombre_en: 'Real Estate III', desc: 'Cálculos de rentabilidad y apalancamiento', desc_en: 'Yield and leverage calculations', emoji: '🧱', tipo: 'quiz' },
-  { id: 'cripto3', nombre: 'Criptomonedas III', nombre_en: 'Cryptocurrencies III', desc: '⚠️ Casos reales de pérdida y gestión del riesgo', desc_en: '⚠️ Real loss cases and risk management', emoji: '💸', tipo: 'quiz' },
-  { id: 'metales3', nombre: 'Oro y Plata III', nombre_en: 'Gold & Silver III', desc: 'Cálculos de prima, coste de oportunidad', desc_en: 'Premium and opportunity cost calculations', emoji: '🪙', tipo: 'quiz' },
-  { id: 'pension3', nombre: 'Planes de pensiones III', nombre_en: 'Pension Plans III', desc: 'Regla del 4%, tasa de sustitución, casos', desc_en: '4% rule, replacement rate, cases', emoji: '🏖️', tipo: 'quiz' },
-  // Capstone Premium
-  { id: 'avanzado', nombre: 'Análisis avanzado', nombre_en: 'Advanced analysis', desc: 'ROIC, WACC, DCF — nivel experto', desc_en: 'ROIC, WACC, DCF — expert level', emoji: '🔬', tipo: 'premium', href: '/#quiz', ronda: 'Experto · Premium', ronda_en: 'Expert · Premium' },
+  // Ronda 2 — Intermedio (requiere plan Junior o Senior)
+  { id: 'ahorro2', nombre: 'Ahorro y fondos II', nombre_en: 'Savings & Funds II', desc: 'TAE, deuda buena y mala, coste de oportunidad', desc_en: 'APR, good vs. bad debt, opportunity cost', emoji: '🐖', tipo: 'quiz', plan: 'junior', ronda: 'Ronda 2 · Intermedio', ronda_en: 'Round 2 · Intermediate' },
+  { id: 'bolsa2', nombre: 'Bolsa II: Intermedio', nombre_en: 'Stocks II: Intermediate', desc: 'Márgenes, recompras, moat, ciclicidad', desc_en: 'Margins, buybacks, moat, cyclicality', emoji: '📊', tipo: 'quiz', plan: 'junior' },
+  { id: 'inversion2', nombre: 'Inversión II: Intermedio', nombre_en: 'Investing II: Intermediate', desc: 'Rebalanceo, TER, value vs growth, REITs', desc_en: 'Rebalancing, TER, value vs. growth, REITs', emoji: '⚖️', tipo: 'quiz', plan: 'junior' },
+  { id: 'bonos2', nombre: 'Bonos del Estado II', nombre_en: 'Government Bonds II', desc: 'TIR, prima de riesgo, curva de tipos', desc_en: 'Yield, risk premium, yield curve', emoji: '📉', tipo: 'quiz', plan: 'junior' },
+  { id: 'fiscal2', nombre: 'Fiscalidad II', nombre_en: 'Taxes II', desc: 'Compensación de pérdidas, doble imposición', desc_en: 'Offsetting losses, double taxation', emoji: '📋', tipo: 'quiz', plan: 'junior' },
+  { id: 'inmuebles2', nombre: 'Inmuebles II', nombre_en: 'Real Estate II', desc: 'Fiscalidad, crowdfunding, ciclo inmobiliario', desc_en: 'Taxes, crowdfunding, real estate cycle', emoji: '🏘️', tipo: 'quiz', plan: 'junior' },
+  { id: 'cripto2', nombre: 'Criptomonedas II', nombre_en: 'Cryptocurrencies II', desc: '⚠️ Estafas, custodia, ciclos de pánico', desc_en: '⚠️ Scams, custody, panic cycles', emoji: '🚨', tipo: 'quiz', plan: 'junior' },
+  { id: 'metales2', nombre: 'Oro y Plata II', nombre_en: 'Gold & Silver II', desc: 'ETF físico vs sintético, ratio oro/plata', desc_en: 'Physical vs. synthetic ETF, gold/silver ratio', emoji: '🥈', tipo: 'quiz', plan: 'junior' },
+  { id: 'pension2', nombre: 'Planes de pensiones II', nombre_en: 'Pension Plans II', desc: 'Tributación del rescate, sistema de reparto', desc_en: 'Withdrawal taxation, pay-as-you-go system', emoji: '🧓', tipo: 'quiz', plan: 'junior' },
+  // Práctica (requiere plan Junior o Senior)
+  { id: 'analisis', nombre: 'Analiza una empresa', nombre_en: 'Analyze a company', desc: 'El método paso a paso, con la propia app', desc_en: 'The step-by-step method, using the app itself', emoji: '🔍', tipo: 'metodo', plan: 'junior', ronda: 'Práctica', ronda_en: 'Practice' },
+  { id: 'geoeconomia', nombre: 'Geoeconomía', nombre_en: 'Geoeconomics', desc: 'Cómo el mundo mueve tu cartera', desc_en: 'How the world moves your portfolio', emoji: '🌍', tipo: 'lectura', plan: 'junior', href: '/geoeconomia.html' },
+  { id: 'buffett', nombre: 'Warren Buffett', nombre_en: 'Warren Buffett', desc: 'Círculo de competencia, moat, margen de seguridad', desc_en: 'Circle of competence, moat, margin of safety', emoji: '🎩', tipo: 'quiz', plan: 'junior' },
+  { id: 'dueno', nombre: '¿Qué harías si fueras el dueño?', nombre_en: 'What would you do if you were the owner?', desc: 'Reparte el beneficio de 3 empresas distintas', desc_en: 'Allocate the profit of 3 different companies', emoji: '👑', tipo: 'dueno', plan: 'junior' },
+  // Ronda 3 — Avanzado, con cálculos (exclusivo Senior)
+  { id: 'ahorro3', nombre: 'Ahorro y fondos III', nombre_en: 'Savings & Funds III', desc: 'Regla del 72, TAE real, casos con números', desc_en: 'Rule of 72, real APR, number-based cases', emoji: '🧮', tipo: 'quiz', plan: 'senior', ronda: 'Ronda 3 · Avanzado', ronda_en: 'Round 3 · Advanced' },
+  { id: 'bolsa3', nombre: 'Bolsa III: Avanzado', nombre_en: 'Stocks III: Advanced', desc: 'Casos prácticos y cálculos reales', desc_en: 'Practical cases and real calculations', emoji: '📐', tipo: 'quiz', plan: 'senior' },
+  { id: 'inversion3', nombre: 'Inversión III: Avanzado', nombre_en: 'Investing III: Advanced', desc: 'Drawdown, ratio de Sharpe, casos reales', desc_en: 'Drawdown, Sharpe ratio, real cases', emoji: '🎯', tipo: 'quiz', plan: 'senior' },
+  { id: 'bonos3', nombre: 'Bonos del Estado III', nombre_en: 'Government Bonds III', desc: 'Cálculos de cupón, duración y prima de riesgo', desc_en: 'Coupon, duration and risk premium calculations', emoji: '💹', tipo: 'quiz', plan: 'senior' },
+  { id: 'fiscal3', nombre: 'Fiscalidad III', nombre_en: 'Taxes III', desc: 'Casos y cálculos de impuestos reales', desc_en: 'Real tax cases and calculations', emoji: '📑', tipo: 'quiz', plan: 'senior' },
+  { id: 'inmuebles3', nombre: 'Inmuebles III', nombre_en: 'Real Estate III', desc: 'Cálculos de rentabilidad y apalancamiento', desc_en: 'Yield and leverage calculations', emoji: '🧱', tipo: 'quiz', plan: 'senior' },
+  { id: 'cripto3', nombre: 'Criptomonedas III', nombre_en: 'Cryptocurrencies III', desc: '⚠️ Casos reales de pérdida y gestión del riesgo', desc_en: '⚠️ Real loss cases and risk management', emoji: '💸', tipo: 'quiz', plan: 'senior' },
+  { id: 'metales3', nombre: 'Oro y Plata III', nombre_en: 'Gold & Silver III', desc: 'Cálculos de prima, coste de oportunidad', desc_en: 'Premium and opportunity cost calculations', emoji: '🪙', tipo: 'quiz', plan: 'senior' },
+  { id: 'pension3', nombre: 'Planes de pensiones III', nombre_en: 'Pension Plans III', desc: 'Regla del 4%, tasa de sustitución, casos', desc_en: '4% rule, replacement rate, cases', emoji: '🏖️', tipo: 'quiz', plan: 'senior' },
+  // Capstone (exclusivo Senior)
+  { id: 'avanzado', nombre: 'Análisis avanzado', nombre_en: 'Advanced analysis', desc: 'ROIC, WACC, DCF — nivel experto', desc_en: 'ROIC, WACC, DCF — expert level', emoji: '🔬', tipo: 'premium', plan: 'senior', href: '/#quiz', ronda: 'Experto · Premium', ronda_en: 'Expert · Premium' },
 ];
 function aN(area) { return _idioma === 'en' && area.nombre_en ? area.nombre_en : area.nombre; }
 function aD(area) { return _idioma === 'en' && area.desc_en ? area.desc_en : area.desc; }
@@ -1194,10 +1196,18 @@ async function init() {
   const xp = profile?.total_xp || 0;
   document.getElementById('rutaXP').textContent = xp;
   document.getElementById('rutaNivel').textContent = Math.floor(xp / 100) + 1;
-  window._esPremium = profile?.plan && profile.plan !== 'free';
+  window._userPlan = profile?.plan || 'free';
   renderRacha(profile?.racha_dias || 0);
 
   renderPath();
+}
+
+function tieneAccesoArea(area) {
+  if (!area || !area.plan) return true;
+  const plan = window._userPlan || 'free';
+  if (plan === 'free') return false;
+  if (area.plan === 'senior') return plan === 'senior';
+  return true;
 }
 
 const ZIGZAG_AMPLITUDE = 95;
@@ -1212,10 +1222,10 @@ function renderPath() {
     const prevDone = i === 0 || !!_progreso[AREAS[i - 1].id];
     let circleClass, estado;
     if (done) { circleClass = 'done'; estado = 'done'; }
-    else if (area.tipo === 'premium' && !window._esPremium) { circleClass = 'premium-lock'; estado = 'locked'; }
+    else if (area.plan && !tieneAccesoArea(area)) { circleClass = 'premium-lock'; estado = 'locked'; }
     else if (prevDone) { circleClass = 'available'; estado = 'available'; }
     else { circleClass = 'locked'; estado = 'locked'; }
-    const clickable = done || (area.tipo === 'premium' && !window._esPremium) || prevDone;
+    const clickable = done || (area.plan && !tieneAccesoArea(area)) || prevDone;
     const offset = Math.round(Math.sin(wave * 1.05) * ZIGZAG_AMPLITUDE);
     wave++;
     const showBadge = estado === 'available' && !startBadgeDone;
@@ -1263,8 +1273,8 @@ window.addEventListener('resize', () => { if (document.getElementById('pathWrap'
 function abrirNodo(id) {
   const area = AREAS.find(a => a.id === id);
   if (!area) return;
-  if (area.tipo === 'premium' && !window._esPremium) {
-    const ir = confirm(t('rutaConfirmPremium'));
+  if (area.plan && !tieneAccesoArea(area)) {
+    const ir = confirm(area.plan === 'senior' ? t('rutaConfirmSenior') : t('rutaConfirmPremium'));
     if (ir) window.location.href = '/premium.html';
     return;
   }
@@ -1387,7 +1397,7 @@ async function finalizarNodo() {
     }
     _progreso[_nodoActual.id] = true;
     const next = siguienteArea(_nodoActual.id);
-    const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
+    const nextLocked = next && next.plan && !tieneAccesoArea(next);
     el.innerHTML = `<div style="text-align:center;padding:20px 0">
       <div style="font-size:48px;margin-bottom:12px">🎉</div>
       <h2 style="margin-bottom:8px">${t('rutaNivelSuperado')}</h2>
@@ -1492,7 +1502,7 @@ async function completarMetodo() {
   }
   _progreso['analisis'] = true;
   const next = siguienteArea('analisis');
-  const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
+  const nextLocked = next && next.plan && !tieneAccesoArea(next);
   document.getElementById('readBody').innerHTML = `<div style="text-align:center;padding:10px 0">
     <div style="font-size:48px;margin-bottom:12px">🎉</div>
     <h2 style="margin-bottom:8px">${t('rutaFichaCompletada')}</h2>
@@ -1513,7 +1523,7 @@ async function completarLectura() {
   }
   _progreso[_nodoActual.id] = true;
   const next = siguienteArea(_nodoActual.id);
-  const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
+  const nextLocked = next && next.plan && !tieneAccesoArea(next);
   cerrarNodo();
   renderPath();
   if (next && !nextLocked) abrirNodo(next.id);
@@ -1586,7 +1596,7 @@ async function completarDueno() {
   }
   _progreso['dueno'] = true;
   const next = siguienteArea('dueno');
-  const nextLocked = next && next.tipo === 'premium' && !window._esPremium;
+  const nextLocked = next && next.plan && !tieneAccesoArea(next);
   document.getElementById('readBody').innerHTML = `<div style="text-align:center;padding:10px 0">
     <div style="font-size:48px;margin-bottom:12px">👑</div>
     <h2 style="margin-bottom:8px">${t('rutaRetoCompletado')}</h2>
