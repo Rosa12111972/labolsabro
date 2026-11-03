@@ -441,14 +441,18 @@ function acceptAge() {
 </nav>
 
 <section class="hero">
-  <div class="hero-tag"><div class="tag-dot"></div> <span data-i18n="heroTag">Disponible ahora · Gratis</span></div>
-  <h1 data-i18n-html="heroTitle">Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em></h1>
-  <p class="hero-sub" data-i18n="heroSub">La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones. Solo tu dinero haciendo algo.</p>
-  <form action="https://formspree.io/f/mqevbzvb" method="POST" onsubmit="handleForm(event)" class="form-row" style="flex-wrap:wrap;justify-content:center;">
-    <input type="email" name="email" id="heroEmail" placeholder="tu@email.com" required />
-    <button type="submit" data-i18n="heroBtn">Empezar gratis</button>
-  </form>
-  <p class="hero-note" data-i18n-html="heroNote">Gratis · <strong style="color:var(--text2)">Sin tarjeta de crédito</strong> · Sin permanencia</p>
+  <div class="hero-tag"><div class="tag-dot"></div> <span data-i18n="heroTag">🎮 Disponible ahora · Gratis</span></div>
+  <h1 data-i18n-html="heroTitle">Aprende bolsa<br>como si fuera<br><em>un <span class="mano">juego</span>.</em></h1>
+  <p class="hero-sub" data-i18n="heroSub">Niveles, racha diaria y XP con DuoInvest. Aprendes de verdad a ahorrar e invertir, sin rollos de banco ni sermones.</p>
+  <a href="/ruta.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#000;font-weight:700;font-size:16px;padding:16px 32px;border-radius:100px;text-decoration:none;margin-bottom:8px;" data-i18n="heroDuoCta">🔥 Empezar mi racha gratis</a>
+  <p style="font-size:12px;color:var(--text3);margin-bottom:22px" data-i18n="heroDuoSub">Como Duolingo, pero con tu dinero. Sin tarjeta, sin permanencia.</p>
+  <details style="margin-bottom:10px">
+    <summary style="cursor:pointer;color:var(--text3);font-size:12px;list-style:none" data-i18n="heroNote">¿Prefieres recibir novedades por email?</summary>
+    <form action="https://formspree.io/f/mqevbzvb" method="POST" onsubmit="handleForm(event)" class="form-row" style="flex-wrap:wrap;justify-content:center;margin-top:10px">
+      <input type="email" name="email" id="heroEmail" placeholder="tu@email.com" required />
+      <button type="submit" data-i18n="heroBtn">Empezar gratis</button>
+    </form>
+  </details>
 
   <div class="phone-wrap">
     <div class="phone-glow"></div>
@@ -546,10 +550,16 @@ function acceptAge() {
 </div>
 
 <section>
-  <div class="pill" data-i18n="whyPill">Por qué laBolsabro</div>
-  <h2 data-i18n-html="whyTitle">Bolsa en español.<br>Sin tecnicismos.</h2>
-  <p class="sub" data-i18n="whySub">Datos reales, explicaciones humanas. Diseñada para que cualquiera entienda si algo vale lo que cuesta.</p>
+  <div class="pill" data-i18n="whyPill">Tus herramientas</div>
+  <h2 data-i18n-html="whyTitle">DuoInvest te enseña.<br>Esto te ayuda a aplicarlo.</h2>
+  <p class="sub" data-i18n="whySub">Datos reales, explicaciones humanas. Cuando termines un nivel, usa estas herramientas con empresas de verdad.</p>
   <div class="feat-grid">
+    <div class="feat" style="border-color:rgba(34,197,94,0.35)">
+      <span class="feat-emoji">🎮</span>
+      <div class="feat-title" data-i18n="feat7Title">DuoInvest</div>
+      <div class="feat-desc" data-i18n="feat7Desc">DuoInvest: niveles que se desbloquean uno a uno, racha diaria y XP. Aprendes de verdad, no solo lees.</div>
+      <a href="/ruta.html" class="feat-tag" style="background:var(--green-glow);color:var(--green);text-decoration:none" data-i18n="feat7Tag">🔥 Empezar racha</a>
+    </div>
     <div class="feat">
       <span class="feat-emoji">🚦</span>
       <div class="feat-title" data-i18n="feat1Title">Semáforo de valor</div>
@@ -585,12 +595,6 @@ function acceptAge() {
       <div class="feat-title" data-i18n="feat6Title">Calculadora de interés compuesto</div>
       <div class="feat-desc" data-i18n="feat6Desc">Pon números a tu futuro. ¿Cuánto tendrías en 20 años ahorrando 100€ al mes? La respuesta te va a sorprender.</div>
       <span class="feat-tag" style="background:var(--purple-dim);color:var(--purple)" data-i18n="feat6Tag">Tu futuro</span>
-    </div>
-    <div class="feat" style="border-color:rgba(34,197,94,0.35)">
-      <span class="feat-emoji">🎮</span>
-      <div class="feat-title" data-i18n="feat7Title">DuoInvest</div>
-      <div class="feat-desc" data-i18n="feat7Desc">DuoInvest: niveles que se desbloquean uno a uno, racha diaria y XP. Aprendes de verdad, no solo lees.</div>
-      <a href="/ruta.html" class="feat-tag" style="background:var(--green-glow);color:var(--green);text-decoration:none" data-i18n="feat7Tag">🔥 Empezar racha</a>
     </div>
   </div>
 </section>
@@ -1738,11 +1742,13 @@ const I18N = {
   es: {
     navPremium: '⭐ Premium', navEntrar: 'Entrar', navGuia: '📘 Guía', navRuta: '🎮 DuoInvest', lblMoneda: 'Moneda', lblIdioma: 'Idioma', navPrimerosPasos: '🚀 Primeros pasos',
     safetyBar: '<strong>Solo para mayores de 18 años · Educación financiera, no asesoramiento.</strong> No gestionamos tu dinero. Invertir conlleva riesgo de pérdida.',
-    heroTag: 'Disponible ahora · Gratis',
-    heroTitle: 'Tu dinero<br>se aburre.<br><em>Haz <span class="mano">algo</span>.</em>',
-    heroSub: 'La app que te enseña a ahorrar e invertir en bolsa. Sin rollos de banco. Sin sermones. Solo tu dinero haciendo algo.',
+    heroTag: '🎮 Disponible ahora · Gratis',
+    heroTitle: 'Aprende bolsa<br>como si fuera<br><em>un <span class="mano">juego</span>.</em>',
+    heroSub: 'Niveles, racha diaria y XP con DuoInvest. Aprendes de verdad a ahorrar e invertir, sin rollos de banco ni sermones.',
+    heroDuoCta: '🔥 Empezar mi racha gratis',
+    heroDuoSub: 'Como Duolingo, pero con tu dinero. Sin tarjeta, sin permanencia.',
     heroBtn: 'Empezar gratis',
-    heroNote: 'Gratis · <strong style="color:var(--text2)">Sin tarjeta de crédito</strong> · Sin permanencia',
+    heroNote: '¿Prefieres recibir novedades por email?',
     pricingPill: 'Precios', pricingTitle: 'Sin letra pequeña.', pricingSub: 'Empieza gratis. Sube de nivel cuando quieras. Sin permanencia.',
     tierFree: 'Gratis', mes: '/mes', freeDesc: 'Para empezar y ver si laBolsabro te va. Sin límite de tiempo.',
     freeF1: 'Analizador de acciones', freeF2: 'Calculadora de interés compuesto', freeF3: '3 pruebas gratis (de por vida)', freeBtn: 'Usar gratis',
@@ -1767,7 +1773,7 @@ const I18N = {
     plansPill: 'Para quien es', plansTitle: 'Dos planes.<br>Un objetivo.', plansSub: 'Tanto si empiezas desde cero como si ya sabes algo de bolsa, laBolsabro tiene lo que necesitas.',
     modeJuniorTitle: 'Para el que empieza a invertir', modeJuniorDesc: 'Entiende si una empresa está cara o barata sin necesidad de conocimientos previos. El semáforo hace el trabajo por ti.',
     modeSeniorTitle: 'Para el que quiere invertir con criterio', modeSeniorDesc: 'Análisis avanzado, alertas personalizadas e historial completo. Para tomar decisiones con información de calidad.',
-    whyPill: 'Por qué laBolsabro', whyTitle: 'Bolsa en español.<br>Sin tecnicismos.', whySub: 'Datos reales, explicaciones humanas. Diseñada para que cualquiera entienda si algo vale lo que cuesta.',
+    whyPill: 'Tus herramientas', whyTitle: 'DuoInvest te enseña.<br>Esto te ayuda a aplicarlo.', whySub: 'Datos reales, explicaciones humanas. Cuando termines un nivel, usa estas herramientas con empresas de verdad.',
     feat1Title: 'Semáforo de valor', feat1Desc: 'Verde, amarillo o rojo. Sabes si una empresa está barata, justa o cara sin leer ningún balance ni informe anual.', feat1Tag: 'Un vistazo',
     feat2Title: 'Puntuación global 0-10', feat2Desc: 'Un solo número que resume valoración, crecimiento y rentabilidad. Sin fórmulas, sin horas de análisis.', feat2Tag: 'Fácil de entender',
     feat3Title: 'Comparador de empresas', feat3Desc: '¿Apple o Microsoft? ¿Inditex o Zara? Ponlas una al lado de la otra y ve qué métricas gana cada una.', feat3Tag: 'Lado a lado',
@@ -1979,11 +1985,13 @@ const I18N = {
   en: {
     navPremium: '⭐ Premium', navEntrar: 'Log in', navGuia: '📘 Guide', navRuta: '🎮 DuoInvest', lblMoneda: 'Currency', lblIdioma: 'Language', navPrimerosPasos: '🚀 First steps',
     safetyBar: '<strong>18+ only · Financial education, not advice.</strong> We never manage your money. Investing carries risk of loss.',
-    heroTag: 'Available now · Free',
-    heroTitle: 'Your money<br>is bored.<br><em>Do <span class="mano">something</span>.</em>',
-    heroSub: 'The app that teaches you to save and invest. No bank jargon. No lectures. Just your money doing something.',
+    heroTag: '🎮 Available now · Free',
+    heroTitle: 'Learn investing<br>like it\'s<br><em>a <span class="mano">game</span>.</em>',
+    heroSub: 'Levels, daily streaks and XP with DuoInvest. Actually learn to save and invest, no bank jargon, no lectures.',
+    heroDuoCta: '🔥 Start my free streak',
+    heroDuoSub: 'Like Duolingo, but with your money. No card, no commitment.',
     heroBtn: 'Start free',
-    heroNote: 'Free · <strong style="color:var(--text2)">No credit card</strong> · Cancel anytime',
+    heroNote: 'Want news by email instead?',
     pricingPill: 'Pricing', pricingTitle: 'No fine print.', pricingSub: 'Start free. Upgrade whenever you want. No commitment.',
     tierFree: 'Free', mes: '/mo', freeDesc: 'To get started and see if laBolsabro is for you. No time limit.',
     freeF1: 'Stock analyzer', freeF2: 'Compound interest calculator', freeF3: '3 free trials (lifetime)', freeBtn: 'Use for free',
@@ -2008,7 +2016,7 @@ const I18N = {
     plansPill: 'Who it\'s for', plansTitle: 'Two plans.<br>One goal.', plansSub: 'Whether you\'re starting from zero or already know some investing, laBolsabro has what you need.',
     modeJuniorTitle: 'For those starting to invest', modeJuniorDesc: 'See if a company is cheap or expensive with no prior knowledge needed. The traffic light does the work for you.',
     modeSeniorTitle: 'For those who invest with a plan', modeSeniorDesc: 'Advanced analysis, custom alerts and full history. Make decisions backed by quality information.',
-    whyPill: 'Why laBolsabro', whyTitle: 'Investing made plain.<br>No jargon.', whySub: 'Real data, human explanations. Built so anyone can tell if something is worth what it costs.',
+    whyPill: 'Your toolkit', whyTitle: 'DuoInvest teaches you.<br>This helps you apply it.', whySub: 'Real data, human explanations. Once you finish a level, use these tools on real companies.',
     feat1Title: 'Value traffic light', feat1Desc: 'Green, yellow or red. Know if a company is cheap, fair or expensive without reading a single balance sheet or annual report.', feat1Tag: 'At a glance',
     feat2Title: 'Overall score 0-10', feat2Desc: 'One single number that sums up valuation, growth and profitability. No formulas, no hours of analysis.', feat2Tag: 'Easy to understand',
     feat3Title: 'Company comparator', feat3Desc: 'Apple or Microsoft? Inditex or Zara? Put them side by side and see which metrics each one wins.', feat3Tag: 'Side by side',
