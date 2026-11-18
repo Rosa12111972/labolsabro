@@ -36,7 +36,9 @@ export default async function handler(req, res) {
               <p style="font-size: 15px; color: #a3a3a3; line-height: 1.7; margin-bottom: 28px;">
                 Mientras tanto, ya puedes usar el analizador de acciones gratuito en <a href="https://labolsabro.com" style="color: #22c55e;">labolsabro.com</a> — busca cualquier empresa y ve si está cara o barata en un vistazo.
               </p>
-              <a href="https://labolsabro.com" style="display: inline-block; background: #22c55e; color: #000; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 100px; text-decoration: none;">Ir a laBolsabro →</a>
+              <a href="https://labolsabro.com/guia.html" style="display: inline-block; background: #22c55e; color: #000; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 100px; text-decoration: none; margin-bottom: 12px;">📘 Leer la guía del principiante →</a>
+              <br>
+              <a href="https://labolsabro.com" style="display: inline-block; color: #a3a3a3; font-size: 13px; text-decoration: none;">o ir directo a laBolsabro →</a>
             </div>
             <div style="padding: 20px 28px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #525252; line-height: 1.6;">
               Recibes este email porque te apuntaste en labolsabro.com.
