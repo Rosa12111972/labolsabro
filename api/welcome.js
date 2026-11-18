@@ -45,18 +45,30 @@ export default async function handler(req, res) {
             </div>
             <div style="padding: 32px 28px;">
               <h1 style="font-size: 22px; font-weight: 700; margin-bottom: 16px; color: #f0f0f0;">¡Bienvenida! 🎉</h1>
-              <p style="font-size: 15px; color: #a3a3a3; line-height: 1.7; margin-bottom: 20px;">
-                Ya tienes tu cuenta en <strong style="color: #f0f0f0;">laBolsabro</strong>. Aquí tienes por dónde empezar:
+              <p style="font-size: 15px; color: #a3a3a3; line-height: 1.7; margin-bottom: 24px;">
+                Ya tienes tu cuenta en <strong style="color: #f0f0f0;">laBolsabro</strong>. Esto es lo que te espera:
               </p>
-              <p style="font-size: 15px; color: #a3a3a3; line-height: 1.7; margin-bottom: 8px;">
-                🎮 <a href="https://labolsabro.com/ruta.html" style="color: #22c55e;">DuoInvest</a> — aprende jugando, con racha diaria y niveles.
+
+              <div style="background: #141414; border-radius: 12px; padding: 18px 20px; margin-bottom: 14px;">
+                <div style="font-size: 15px; font-weight: 700; color: #f0f0f0; margin-bottom: 8px;">🚀 Primeros pasos</div>
+                <p style="font-size: 13.5px; color: #a3a3a3; line-height: 1.6; margin: 0 0 10px;">
+                  Regístrate, busca tu primera empresa, aprende a leer el semáforo de valor, prueba la calculadora de interés compuesto, haz tu primer nivel de DuoInvest y crea tu primer bote de ahorro. Todo en menos de 15 minutos.
+                </p>
+                <a href="https://labolsabro.com/primeros-pasos.html" style="color: #22c55e; font-size: 13.5px; font-weight: 700; text-decoration: none;">Ver primeros pasos →</a>
+              </div>
+
+              <div style="background: #141414; border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;">
+                <div style="font-size: 15px; font-weight: 700; color: #f0f0f0; margin-bottom: 8px;">📘 Guía del principiante</div>
+                <p style="font-size: 13.5px; color: #a3a3a3; line-height: 1.6; margin: 0 0 10px;">
+                  Los 10 puntos clave antes de invertir: fondo de emergencia, por qué el riesgo y la rentabilidad van juntos, diversificación, interés compuesto, cómo valorar una empresa y los errores típicos que hay que evitar.
+                </p>
+                <a href="https://labolsabro.com/guia.html" style="color: #22c55e; font-size: 13.5px; font-weight: 700; text-decoration: none;">Leer la guía →</a>
+              </div>
+
+              <p style="font-size: 13.5px; color: #a3a3a3; line-height: 1.6; margin-bottom: 24px;">
+                Y cuando quieras pasar a la acción: el 🎮 <a href="https://labolsabro.com/ruta.html" style="color: #22c55e;">DuoInvest</a> (aprende jugando, con racha diaria) y el 🚦 <a href="https://labolsabro.com/#stocks" style="color: #22c55e;">analizador de acciones</a> (mira si una empresa está cara o barata en un vistazo) están siempre ahí.
               </p>
-              <p style="font-size: 15px; color: #a3a3a3; line-height: 1.7; margin-bottom: 8px;">
-                📘 <a href="https://labolsabro.com/guia.html" style="color: #22c55e;">Guía del principiante</a> — los 10 puntos clave para invertir desde cero.
-              </p>
-              <p style="font-size: 15px; color: #a3a3a3; line-height: 1.7; margin-bottom: 28px;">
-                🚦 <a href="https://labolsabro.com/#stocks" style="color: #22c55e;">Analizador de acciones</a> — mira si una empresa está cara o barata en un vistazo.
-              </p>
+
               <a href="https://labolsabro.com" style="display: inline-block; background: #22c55e; color: #000; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 100px; text-decoration: none;">Ir a laBolsabro →</a>
             </div>
             <div style="padding: 20px 28px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #525252; line-height: 1.6;">
