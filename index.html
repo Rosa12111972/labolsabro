@@ -545,7 +545,7 @@ footer { border-top: 1px solid var(--border); }
     <div class="feat" style="border-color:rgba(34,197,94,0.35)">
       <span class="feat-emoji">💼</span>
       <div class="feat-title" data-i18n="feat8Title">Cartera Virtual</div>
-      <div class="feat-desc" data-i18n="feat8Desc">Compra y vende acciones con 10.000€ ficticios a precio real. Practica de verdad, sin arriesgar nada.</div>
+      <div class="feat-desc" data-i18n="feat8Desc">Compra y vende acciones con 10.000€ ficticios a precio real. Practica de verdad, sin arriesgar nada. 🔒 Función Premium.</div>
       <a href="#" onclick="abrirPanel(); return false;" class="feat-tag" style="background:var(--green-glow);color:var(--green);text-decoration:none" data-i18n="feat8Tag">💼 Empezar a invertir</a>
     </div>
     <div class="feat">
@@ -1941,7 +1941,6 @@ const I18N = {
     retoCompletadoTxt: '✓ Ya lo has completado hoy. Vuelve mañana a por otro.',
     carteraEmpty: 'Aún no tienes ninguna posición. Añade la primera, crack.', cargandoPrecios: 'Cargando precios...', precioNoDisponible: 'Precio no disponible', precioAhoraTpl: '{precio} ahora · {pct}%',
     hintZonaValor: '🟢 Zona de valor — podría ser momento de comprar más', hintPrecioJusto: '🟡 Precio justo — ni prisa por comprar ni por vender', hintZonaCara: '🔴 Zona cara — podría ser momento de recoger beneficios',
-    anadirPosicionPromptTicker: '¿Qué empresa quieres simular? (ticker, ej: AAPL, TSLA)', anadirPosicionPromptShares: '¿Cuántas acciones simuladas quieres comprar?',
     limiteBusquedasAlert: 'Has alcanzado el límite de búsquedas. Espera un momento e inténtalo de nuevo.', noEncontramosTicker: 'No encontramos ese ticker.', errorAnadirPosicion: 'Error al añadir la posición',
     crearBotePrompt: '¿Cómo quieres llamar a tu bote? (ej: vacaciones, coche, emergencias)', crearBoteError: 'Error al crear el bote',
     borrarBoteConfirmTpl: '¿Seguro que quieres borrar el bote "{nombre}"? Perderás el saldo guardado.',
@@ -1964,9 +1963,12 @@ const I18N = {
     panelSaldoTotalLbl: 'Saldo total', panelEsteMesLbl: 'Este mes', panelRetoLbl: '⚡ Reto de hoy', panelRetoBtnTxt: 'Completar reto',
     panelBotesLbl: '🏺 Mis botes de ahorro', panelNuevoBoteBtn: '+ Nuevo bote',
     panelBotesDesc: 'Un bote es una meta de ahorro separada: vacaciones, coche, fondo de emergencia... Cada uno guarda su propio saldo, así no se te mezcla todo en un montón.',
-    panelCarteraLbl: '📈 Cartera simulada', panelAddPosicionBtn: '+ Añadir posición', panelSimuladoLbl: 'Simulado, no es dinero real',
-    carteraInvertidoLbl: 'Invertido', carteraActualLbl: 'Valor actual', carteraGananciaLbl: 'Ganancia',
+    panelCarteraLbl: '📈 Cartera simulada', panelSimuladoLbl: 'Simulado, no es dinero real',
+    carteraInvertidoLbl: 'Efectivo', carteraActualLbl: 'Valor acciones', carteraGananciaLbl: 'Ganancia total',
     carteraUpsellTxt: '🔒 La cartera simulada con precios en vivo es de <strong style="color:var(--yellow)">Premium</strong>', carteraVerPlanes: 'Ver planes →',
+    carteraTickerPh2: 'Ticker, ej. AAPL', carteraMontoPh: '€', carteraComprarBtn: 'Comprar',
+    carteraTickerVacioAlert: 'Escribe un ticker para comprar.', carteraMontoInvalidoAlert: 'Pon una cantidad válida en euros.', carteraSinSaldoAlert: 'No tienes suficiente efectivo simulado para esa compra.',
+    btnVenderPosicion: 'Vender',
     remTitle: '⏰ Mis recordatorios', remSub: 'Te lo mandamos por email cada mañana, según los días que elijas.', remMensajePh: 'Ej: Aporta 5€ al bote de ahorro',
     chatInputPh: 'Pregúntame lo que sea de dinero...',
   },
@@ -2012,7 +2014,7 @@ const I18N = {
     feat5Title: 'Global markets', feat5Desc: 'Spain, the US, Europe, crypto. NASDAQ, NYSE, Madrid, Paris, Frankfurt. Search any company listed on a stock exchange.', feat5Tag: 'International',
     feat6Title: 'Compound interest calculator', feat6Desc: 'Put numbers to your future. How much would you have in 20 years saving €100 a month? The answer might surprise you.', feat6Tag: 'Your future',
     feat7Title: 'DuoInvest', feat7Desc: 'DuoInvest: levels that unlock one by one, a daily streak and XP. You actually learn, not just read.', feat7Tag: '🔥 Start your streak',
-    feat8Title: 'Virtual Portfolio', feat8Desc: 'Buy and sell stocks with €10,000 in fake money at real prices. Practice for real, risk nothing.', feat8Tag: '💼 Start investing',
+    feat8Title: 'Virtual Portfolio', feat8Desc: 'Buy and sell stocks with €10,000 in fake money at real prices. Practice for real, risk nothing. 🔒 Premium feature.', feat8Tag: '💼 Start investing',
     safePill: 'Your safety first', safeTitle: 'You learn.<br>You don\'t risk.', safeSub: 'Mosca is financial education. We never touch your money or push you to invest without understanding what you\'re doing.',
     safe1Title: 'We never manage your money', safe1Desc: 'We\'re not a bank or an investment platform. No need to add your card or connect your bank account.',
     safe2Title: 'Education, not speculation', safe2Desc: 'We\'ll never tell you to "buy this now." We teach you to analyze public data. The investment decision is always yours.',
@@ -2184,7 +2186,6 @@ const I18N = {
     retoCompletadoTxt: '✓ Already completed today. Come back tomorrow for another one.',
     carteraEmpty: 'You don\'t have any positions yet. Add the first one.', cargandoPrecios: 'Loading prices...', precioNoDisponible: 'Price not available', precioAhoraTpl: '{precio} now · {pct}%',
     hintZonaValor: '🟢 Value zone — might be a good time to buy more', hintPrecioJusto: '🟡 Fair price — no rush to buy or sell', hintZonaCara: '🔴 Expensive zone — might be a good time to take profits',
-    anadirPosicionPromptTicker: 'Which company do you want to simulate? (ticker, e.g. AAPL, TSLA)', anadirPosicionPromptShares: 'How many simulated shares do you want to buy?',
     limiteBusquedasAlert: 'You\'ve reached the search limit. Wait a moment and try again.', noEncontramosTicker: 'We couldn\'t find that ticker.', errorAnadirPosicion: 'Error adding the position',
     crearBotePrompt: 'What do you want to name your jar? (e.g. vacation, car, emergencies)', crearBoteError: 'Error creating the jar',
     borrarBoteConfirmTpl: 'Are you sure you want to delete the "{nombre}" jar? You\'ll lose the saved balance.',
@@ -2207,9 +2208,12 @@ const I18N = {
     panelSaldoTotalLbl: 'Total balance', panelEsteMesLbl: 'This month', panelRetoLbl: '⚡ Today\'s challenge', panelRetoBtnTxt: 'Complete challenge',
     panelBotesLbl: '🏺 My savings jars', panelNuevoBoteBtn: '+ New jar',
     panelBotesDesc: 'A jar is a separate savings goal: vacation, car, emergency fund... Each one keeps its own balance, so it doesn\'t all get mixed together.',
-    panelCarteraLbl: '📈 Simulated portfolio', panelAddPosicionBtn: '+ Add position', panelSimuladoLbl: 'Simulated, not real money',
-    carteraInvertidoLbl: 'Invested', carteraActualLbl: 'Current value', carteraGananciaLbl: 'Gain',
+    panelCarteraLbl: '📈 Simulated portfolio', panelSimuladoLbl: 'Simulated, not real money',
+    carteraInvertidoLbl: 'Cash', carteraActualLbl: 'Stock value', carteraGananciaLbl: 'Total gain',
     carteraUpsellTxt: '🔒 The simulated portfolio with live prices is a <strong style="color:var(--yellow)">Premium</strong> feature', carteraVerPlanes: 'See plans →',
+    carteraTickerPh2: 'Ticker, e.g. AAPL', carteraMontoPh: '€', carteraComprarBtn: 'Buy',
+    carteraTickerVacioAlert: 'Enter a ticker to buy.', carteraMontoInvalidoAlert: 'Enter a valid amount in euros.', carteraSinSaldoAlert: 'Not enough simulated cash for that purchase.',
+    btnVenderPosicion: 'Sell',
     remTitle: '⏰ My reminders', remSub: 'We\'ll email it to you every morning, on the days you choose.', remMensajePh: 'E.g.: Add €5 to the savings jar',
     chatInputPh: 'Ask me anything about money...',
   }
@@ -2647,12 +2651,14 @@ function generarRetoDelDia() {
 }
 
 let _posiciones = [];
+let _carteraCash = 10000;
 async function cargarPanelData() {
   if (!_currentUser) return;
-  const { data: profile } = await _sb.from('profiles').select('nombre,invertido_simulado,reto_completado_fecha').eq('id', _currentUser.id).single();
+  const { data: profile } = await _sb.from('profiles').select('nombre,invertido_simulado,reto_completado_fecha,cartera_cash').eq('id', _currentUser.id).single();
   const { data: jars } = await _sb.from('savings_jars').select('*').eq('user_id', _currentUser.id).order('created_at', { ascending: true });
   _jars = jars || [];
   _invertidoSimulado = profile?.invertido_simulado || 0;
+  _carteraCash = profile?.cartera_cash ?? 10000;
   _retoCompletadoHoy = profile?.reto_completado_fecha === hoyStr();
   _retoActual = generarRetoDelDia();
   window._panelNombre = profile?.nombre || _currentUser.email.split('@')[0];
@@ -2706,7 +2712,7 @@ function closePanelIfBg(e) { if (e.target.id === 'panelOverlay') cerrarPanel(); 
 async function renderPanel() {
   const totalBotes = _jars.reduce((s, j) => s + parseFloat(j.saldo || 0), 0);
   const isPremium = _userPlan !== 'free';
-  const carteraValor = isPremium ? await calcularValorCartera() : parseFloat(_invertidoSimulado || 0);
+  const carteraValor = isPremium ? (_carteraCash + await calcularValorCartera()) : parseFloat(_invertidoSimulado || 0);
   const saldoTotal = totalBotes + carteraValor;
   document.getElementById('panelSaldoTotal').textContent = fmtEUR(saldoTotal);
 
@@ -2740,7 +2746,6 @@ async function renderPanel() {
   document.getElementById('carteraFree').style.display = !isPremium ? 'flex' : 'none';
   document.getElementById('carteraUpsell').style.display = !isPremium ? 'block' : 'none';
   document.getElementById('carteraPremium').style.display = isPremium ? 'block' : 'none';
-  document.getElementById('btnAddPosicion').style.display = isPremium ? 'inline-block' : 'none';
   if (isPremium) await renderCartera();
 
   renderHeroMockup();
@@ -2770,26 +2775,26 @@ async function obtenerPrecioActual(ticker) {
   } catch (e) { return null; }
 }
 async function renderCartera() {
+  document.getElementById('carteraInvertido').textContent = fmtEUR(_carteraCash);
   const el = document.getElementById('carteraPosiciones');
   if (!_posiciones.length) {
     el.innerHTML = `<p style="color:var(--text2);font-size:13px;padding:8px 0">${t('carteraEmpty')}</p>`;
-    document.getElementById('carteraInvertido').textContent = '0,00 €';
     document.getElementById('carteraActual').textContent = '0,00 €';
-    document.getElementById('carteraGanancia').textContent = '0,00 €';
+    const ganEl0 = document.getElementById('carteraGanancia');
+    ganEl0.textContent = '0,00 €';
+    ganEl0.style.color = '';
     return;
   }
   el.innerHTML = `<p style="color:var(--text2);font-size:13px;padding:8px 0">${t('cargandoPrecios')}</p>`;
-  let totalInvertidoEUR = 0, totalActualEUR = 0;
+  let totalActualEUR = 0;
   const filas = [];
   for (const p of _posiciones) {
     let d = null;
     try { d = await fetchStock(p.ticker); } catch (e) {}
     const precioActual = d?.precio ?? null;
     const moneda = d?.moneda || 'USD';
-    const invertidoNativo = p.precio_compra * p.shares;
     const actualNativo = (precioActual ?? p.precio_compra) * p.shares;
     const gananciaPct = precioActual ? ((precioActual - p.precio_compra) / p.precio_compra * 100) : 0;
-    totalInvertidoEUR += moneda === 'EUR' ? invertidoNativo : (convertirMoneda(invertidoNativo, moneda, 'EUR') ?? invertidoNativo);
     totalActualEUR += moneda === 'EUR' ? actualNativo : (convertirMoneda(actualNativo, moneda, 'EUR') ?? actualNativo);
     const color = gananciaPct >= 0 ? 'var(--green)' : 'var(--red)';
     let hint = '';
@@ -2801,48 +2806,72 @@ async function renderCartera() {
     const precioLineTxt = precioActual ? tf('precioAhoraTpl', { precio: precioActual.toFixed(2) + ' ' + moneda + fmtMonedaConvertida(precioActual, moneda), pct: (gananciaPct >= 0 ? '+' : '') + gananciaPct.toFixed(1) }) : t('precioNoDisponible');
     filas.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
       <div>
-        <div style="font-weight:700;font-size:13.5px">${p.ticker} <span style="font-weight:400;color:var(--text3);font-size:11.5px">· ${p.shares} uds a ${p.precio_compra.toFixed(2)} ${moneda}</span></div>
+        <div style="font-weight:700;font-size:13.5px">${p.ticker} <span style="font-weight:400;color:var(--text3);font-size:11.5px">· ${p.shares.toFixed(4).replace(/\.?0+$/, '')} uds a ${p.precio_compra.toFixed(2)} ${moneda}</span></div>
         <div style="font-size:12px;color:${color};margin-top:2px">${precioLineTxt}</div>
         ${hint}
       </div>
-      <button onclick="eliminarPosicion(${p.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:5px 10px;border-radius:100px;font-size:11.5px;cursor:pointer;font-family:inherit;">${t('btnBorrar')}</button>
+      <button onclick="venderPosicionSim(${p.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:5px 10px;border-radius:100px;font-size:11.5px;cursor:pointer;font-family:inherit;">${t('btnVenderPosicion')}</button>
     </div>`);
   }
   el.innerHTML = filas.join('');
-  const gananciaEUR = totalActualEUR - totalInvertidoEUR;
-  document.getElementById('carteraInvertido').textContent = fmtEUR(totalInvertidoEUR);
+  const gananciaEUR = (_carteraCash + totalActualEUR) - 10000;
   document.getElementById('carteraActual').textContent = fmtEUR(totalActualEUR);
   const ganEl = document.getElementById('carteraGanancia');
   ganEl.textContent = (gananciaEUR >= 0 ? '+' : '') + fmtEUR(gananciaEUR);
   ganEl.style.color = gananciaEUR >= 0 ? 'var(--green)' : 'var(--red)';
 }
-async function anadirPosicion() {
-  const ticker = prompt(t('anadirPosicionPromptTicker'));
-  if (!ticker || !ticker.trim()) return;
-  const tk = ticker.trim().toUpperCase();
-  const sharesStr = prompt(t('anadirPosicionPromptShares'));
-  const shares = parseFloat(sharesStr);
-  if (!shares || shares <= 0) return;
-  let precio;
+async function comprarAccionSim() {
+  const tickerInput = document.getElementById('carteraCompraTicker');
+  const montoInput = document.getElementById('carteraCompraMonto');
+  const tk = (tickerInput.value || '').trim().toUpperCase();
+  const montoEUR = parseFloat(montoInput.value);
+  if (!tk) { alert(t('carteraTickerVacioAlert')); return; }
+  if (!montoEUR || montoEUR <= 0) { alert(t('carteraMontoInvalidoAlert')); return; }
+  if (montoEUR > _carteraCash) { alert(t('carteraSinSaldoAlert')); return; }
+  let d;
   try {
-    const d = await fetchStock(tk);
-    precio = d.precio;
+    d = await fetchStock(tk);
   } catch (e) {
     if (e.message === 'limite') alert(t('limiteBusquedasAlert'));
     else alert(t('noEncontramosTicker'));
     return;
   }
-  const { data, error } = await _sb.from('simulated_positions').insert({
-    user_id: _currentUser.id, ticker: tk, nombre: tk, shares, precio_compra: precio
-  }).select().single();
-  if (error) { alert(t('errorAnadirPosicion')); return; }
-  _posiciones.unshift(data);
-  await renderPanel();
+  const precio = d.precio, moneda = d.moneda || 'USD';
+  const montoNativo = moneda === 'EUR' ? montoEUR : (convertirMoneda(montoEUR, 'EUR', moneda) ?? montoEUR);
+  const sharesComprados = montoNativo / precio;
+  const existente = _posiciones.find(p => p.ticker === tk);
+  if (existente) {
+    const nuevasShares = parseFloat(existente.shares) + sharesComprados;
+    const nuevoCoste = (existente.shares * existente.precio_compra + sharesComprados * precio) / nuevasShares;
+    const { error } = await _sb.from('simulated_positions').update({ shares: nuevasShares, precio_compra: nuevoCoste }).eq('id', existente.id);
+    if (error) { alert(t('errorAnadirPosicion')); return; }
+    existente.shares = nuevasShares; existente.precio_compra = nuevoCoste;
+  } else {
+    const { data, error } = await _sb.from('simulated_positions').insert({
+      user_id: _currentUser.id, ticker: tk, nombre: tk, shares: sharesComprados, precio_compra: precio
+    }).select().single();
+    if (error) { alert(t('errorAnadirPosicion')); return; }
+    _posiciones.unshift(data);
+  }
+  _carteraCash -= montoEUR;
+  await _sb.from('profiles').update({ cartera_cash: _carteraCash }).eq('id', _currentUser.id);
+  tickerInput.value = ''; montoInput.value = '';
+  await renderCartera();
 }
-async function eliminarPosicion(id) {
+async function venderPosicionSim(id) {
+  const p = _posiciones.find(x => x.id === id);
+  if (!p) return;
+  let d = null;
+  try { d = await fetchStock(p.ticker); } catch (e) {}
+  const precio = d?.precio ?? p.precio_compra;
+  const moneda = d?.moneda || 'USD';
+  const valorNativo = precio * parseFloat(p.shares);
+  const valorEUR = moneda === 'EUR' ? valorNativo : (convertirMoneda(valorNativo, moneda, 'EUR') ?? valorNativo);
   await _sb.from('simulated_positions').delete().eq('id', id);
-  _posiciones = _posiciones.filter(p => p.id !== id);
-  await renderPanel();
+  _posiciones = _posiciones.filter(x => x.id !== id);
+  _carteraCash += valorEUR;
+  await _sb.from('profiles').update({ cartera_cash: _carteraCash }).eq('id', _currentUser.id);
+  await renderCartera();
 }
 
 async function crearBote() {
@@ -3996,7 +4025,7 @@ function renderStock(el, d, ticker) {
   </div>
 </section>
 
-<div class="bg-card" id="quiz">
+<div class="bg-card" id="quiz" style="display:none">
   <section>
     <div class="pill" data-i18n="quizPill">Retos de conocimiento</div>
     <h2 data-i18n-html="quizTitle">¿Cuánto sabes<br>de dinero?</h2>
@@ -4168,7 +4197,6 @@ function renderStock(el, d, ticker) {
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
       <div style="font-weight:700;font-size:14px" data-i18n="panelCarteraLbl">📈 Cartera simulada</div>
-      <button id="btnAddPosicion" onclick="anadirPosicion()" style="display:none;background:none;border:1px solid var(--border2);color:var(--purple);padding:5px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;" data-i18n="panelAddPosicionBtn">+ Añadir posición</button>
     </div>
     <div id="carteraFree" style="display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:12px;padding:12px 16px;">
       <div>
@@ -4180,17 +4208,22 @@ function renderStock(el, d, ticker) {
     <div id="carteraPremium" style="display:none">
       <div id="carteraResumen" style="display:flex;gap:10px;margin-bottom:12px;">
         <div style="flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center">
-          <div style="font-size:10.5px;color:var(--text3)" data-i18n="carteraInvertidoLbl">Invertido</div>
+          <div style="font-size:10.5px;color:var(--text3)" data-i18n="carteraInvertidoLbl">Efectivo</div>
           <div style="font-size:16px;font-weight:700" id="carteraInvertido">0,00 €</div>
         </div>
         <div style="flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center">
-          <div style="font-size:10.5px;color:var(--text3)" data-i18n="carteraActualLbl">Valor actual</div>
+          <div style="font-size:10.5px;color:var(--text3)" data-i18n="carteraActualLbl">Valor acciones</div>
           <div style="font-size:16px;font-weight:700" id="carteraActual">0,00 €</div>
         </div>
         <div style="flex:1;background:var(--card2);border-radius:12px;padding:12px;text-align:center">
-          <div style="font-size:10.5px;color:var(--text3)" data-i18n="carteraGananciaLbl">Ganancia</div>
+          <div style="font-size:10.5px;color:var(--text3)" data-i18n="carteraGananciaLbl">Ganancia total</div>
           <div style="font-size:16px;font-weight:700" id="carteraGanancia">0,00 €</div>
         </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;">
+        <input id="carteraCompraTicker" data-i18n-placeholder="carteraTickerPh2" placeholder="Ticker, ej. AAPL" style="flex:1;min-width:0;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;text-transform:uppercase;">
+        <input id="carteraCompraMonto" type="number" min="1" step="1" data-i18n-placeholder="carteraMontoPh" placeholder="€" style="width:90px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+        <button onclick="comprarAccionSim()" data-i18n="carteraComprarBtn" style="background:var(--green);color:#000;font-weight:700;border:none;border-radius:10px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;">Comprar</button>
       </div>
       <div id="carteraPosiciones"></div>
     </div>
