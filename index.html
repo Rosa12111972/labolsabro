@@ -307,6 +307,7 @@ footer { border-top: 1px solid var(--border); }
         <button type="button" onclick="togglePassVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text2);font-size:16px;padding:0" id="passEye">👁</button>
       </div>
     </div>
+    <p id="authConsent" style="display:none;font-size:11.5px;color:var(--text3);line-height:1.5;text-align:center;margin:-8px 0 14px" data-i18n-html="authConsentText">Al registrarte, aceptas nuestros <a href="/terminos.html" target="_blank" style="color:var(--green)">Términos y condiciones</a> y nuestra <a href="/privacidad.html" target="_blank" style="color:var(--green)">Política de privacidad</a>.</p>
     <button class="auth-submit" id="authSubmit" onclick="submitAuth()" data-i18n="authBtnLogin">Entrar</button>
     <div class="auth-toggle">
       <span id="authToggleLink" onclick="toggleAuthMode()" data-i18n="authToggleToRegister">¿No tienes cuenta? Regístrate</span>
@@ -1775,6 +1776,7 @@ const I18N = {
     origin3: '🚀 Estamos empezando y lo decimos claro: preferimos construir algo honesto poco a poco que inflar el producto con humo desde el primer día.',
     authTitleLogin: 'Iniciar sesión', authTitleRegister: '¿A qué esperas?',
     authSubLogin: 'Accede a tu cuenta de laBolsabro', authSubRegister: 'Introduce tu email y empecemos',
+    authConsentText: 'Al registrarte, aceptas nuestros <a href="/terminos.html" target="_blank" style="color:var(--green)">Términos y condiciones</a> y nuestra <a href="/privacidad.html" target="_blank" style="color:var(--green)">Política de privacidad</a>.',
     authLblEmail: 'Email', authLblPass: 'Contraseña',
     authBtnLogin: 'Entrar', authBtnRegister: 'Crear cuenta', authBtnWait: 'Un momento...',
     authToggleToRegister: '¿No tienes cuenta? Regístrate', authToggleToLogin: '¿Ya tienes cuenta? Entra aquí',
@@ -2014,6 +2016,7 @@ const I18N = {
     origin3: '🚀 We\'re just getting started and we say it plainly: we\'d rather build something honest step by step than inflate the product with hype from day one.',
     authTitleLogin: 'Log in', authTitleRegister: 'What are you waiting for?',
     authSubLogin: 'Access your laBolsabro account', authSubRegister: "Enter your email and let's go",
+    authConsentText: 'By signing up, you accept our <a href="/terminos.html" target="_blank" style="color:var(--green)">Terms and conditions</a> and our <a href="/privacidad.html" target="_blank" style="color:var(--green)">Privacy policy</a>.',
     authLblEmail: 'Email', authLblPass: 'Password',
     authBtnLogin: 'Log in', authBtnRegister: 'Create account', authBtnWait: 'One moment...',
     authToggleToRegister: 'No account? Sign up', authToggleToLogin: 'Already have an account? Log in',
@@ -2411,6 +2414,7 @@ function toggleAuthMode() {
   titleEl.textContent = isReg ? t('authTitleRegister') : t('authTitleLogin');
   titleEl.style.fontSize = isReg ? '26px' : '20px';
   document.getElementById('authIcon').textContent = isReg ? '🚀' : '🪰';
+  document.getElementById('authConsent').style.display = isReg ? 'block' : 'none';
   document.getElementById('authSub').textContent = isReg ? t('authSubRegister') : t('authSubLogin');
   document.getElementById('authSubmit').textContent = isReg ? t('authBtnRegister') : t('authBtnLogin');
   document.getElementById('authToggleLink').textContent = isReg ? t('authToggleToLogin') : t('authToggleToRegister');
