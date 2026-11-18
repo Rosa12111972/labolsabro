@@ -81,7 +81,7 @@
 
 <div class="progress-wrap">
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-  <div class="progress-txt" id="progressTxt">0 de 8 completados</div>
+  <div class="progress-txt" id="progressTxt">0 de 7 completados</div>
 </div>
 
 <div class="steps" id="stepsWrap"></div>
@@ -180,11 +180,10 @@ aplicarIdioma();
 
 function getPasos() {
   return [
-    { id: 'registro', badge: t('badgeMin1'), title: t('p1title'), desc: t('p1desc'), href: '/', link: t('p1link') },
+    { id: 'registro', badge: t('badgeMin1'), title: t('p1title'), desc: t('p1desc'), href: '/?auth=register', link: t('p1link') },
     { id: 'buscar', badge: t('badgeSeg30'), title: t('p2title'), desc: t('p2desc'), href: '/#stocks', link: t('p2link') },
     { id: 'semaforo', badge: t('badgeMin1'), title: t('p3title'), desc: t('p3desc'), href: '/#stocks', link: t('p3link') },
     { id: 'calculadora', badge: t('badgeMin1'), title: t('p4title'), desc: t('p4desc'), href: '/#calculadora', link: t('p4link') },
-    { id: 'quiz', badge: t('badgeMin2'), title: t('p5title'), desc: t('p5desc'), href: '/#quiz', link: t('p5link') },
     { id: 'duoinvest', badge: t('badgeMin3'), title: t('p6title'), desc: t('p6desc'), href: '/ruta.html', link: t('p6link') },
     { id: 'bote', badge: t('badgeMin1'), title: t('p7title'), desc: t('p7desc'), href: '/', link: t('p7link') },
     { id: 'premium', badge: t('badgeOpcional'), title: t('p8title'), desc: t('p8desc'), href: '/premium.html', link: t('p8link') },
