@@ -91,8 +91,9 @@
   <div class="xpbar" id="xpBar" style="display:none"><span data-i18n="xpbarNivel">Nivel</span> <strong id="rutaNivel" style="color:var(--green)">1</strong> · <strong id="rutaXP" style="color:var(--yellow)">0</strong> XP <span id="rutaRachaWrap" style="display:none">· 🔥 <strong id="rutaRacha" style="color:var(--yellow)">0</strong> <span data-i18n="xpbarDias">días</span></span></div>
 </div>
 
-<div id="loginGate">
-  <p style="color:var(--text2);font-size:15px;" data-i18n-html="loginGateText">Inicia sesión en <a href="/">la home</a> para guardar tu progreso en la ruta.</p>
+<div id="loginGate" style="text-align:center;">
+  <a href="/?auth=register" style="display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#000;font-weight:700;font-size:16px;padding:16px 32px;border-radius:100px;text-decoration:none;margin-bottom:12px;" data-i18n="loginGateBtn">🔥 Empezar mi racha gratis</a>
+  <p style="color:var(--text2);font-size:13px;" data-i18n="loginGateText">Crea tu cuenta gratis para guardar el progreso de tu ruta.</p>
 </div>
 
 <div class="path" id="pathWrap" style="display:none"></div>
@@ -132,7 +133,8 @@ const I18N = {
     heroTitle: 'Aprende a invertir,<br>nivel a nivel.',
     heroLede: 'Completa cada tema para desbloquear el siguiente. Niveles, racha diaria y XP — como aprender un idioma, pero con tu dinero.',
     xpbarNivel: 'Nivel', xpbarDias: 'días',
-    loginGateText: 'Inicia sesión en <a href="/">la home</a> para guardar tu progreso en la ruta.',
+    loginGateText: 'Crea tu cuenta gratis para guardar el progreso de tu ruta.',
+    loginGateBtn: '🔥 Empezar mi racha gratis',
     footerPrivacidad: 'Privacidad', footerTerminos: 'Términos', footerContacto: 'Contacto',
     rutaEmpiezaAqui: 'Empieza aquí',
     rutaConfirmPremium: 'Este nivel es de Premium. ¿Quieres ver los planes?',
@@ -186,7 +188,8 @@ const I18N = {
     heroTitle: 'Learn to invest,<br>one level at a time.',
     heroLede: 'Complete each topic to unlock the next. Levels, daily streak and XP — like learning a language, but with your money.',
     xpbarNivel: 'Level', xpbarDias: 'days',
-    loginGateText: 'Log in on <a href="/">the home page</a> to save your progress on this path.',
+    loginGateText: 'Create a free account to save your progress on this path.',
+    loginGateBtn: '🔥 Start my free streak',
     footerPrivacidad: 'Privacy', footerTerminos: 'Terms', footerContacto: 'Contact',
     rutaEmpiezaAqui: 'Start here',
     rutaConfirmPremium: 'This level is a Premium feature. Want to see the plans?',

@@ -3121,7 +3121,13 @@ function checkHashGate() {
   if (gated.includes(location.hash) && !_currentUser) openAuthModal();
 }
 window.addEventListener('hashchange', checkHashGate);
-initAuth().then(checkHashGate);
+initAuth().then(() => {
+  checkHashGate();
+  if (new URLSearchParams(location.search).get('auth') === 'register' && !_currentUser) {
+    if (_authMode !== 'register') toggleAuthMode();
+    openAuthModal();
+  }
+});
 
 // Pruebas gratis de por vida (analizador + calculadora, contador compartido)
 const PRUEBAS_GRATIS = 3;
