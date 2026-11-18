@@ -377,7 +377,7 @@ footer { border-top: 1px solid var(--border); }
     <div class="nav-right">
       <a class="nav-btn-outline nav-hide-sm" href="/ruta.html" data-i18n="navRuta">🎮 DuoInvest</a>
       <a class="nav-btn-outline nav-hide-sm" href="/primeros-pasos.html" data-i18n="navPrimerosPasos">🚀 Primeros pasos</a>
-      <a class="nav-btn-outline nav-hide-sm" href="/guia.html" data-i18n="navGuia">📘 Guía</a>
+      <a class="nav-btn-outline nav-hide-sm" href="/guia.html" onclick="return irAGuia(event)" data-i18n="navGuia">📘 Guía</a>
       <a class="nav-btn-outline" href="/premium.html" data-i18n="navPremium">⭐ Premium</a>
       <div class="settings-wrap">
         <button class="nav-icon-btn" onclick="toggleSettingsMenu()">⚙️</button>
@@ -407,7 +407,7 @@ footer { border-top: 1px solid var(--border); }
           <div class="dropdown-links nav-show-sm">
             <a href="/ruta.html" data-i18n="navRuta">🎮 DuoInvest</a>
             <a href="/primeros-pasos.html" data-i18n="navPrimerosPasos">🚀 Primeros pasos</a>
-            <a href="/guia.html" data-i18n="navGuia">📘 Guía</a>
+            <a href="/guia.html" onclick="return irAGuia(event)" data-i18n="navGuia">📘 Guía</a>
           </div>
         </div>
       </div>
@@ -2426,6 +2426,13 @@ function irADuoInvest(e) {
   openAuthModal();
   return false;
 }
+function irAGuia(e) {
+  if (_currentUser) return true;
+  e.preventDefault();
+  if (_authMode !== 'register') toggleAuthMode();
+  openAuthModal();
+  return false;
+}
 function closeAuthModal() {
   document.getElementById('authOverlay').classList.remove('open');
   document.getElementById('authError').style.display = 'none';
@@ -3056,6 +3063,7 @@ async function submitAuth() {
     result = await _sb.auth.signUp({ email, password: pass });
     if (!result.error) {
       if (typeof gtag === 'function') gtag('event', 'sign_up', { method: 'email' });
+      fetch('/api/welcome', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) }).catch(() => {});
       closeAuthModal(); abrirOnboarding();
     }
   } else {
