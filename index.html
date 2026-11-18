@@ -1839,7 +1839,7 @@ const I18N = {
     exitTitle: '¡Espera un segundo!', exitText: 'Antes de irte, déjanos tu email y te avisamos en cuanto saquemos novedades — alertas de precio, IA con acento y más.', exitBtn: 'Avísame',
     exitInvalidEmail: 'Pon un email válido',
     signupModalTitle: '¡Apuntado!', signupModalText: 'Te avisaremos de todas las novedades antes que nadie. Mientras tanto, ya puedes usar laBolsabro gratis.',
-    signupModalCta: 'Ver primeros pasos →', signupModalLater: 'Ahora no',
+    signupModalCta: 'Ver primeros pasos →', signupModalGuiaCta: '📘 Leer la guía del principiante', signupModalLater: 'Ahora no',
     idleMsg1: 'Illo, ¿te has quedado dormido o qué? Mira cuánto podrías tener ahorrado en 10 años, que flipas.', idleCta1: 'Flipar ahora',
     idleMsg2: 'Ey crack, ¿vas a analizar algo o solo estás mirando? Prueba con AAPL, TSLA... lo que te suene.', idleCta2: 'Venga, va',
     idleMsg3: '¿Te crees que sabes de bolsa? Demuéstralo, valiente. 2 minutos y salimos de dudas.', idleCta3: 'Reto aceptado',
@@ -2089,7 +2089,7 @@ const I18N = {
     exitTitle: 'Wait a second!', exitText: "Before you go, leave us your email and we'll let you know as soon as we launch new features — price alerts, an AI with attitude, and more.", exitBtn: 'Notify me',
     exitInvalidEmail: 'Enter a valid email',
     signupModalTitle: 'You\'re on the list!', signupModalText: "We'll let you know about updates before anyone else. Meanwhile, you can already use laBolsabro for free.",
-    signupModalCta: 'See first steps →', signupModalLater: 'Not now',
+    signupModalCta: 'See first steps →', signupModalGuiaCta: '📘 Read the beginner guide', signupModalLater: 'Not now',
     idleMsg1: 'Hey, did you fall asleep or what? Look how much you could have saved in 10 years — it\'s wild.', idleCta1: 'Show me',
     idleMsg2: 'Hey there, are you going to analyze something or just browsing? Try AAPL, TSLA... whatever sounds familiar.', idleCta2: 'Let\'s go',
     idleMsg3: 'Think you know your way around investing? Prove it, brave one. 2 minutes and we\'ll find out.', idleCta3: 'Challenge accepted',
@@ -4339,6 +4339,7 @@ function renderStock(el, d, ticker) {
     <h3 data-i18n="signupModalTitle">¡Apuntado!</h3>
     <p data-i18n="signupModalText">Te avisaremos de todas las novedades antes que nadie. Mientras tanto, ya puedes usar laBolsabro gratis.</p>
     <a href="/primeros-pasos.html" class="modal-btn" style="display:block;text-decoration:none;margin-bottom:10px;" data-i18n="signupModalCta">Ver primeros pasos →</a>
+    <a href="/guia.html" class="modal-btn" style="display:block;text-decoration:none;margin-bottom:10px;background:transparent;border:1px solid var(--border2);color:var(--text)" data-i18n="signupModalGuiaCta">📘 Leer la guía del principiante</a>
     <button class="modal-btn" style="background:transparent;border:1px solid var(--border2);color:var(--text2)" onclick="document.getElementById('modal').classList.remove('open')" data-i18n="signupModalLater">Ahora no</button>
   </div>
 </div>
