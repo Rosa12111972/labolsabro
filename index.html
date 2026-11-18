@@ -406,10 +406,8 @@ footer { border-top: 1px solid var(--border); }
           </select>
           <div class="dropdown-links nav-show-sm">
             <a href="/ruta.html" data-i18n="navRuta">🎮 DuoInvest</a>
-            <a href="/guia.html" data-i18n="navGuia">📘 Guía</a>
-          </div>
-          <div class="dropdown-links" style="display:flex">
             <a href="/primeros-pasos.html" data-i18n="navPrimerosPasos">🚀 Primeros pasos</a>
+            <a href="/guia.html" data-i18n="navGuia">📘 Guía</a>
           </div>
         </div>
       </div>
@@ -1955,6 +1953,7 @@ const I18N = {
     histTitle: '📊 Mi historial de análisis', alertsTitle: '🔔 Mis alertas de precio', alertTickerPh: 'Ticker (ej. AAPL)',
     optAlertAbove: 'Sube por encima de', optAlertBelow: 'Baja por debajo de', alertPricePh: 'Precio €', btnCrear: 'Crear',
     alertSugerirBtn: '🧮 Calcular precio sugerido para este ticker',
+    alertCargandoPrecio: 'Cargando precio...', alertPrecioAhoraTpl: 'Ahora: {precio}', alertYaCumple: '✅ ¡Ya está en tu precio!',
     novTitle: '🎁 Novedades — acceso anticipado', novSub: 'Como premium, ves lo que estamos construyendo antes de que salga para todos.',
     novBanco: '🏦 Conexión con tu banco', novBancoDesc: 'Ver tus ahorros reales junto al análisis, sin salir de la app. En diseño.',
     novWhatsapp: '📲 Alertas por WhatsApp', novWhatsappDesc: 'Recibe el aviso de precio directo al móvil, no solo por email. Próximamente.',
@@ -2200,6 +2199,7 @@ const I18N = {
     histTitle: '📊 My analysis history', alertsTitle: '🔔 My price alerts', alertTickerPh: 'Ticker (e.g. AAPL)',
     optAlertAbove: 'Rises above', optAlertBelow: 'Falls below', alertPricePh: 'Price €', btnCrear: 'Create',
     alertSugerirBtn: '🧮 Calculate a suggested price for this ticker',
+    alertCargandoPrecio: 'Loading price...', alertPrecioAhoraTpl: 'Now: {precio}', alertYaCumple: '✅ Already at your price!',
     novTitle: '🎁 What\'s next — early access', novSub: 'As a Premium member, you see what we\'re building before anyone else.',
     novBanco: '🏦 Bank connection', novBancoDesc: 'See your real savings alongside your analysis, without leaving the app. In design.',
     novWhatsapp: '📲 WhatsApp alerts', novWhatsappDesc: 'Get price alerts straight to your phone, not just by email. Coming soon.',
@@ -2512,10 +2512,27 @@ async function cargarAlertas() {
       <div>
         <div style="font-weight:700;font-size:14px">${a.ticker} ${dirTxt} ${precioTxt}</div>
         <div style="font-size:12px;margin-top:2px">${estado}</div>
+        <div id="alertInfo${a.id}" style="font-size:12px;color:var(--text2);margin-top:4px">${t('alertCargandoPrecio')}</div>
       </div>
       <button onclick="eliminarAlerta(${a.id})" style="background:none;border:1px solid var(--border2);color:var(--red);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:inherit;">${t('btnBorrar')}</button>
     </div>`;
   }).join('');
+  for (const a of data) {
+    let d = null;
+    try { d = await fetchStock(a.ticker); } catch (e) {}
+    const infoEl = document.getElementById(`alertInfo${a.id}`);
+    if (!infoEl) continue;
+    if (!d || !d.precio) { infoEl.textContent = ''; continue; }
+    const monedaD = d.moneda || 'USD';
+    const precioAhoraTxt = monedaD === 'EUR' ? `${d.precio.toFixed(2)} €` : `${d.precio.toFixed(2)} ${monedaD}${fmtMonedaConvertida(d.precio, monedaD)}`;
+    let valoracionTxt = '';
+    if (d.tipo !== 'crypto' && d.pe) {
+      const sem = semaforo(d.pe, d.sector || 'default', d.peg);
+      valoracionTxt = sem.cls === 'sem-green' ? t('hintZonaValor') : sem.cls === 'sem-yellow' ? t('hintPrecioJusto') : sem.cls === 'sem-red' ? t('hintZonaCara') : '';
+    }
+    const yaCumple = a.direction === 'below' ? d.precio <= a.target_price : d.precio >= a.target_price;
+    infoEl.innerHTML = `${tf('alertPrecioAhoraTpl', { precio: precioAhoraTxt })}${valoracionTxt ? ' · ' + valoracionTxt : ''}${(!a.triggered && yaCumple) ? `<div style="color:var(--green);font-weight:700;margin-top:3px">${t('alertYaCumple')}</div>` : ''}`;
+  }
 }
 async function calcularPrecioSugerido() {
   const ticker = document.getElementById('alertTicker').value.trim().toUpperCase();
