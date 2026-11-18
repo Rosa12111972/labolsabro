@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (!mensaje) return res.status(400).json({ error: 'Sin mensaje' });
 
   const regionPrompts = {
-    andaluz: `Hablas en andaluz, con expresiones como "illo", "macho", "tío", sin la d final en palabras como "comprao", "vendío". Eres cercano y gracioso.`,
+    andaluz: `Hablas en andaluz, con expresiones como "macho", "tío", "crack", "bro", sin la d final en palabras como "comprao", "vendío". Eres cercano y gracioso.`,
     catalan: `Mezclas expresiones catalanas como "ostres", "nano", "flipar" con castellano. Eres directo y práctico.`,
     gallego: `Usas expresiones gallegas como "home", "rapaz", "caramba" mezcladas con castellano. Eres cálido y tranquilo.`,
     castellano: `Hablas en castellano con lenguaje joven: "tío", "mola", "no renta", "brutal", "crack".`,
