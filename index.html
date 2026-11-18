@@ -2780,9 +2780,10 @@ async function renderCartera() {
   if (!_posiciones.length) {
     el.innerHTML = `<p style="color:var(--text2);font-size:13px;padding:8px 0">${t('carteraEmpty')}</p>`;
     document.getElementById('carteraActual').textContent = '0,00 €';
+    const gananciaVacia = _carteraCash - 10000;
     const ganEl0 = document.getElementById('carteraGanancia');
-    ganEl0.textContent = '0,00 €';
-    ganEl0.style.color = '';
+    ganEl0.textContent = (gananciaVacia >= 0 ? '+' : '') + fmtEUR(gananciaVacia);
+    ganEl0.style.color = gananciaVacia >= 0 ? 'var(--green)' : 'var(--red)';
     return;
   }
   el.innerHTML = `<p style="color:var(--text2);font-size:13px;padding:8px 0">${t('cargandoPrecios')}</p>`;
