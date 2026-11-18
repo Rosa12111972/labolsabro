@@ -422,7 +422,7 @@ footer { border-top: 1px solid var(--border); }
   <div class="hero-tag"><div class="tag-dot"></div> <span data-i18n="heroTag">🎮 Disponible ahora · Gratis</span></div>
   <h1 data-i18n-html="heroTitle">Aprende la bolsa<br>jugando con<br><em><span class="mano">DuoInvest</span>.</em></h1>
   <p class="hero-sub" data-i18n="heroSub">Niveles, racha diaria y XP con DuoInvest. Aprendes de verdad a ahorrar e invertir, sin rollos de banco ni sermones.</p>
-  <a href="/ruta.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#000;font-weight:700;font-size:16px;padding:16px 32px;border-radius:100px;text-decoration:none;margin-bottom:8px;" data-i18n="heroDuoCta">🔥 Empezar mi racha gratis</a>
+  <a href="/ruta.html" onclick="return irADuoInvest(event)" style="display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#000;font-weight:700;font-size:16px;padding:16px 32px;border-radius:100px;text-decoration:none;margin-bottom:8px;" data-i18n="heroDuoCta">🔥 Empezar mi racha gratis</a>
   <p style="font-size:12px;color:var(--text3);margin-bottom:22px" data-i18n="heroDuoSub">Como Duolingo, pero con tu dinero. Sin tarjeta, sin permanencia.</p>
   <details style="margin-bottom:10px">
     <summary style="cursor:pointer;color:var(--text3);font-size:12px;list-style:none" data-i18n="heroNote">¿Prefieres recibir novedades por email?</summary>
@@ -2389,6 +2389,13 @@ let _authMode = 'login';
 function openAuthModal() {
   document.getElementById('authOverlay').classList.add('open');
   document.getElementById('authEmail').focus();
+}
+function irADuoInvest(e) {
+  if (_currentUser) return true;
+  e.preventDefault();
+  if (_authMode !== 'register') toggleAuthMode();
+  openAuthModal();
+  return false;
 }
 function closeAuthModal() {
   document.getElementById('authOverlay').classList.remove('open');
