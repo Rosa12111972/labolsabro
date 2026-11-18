@@ -44,15 +44,15 @@ export default async function handler(req, res) {
               <div style="font-size: 22px; font-weight: 700; color: #000; margin-top: 8px;">laBolsabro</div>
             </div>
             <div style="padding: 32px 28px;">
-              <h1 style="font-size: 22px; font-weight: 700; margin-bottom: 16px; color: #f0f0f0;">¡Bienvenida! 🎉</h1>
+              <h1 style="font-size: 22px; font-weight: 700; margin-bottom: 16px; color: #f0f0f0;">Bienvenida a laBolsabro</h1>
               <p style="font-size: 15px; color: #a3a3a3; line-height: 1.7; margin-bottom: 24px;">
-                Ya tienes tu cuenta en <strong style="color: #f0f0f0;">laBolsabro</strong>. Esto es lo que te espera:
+                Tu cuenta ya está creada. Antes de nada, te explicamos dónde encontrar cada cosa para que le saques partido desde el primer día.
               </p>
 
               <div style="background: #141414; border-radius: 12px; padding: 18px 20px; margin-bottom: 14px;">
                 <div style="font-size: 15px; font-weight: 700; color: #f0f0f0; margin-bottom: 8px;">🚀 Primeros pasos</div>
                 <p style="font-size: 13.5px; color: #a3a3a3; line-height: 1.6; margin: 0 0 10px;">
-                  Regístrate, busca tu primera empresa, aprende a leer el semáforo de valor, prueba la calculadora de interés compuesto, haz tu primer nivel de DuoInvest y crea tu primer bote de ahorro. Todo en menos de 15 minutos.
+                  Es una lista guiada, paso a paso, para que no tengas que adivinar por dónde empezar: te lleva a buscar tu primera empresa y entender el semáforo de valor, a probar la calculadora de interés compuesto, a jugar tu primer nivel de DuoInvest y a crear tu primer bote de ahorro. Cada paso se marca como completado a medida que avanzas, y puedes retomarlo cuando quieras.
                 </p>
                 <a href="https://labolsabro.com/primeros-pasos.html" style="color: #22c55e; font-size: 13.5px; font-weight: 700; text-decoration: none;">Ver primeros pasos →</a>
               </div>
@@ -60,13 +60,13 @@ export default async function handler(req, res) {
               <div style="background: #141414; border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;">
                 <div style="font-size: 15px; font-weight: 700; color: #f0f0f0; margin-bottom: 8px;">📘 Guía del principiante</div>
                 <p style="font-size: 13.5px; color: #a3a3a3; line-height: 1.6; margin: 0 0 10px;">
-                  Los 10 puntos clave antes de invertir: fondo de emergencia, por qué el riesgo y la rentabilidad van juntos, diversificación, interés compuesto, cómo valorar una empresa y los errores típicos que hay que evitar.
+                  Es el contenido de fondo: los 10 puntos que, en nuestra opinión, hay que entender antes de invertir un euro — el fondo de emergencia, por qué el riesgo y la rentabilidad van siempre juntos, la diversificación, cómo funciona el interés compuesto, cómo valorar una empresa en lugar de limitarte a mirar el precio, y los errores más habituales al empezar. No hace falta leerla de un tirón; está pensada para consultarla cuando la necesites.
                 </p>
                 <a href="https://labolsabro.com/guia.html" style="color: #22c55e; font-size: 13.5px; font-weight: 700; text-decoration: none;">Leer la guía →</a>
               </div>
 
               <p style="font-size: 13.5px; color: #a3a3a3; line-height: 1.6; margin-bottom: 24px;">
-                Y cuando quieras pasar a la acción: el 🎮 <a href="https://labolsabro.com/ruta.html" style="color: #22c55e;">DuoInvest</a> (aprende jugando, con racha diaria) y el 🚦 <a href="https://labolsabro.com/#stocks" style="color: #22c55e;">analizador de acciones</a> (mira si una empresa está cara o barata en un vistazo) están siempre ahí.
+                Cuando quieras pasar a la práctica, tienes dos herramientas siempre disponibles: <a href="https://labolsabro.com/ruta.html" style="color: #22c55e;">DuoInvest</a>, el itinerario con niveles y racha diaria, y el <a href="https://labolsabro.com/#stocks" style="color: #22c55e;">analizador de acciones</a>, para comprobar si una empresa concreta está cara o barata.
               </p>
 
               <a href="https://labolsabro.com" style="display: inline-block; background: #22c55e; color: #000; font-weight: 700; font-size: 15px; padding: 14px 28px; border-radius: 100px; text-decoration: none;">Ir a laBolsabro →</a>
