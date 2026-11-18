@@ -31,6 +31,29 @@ export default async function handler(req, res) {
   const userId = await getUserId(req);
   if (!userId) return res.status(401).json({ error: 'No autenticado' });
 
+  if (req.body?.action === 'delete_account') {
+    try {
+      const profRes = await fetch(`${process.env.SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=stripe_subscription_id`, {
+        headers: { apikey: process.env.SUPABASE_SERVICE_KEY, Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}` }
+      });
+      const subscriptionId = (await profRes.json())?.[0]?.stripe_subscription_id;
+      if (subscriptionId) {
+        try { await stripe.subscriptions.cancel(subscriptionId); } catch (e) { console.error('Error cancelando suscripción:', e); }
+      }
+
+      const delRes = await fetch(`${process.env.SUPABASE_URL}/auth/v1/admin/users/${userId}`, {
+        method: 'DELETE',
+        headers: { apikey: process.env.SUPABASE_SERVICE_KEY, Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}` }
+      });
+      if (!delRes.ok) return res.status(500).json({ error: 'No se pudo borrar la cuenta' });
+
+      return res.json({ ok: true });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({ error: 'Error al borrar la cuenta' });
+    }
+  }
+
   const { plan, anual } = req.body || {};
   const planKey = anual ? `${plan}_anual` : plan;
   const newPriceId = PRICES[planKey];

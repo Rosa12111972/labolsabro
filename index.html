@@ -1794,6 +1794,10 @@ const I18N = {
     authAlertEmailFirst: 'Escribe tu email primero', authAlertErrorPrefix: 'Error: ',
     authAlertResetSent: 'Te hemos enviado un enlace para restablecer la contraseña. Revisa tu email.',
     authAlertAccountCreated: '¡Cuenta creada! Revisa tu email para confirmarla.',
+    borrarCuentaConfirm1: 'Esto borra tu cuenta para siempre: botes de ahorro, cartera simulada, alertas, historial... todo. No se puede deshacer. ¿Seguro que quieres continuar?',
+    borrarCuentaConfirm2: 'De verdad de la buena: ¿borramos tu cuenta ya mismo?',
+    borrarCuentaHecho: 'Tu cuenta se ha borrado. Gracias por haber estado por aquí.',
+    borrarCuentaError: 'No se ha podido borrar la cuenta. Inténtalo de nuevo o escríbenos a hola@labolsabro.com.',
     onbTitle: '¿Cómo quieres aprender?', onbSub: 'Cuenta creada — revisa tu email para confirmarla. Mientras tanto, tú eliges por dónde empezar. Puedes cambiar de modo cuando quieras.',
     onbOpt1: '🎮 Jugando, paso a paso (DuoInvest)', onbOpt2: '📘 Leyendo a mi ritmo (Guía)', onbOpt3: '🚦 Directo a analizar una empresa', onbSkip: 'Ahora no',
     authErrFillFields: 'Rellena email y contraseña', authErrUnknown: 'Error desconocido',
@@ -2044,6 +2048,10 @@ const I18N = {
     authAlertEmailFirst: 'Enter your email first', authAlertErrorPrefix: 'Error: ',
     authAlertResetSent: 'We\'ve sent you a link to reset your password. Check your email.',
     authAlertAccountCreated: 'Account created! Check your email to confirm it.',
+    borrarCuentaConfirm1: 'This deletes your account forever: savings jars, simulated portfolio, alerts, history... everything. This can\'t be undone. Are you sure you want to continue?',
+    borrarCuentaConfirm2: 'Really sure: delete your account right now?',
+    borrarCuentaHecho: 'Your account has been deleted. Thanks for being here.',
+    borrarCuentaError: 'Couldn\'t delete the account. Try again or write to us at hola@labolsabro.com.',
     onbTitle: 'How do you want to learn?', onbSub: 'Account created — check your email to confirm it. Meanwhile, you choose where to start. You can switch modes anytime.',
     onbOpt1: '🎮 Playing, step by step (DuoInvest)', onbOpt2: '📘 Reading at my own pace (Guide)', onbOpt3: '🚦 Straight to analyzing a company', onbSkip: 'Not now',
     authErrFillFields: 'Fill in email and password', authErrUnknown: 'Unknown error',
@@ -2367,6 +2375,7 @@ async function setUser(user) {
       ${isPremium ? `<button class="dropdown-menu-item" onclick="abrirChatIA()">💬 Chat IA</button>` : ''}
       <button class="dropdown-menu-item" onclick="abrirInvitar()">🔥 Invita a un colega</button>
       <button class="dropdown-menu-item" onclick="signOut()">Salir</button>
+      <button class="dropdown-menu-item" onclick="borrarCuenta()" style="color:var(--red)">🗑️ Borrar mi cuenta</button>
     </div>
   </div>`;
   const fab = document.getElementById('chatFab');
@@ -2412,6 +2421,26 @@ function clearUser() {
 
 async function signOut() {
   await _sb.auth.signOut();
+}
+async function borrarCuenta() {
+  if (!confirm(t('borrarCuentaConfirm1'))) return;
+  if (!confirm(t('borrarCuentaConfirm2'))) return;
+  const { data: { session } } = await _sb.auth.getSession();
+  if (!session) return;
+  try {
+    const r = await fetch('/api/upgrade-plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify({ action: 'delete_account' })
+    });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || 'delete failed');
+    await _sb.auth.signOut();
+    alert(t('borrarCuentaHecho'));
+    location.href = '/';
+  } catch (e) {
+    alert(t('borrarCuentaError'));
+  }
 }
 
 let _authMode = 'login';
