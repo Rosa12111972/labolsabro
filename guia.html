@@ -31,9 +31,19 @@
     .tag { display: inline-flex; align-items: center; gap: 8px; background: var(--green-glow); border: 1px solid rgba(34,197,94,0.25); color: var(--green); padding: 6px 16px; border-radius: 100px; font-size: 12.5px; font-weight: 700; margin-bottom: 22px; }
     h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px; }
     .lede { font-size: 17px; color: var(--text2); max-width: 60ch; }
-    .content { max-width: 760px; margin: 0 auto; padding: 0 24px 80px; }
-    .step { border-top: 1px solid var(--border); padding: 40px 0; }
-    .step:first-child { border-top: none; }
+    .content { max-width: 760px; margin: 0 auto; padding: 0 24px 24px; }
+    .step { display: none; background: var(--card); border: 1px solid var(--border2); border-radius: 20px; padding: 36px 40px; }
+    .step.active { display: block; }
+    .step-nav { max-width: 760px; margin: 0 auto; padding: 32px 24px 70px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .step-nav-btn { padding: 12px 22px; border-radius: 100px; font-size: 14px; font-weight: 700; border: 1px solid var(--border2); background: var(--card2); color: var(--text2); cursor: pointer; font-family: inherit; }
+    .step-nav-btn:disabled { opacity: 0.35; cursor: default; }
+    .step-nav-btn.primary { background: var(--green); color: #000; border-color: var(--green); }
+    .step-nav-mid { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .step-dots { display: flex; gap: 7px; }
+    .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); cursor: pointer; border: none; padding: 0; }
+    .step-dot.active { background: var(--green); width: 22px; border-radius: 4px; }
+    .step-dot.done { background: var(--text3); }
+    .step-counter { font-size: 12px; color: var(--text3); font-weight: 700; }
     .step-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; background: var(--card2); color: var(--yellow); font-size: 13px; font-weight: 700; margin-bottom: 14px; }
     .step h2 { font-size: 21px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; color: var(--green); }
     .step p { color: var(--text2); font-size: 15px; margin-bottom: 12px; }
@@ -240,6 +250,15 @@
 
 </div>
 
+<div class="step-nav">
+  <button class="step-nav-btn" id="btnPrevGuia" onclick="prevStepGuia()">← Anterior</button>
+  <div class="step-nav-mid">
+    <div class="step-dots" id="stepDotsGuia"></div>
+    <div class="step-counter" id="stepCounterGuia"></div>
+  </div>
+  <button class="step-nav-btn primary" id="btnNextGuia" onclick="nextStepGuia()">Siguiente →</button>
+</div>
+
 <div class="closing">
   <div class="closing-box">
     <p data-i18n="closingP">Si estás empezando literalmente desde cero, no empieces estudiando qué acciones comprar. Empieza aprendiendo cómo funciona una cartera diversificada, los ETF/indexados, el riesgo y el interés compuesto. Después, analiza empresas como Microsoft, Meta, Apple o Amazon como casos prácticos — con el analizador y el comparador de laBolsabro.</p>
@@ -333,6 +352,7 @@ const I18N = {
     ctaAnalizar: 'Analizar mi primera empresa →',
     ctaAreas: 'Las 6 áreas de un inversor →',
     footerPrivacidad: 'Privacidad', footerTerminos: 'Términos', footerContacto: 'Contacto',
+    btnAnterior: 'Anterior', btnSiguiente: 'Siguiente', btnFinalizar: 'Ir a la conclusión', pasoDeTotal: 'Paso {n} de {total}',
   },
   en: {
     navVolver: '← Back',
@@ -412,6 +432,7 @@ const I18N = {
     ctaAnalizar: 'Analyze my first company →',
     ctaAreas: 'The 6 areas of an investor →',
     footerPrivacidad: 'Privacy', footerTerminos: 'Terms', footerContacto: 'Contact',
+    btnAnterior: 'Previous', btnSiguiente: 'Next', btnFinalizar: 'Go to conclusion', pasoDeTotal: 'Step {n} of {total}',
   },
 };
 function detectarIdiomaNavegador() {
@@ -443,6 +464,46 @@ function aplicarIdioma() {
 }
 aplicarIdioma();
 // ---- /i18n ----
+
+// ---- asistente paso a paso ----
+const _stepsGuia = Array.from(document.querySelectorAll('.content .step'));
+const _totalStepsGuia = _stepsGuia.length;
+function _pasoGuardadoGuia() {
+  const v = parseInt(localStorage.getItem('mosca_guia_step') || '0', 10);
+  return (isNaN(v) || v < 0 || v >= _totalStepsGuia) ? 0 : v;
+}
+let _currentStepGuia = _pasoGuardadoGuia();
+function renderGuia(scroll) {
+  _stepsGuia.forEach((el, i) => el.classList.toggle('active', i === _currentStepGuia));
+  const dotsWrap = document.getElementById('stepDotsGuia');
+  dotsWrap.innerHTML = '';
+  _stepsGuia.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'step-dot' + (i === _currentStepGuia ? ' active' : (i < _currentStepGuia ? ' done' : ''));
+    dot.setAttribute('aria-label', 'Paso ' + (i + 1));
+    dot.onclick = () => irAPasoGuia(i);
+    dotsWrap.appendChild(dot);
+  });
+  document.getElementById('btnPrevGuia').disabled = _currentStepGuia === 0;
+  document.getElementById('btnNextGuia').textContent = _currentStepGuia === _totalStepsGuia - 1
+    ? '✓ ' + t('btnFinalizar')
+    : t('btnSiguiente') + ' →';
+  document.getElementById('stepCounterGuia').textContent = tf('pasoDeTotal', { n: _currentStepGuia + 1, total: _totalStepsGuia });
+  localStorage.setItem('mosca_guia_step', String(_currentStepGuia));
+  if (scroll) document.querySelector('.content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function irAPasoGuia(i) {
+  _currentStepGuia = Math.max(0, Math.min(_totalStepsGuia - 1, i));
+  renderGuia(true);
+}
+function prevStepGuia() { if (_currentStepGuia > 0) irAPasoGuia(_currentStepGuia - 1); }
+function nextStepGuia() {
+  if (_currentStepGuia < _totalStepsGuia - 1) irAPasoGuia(_currentStepGuia + 1);
+  else document.querySelector('.closing').scrollIntoView({ behavior: 'smooth' });
+}
+document.getElementById('btnPrevGuia').textContent = '← ' + t('btnAnterior');
+renderGuia(false);
+// ---- /asistente paso a paso ----
 </script>
 </body>
 </html>
