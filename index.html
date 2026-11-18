@@ -271,14 +271,6 @@ footer { border-top: 1px solid var(--border); }
 .auth-toggle span { color:var(--green); cursor:pointer; font-weight:600; }
 .auth-error { background:var(--red-dim); color:var(--red); border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:12px; display:none; }
 .auth-close { float:right; background:none; border:none; color:var(--text3); cursor:pointer; font-size:20px; line-height:1; }
-#authOverlay.register-mode .auth-box { background:#fff; border-color:#eee; }
-#authOverlay.register-mode .auth-box h2, #authOverlay.register-mode .auth-field input { color:#111; }
-#authOverlay.register-mode .auth-box p, #authOverlay.register-mode #authConsent { color:#666; }
-#authOverlay.register-mode .auth-field input { background:#f5f5f5; border-color:#e2e2e2; }
-#authOverlay.register-mode .auth-field input::placeholder { color:#999; }
-#authOverlay.register-mode .auth-toggle { color:#666; }
-#authOverlay.register-mode .auth-close { color:#999; }
-#authOverlay.register-mode #passEye { color:#999; }
 .nav-user { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text2); }
 .nav-user strong { color:var(--green); }
 .nav-user button { background:none; border:1px solid var(--border2); color:var(--text2); padding:6px 14px; border-radius:100px; font-size:12px; cursor:pointer; font-family:inherit; }
@@ -438,6 +430,7 @@ footer { border-top: 1px solid var(--border); }
       <input type="email" name="email" id="heroEmail" placeholder="tu@email.com" required />
       <button type="submit" data-i18n="heroBtn">Empezar gratis</button>
     </form>
+    <p style="font-size:10.5px;color:var(--text3);margin-top:8px;max-width:320px;margin-left:auto;margin-right:auto" data-i18n-html="emailConsentText">Al apuntarte, aceptas nuestros <a href="/terminos.html" target="_blank" style="color:var(--green)">Términos y condiciones</a> y nuestra <a href="/privacidad.html" target="_blank" style="color:var(--green)">Política de privacidad</a>.</p>
   </details>
 
   <div class="phone-wrap">
@@ -1791,6 +1784,7 @@ const I18N = {
     authTitleLogin: 'Iniciar sesión', authTitleRegister: '¿A qué esperas?',
     authSubLogin: 'Accede a tu cuenta de laBolsabro', authSubRegister: 'Introduce tu email y empecemos',
     authConsentText: 'Al registrarte, aceptas nuestros <a href="/terminos.html" target="_blank" style="color:var(--green)">Términos y condiciones</a> y nuestra <a href="/privacidad.html" target="_blank" style="color:var(--green)">Política de privacidad</a>.',
+    emailConsentText: 'Al apuntarte, aceptas nuestros <a href="/terminos.html" target="_blank" style="color:var(--green)">Términos y condiciones</a> y nuestra <a href="/privacidad.html" target="_blank" style="color:var(--green)">Política de privacidad</a>.',
     installBtnTxt: 'Instalar app',
     installIosText: 'Toca el icono de <strong style="color:var(--text)">Compartir</strong> ⬆️ en la barra de Safari, y luego elige <strong style="color:var(--text)">"Añadir a pantalla de inicio"</strong>.',
     authLblEmail: 'Email', authLblPass: 'Contraseña',
@@ -2040,6 +2034,7 @@ const I18N = {
     authTitleLogin: 'Log in', authTitleRegister: 'What are you waiting for?',
     authSubLogin: 'Access your laBolsabro account', authSubRegister: "Enter your email and let's go",
     authConsentText: 'By signing up, you accept our <a href="/terminos.html" target="_blank" style="color:var(--green)">Terms and conditions</a> and our <a href="/privacidad.html" target="_blank" style="color:var(--green)">Privacy policy</a>.',
+    emailConsentText: 'By signing up, you accept our <a href="/terminos.html" target="_blank" style="color:var(--green)">Terms and conditions</a> and our <a href="/privacidad.html" target="_blank" style="color:var(--green)">Privacy policy</a>.',
     installBtnTxt: 'Install app',
     installIosText: 'Tap the <strong style="color:var(--text)">Share</strong> icon ⬆️ in the Safari toolbar, then choose <strong style="color:var(--text)">"Add to Home Screen"</strong>.',
     authLblEmail: 'Email', authLblPass: 'Password',
@@ -2441,7 +2436,6 @@ function closeAuthIfBg(e) {
 function toggleAuthMode() {
   _authMode = _authMode === 'login' ? 'register' : 'login';
   const isReg = _authMode === 'register';
-  document.getElementById('authOverlay').classList.toggle('register-mode', isReg);
   const titleEl = document.getElementById('authTitle');
   titleEl.textContent = isReg ? t('authTitleRegister') : t('authTitleLogin');
   titleEl.style.fontSize = isReg ? '26px' : '20px';
@@ -4175,6 +4169,7 @@ function renderStock(el, d, ticker) {
       <input type="email" name="email" placeholder="tu@email.com" required />
       <button type="submit" data-i18n="ctaBtn">Avisadme de novedades</button>
     </form>
+    <p style="font-size:10.5px;color:var(--text3);margin-top:10px" data-i18n-html="emailConsentText">Al apuntarte, aceptas nuestros <a href="/terminos.html" target="_blank" style="color:var(--green)">Términos y condiciones</a> y nuestra <a href="/privacidad.html" target="_blank" style="color:var(--green)">Política de privacidad</a>.</p>
   </div>
 </div>
 
@@ -4333,6 +4328,7 @@ function renderStock(el, d, ticker) {
     <div class="auth-field">
       <input type="email" id="exitEmail" placeholder="tu@email.com">
     </div>
+    <p style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-6px 0 14px" data-i18n-html="emailConsentText">Al apuntarte, aceptas nuestros <a href="/terminos.html" target="_blank" style="color:var(--green)">Términos y condiciones</a> y nuestra <a href="/privacidad.html" target="_blank" style="color:var(--green)">Política de privacidad</a>.</p>
     <button class="auth-submit" onclick="submitExitEmail()" data-i18n="exitBtn">Avísame</button>
   </div>
 </div>
