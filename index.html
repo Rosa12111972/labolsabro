@@ -3063,7 +3063,9 @@ async function submitAuth() {
     result = await _sb.auth.signUp({ email, password: pass });
     if (!result.error) {
       if (typeof gtag === 'function') gtag('event', 'sign_up', { method: 'email' });
-      fetch('/api/welcome', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) }).catch(() => {});
+      fetch('/api/welcome', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) })
+        .then(async r => { if (!r.ok) alert('DEBUG welcome: status ' + r.status + ' — ' + await r.text()); })
+        .catch(e => alert('DEBUG welcome: error — ' + e.message));
       closeAuthModal(); abrirOnboarding();
     }
   } else {
