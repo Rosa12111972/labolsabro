@@ -1,9 +1,51 @@
+function paginaUnsubscribe(mensaje) {
+  return `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head><meta charset="UTF-8"><title>laBolsabro</title></head>
+    <body style="font-family: 'Helvetica Neue', Arial, sans-serif; background:#0a0a0a; color:#f0f0f0; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; padding:24px; text-align:center;">
+      <div>
+        <div style="font-size:40px;margin-bottom:16px">🪰</div>
+        <h1 style="font-size:20px;margin-bottom:12px">${mensaje}</h1>
+        <a href="https://labolsabro.com" style="color:#22c55e;font-weight:700;text-decoration:none">Volver a laBolsabro →</a>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  if (req.method === 'GET') {
+    const email = (req.query.email || '').trim();
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+
+    if (!email || !email.includes('@')) {
+      return res.status(400).send(paginaUnsubscribe('Enlace no válido.'));
+    }
+    if (!process.env.RESEND_AUDIENCE_ID) {
+      return res.status(200).send(paginaUnsubscribe('Ya está — no recibirás más correos.'));
+    }
+    try {
+      await fetch(`https://api.resend.com/audiences/${process.env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ unsubscribed: true }),
+      });
+    } catch (e) {
+      console.error('Resend unsubscribe error:', e);
+    }
+    return res.status(200).send(paginaUnsubscribe('Hecho — no recibirás más correos de laBolsabro.'));
+  }
+
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { email } = req.body || {};
@@ -43,7 +85,7 @@ export default async function handler(req, res) {
             <div style="padding: 20px 28px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #525252; line-height: 1.6;">
               Recibes este email porque te apuntaste en labolsabro.com.
               Si no fuiste tú, ignora este mensaje.<br>
-              © 2025 Mosca · <a href="https://labolsabro.com/privacidad.html" style="color: #525252;">Privacidad</a> · <a href="https://labolsabro.com/api/unsubscribe?email=${encodeURIComponent(email)}" style="color: #525252;">Darte de baja</a>
+              © 2025 Mosca · <a href="https://labolsabro.com/privacidad.html" style="color: #525252;">Privacidad</a> · <a href="https://labolsabro.com/api/subscribe?email=${encodeURIComponent(email)}" style="color: #525252;">Darte de baja</a>
             </div>
           </div>
         `,
