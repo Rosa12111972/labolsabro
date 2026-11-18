@@ -1834,6 +1834,13 @@ const I18N = {
     idleMsg2: 'Ey crack, ¿vas a analizar algo o solo estás mirando? Prueba con AAPL, TSLA... lo que te suene.', idleCta2: 'Venga, va',
     idleMsg3: '¿Te crees que sabes de bolsa? Demuéstralo, valiente. 2 minutos y salimos de dudas.', idleCta3: 'Reto aceptado',
     idleMsg4: '¿Sigues ahí? Trae a un colega y os lleváis 3 días de Premium gratis los dos.', idleCta4: 'Invitar',
+    carteraPill: 'Cartera Virtual', carteraTitle: 'Invierte sin arriesgar<br>ni un euro real.',
+    carteraSub: 'Dinero ficticio, precios reales. Compra y vende acciones y ve cómo se mueve tu cartera.',
+    carteraSaldo: 'Saldo disponible', carteraValorTotal: 'Valor de la cartera', carteraGanancia: 'Ganancia / pérdida',
+    carteraTickerPh: 'Ticker (ej. AAPL)', carteraCantidadPh: 'Nº acciones', carteraBtnComprar: 'Comprar',
+    carteraEmptyTxt: 'Todavía no tienes ninguna posición abierta.',
+    carteraAlertDatos: 'Escribe un ticker y una cantidad válida', carteraAlertNoEncontrado: 'No encontramos ese ticker',
+    carteraAlertSinSaldo: 'No tienes saldo ficticio suficiente para esta compra', carteraAlertNoPrecio: 'No pudimos obtener el precio actual',
     biblioPill: 'Biblioteca', biblioTitle: 'Términos financieros<br>en cristiano.',
     biblioSub: '¿Qué es el PER? ¿Qué significa el ROE? Pulsa cualquier término y te lo explicamos como si tuvieras 15 años.',
     glosarioSearchPh: 'Busca un término... PER, ROE, dividendo...', glosarioAllCats: 'Todas las categorías',
@@ -2076,6 +2083,13 @@ const I18N = {
     idleMsg2: 'Hey there, are you going to analyze something or just browsing? Try AAPL, TSLA... whatever sounds familiar.', idleCta2: 'Let\'s go',
     idleMsg3: 'Think you know your way around investing? Prove it, brave one. 2 minutes and we\'ll find out.', idleCta3: 'Challenge accepted',
     idleMsg4: 'Still there? Bring a friend and you both get 3 days of Premium free.', idleCta4: 'Invite',
+    carteraPill: 'Virtual Portfolio', carteraTitle: 'Invest without risking<br>a single real euro.',
+    carteraSub: 'Fake money, real prices. Buy and sell stocks and watch your portfolio move.',
+    carteraSaldo: 'Available balance', carteraValorTotal: 'Portfolio value', carteraGanancia: 'Gain / loss',
+    carteraTickerPh: 'Ticker (e.g. AAPL)', carteraCantidadPh: 'Shares', carteraBtnComprar: 'Buy',
+    carteraEmptyTxt: "You don't have any open positions yet.",
+    carteraAlertDatos: 'Enter a ticker and a valid quantity', carteraAlertNoEncontrado: "We couldn't find that ticker",
+    carteraAlertSinSaldo: "You don't have enough virtual balance for this purchase", carteraAlertNoPrecio: "We couldn't get the current price",
     biblioPill: 'Library', biblioTitle: 'Financial terms,<br>plain and simple.',
     biblioSub: 'What\'s the P/E ratio? What does ROE mean? Tap any term and we\'ll explain it like you\'re 15.',
     glosarioSearchPh: 'Search a term... P/E, ROE, dividend...', glosarioAllCats: 'All categories',
@@ -2321,11 +2335,12 @@ async function setUser(user) {
   }
   if (typeof renderXPBadge === 'function') renderXPBadge();
   if (typeof renderRachaBadge === 'function') renderRachaBadge();
-  ['biblioteca', 'stocks', 'calculadora', 'simulador'].forEach(id => {
+  ['biblioteca', 'stocks', 'calculadora', 'simulador', 'cartera'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = '';
   });
   await cargarPanelData();
+  if (document.getElementById('cartera')) cargarCartera();
   const navAuth = document.getElementById('navAuth');
   const isPremium = _userPlan !== 'free';
   const nombreCorto = user.email.split('@')[0];
@@ -2340,6 +2355,7 @@ async function setUser(user) {
       <button class="dropdown-menu-item" onclick="abrirPanel()">📊 Mi panel</button>
       ${isPremium ? `<button class="dropdown-menu-item" onclick="abrirHistorialPremium()">📜 Mi historial</button>` : ''}
       ${isPremium ? `<button class="dropdown-menu-item" onclick="abrirAlertas()">🔔 Alertas</button>` : ''}
+      <a class="dropdown-menu-item" href="/#cartera" style="display:block;text-decoration:none">💼 Cartera Virtual</a>
       ${isPremium ? `<button class="dropdown-menu-item" onclick="abrirRecordatorios()">⏰ Recordatorios</button>` : ''}
       ${isPremium ? `<button class="dropdown-menu-item" onclick="abrirNovedades()">🎁 Novedades</button>` : ''}
       ${isPremium ? `<button class="dropdown-menu-item" onclick="abrirChatIA()">💬 Chat IA</button>` : ''}
@@ -2379,7 +2395,7 @@ function clearUser() {
   _jars = [];
   _invertidoSimulado = 0;
   _pruebasGratisUsadas = 0;
-  ['biblioteca', 'stocks', 'calculadora', 'simulador'].forEach(id => {
+  ['biblioteca', 'stocks', 'calculadora', 'simulador', 'cartera'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
@@ -2555,6 +2571,114 @@ async function crearAlerta() {
 async function eliminarAlerta(id) {
   await _sb.from('price_alerts').delete().eq('id', id);
   await cargarAlertas();
+}
+
+// Cartera Virtual (dinero ficticio, precios reales)
+const SALDO_INICIAL_VIRTUAL = 10000;
+let _carteraSaldo = 0;
+let _carteraPosiciones = [];
+
+function precioEnEur(precio, moneda) {
+  if (!moneda || moneda === 'EUR') return precio;
+  if (_fxRates) {
+    const c = convertirMoneda(precio, moneda, 'EUR');
+    if (c !== null) return c;
+  }
+  return precio;
+}
+
+async function cargarCartera() {
+  if (!_currentUser || !_sb) return;
+  let { data: port } = await _sb.from('sim_portfolio').select('saldo').eq('user_id', _currentUser.id).single();
+  if (!port) {
+    const ins = await _sb.from('sim_portfolio').insert({ user_id: _currentUser.id, saldo: SALDO_INICIAL_VIRTUAL }).select('saldo').single();
+    port = ins.data || { saldo: SALDO_INICIAL_VIRTUAL };
+  }
+  _carteraSaldo = port.saldo;
+  const { data: pos } = await _sb.from('sim_posiciones').select('*').eq('user_id', _currentUser.id).order('created_at', { ascending: false });
+  _carteraPosiciones = pos || [];
+  await renderCartera();
+}
+
+async function renderCartera() {
+  const saldoEl = document.getElementById('carteraSaldoVal');
+  if (!saldoEl) return;
+  saldoEl.textContent = fmtEUR(_carteraSaldo);
+  const cont = document.getElementById('carteraPosiciones');
+  const emptyEl = document.getElementById('carteraEmpty');
+  if (!_carteraPosiciones.length) {
+    cont.innerHTML = '';
+    emptyEl.style.display = 'block';
+    document.getElementById('carteraValorVal').textContent = fmtEUR(0);
+    document.getElementById('carteraGananciaVal').textContent = fmtEUR(0);
+    return;
+  }
+  emptyEl.style.display = 'none';
+  let valorTotalEur = 0, costeTotalEur = 0;
+  const filas = [];
+  for (const p of _carteraPosiciones) {
+    let precioActual = p.precio_medio;
+    try { const d = await fetchStock(p.ticker); precioActual = d.precio; } catch (e) {}
+    valorTotalEur += precioEnEur(precioActual, p.moneda) * p.cantidad;
+    costeTotalEur += precioEnEur(p.precio_medio, p.moneda) * p.cantidad;
+    const gananciaPct = p.precio_medio > 0 ? ((precioActual - p.precio_medio) / p.precio_medio * 100) : 0;
+    const clr = gananciaPct >= 0 ? 'var(--green)' : 'var(--red)';
+    filas.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);">
+      <div>
+        <div style="font-weight:700;font-size:14px">${p.ticker} · ${p.cantidad} acc.</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">Precio medio ${p.precio_medio.toFixed(2)} ${p.moneda||'USD'} → actual ${precioActual.toFixed(2)} ${p.moneda||'USD'}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:700;color:${clr}">${gananciaPct>=0?'+':''}${gananciaPct.toFixed(1)}%</div>
+        <button onclick="venderVirtual('${p.ticker.replace(/'/g,"\\'")}')"  style="margin-top:4px;background:none;border:1px solid var(--border2);color:var(--red);padding:4px 10px;border-radius:100px;font-size:11px;cursor:pointer;font-family:inherit;">Vender</button>
+      </div>
+    </div>`);
+  }
+  cont.innerHTML = filas.join('');
+  document.getElementById('carteraValorVal').textContent = fmtEUR(valorTotalEur);
+  const gananciaTotal = valorTotalEur - costeTotalEur;
+  const gEl = document.getElementById('carteraGananciaVal');
+  gEl.textContent = (gananciaTotal>=0?'+':'-') + fmtEUR(Math.abs(gananciaTotal));
+  gEl.style.color = gananciaTotal >= 0 ? 'var(--green)' : 'var(--red)';
+}
+
+async function comprarVirtual() {
+  if (!_currentUser) { openAuthModal(); return; }
+  const ticker = document.getElementById('carteraTicker').value.trim().toUpperCase();
+  const cantidad = parseInt(document.getElementById('carteraCantidad').value, 10);
+  if (!ticker || !cantidad || cantidad <= 0) { alert(t('carteraAlertDatos')); return; }
+  let d;
+  try { d = await fetchStock(ticker); } catch (e) { alert(t('carteraAlertNoEncontrado')); return; }
+  const tickerFinal = d.ticker || ticker;
+  const costeEur = precioEnEur(d.precio, d.moneda) * cantidad;
+  if (costeEur > _carteraSaldo) { alert(t('carteraAlertSinSaldo')); return; }
+  const existente = _carteraPosiciones.find(p => p.ticker === tickerFinal);
+  if (existente) {
+    const nuevaCantidad = existente.cantidad + cantidad;
+    const nuevoPrecioMedio = (existente.precio_medio * existente.cantidad + d.precio * cantidad) / nuevaCantidad;
+    await _sb.from('sim_posiciones').update({ cantidad: nuevaCantidad, precio_medio: nuevoPrecioMedio }).eq('id', existente.id);
+  } else {
+    await _sb.from('sim_posiciones').insert({ user_id: _currentUser.id, ticker: tickerFinal, nombre: d.nombre || tickerFinal, cantidad, precio_medio: d.precio, moneda: d.moneda || 'USD' });
+  }
+  _carteraSaldo -= costeEur;
+  await _sb.from('sim_portfolio').update({ saldo: _carteraSaldo }).eq('user_id', _currentUser.id);
+  await _sb.from('sim_transacciones').insert({ user_id: _currentUser.id, ticker: tickerFinal, tipo: 'compra', cantidad, precio: d.precio, moneda: d.moneda || 'USD' });
+  document.getElementById('carteraTicker').value = '';
+  document.getElementById('carteraCantidad').value = '';
+  await cargarCartera();
+}
+
+async function venderVirtual(ticker) {
+  const pos = _carteraPosiciones.find(p => p.ticker === ticker);
+  if (!pos) return;
+  let d;
+  try { d = await fetchStock(ticker); } catch (e) { alert(t('carteraAlertNoPrecio')); return; }
+  const ingresoEur = precioEnEur(d.precio, d.moneda) * pos.cantidad;
+  await _sb.from('sim_posiciones').delete().eq('id', pos.id);
+  _carteraSaldo += ingresoEur;
+  await _sb.from('sim_portfolio').update({ saldo: _carteraSaldo }).eq('user_id', _currentUser.id);
+  await _sb.from('sim_transacciones').insert({ user_id: _currentUser.id, ticker, tipo: 'venta', cantidad: pos.cantidad, precio: d.precio, moneda: d.moneda || 'USD' });
+  await cargarCartera();
 }
 
 function abrirInvitar() {
@@ -2993,7 +3117,7 @@ async function submitAuth() {
 }
 
 function checkHashGate() {
-  const gated = ['#stocks', '#calculadora', '#simulador'];
+  const gated = ['#stocks', '#calculadora', '#simulador', '#cartera'];
   if (gated.includes(location.hash) && !_currentUser) openAuthModal();
 }
 window.addEventListener('hashchange', checkHashGate);
@@ -4038,6 +4162,36 @@ function renderStock(el, d, ticker) {
     </div>
   </section>
 </div>
+
+<section id="cartera" style="display:none">
+  <div class="pill" data-i18n="carteraPill">Cartera Virtual</div>
+  <h2 data-i18n-html="carteraTitle">Invierte sin arriesgar<br>ni un euro real.</h2>
+  <p class="sub" data-i18n="carteraSub">Dinero ficticio, precios reales. Compra y vende acciones y ve cómo se mueve tu cartera.</p>
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:28px;max-width:820px;">
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px;">
+      <div style="flex:1;min-width:160px;background:var(--card2);border-radius:12px;padding:16px 20px;">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px" data-i18n="carteraSaldo">Saldo disponible</div>
+        <div style="font-size:22px;font-weight:700" id="carteraSaldoVal">—</div>
+      </div>
+      <div style="flex:1;min-width:160px;background:var(--card2);border-radius:12px;padding:16px 20px;">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px" data-i18n="carteraValorTotal">Valor de la cartera</div>
+        <div style="font-size:22px;font-weight:700" id="carteraValorVal">—</div>
+      </div>
+      <div style="flex:1;min-width:160px;background:var(--card2);border-radius:12px;padding:16px 20px;">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px" data-i18n="carteraGanancia">Ganancia / pérdida</div>
+        <div style="font-size:22px;font-weight:700" id="carteraGananciaVal">—</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+      <input id="carteraTicker" placeholder="Ticker (ej. AAPL)" data-i18n-placeholder="carteraTickerPh" style="flex:1;min-width:120px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+      <input id="carteraCantidad" type="number" min="1" step="1" placeholder="Nº acciones" data-i18n-placeholder="carteraCantidadPh" style="width:120px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;">
+      <button onclick="comprarVirtual()" data-i18n="carteraBtnComprar" style="background:var(--green);color:#000;font-weight:700;border:none;border-radius:10px;padding:10px 18px;font-size:13px;cursor:pointer;font-family:inherit;">Comprar</button>
+    </div>
+    <div id="carteraPrecioPreview" style="display:none;font-size:12px;color:var(--text3);margin:-10px 0 16px;"></div>
+    <div id="carteraPosiciones"></div>
+    <div id="carteraEmpty" style="display:none;color:var(--text2);font-size:14px;text-align:center;padding:24px 0" data-i18n="carteraEmptyTxt">Todavía no tienes ninguna posición abierta.</div>
+  </div>
+</section>
 
 <section id="biblioteca" style="display:none">
   <div class="pill" data-i18n="biblioPill">Biblioteca</div>
