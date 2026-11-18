@@ -271,14 +271,14 @@ footer { border-top: 1px solid var(--border); }
 .auth-toggle span { color:var(--green); cursor:pointer; font-weight:600; }
 .auth-error { background:var(--red-dim); color:var(--red); border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:12px; display:none; }
 .auth-close { float:right; background:none; border:none; color:var(--text3); cursor:pointer; font-size:20px; line-height:1; }
-#authOverlay .auth-box { background:#fff; border-color:#eee; }
-#authOverlay .auth-box h2, #authOverlay .auth-field input { color:#111; }
-#authOverlay .auth-box p, #authOverlay #authConsent { color:#666; }
-#authOverlay .auth-field input { background:#f5f5f5; border-color:#e2e2e2; }
-#authOverlay .auth-field input::placeholder { color:#999; }
-#authOverlay .auth-toggle { color:#666; }
-#authOverlay .auth-close { color:#999; }
-#authOverlay #passEye { color:#999; }
+#authOverlay.register-mode .auth-box { background:#fff; border-color:#eee; }
+#authOverlay.register-mode .auth-box h2, #authOverlay.register-mode .auth-field input { color:#111; }
+#authOverlay.register-mode .auth-box p, #authOverlay.register-mode #authConsent { color:#666; }
+#authOverlay.register-mode .auth-field input { background:#f5f5f5; border-color:#e2e2e2; }
+#authOverlay.register-mode .auth-field input::placeholder { color:#999; }
+#authOverlay.register-mode .auth-toggle { color:#666; }
+#authOverlay.register-mode .auth-close { color:#999; }
+#authOverlay.register-mode #passEye { color:#999; }
 .nav-user { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text2); }
 .nav-user strong { color:var(--green); }
 .nav-user button { background:none; border:1px solid var(--border2); color:var(--text2); padding:6px 14px; border-radius:100px; font-size:12px; cursor:pointer; font-family:inherit; }
@@ -2441,6 +2441,7 @@ function closeAuthIfBg(e) {
 function toggleAuthMode() {
   _authMode = _authMode === 'login' ? 'register' : 'login';
   const isReg = _authMode === 'register';
+  document.getElementById('authOverlay').classList.toggle('register-mode', isReg);
   const titleEl = document.getElementById('authTitle');
   titleEl.textContent = isReg ? t('authTitleRegister') : t('authTitleLogin');
   titleEl.style.fontSize = isReg ? '26px' : '20px';
