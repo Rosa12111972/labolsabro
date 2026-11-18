@@ -34,17 +34,25 @@
     .progress-bar { height: 8px; background: var(--card2); border-radius: 100px; overflow: hidden; }
     .progress-fill { height: 100%; background: var(--green); border-radius: 100px; width: 0%; transition: width 0.3s; }
     .progress-txt { text-align: center; font-size: 12.5px; color: var(--text3); margin-top: 8px; }
-    .steps { max-width: 640px; margin: 40px auto 80px; padding: 0 24px; display: flex; flex-direction: column; gap: 14px; }
-    .stepcard { background: var(--card); border: 1px solid var(--border2); border-radius: 16px; padding: 20px 22px; display: flex; gap: 16px; align-items: flex-start; transition: border-color 0.2s; }
+    .steps { max-width: 640px; margin: 40px auto 24px; padding: 0 24px; }
+    .stepcard { background: var(--card); border: 1px solid var(--border2); border-radius: 20px; padding: 36px 32px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; transition: border-color 0.2s; text-align: center; align-items: center; }
     .stepcard.done { border-color: rgba(34,197,94,0.4); background: var(--green-glow); }
-    .stepbox { flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: transparent; background: var(--card2); margin-top: 2px; }
+    .stepbox { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: transparent; background: var(--card2); }
     .stepcard.done .stepbox { background: var(--green); border-color: var(--green); color: #000; }
-    .stepinfo { flex: 1; }
-    .stepinfo h3 { font-size: 15.5px; font-weight: 700; margin-bottom: 4px; }
+    .stepinfo { width: 100%; }
+    .stepinfo h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
     .stepcard.done .stepinfo h3 { text-decoration: line-through; color: var(--text2); }
-    .stepinfo p { font-size: 13.5px; color: var(--text2); margin-bottom: 10px; }
-    .stepinfo a.go { font-size: 13px; font-weight: 700; color: var(--green); text-decoration: none; }
+    .stepinfo p { font-size: 14.5px; color: var(--text2); margin-bottom: 16px; line-height: 1.6; }
+    .stepinfo a.go { display: inline-block; font-size: 14px; font-weight: 700; color: var(--green); text-decoration: none; padding: 10px 20px; border: 1px solid rgba(34,197,94,0.3); border-radius: 100px; }
     .step-badge { flex-shrink: 0; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; background: var(--yellow-dim); color: var(--yellow); padding: 3px 9px; border-radius: 100px; }
+    .step-nav { max-width: 640px; margin: 0 auto 60px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .step-nav-btn { background: var(--card2); border: 1px solid var(--border2); color: var(--text); padding: 12px 22px; border-radius: 100px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .step-nav-btn:disabled { opacity: 0.35; cursor: default; }
+    .step-nav-btn.primary { background: var(--green); color: #000; border: none; }
+    .step-dots { display: flex; gap: 7px; }
+    .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); cursor: pointer; }
+    .step-dot.active { background: var(--green); width: 20px; border-radius: 100px; }
+    .step-dot.done { background: rgba(34,197,94,0.5); }
     .celebrate { display: none; max-width: 640px; margin: 0 auto 60px; padding: 0 24px; text-align: center; }
     .celebrate.show { display: block; }
     .celebrate-box { background: var(--card); border: 1px solid rgba(34,197,94,0.4); border-radius: 18px; padding: 32px; }
@@ -77,6 +85,11 @@
 </div>
 
 <div class="steps" id="stepsWrap"></div>
+<div class="step-nav" id="stepNav">
+  <button class="step-nav-btn" id="btnPrev" onclick="prevStep()" data-i18n="btnAnterior">← Anterior</button>
+  <div class="step-dots" id="stepDots"></div>
+  <button class="step-nav-btn primary" id="btnNext" onclick="nextStep()" data-i18n="btnSiguiente">Siguiente →</button>
+</div>
 
 <div class="celebrate" id="celebrate">
   <div class="celebrate-box">
@@ -98,6 +111,7 @@ const I18N = {
     pasosH1: 'Acabas de llegar. Esto es lo que tienes que hacer.',
     pasosLede: '8 pasos, en orden, para sacarle todo el partido a laBolsabro. Márcalos según los vayas completando.',
     progressTxt: '{n} de {total} completados',
+    btnAnterior: '← Anterior', btnSiguiente: 'Siguiente →', btnFinalizar: 'Finalizar',
     celebrateH2: '¡Ya conoces laBolsabro entera!',
     celebrateP: 'Ahora solo te queda seguir usándola. Vuelve cada día para no perder la racha.',
     celebrateBtn: 'Ir a DuoInvest →',
@@ -118,6 +132,7 @@ const I18N = {
     pasosH1: 'You just got here. This is what to do.',
     pasosLede: '8 steps, in order, to get the most out of laBolsabro. Check them off as you complete them.',
     progressTxt: '{n} of {total} completed',
+    btnAnterior: '← Back', btnSiguiente: 'Next →', btnFinalizar: 'Finish',
     celebrateH2: 'You now know all of laBolsabro!',
     celebrateP: 'Now all that\'s left is to keep using it. Come back every day to keep your streak going.',
     celebrateBtn: 'Go to DuoInvest →',
@@ -184,32 +199,65 @@ function guardarProgreso(p) {
 }
 let _progreso = cargarProgreso();
 
+function primerPasoIncompleto() {
+  const PASOS = getPasos();
+  const idx = PASOS.findIndex(p => !_progreso[p.id]);
+  return idx === -1 ? PASOS.length - 1 : idx;
+}
+let _currentStep = primerPasoIncompleto();
+
 function toggle(id) {
   _progreso[id] = !_progreso[id];
   guardarProgreso(_progreso);
   render();
 }
 
+function prevStep() {
+  if (_currentStep > 0) { _currentStep--; render(); }
+}
+function nextStep() {
+  const PASOS = getPasos();
+  if (_currentStep < PASOS.length - 1) { _currentStep++; render(); }
+}
+function irAPaso(i) {
+  _currentStep = i;
+  render();
+}
+
 function render() {
   const PASOS = getPasos();
-  const wrap = document.getElementById('stepsWrap');
-  wrap.innerHTML = PASOS.map(p => {
-    const done = !!_progreso[p.id];
-    return `<div class="stepcard ${done ? 'done' : ''}">
-      <div class="stepbox" onclick="toggle('${p.id}')">${done ? '✓' : ''}</div>
-      <div class="stepinfo">
-        <h3>${p.title}</h3>
-        <p>${p.desc}</p>
-        <a class="go" href="${p.href}">${p.link}</a>
-      </div>
-      <span class="step-badge">${p.badge}</span>
-    </div>`;
-  }).join('');
-
+  const total = PASOS.length;
   const completados = PASOS.filter(p => _progreso[p.id]).length;
-  document.getElementById('progressFill').style.width = (completados / PASOS.length * 100) + '%';
-  document.getElementById('progressTxt').textContent = tf('progressTxt', { n: completados, total: PASOS.length });
-  document.getElementById('celebrate').classList.toggle('show', completados === PASOS.length);
+  const todoHecho = completados === total;
+
+  document.getElementById('progressFill').style.width = (completados / total * 100) + '%';
+  document.getElementById('progressTxt').textContent = tf('progressTxt', { n: completados, total });
+  document.getElementById('celebrate').classList.toggle('show', todoHecho);
+  document.getElementById('stepsWrap').style.display = todoHecho ? 'none' : 'block';
+  document.getElementById('stepNav').style.display = todoHecho ? 'none' : 'flex';
+  if (todoHecho) return;
+
+  const p = PASOS[_currentStep];
+  const done = !!_progreso[p.id];
+  document.getElementById('stepsWrap').innerHTML = `<div class="stepcard ${done ? 'done' : ''}">
+    <span class="step-badge">${p.badge}</span>
+    <div class="stepbox" onclick="toggle('${p.id}')">${done ? '✓' : ''}</div>
+    <div class="stepinfo">
+      <h3>${p.title}</h3>
+      <p>${p.desc}</p>
+      <a class="go" href="${p.href}">${p.link}</a>
+    </div>
+  </div>`;
+
+  document.getElementById('stepDots').innerHTML = PASOS.map((pp, i) =>
+    `<div class="step-dot ${i === _currentStep ? 'active' : ''} ${_progreso[pp.id] ? 'done' : ''}" onclick="irAPaso(${i})"></div>`
+  ).join('');
+
+  document.getElementById('btnPrev').disabled = _currentStep === 0;
+  const btnNext = document.getElementById('btnNext');
+  const esUltimo = _currentStep === total - 1;
+  btnNext.textContent = esUltimo ? t('btnFinalizar') : t('btnSiguiente');
+  btnNext.disabled = esUltimo && !done;
 }
 
 render();
