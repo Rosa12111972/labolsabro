@@ -43,7 +43,7 @@ export default async function handler(req, res) {
             <div style="padding: 20px 28px; border-top: 1px solid #2a2a2a; font-size: 12px; color: #525252; line-height: 1.6;">
               Recibes este email porque te apuntaste en labolsabro.com.
               Si no fuiste tú, ignora este mensaje.<br>
-              © 2025 Mosca · <a href="https://labolsabro.com/privacidad.html" style="color: #525252;">Privacidad</a>
+              © 2025 Mosca · <a href="https://labolsabro.com/privacidad.html" style="color: #525252;">Privacidad</a> · <a href="https://labolsabro.com/api/unsubscribe?email=${encodeURIComponent(email)}" style="color: #525252;">Darte de baja</a>
             </div>
           </div>
         `,
