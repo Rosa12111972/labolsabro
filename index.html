@@ -259,12 +259,12 @@ footer { border-top: 1px solid var(--border); }
 }
 .auth-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:1000; align-items:center; justify-content:center; padding:16px; }
 .auth-overlay.open { display:flex; }
-.auth-box { background:var(--card); border:1px solid var(--border2); border-radius:var(--radius-lg); padding:36px 32px; width:100%; max-width:400px; }
-.auth-box h2 { font-size:20px; font-weight:700; margin-bottom:4px; }
-.auth-box p { font-size:13px; color:var(--text2); margin-bottom:24px; }
-.auth-field { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
-.auth-field label { font-size:13px; font-weight:600; color:var(--text2); }
-.auth-field input { background:var(--card2); border:1px solid var(--border2); border-radius:10px; padding:11px 14px; font-size:14px; color:var(--text); font-family:inherit; outline:none; }
+.auth-box { background:var(--card); border:1px solid var(--border2); border-radius:var(--radius-lg); padding:44px 32px; width:100%; max-width:400px; }
+.auth-box h2 { font-size:25px; font-weight:700; margin-bottom:8px; }
+.auth-box p { font-size:13.5px; color:var(--text2); margin-bottom:32px; }
+.auth-field { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.auth-field label { display:none; }
+.auth-field input { background:var(--card2); border:1px solid var(--border2); border-radius:12px; padding:14px 16px; font-size:14.5px; color:var(--text); font-family:inherit; outline:none; }
 .auth-field input:focus { border-color:var(--green); }
 .auth-submit { width:100%; background:var(--green); color:#000; font-weight:700; font-size:15px; padding:13px; border:none; border-radius:100px; cursor:pointer; font-family:inherit; margin-top:4px; }
 .auth-toggle { text-align:center; font-size:13px; color:var(--text2); margin-top:16px; }
@@ -292,7 +292,7 @@ footer { border-top: 1px solid var(--border); }
 <div id="authOverlay" class="auth-overlay" onclick="closeAuthIfBg(event)">
   <div class="auth-box">
     <button class="auth-close" onclick="closeAuthModal()">×</button>
-    <div id="authIcon" style="width:72px;height:72px;border-radius:50%;background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 18px">🪰</div>
+    <div id="authIcon" style="width:92px;height:92px;border-radius:50%;background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:42px;margin:0 auto 22px">🪰</div>
     <h2 id="authTitle" style="text-align:center" data-i18n="authTitleLogin">Iniciar sesión</h2>
     <p id="authSub" style="text-align:center" data-i18n="authSubLogin">Accede a tu cuenta de laBolsabro</p>
     <div id="authError" class="auth-error"></div>
@@ -307,7 +307,7 @@ footer { border-top: 1px solid var(--border); }
         <button type="button" onclick="togglePassVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text2);font-size:16px;padding:0" id="passEye">👁</button>
       </div>
     </div>
-    <p id="authConsent" style="display:none;font-size:11.5px;color:var(--text3);line-height:1.5;text-align:center;margin:-8px 0 14px" data-i18n-html="authConsentText">Al registrarte, aceptas nuestros <a href="/terminos.html" target="_blank" style="color:var(--green)">Términos y condiciones</a> y nuestra <a href="/privacidad.html" target="_blank" style="color:var(--green)">Política de privacidad</a>.</p>
+    <p id="authConsent" style="display:none;font-size:11.5px;color:var(--text3);line-height:1.5;text-align:center;margin:10px 0 18px" data-i18n-html="authConsentText">Al registrarte, aceptas nuestros <a href="/terminos.html" target="_blank" style="color:var(--green)">Términos y condiciones</a> y nuestra <a href="/privacidad.html" target="_blank" style="color:var(--green)">Política de privacidad</a>.</p>
     <button class="auth-submit" id="authSubmit" onclick="submitAuth()" data-i18n="authBtnLogin">Entrar</button>
     <div class="auth-toggle">
       <span id="authToggleLink" onclick="toggleAuthMode()" data-i18n="authToggleToRegister">¿No tienes cuenta? Regístrate</span>
