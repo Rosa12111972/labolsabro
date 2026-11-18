@@ -541,6 +541,12 @@ footer { border-top: 1px solid var(--border); }
       <div class="feat-desc" data-i18n="feat7Desc">DuoInvest: niveles que se desbloquean uno a uno, racha diaria y XP. Aprendes de verdad, no solo lees.</div>
       <a href="/ruta.html" class="feat-tag" style="background:var(--green-glow);color:var(--green);text-decoration:none" data-i18n="feat7Tag">🔥 Empezar racha</a>
     </div>
+    <div class="feat" style="border-color:rgba(34,197,94,0.35)">
+      <span class="feat-emoji">💼</span>
+      <div class="feat-title" data-i18n="feat8Title">Cartera Virtual</div>
+      <div class="feat-desc" data-i18n="feat8Desc">Compra y vende acciones con 10.000€ ficticios a precio real. Practica de verdad, sin arriesgar nada.</div>
+      <a href="/#cartera" onclick="return irACarteraVirtual(event)" class="feat-tag" style="background:var(--green-glow);color:var(--green);text-decoration:none" data-i18n="feat8Tag">💼 Empezar a invertir</a>
+    </div>
     <div class="feat">
       <span class="feat-emoji">🚦</span>
       <div class="feat-title" data-i18n="feat1Title">Semáforo de valor</div>
@@ -1762,6 +1768,7 @@ const I18N = {
     feat5Title: 'Mercados globales', feat5Desc: 'España, EEUU, Europa, crypto. NASDAQ, NYSE, Madrid, París, Fráncfort. Busca cualquier empresa que cotice en bolsa.', feat5Tag: 'Internacional',
     feat6Title: 'Calculadora de interés compuesto', feat6Desc: 'Pon números a tu futuro. ¿Cuánto tendrías en 20 años ahorrando 100€ al mes? La respuesta te va a sorprender.', feat6Tag: 'Tu futuro',
     feat7Title: 'DuoInvest', feat7Desc: 'DuoInvest: niveles que se desbloquean uno a uno, racha diaria y XP. Aprendes de verdad, no solo lees.', feat7Tag: '🔥 Empezar racha',
+    feat8Title: 'Cartera Virtual', feat8Desc: 'Compra y vende acciones con 10.000€ ficticios a precio real. Practica de verdad, sin arriesgar nada.', feat8Tag: '💼 Empezar a invertir',
     safePill: 'Tu seguridad primero', safeTitle: 'Aprendes.<br>No arriesgas.', safeSub: 'Mosca es educación financiera. Nunca tocamos tu dinero ni te empujamos a invertir sin entender lo que haces.',
     safe1Title: 'No gestiónamos tu dinero', safe1Desc: 'No somos un banco ni una plataforma de inversión. No necesitas meter tu tarjeta ni conectar tu cuenta bancaria.',
     safe2Title: 'Educación, no especulación', safe2Desc: 'Nunca te diremos "compra esto ahora". Te enseñamos a analizar datos públicos. La decisión de invertir es siempre tuya.',
@@ -2011,6 +2018,7 @@ const I18N = {
     feat5Title: 'Global markets', feat5Desc: 'Spain, the US, Europe, crypto. NASDAQ, NYSE, Madrid, Paris, Frankfurt. Search any company listed on a stock exchange.', feat5Tag: 'International',
     feat6Title: 'Compound interest calculator', feat6Desc: 'Put numbers to your future. How much would you have in 20 years saving €100 a month? The answer might surprise you.', feat6Tag: 'Your future',
     feat7Title: 'DuoInvest', feat7Desc: 'DuoInvest: levels that unlock one by one, a daily streak and XP. You actually learn, not just read.', feat7Tag: '🔥 Start your streak',
+    feat8Title: 'Virtual Portfolio', feat8Desc: 'Buy and sell stocks with €10,000 in fake money at real prices. Practice for real, risk nothing.', feat8Tag: '💼 Start investing',
     safePill: 'Your safety first', safeTitle: 'You learn.<br>You don\'t risk.', safeSub: 'Mosca is financial education. We never touch your money or push you to invest without understanding what you\'re doing.',
     safe1Title: 'We never manage your money', safe1Desc: 'We\'re not a bank or an investment platform. No need to add your card or connect your bank account.',
     safe2Title: 'Education, not speculation', safe2Desc: 'We\'ll never tell you to "buy this now." We teach you to analyze public data. The investment decision is always yours.',
@@ -2414,6 +2422,13 @@ function openAuthModal() {
   document.getElementById('authEmail').focus();
 }
 function irADuoInvest(e) {
+  if (_currentUser) return true;
+  e.preventDefault();
+  if (_authMode !== 'register') toggleAuthMode();
+  openAuthModal();
+  return false;
+}
+function irACarteraVirtual(e) {
   if (_currentUser) return true;
   e.preventDefault();
   if (_authMode !== 'register') toggleAuthMode();
