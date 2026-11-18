@@ -1792,6 +1792,8 @@ const I18N = {
     authAlertEmailFirst: 'Escribe tu email primero', authAlertErrorPrefix: 'Error: ',
     authAlertResetSent: 'Te hemos enviado un enlace para restablecer la contraseña. Revisa tu email.',
     authAlertAccountCreated: '¡Cuenta creada! Revisa tu email para confirmarla.',
+    onbTitle: '¿Cómo quieres aprender?', onbSub: 'Cuenta creada — revisa tu email para confirmarla. Mientras tanto, tú eliges por dónde empezar. Puedes cambiar de modo cuando quieras.',
+    onbOpt1: '🎮 Jugando, paso a paso (DuoInvest)', onbOpt2: '📘 Leyendo a mi ritmo (Guía)', onbOpt3: '🚦 Directo a analizar una empresa', onbSkip: 'Ahora no',
     authErrFillFields: 'Rellena email y contraseña', authErrUnknown: 'Error desconocido',
     limitTitle: 'Has usado tus 3 pruebas gratis',
     limitDesc: 'El plan gratuito incluye 3 pruebas de por vida (análisis de empresas o calculadora, como prefieras).<br>Pasa a Premium para seguir usando laBolsabro sin límite.',
@@ -2039,6 +2041,8 @@ const I18N = {
     authAlertEmailFirst: 'Enter your email first', authAlertErrorPrefix: 'Error: ',
     authAlertResetSent: 'We\'ve sent you a link to reset your password. Check your email.',
     authAlertAccountCreated: 'Account created! Check your email to confirm it.',
+    onbTitle: 'How do you want to learn?', onbSub: 'Account created — check your email to confirm it. Meanwhile, you choose where to start. You can switch modes anytime.',
+    onbOpt1: '🎮 Playing, step by step (DuoInvest)', onbOpt2: '📘 Reading at my own pace (Guide)', onbOpt3: '🚦 Straight to analyzing a company', onbSkip: 'Not now',
     authErrFillFields: 'Fill in email and password', authErrUnknown: 'Unknown error',
     limitTitle: 'You\'ve used your 3 free trials',
     limitDesc: 'The free plan includes 3 lifetime trials (company analysis or calculator, whichever you prefer).<br>Upgrade to Premium to keep using laBolsabro with no limit.',
@@ -3049,7 +3053,7 @@ async function submitAuth() {
     result = await _sb.auth.signUp({ email, password: pass });
     if (!result.error) {
       if (typeof gtag === 'function') gtag('event', 'sign_up', { method: 'email' });
-      closeAuthModal(); alert(t('authAlertAccountCreated'));
+      closeAuthModal(); abrirOnboarding();
     }
   } else {
     result = await _sb.auth.signInWithPassword({ email, password: pass });
@@ -4334,7 +4338,23 @@ function renderStock(el, d, ticker) {
   </div>
 </div>
 
+<div id="onboardingOverlay" class="auth-overlay" onclick="if(event.target.id==='onboardingOverlay') cerrarOnboarding()">
+  <div class="auth-box" style="text-align:center">
+    <div style="font-size:40px;margin-bottom:10px">🎯</div>
+    <h2 style="font-size:20px;margin-bottom:8px" data-i18n="onbTitle">¿Cómo quieres aprender?</h2>
+    <p style="font-size:13.5px;color:var(--text2);margin-bottom:22px" data-i18n="onbSub">Es educativo, así que tú eliges por dónde empezar. Puedes cambiar de modo cuando quieras.</p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a href="/ruta.html" class="auth-submit" style="text-decoration:none;display:block;box-sizing:border-box" data-i18n="onbOpt1">🎮 Jugando, paso a paso (DuoInvest)</a>
+      <a href="/guia.html" class="auth-submit" style="text-decoration:none;display:block;box-sizing:border-box;background:var(--card2);color:var(--text);border:1px solid var(--border2)" data-i18n="onbOpt2">📘 Leyendo a mi ritmo (Guía)</a>
+      <a href="/#stocks" onclick="cerrarOnboarding()" class="auth-submit" style="text-decoration:none;display:block;box-sizing:border-box;background:var(--card2);color:var(--text);border:1px solid var(--border2)" data-i18n="onbOpt3">🚦 Directo a analizar una empresa</a>
+    </div>
+    <button onclick="cerrarOnboarding()" style="margin-top:16px;background:none;border:none;color:var(--text3);font-size:12.5px;cursor:pointer;font-family:inherit" data-i18n="onbSkip">Ahora no</button>
+  </div>
+</div>
+
 <script>
+function abrirOnboarding() { document.getElementById('onboardingOverlay').classList.add('open'); }
+function cerrarOnboarding() { document.getElementById('onboardingOverlay').classList.remove('open'); }
 async function handleForm(e) {
   e.preventDefault();
   const form = e.target;
