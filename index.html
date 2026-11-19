@@ -2774,9 +2774,7 @@ function closePanelIfBg(e) { if (e.target.id === 'panelOverlay') cerrarPanel(); 
 async function renderPanel() {
   const totalBotes = _jars.reduce((s, j) => s + parseFloat(j.saldo || 0), 0);
   const isPremium = _userPlan !== 'free';
-  const carteraValor = isPremium ? (_carteraCash + await calcularValorCartera()) : parseFloat(_invertidoSimulado || 0);
-  const saldoTotal = totalBotes + carteraValor;
-  document.getElementById('panelSaldoTotal').textContent = fmtEUR(saldoTotal);
+  document.getElementById('panelSaldoTotal').textContent = fmtEUR(totalBotes);
 
   const inicioMes = new Date(); inicioMes.setDate(1); inicioMes.setHours(0,0,0,0);
   const isoInicio = inicioMes.toISOString();
