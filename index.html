@@ -827,8 +827,6 @@ async function resolveTicker(query) {
 }
 
 async function fetchStock(ticker) {
-  const cached = cacheGet(ticker);
-  if (cached) return cached;
   const base = apiBase();
   let res = await fetch(`${base}/api/stock?ticker=${encodeURIComponent(ticker)}`, { headers: authHeaders() });
   let d = res.ok ? await res.json() : null;
@@ -1947,6 +1945,7 @@ const I18N = {
     retoCompletadoTxt: '✓ Ya lo has completado hoy. Vuelve mañana a por otro.',
     carteraEmpty: 'Aún no tienes ninguna posición. Añade la primera, crack.', cargandoPrecios: 'Cargando precios...', precioNoDisponible: 'Precio no disponible', precioAhoraTpl: '{precio} ahora · {pct}%',
     hintZonaValor: '🟢 Zona de valor — podría ser momento de comprar más', hintPrecioJusto: '🟡 Precio justo — ni prisa por comprar ni por vender', hintZonaCara: '🔴 Zona cara — podría ser momento de recoger beneficios',
+    carteraPrecioVentaTpl: 'precio de venta sugerido: {precio}',
     limiteBusquedasAlert: 'Has alcanzado el límite de búsquedas. Espera un momento e inténtalo de nuevo.', noEncontramosTicker: 'No encontramos ese ticker.', errorAnadirPosicion: 'Error al añadir la posición',
     crearBotePrompt: '¿Cómo quieres llamar a tu bote? (ej: vacaciones, coche, emergencias)', crearBoteError: 'Error al crear el bote',
     borrarBoteConfirmTpl: '¿Seguro que quieres borrar el bote "{nombre}"? Perderás el saldo guardado.',
@@ -2201,6 +2200,7 @@ const I18N = {
     retoCompletadoTxt: '✓ Already completed today. Come back tomorrow for another one.',
     carteraEmpty: 'You don\'t have any positions yet. Add the first one.', cargandoPrecios: 'Loading prices...', precioNoDisponible: 'Price not available', precioAhoraTpl: '{precio} now · {pct}%',
     hintZonaValor: '🟢 Value zone — might be a good time to buy more', hintPrecioJusto: '🟡 Fair price — no rush to buy or sell', hintZonaCara: '🔴 Expensive zone — might be a good time to take profits',
+    carteraPrecioVentaTpl: 'suggested sell price: {precio}',
     limiteBusquedasAlert: 'You\'ve reached the search limit. Wait a moment and try again.', noEncontramosTicker: 'We couldn\'t find that ticker.', errorAnadirPosicion: 'Error adding the position',
     crearBotePrompt: 'What do you want to name your jar? (e.g. vacation, car, emergencies)', crearBoteError: 'Error creating the jar',
     borrarBoteConfirmTpl: 'Are you sure you want to delete the "{nombre}" jar? You\'ll lose the saved balance.',
@@ -2865,7 +2865,13 @@ async function renderCartera() {
     if (d && d.tipo !== 'crypto' && d.pe) {
       const sem = semaforo(d.pe, d.sector || 'default', d.peg);
       const hintTxt = sem.cls === 'sem-green' ? t('hintZonaValor') : sem.cls === 'sem-yellow' ? t('hintPrecioJusto') : sem.cls === 'sem-red' ? t('hintZonaCara') : '';
-      if (hintTxt) hint = `<div style="font-size:11.5px;color:var(--text3);margin-top:3px">${hintTxt}</div>`;
+      let ventaTxt = '';
+      if (d.eps && d.eps > 0) {
+        const ref = PER_SECTORES[d.sector] || PER_SECTORES['default'];
+        const precioVenta = d.eps * ref.alto;
+        ventaTxt = ` · ${tf('carteraPrecioVentaTpl', { precio: precioVenta.toFixed(2) + ' ' + moneda })}`;
+      }
+      if (hintTxt || ventaTxt) hint = `<div style="font-size:11.5px;color:var(--text3);margin-top:3px">${hintTxt}${ventaTxt}</div>`;
     }
     const precioLineTxt = precioActual ? tf('precioAhoraTpl', { precio: precioActual.toFixed(2) + ' ' + moneda + fmtMonedaConvertida(precioActual, moneda), pct: (gananciaPct >= 0 ? '+' : '') + gananciaPct.toFixed(1) }) : t('precioNoDisponible');
     filas.push(`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
