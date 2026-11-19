@@ -2731,7 +2731,7 @@ async function cargarPanelData() {
   renderHeroMockup();
 }
 
-function renderHeroMockup() {
+async function renderHeroMockup() {
   const hola = document.getElementById('pHola');
   const abrirBtn = document.getElementById('pAbrirPanel');
   if (!_currentUser) {
@@ -2749,14 +2749,15 @@ function renderHeroMockup() {
   }
   const nivel = Math.floor((_totalXP || 0) / 100) + 1;
   const totalBotes = _jars.reduce((s, j) => s + parseFloat(j.saldo || 0), 0);
-  const saldoTotal = totalBotes + parseFloat(_invertidoSimulado || 0);
+  const isPremium = _userPlan !== 'free';
+  const invertidoValor = isPremium ? await calcularValorCartera() : parseFloat(_invertidoSimulado || 0);
   document.getElementById('pHola').textContent = `${t('phoneHolaName')} ${window._panelNombre} 👋`;
   document.getElementById('pLevel').textContent = tf('nivelXpTpl', { nivel, xp: _totalXP || 0 });
-  document.getElementById('pSaldoTotal').textContent = fmtEUR(saldoTotal);
-  document.getElementById('pSaldoDelta').textContent = totalBotes === 0 && _invertidoSimulado === 0 ? t('phoneSaldoDelta') : t('phoneControl');
+  document.getElementById('pSaldoTotal').textContent = fmtEUR(totalBotes);
+  document.getElementById('pSaldoDelta').textContent = totalBotes === 0 && invertidoValor === 0 ? t('phoneSaldoDelta') : t('phoneControl');
   document.getElementById('pAhorrando').textContent = fmtEUR(totalBotes, 0);
   document.getElementById('pBotesN').textContent = `${_jars.length} ${_jars.length === 1 ? t('phoneBote') : t('phoneBotes')}`;
-  document.getElementById('pInvertido').textContent = fmtEUR(parseFloat(_invertidoSimulado || 0), 0);
+  document.getElementById('pInvertido').textContent = fmtEUR(invertidoValor, 0);
   document.getElementById('pRetoTexto').textContent = _retoCompletadoHoy ? t('phoneRetoOk') : (_retoActual?.texto || '');
   if (abrirBtn) abrirBtn.style.display = 'block';
 }
